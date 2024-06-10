@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ttal_kkak/add_clothes_page.dart';
 import 'package:ttal_kkak/splash_page.dart';
 
 void main() {
@@ -14,6 +15,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: SplashPage(),
+      routes: {
+        '/addClothes': (context) => AddClothesPage(),
+      },
     );
   }
 }

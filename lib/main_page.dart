@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/clothes_grid.dart';
 
 class MainPage extends StatelessWidget {
   final List<Clothes> clothesList = generateDummyClothes();
 
   @override
   Widget build(BuildContext context) {
+    // 카테고리별로 옷 데이터를 그룹화
+    Map<String, List<Clothes>> categorizedClothes = {};
+    clothesList.forEach((clothes) {
+      if (!categorizedClothes.containsKey(clothes.primaryCategory)) {
+        categorizedClothes[clothes.primaryCategory] = [];
+      }
+      categorizedClothes[clothes.primaryCategory]!.add(clothes);
+    });
+
+    List<String> categories = categorizedClothes.keys.toList();
+    categories.insert(0, '전체'); // '전체' 탭 추가
+
     return DefaultTabController(
-      length: 5, // 탭의 개수를 설정
+      length: categories.length,
       child: Scaffold(
         appBar: AppBar(
           title: Text('아경 옷장', style: TextStyle(color: Colors.black)),
@@ -20,94 +33,33 @@ class MainPage extends StatelessWidget {
               },
             ),
           ],
-          bottom: TabBar(
-            indicatorColor: Colors.purple,
-            isScrollable: true,
-            labelColor: Colors.red,
-            unselectedLabelColor: Colors.black,
-            tabs: [
-              Tab(text: '전체 20'),
-              Tab(text: '상의 4'),
-              Tab(text: '하의 4'),
-              Tab(text: '아우터 2'),
-              Tab(text: '원피스 1'),
-            ],
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(48.0),
+            child: Container(
+              color: Colors.white,
+              child: TabBar(
+                indicatorColor: Colors.purple,
+                isScrollable: true,
+                labelColor: Colors.red,
+                unselectedLabelColor: Colors.black,
+                tabs: categories.map((category) {
+                  int itemCount = category == '전체'
+                      ? clothesList.length
+                      : categorizedClothes[category]!.length;
+                  return Tab(text: '$category $itemCount');
+                }).toList(),
+              ),
+            ),
           ),
         ),
         body: TabBarView(
-          children: [
-            ClothesGrid(clothesList: clothesList),
-            ClothesGrid(
-                clothesList: clothesList
-                    .where((clothes) => clothes.primaryCategory == '상의')
-                    .toList()),
-            ClothesGrid(
-                clothesList: clothesList
-                    .where((clothes) => clothes.primaryCategory == '하의')
-                    .toList()),
-            ClothesGrid(
-                clothesList: clothesList
-                    .where((clothes) => clothes.primaryCategory == '아우터')
-                    .toList()),
-            ClothesGrid(
-                clothesList: clothesList
-                    .where((clothes) => clothes.primaryCategory == '원피스')
-                    .toList()),
-          ],
+          children: categories.map((category) {
+            List<Clothes> clothesToShow =
+                category == '전체' ? clothesList : categorizedClothes[category]!;
+            return ClothesGrid(clothesList: clothesToShow);
+          }).toList(),
         ),
       ),
-    );
-  }
-}
-
-class ClothesGrid extends StatelessWidget {
-  final List<Clothes> clothesList;
-
-  ClothesGrid({required this.clothesList});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: EdgeInsets.all(8.0),
-      itemCount: (clothesList.length / 4).ceil(),
-      itemBuilder: (context, index) {
-        int start = index * 4;
-        int end =
-            (start + 4) < clothesList.length ? start + 4 : clothesList.length;
-        List<Clothes> rowClothes = clothesList.sublist(start, end);
-
-        return Container(
-          margin: EdgeInsets.symmetric(vertical: 8.0),
-          padding: EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: rowClothes
-                .map((clothes) => _buildClothesCard(clothes))
-                .toList(),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildClothesCard(Clothes clothes) {
-    return Column(
-      children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            color: clothes.color,
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-        ),
-        SizedBox(height: 8.0),
-        Text(clothes.name, style: TextStyle(fontSize: 12)),
-      ],
     );
   }
 }

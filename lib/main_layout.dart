@@ -20,7 +20,7 @@ class _MainLayoutState extends State<MainLayout> {
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: [MainPage(), MainPage(), MainPage(), MainPage(), MainPage()],
+        children: [MainPage(), MainPage(), MainPage(), MainPage()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
@@ -51,7 +51,13 @@ class _MainLayoutState extends State<MainLayout> {
         unselectedItemColor: Colors.black, // 선택되지 않은 아이템 색상
         selectedLabelStyle: TextStyle(fontSize: 14), // 선택된 텍스트 스타일
         unselectedLabelStyle: TextStyle(fontSize: 14), // 선택되지 않은 텍스트 스타일
-        onTap: _onItemTapped,
+        onTap: (index) {
+          if (index == 4) {
+            Navigator.pushNamed(context, '/addClothes');
+          } else {
+            _onItemTapped(index);
+          }
+        },
       ),
     );
   }
