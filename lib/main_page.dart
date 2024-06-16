@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
+import 'package:ttal_kkak/clothes_repository.dart';
 
-class MainPage extends StatelessWidget {
-  final List<Clothes> clothesList = generateDummyClothes();
+class MainPage extends StatefulWidget {
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  late List<Clothes> clothesList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      List<Clothes> loadedClothes = await ClothesRepository().loadClothes();
+      setState(() {
+        clothesList = loadedClothes;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -21,7 +21,7 @@ class Clothes {
       primaryCategory: json['primaryCategory'],
       secondaryCategory: json['secondaryCategory'],
       details: ClothesDetails.fromJson(json['details']),
-      color: json['color'],
+      color: Color(json['color']),
     );
   }
 
@@ -31,7 +31,7 @@ class Clothes {
       'primaryCategory': primaryCategory,
       'secondaryCategory': secondaryCategory,
       'details': details.toJson(),
-      'color': color,
+      'color': color.value,
     };
   }
 }
