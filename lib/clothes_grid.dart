@@ -27,7 +27,7 @@ class ClothesGrid extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: rowClothes
-                .map((clothes) => _buildClothesCard(clothes))
+                .map((clothes) => _buildClothesCard(context, clothes))
                 .toList(),
           ),
         );
@@ -35,21 +35,23 @@ class ClothesGrid extends StatelessWidget {
     );
   }
 
-  Widget _buildClothesCard(Clothes clothes) {
-    return Column(
-      children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            color: clothes.color,
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-        ),
-        SizedBox(height: 8.0),
-        Text(clothes.name, style: TextStyle(fontSize: 12)),
-      ],
-    );
+  Widget _buildClothesCard(BuildContext context, Clothes clothes) {
+    return GestureDetector(
+        onTap: () => {showClothesOptionsBottomSheet(context, clothes)},
+        child: Column(
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: clothes.color,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+            SizedBox(height: 8.0),
+            Text(clothes.name, style: TextStyle(fontSize: 12)),
+          ],
+        ));
   }
 }
 
