@@ -22,6 +22,7 @@ class _AddClothesPageState extends State<AddClothesPage> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       Clothes newClothes = Clothes(
+        id: 11,
         name: _name,
         primaryCategory: _primaryCategory,
         secondaryCategory: _secondaryCategory,

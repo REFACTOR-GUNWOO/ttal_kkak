@@ -52,3 +52,51 @@ class ClothesGrid extends StatelessWidget {
     );
   }
 }
+
+void showClothesOptionsBottomSheet(BuildContext context, Clothes clothes) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(Icons.info),
+              title: Text('정보 수정하기'),
+              onTap: () {
+                // 정보 수정 기능
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.note),
+              title: Text('메모 남기기'),
+              onTap: () {
+                // 메모 남기기 기능
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.favorite),
+              title: Text('좋아하는 옷 OFF'),
+              onTap: () {
+                // 좋아하는 옷 기능
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.delete, color: Colors.red),
+              title: Text('삭제하기', style: TextStyle(color: Colors.red)),
+              onTap: () {
+                // 삭제 기능
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}

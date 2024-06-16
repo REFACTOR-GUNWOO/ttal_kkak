@@ -16,14 +16,12 @@ class OnboardingClothesGrid extends StatefulWidget {
 class _OnboardingClothesGridState extends State<OnboardingClothesGrid> {
   late List<Clothes> clothesList;
   late Map<int, bool> selected;
-  late Set<Clothes> selectedClothes;
   @override
   void initState() {
     super.initState();
     clothesList = widget.clothesList;
-    selectedClothes = Set();
     // 선택 상태를 초기화
-    selected = {for (int i = 0; i < clothesList.length; i++) i: false};
+    selected = {for (var clothes in clothesList) clothes.id: false};
   }
 
   @override
@@ -53,19 +51,12 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid> {
                   .map((clothes) => GestureDetector(
                       onTap: () {
                         setState(() {
-                          int index = clothes.key + start;
-                          print(index);
-                          selected[index] = !selected[index]!;
-                          if (selected[index]!) {
-                            Set<Clothes> newSelectedClothes = selectedClothes;
-                            newSelectedClothes.add(clothes.value);
-                            selectedClothes = newSelectedClothes;
-                            print(selectedClothes);
-                          }
+                          selected[clothes.value.id] =
+                              !selected[clothes.value.id]!;
                         });
                       },
                       child: _buildClothesCard(
-                          clothes.value, clothes.key + start)))
+                          clothes.value, selected[clothes.value.id] ?? false)))
                   .toList(),
             ),
           );
@@ -79,7 +70,7 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid> {
     );
   }
 
-  Widget _buildClothesCard(Clothes clothes, int index) {
+  Widget _buildClothesCard(Clothes clothes, bool isSelected) {
     return Column(
       children: [
         Stack(
@@ -93,7 +84,7 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
             ),
-            if (selected[index]!)
+            if (isSelected)
               AnimatedOpacity(
                 opacity: 1.0,
                 duration: Duration(milliseconds: 300),
@@ -116,8 +107,19 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid> {
         selected.values.where((isSelected) => isSelected).length;
     return FloatingActionButton.extended(
       onPressed: () async {
-        print("_buildFloatingActionButton : $selectedClothes");
-        await ClothesRepository().addClothesList(selectedClothes);
+        print("_buildFloatingActionButton : $selected");
+        var selectedIds = selected.entries
+            .where(
+              (it) => it.value == true,
+            )
+            .map(
+              (it) => it.key,
+            );
+        await ClothesRepository().addClothesList(selectedIds
+            .map((it) => clothesList.firstWhere(
+                  (e) => e.id == it,
+                ))
+            .toSet());
         // 플로팅 버튼 클릭 시의 동작
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => MainLayout()),
