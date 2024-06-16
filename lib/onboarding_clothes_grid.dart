@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
+import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/utils/custom_floating_action_button_location.dart';
 
@@ -119,7 +120,7 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid> {
         await ClothesRepository().addClothesList(selectedClothes);
         // 플로팅 버튼 클릭 시의 동작
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => MainPage()),
+          MaterialPageRoute(builder: (context) => MainLayout()),
         );
       },
       backgroundColor: Colors.black,
