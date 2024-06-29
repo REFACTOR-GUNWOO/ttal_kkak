@@ -6,7 +6,7 @@ import 'package:ttal_kkak/splash_page.dart';
 import 'package:ttal_kkak/setting_page.dart';
 
 void main() {
-  debugPaintSizeEnabled=true;
+  debugPaintSizeEnabled = false;
   runApp(MyApp());
 }
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Pretendard',
         primarySwatch: Colors.blue,
       ),
-      home: SettingPage(),
+      home: SplashPage(),
       routes: {
         '/addClothes': (context) => AddClothesPage(),
       },
