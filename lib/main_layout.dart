@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ttal_kkak/main_page.dart';
+import 'package:ttal_kkak/setting_page.dart';
 
 class MainLayout extends StatefulWidget {
   @override
@@ -20,7 +21,11 @@ class _MainLayoutState extends State<MainLayout> {
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: [MainPage(), MainPage(), MainPage(), MainPage()],
+        children: [
+          MainPage(),// 내 옷장 페이지
+          MainPage(),// 통계 페이지
+          MainPage(),// 코디 페이지
+          SettingPage()],// 설정 페이지
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
