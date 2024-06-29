@@ -22,17 +22,17 @@ class _AddClothesPageState extends State<AddClothesPage> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       Clothes newClothes = Clothes(
-        id: 11,
-        name: _name,
-        primaryCategory: _primaryCategory,
-        secondaryCategory: _secondaryCategory,
-        details: ClothesDetails(
-          topLength: _topLength,
-          sleeveLength: _sleeveLength,
-          neckline: _neckline,
-        ),
-        color: _color,
-      );
+          id: 11,
+          name: _name,
+          primaryCategory: _primaryCategory,
+          secondaryCategory: _secondaryCategory,
+          details: ClothesDetails(
+            topLength: _topLength,
+            sleeveLength: _sleeveLength,
+            neckline: _neckline,
+          ),
+          color: _color,
+          regTs: DateTime.now());
       // Do something with newClothes, e.g., add to list or send to backend.
       Navigator.of(context).pop(newClothes);
     }
