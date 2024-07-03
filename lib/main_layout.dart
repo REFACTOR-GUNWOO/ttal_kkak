@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ttal_kkak/add_clothes.dart';
 import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/setting_page.dart';
 
@@ -22,14 +23,15 @@ class _MainLayoutState extends State<MainLayout> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          MainPage(),// 내 옷장 페이지
-          MainPage(),// 통계 페이지
-          MainPage(),// 코디 페이지
-          SettingPage()],// 설정 페이지
+          MainPage(), // 내 옷장 페이지
+          MainPage(), // 통계 페이지
+          MainPage(), // 코디 페이지
+          SettingPage()
+        ], // 설정 페이지
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
-        items: const <BottomNavigationBarItem>[
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.checkroom),
             label: '내 옷장',
@@ -47,7 +49,12 @@ class _MainLayoutState extends State<MainLayout> {
             label: '설정',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
+            icon: IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                ShowAddClothesBottomSheet(context);
+              },
+            ),
             label: '추가',
           ),
         ],
