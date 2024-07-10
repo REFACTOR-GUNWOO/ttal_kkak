@@ -1,45 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/styles/colors_styles.dart';
+import 'package:ttal_kkak/styles/text_styles.dart';
 
 class ClothesGrid extends StatelessWidget {
   final List<Clothes> clothesList;
 
   ClothesGrid({required this.clothesList});
+  static const int columnCount = 4;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: EdgeInsets.all(8.0),
-      itemCount: (clothesList.length / 4).ceil(),
+      itemCount: (clothesList.length / columnCount).ceil(),
       itemBuilder: (context, index) {
-        int start = index * 4;
-        int end =
-            (start + 4) < clothesList.length ? start + 4 : clothesList.length;
+        int start = index * columnCount;
+        int end = (start + columnCount) < clothesList.length
+            ? start + columnCount
+            : clothesList.length;
         List<Clothes> rowClothes = clothesList.sublist(start, end);
 
         return Container(
-          margin: EdgeInsets.symmetric(vertical: 8.0),
-          padding: EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+          width: double.infinity,
+          alignment: Alignment.center,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: rowClothes
-                .map((clothes) => _buildClothesCard(context, clothes))
-                .toList(),
-          ),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: _buildClothesCardRow(context, rowClothes)),
         );
       },
     );
   }
 
+  List<Widget> _buildClothesCardRow(
+      BuildContext context, List<Clothes> rowClothes) {
+    List<Widget> list = rowClothes
+        .map((clothes) => _buildClothesCard(context, clothes))
+        .toList();
+    int listDiff = columnCount - list.length;
+
+    for (int i = 0; i < listDiff; i++) {
+      list.add(SvgPicture.asset("assets/icons/MiddleCloset.svg"));
+    }
+
+    list.insert(0, SvgPicture.asset("assets/icons/LeftCloset.svg"));
+    list.add(SvgPicture.asset("assets/icons/RightCloset.svg"));
+    return list;
+  }
+
   Widget _buildClothesCard(BuildContext context, Clothes clothes) {
     return GestureDetector(
         onTap: () => {showClothesOptionsBottomSheet(context, clothes)},
-        child: Column(
-          children: [
+        child: Column(children: [
+          Stack(children: [
+            SvgPicture.asset("assets/icons/MiddleCloset.svg"),
             Container(
               width: 60,
               height: 60,
@@ -48,10 +64,17 @@ class ClothesGrid extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
               ),
             ),
-            SizedBox(height: 8.0),
-            Text(clothes.name, style: TextStyle(fontSize: 12)),
-          ],
-        ));
+          ]),
+          SizedBox(
+            height: 8,
+          ),
+          Text(clothes.name,
+              style: OneLineTextStyles.SemiBold10.copyWith(
+                  color: SystemColors.gray800)),
+          SizedBox(
+            height: 8,
+          ),
+        ]));
   }
 }
 

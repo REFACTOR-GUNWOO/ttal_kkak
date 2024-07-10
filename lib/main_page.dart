@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ttal_kkak/closet_repository.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
+import 'package:ttal_kkak/styles/colors_styles.dart';
+import 'package:ttal_kkak/styles/text_styles.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -12,6 +15,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late List<Clothes> clothesList = [];
   late String closetName = "내 옷장";
+  late int tab1Index = 0;
+  late int tab2Index = 0;
 
   @override
   void initState() {
@@ -39,8 +44,9 @@ class _MainPageState extends State<MainPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
+                keyboardType: TextInputType.text,
                 controller: _controller,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Enter some text',
                   border: OutlineInputBorder(),
                 ),
@@ -75,63 +81,77 @@ class _MainPageState extends State<MainPage> {
     return DefaultTabController(
       length: categories.length,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            closetName,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black),
-          ),
-          backgroundColor: Colors.white,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.edit, color: Colors.black),
-              onPressed: () {
-                _showSaveClosetNameBottomSheet(context);
-              },
-            ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(90.0),
-            child: Container(
-                color: Colors.white,
-                child: Column(
+          backgroundColor: SignatureColors.begie200,
+          appBar: AppBar(
+              backgroundColor: SignatureColors.begie200,
+              title:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(
+                  closetName,
+                  textAlign: TextAlign.center,
+                  style: OneLineTextStyles.Bold18.copyWith(
+                      color: SystemColors.black),
+                ),
+                IconButton(
+                  padding: null,
+                  icon: SvgPicture.asset(
+                    'assets/icons/closet_title_update_button.svg',
+                    width: 16, // 원하는 크기로 설정할 수 있습니다.
+                    height: 16, // 원하는 크기로 설정할 수 있습니다.
+                  ),
+                  onPressed: () {
+                    _showSaveClosetNameBottomSheet(context);
+                  },
+                ),
+              ]),
+              centerTitle: true,
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(30.0),
+                child: Container(
+                    child: Column(
                   children: [
                     TabBar(
                       indicatorColor: Colors.purple,
+                      indicator: BoxDecoration(),
                       isScrollable: true,
-                      labelColor: Colors.red,
                       unselectedLabelColor: Colors.black,
+                      onTap: (value) {
+                        setState(() {
+                          tab1Index = value;
+                        });
+                      },
                       tabs: categories.map((category) {
                         int itemCount = category == '전체'
                             ? clothesList.length
                             : categorizedClothes[category]!.length;
-                        return Tab(text: '$category $itemCount');
+                        return Tab(
+                            child: categories.indexOf(category) == tab1Index
+                                ? Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                        Text('$category',
+                                            style: OneLineTextStyles.Bold14
+                                                .copyWith(
+                                                    color: SystemColors.black)),
+                                        Text(' $itemCount',
+                                            style: OneLineTextStyles.Bold14
+                                                .copyWith(
+                                                    color: SignatureColors
+                                                        .orange400))
+                                      ])
+                                : Text('$category $itemCount',
+                                    style: OneLineTextStyles.Medium14.copyWith(
+                                        color: SystemColors.gray700)));
                       }).toList(),
                     ),
-                    TabBar(
-                      indicatorColor: Colors.purple,
-                      isScrollable: true,
-                      labelColor: Colors.red,
-                      unselectedLabelColor: Colors.black,
-                      tabs: categories.map((category) {
-                        int itemCount = category == '전체'
-                            ? clothesList.length
-                            : categorizedClothes[category]!.length;
-                        return Tab(text: '$category $itemCount');
-                      }).toList(),
-                    )
                   ],
                 )),
-          ),
-        ),
-        body: TabBarView(
-          children: categories.map((category) {
-            List<Clothes> clothesToShow =
-                category == '전체' ? clothesList : categorizedClothes[category]!;
-            return ClothesGrid(clothesList: clothesToShow);
-          }).toList(),
-        ),
-      ),
+              ),
+              elevation: 0),
+          body: categories[tab1Index] == '전체'
+              ? ClothesGrid(clothesList: clothesList)
+              : ClothesGrid(
+                  clothesList: categorizedClothes[categories[tab1Index]]!)),
     );
   }
 }

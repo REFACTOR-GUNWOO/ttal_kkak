@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ttal_kkak/add_clothes.dart';
 import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/setting_page.dart';
+import 'package:ttal_kkak/styles/colors_styles.dart';
 
 class MainLayout extends StatefulWidget {
   @override
@@ -19,17 +21,19 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: SignatureColors.begie500,
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          MainPage(),// 내 옷장 페이지
-          MainPage(),// 통계 페이지
-          MainPage(),// 코디 페이지
-          SettingPage()],// 설정 페이지
+          MainPage(), // 내 옷장 페이지
+          MainPage(), // 통계 페이지
+          MainPage(), // 코디 페이지
+          SettingPage()
+        ], // 설정 페이지
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black,
-        items: const <BottomNavigationBarItem>[
+        backgroundColor: SignatureColors.begie500,
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.checkroom),
             label: '내 옷장',
@@ -47,7 +51,12 @@ class _MainLayoutState extends State<MainLayout> {
             label: '설정',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
+            icon: IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                ShowAddClothesBottomSheet(context);
+              },
+            ),
             label: '추가',
           ),
         ],
