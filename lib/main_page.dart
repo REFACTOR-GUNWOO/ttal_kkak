@@ -107,8 +107,7 @@ class _MainPageState extends State<MainPage> {
               centerTitle: true,
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(30.0),
-                child: Container(
-                    child: Column(
+                child: Column(
                   children: [
                     TabBar(
                       indicatorColor: Colors.purple,
@@ -145,7 +144,7 @@ class _MainPageState extends State<MainPage> {
                       }).toList(),
                     ),
                   ],
-                )),
+                ),
               ),
               elevation: 0),
           body: categories[tab1Index] == '전체'

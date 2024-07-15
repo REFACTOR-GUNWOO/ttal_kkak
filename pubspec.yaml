@@ -48,11 +48,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   rules:
-    prefer_typing_uninitialized_variables : false
-    prefer_const_constructors_in_immutables : false
-    prefer_const_constructors : false
-    avoid_print : false
-    prefer_const_literals_to_create_immutables : false
+    prefer_typing_uninitialized_variables: false
+    prefer_const_constructors_in_immutables: false
+    prefer_const_constructors: false
+    avoid_print: false
+    prefer_const_literals_to_create_immutables: false
 
   flutter_lints: ^2.0.0
 
@@ -72,6 +72,7 @@ flutter:
     - assets/icons/LeftCloset.svg
     - assets/icons/RightCloset.svg
     - assets/icons/MiddleCloset.svg
+    - assets/icons/hanger.svg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -56,14 +56,10 @@ class ClothesGrid extends StatelessWidget {
         child: Column(children: [
           Stack(children: [
             SvgPicture.asset("assets/icons/MiddleCloset.svg"),
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: clothes.color,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
+            Positioned.fill(
+                child: Align(
+                    alignment: Alignment.topCenter,
+                    child: SvgPicture.asset("assets/icons/hanger.svg")))
           ]),
           SizedBox(
             height: 8,
