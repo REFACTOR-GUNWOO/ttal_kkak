@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ttal_kkak/Category.dart';
 import 'package:ttal_kkak/closet_repository.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
@@ -67,19 +68,76 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     // 카테고리별로 옷 데이터를 그룹화
-    Map<String, List<Clothes>> categorizedClothes = {};
+    Map<FirstCategory, List<Clothes>> categorizedClothes = {};
     clothesList.forEach((clothes) {
-      if (!categorizedClothes.containsKey(clothes.primaryCategory)) {
-        categorizedClothes[clothes.primaryCategory] = [];
+      FirstCategory category = firstCategories
+          .firstWhere((element) => element.id == clothes.primaryCategoryId);
+
+      if (!categorizedClothes.containsKey(category)) {
+        categorizedClothes[category] = [];
       }
-      categorizedClothes[clothes.primaryCategory]!.add(clothes);
+      categorizedClothes[category]!.add(clothes);
     });
 
-    List<String> categories = categorizedClothes.keys.toList();
-    categories.insert(0, '전체'); // '전체' 탭 추가
+    List<FirstCategory> getSortedCategories() {
+      List<FirstCategory> categories = categorizedClothes.keys.toList();
+
+      categories.sort((a, b) => a.priority.compareTo(b.priority));
+      return categories;
+    }
+
+    ;
+
+    Tab getTab(bool isSelected, bool isAllTab, FirstCategory? category) {
+      int itemCount =
+          isAllTab ? clothesList.length : categorizedClothes[category]!.length;
+
+      String categoryName = isAllTab
+          ? "전체"
+          : category?.name != null
+              ? category!.name
+              : "";
+
+      return Tab(
+          child: isSelected
+              ? Row(mainAxisSize: MainAxisSize.min, children: [
+                  Text('$categoryName',
+                      style: OneLineTextStyles.Bold14.copyWith(
+                          color: SystemColors.black)),
+                  Text(' $itemCount',
+                      style: OneLineTextStyles.Bold14.copyWith(
+                          color: SignatureColors.orange400))
+                ])
+              : Text('$categoryName $itemCount',
+                  style: OneLineTextStyles.Medium14.copyWith(
+                      color: SystemColors.gray700)));
+    }
+
+    List<Tab> getTabs() {
+      Tab allTab = getTab(tab1Index == 0, true, null);
+      List<Tab> tabList = getSortedCategories().map((category) {
+        bool isSelected =
+            getSortedCategories().indexOf(category) == tab1Index - 1;
+        return getTab(isSelected, false, category);
+      }).toList();
+      tabList.insert(0, allTab);
+      return tabList;
+    }
+
+    List<ClothesGrid> getTabBarViews() {
+      ClothesGrid allTabView = ClothesGrid(clothesList: clothesList);
+
+      List<ClothesGrid> allTabViews = getSortedCategories().map((category) {
+        List<Clothes> clothesToShow = categorizedClothes[category]!;
+        return ClothesGrid(clothesList: clothesToShow);
+      }).toList();
+
+      allTabViews.insert(0, allTabView);
+      return allTabViews;
+    }
 
     return DefaultTabController(
-      length: categories.length,
+      length: getSortedCategories().length + 1,
       child: Scaffold(
           backgroundColor: SignatureColors.begie200,
           appBar: AppBar(
@@ -119,38 +177,17 @@ class _MainPageState extends State<MainPage> {
                           tab1Index = value;
                         });
                       },
-                      tabs: categories.map((category) {
-                        int itemCount = category == '전체'
-                            ? clothesList.length
-                            : categorizedClothes[category]!.length;
-                        return Tab(
-                            child: categories.indexOf(category) == tab1Index
-                                ? Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                        Text('$category',
-                                            style: OneLineTextStyles.Bold14
-                                                .copyWith(
-                                                    color: SystemColors.black)),
-                                        Text(' $itemCount',
-                                            style: OneLineTextStyles.Bold14
-                                                .copyWith(
-                                                    color: SignatureColors
-                                                        .orange400))
-                                      ])
-                                : Text('$category $itemCount',
-                                    style: OneLineTextStyles.Medium14.copyWith(
-                                        color: SystemColors.gray700)));
-                      }).toList(),
+                      tabs: getTabs(),
                     ),
                   ],
                 ),
               ),
               elevation: 0),
-          body: categories[tab1Index] == '전체'
+          body: tab1Index == 0
               ? ClothesGrid(clothesList: clothesList)
               : ClothesGrid(
-                  clothesList: categorizedClothes[categories[tab1Index]]!)),
+                  clothesList: categorizedClothes[
+                      getSortedCategories()[tab1Index - 1]]!)),
     );
   }
 }

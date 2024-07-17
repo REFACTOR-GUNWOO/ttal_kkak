@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
 import 'package:ttal_kkak/onboarding_clothes_grid.dart';
@@ -9,19 +11,50 @@ class OnboardingAddClothesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 카테고리별로 옷 데이터를 그룹화
-    Map<String, List<Clothes>> categorizedClothes = {};
+    Map<FirstCategory, List<Clothes>> categorizedClothes = {};
     clothesList.forEach((clothes) {
-      if (!categorizedClothes.containsKey(clothes.primaryCategory)) {
-        categorizedClothes[clothes.primaryCategory] = [];
+      FirstCategory category = firstCategories
+          .firstWhere((element) => element.id == clothes.primaryCategoryId);
+
+      if (!categorizedClothes.containsKey(category)) {
+        categorizedClothes[category] = [];
       }
-      categorizedClothes[clothes.primaryCategory]!.add(clothes);
+      categorizedClothes[category]!.add(clothes);
     });
 
-    List<String> categories = categorizedClothes.keys.toList();
-    categories.insert(0, '전체'); // '전체' 탭 추가
+    List<FirstCategory> getSortedCategories() {
+      List<FirstCategory> categories = categorizedClothes.keys.toList();
+
+      categories.sort((a, b) => a.priority.compareTo(b.priority));
+      return categories;
+    };
+
+    List<Tab> getTabs() {
+      Tab allTab = Tab(text: '전체 ${clothesList.length}');
+      List<Tab> tabList = getSortedCategories().map((category) {
+        int itemCount = categorizedClothes[category]!.length;
+        return Tab(text: '${category.name} $itemCount');
+      }).toList();
+      tabList.insert(0, allTab);
+      return tabList;
+    }
+
+    List<OnboardingClothesGrid> getTabBarViews() {
+      OnboardingClothesGrid allTabView =
+          OnboardingClothesGrid(clothesList: clothesList);
+
+      List<OnboardingClothesGrid> allTabViews =
+          getSortedCategories().map((category) {
+        List<Clothes> clothesToShow = categorizedClothes[category]!;
+        return OnboardingClothesGrid(clothesList: clothesToShow);
+      }).toList();
+
+      allTabViews.insert(0, allTabView);
+      return allTabViews;
+    }
 
     return DefaultTabController(
-      length: categories.length,
+      length: getSortedCategories().length + 1,
       child: Scaffold(
         appBar: AppBar(
           title: Text('기본템 패키지', style: TextStyle(color: Colors.black)),
@@ -35,22 +68,13 @@ class OnboardingAddClothesPage extends StatelessWidget {
                 isScrollable: true,
                 labelColor: Colors.red,
                 unselectedLabelColor: Colors.black,
-                tabs: categories.map((category) {
-                  int itemCount = category == '전체'
-                      ? clothesList.length
-                      : categorizedClothes[category]!.length;
-                  return Tab(text: '$category $itemCount');
-                }).toList(),
+                tabs: getTabs(),
               ),
             ),
           ),
         ),
         body: TabBarView(
-          children: categories.map((category) {
-            List<Clothes> clothesToShow =
-                category == '전체' ? clothesList : categorizedClothes[category]!;
-            return OnboardingClothesGrid(clothesList: clothesToShow);
-          }).toList(),
+          children: getTabBarViews(),
         ),
       ),
     );
