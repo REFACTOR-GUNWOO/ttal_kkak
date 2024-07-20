@@ -7,6 +7,7 @@ class Clothes {
   int secondaryCategoryId;
   ClothesDetails details; // 상세 설정
   Color color;
+  int? price;
   DateTime regTs = DateTime.now();
 
   Clothes(
@@ -16,6 +17,7 @@ class Clothes {
       required this.secondaryCategoryId,
       required this.details,
       required this.color,
+      required this.price,
       required this.regTs});
 
   factory Clothes.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class Clothes {
         secondaryCategoryId: json['secondaryCategoryId'],
         details: ClothesDetails.fromJson(json['details']),
         color: Color(json['color']),
+        price: json["price"],
         regTs: DateTime.fromMillisecondsSinceEpoch(json['regTs'] as int));
   }
 
@@ -37,6 +40,7 @@ class Clothes {
       'secondaryCategoryId': secondaryCategoryId,
       'details': details.toJson(),
       'color': color.value,
+      'price': price,
       'regTs': regTs.millisecondsSinceEpoch
     };
   }
@@ -107,6 +111,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.short,
           neckline: Neckline.round,
         ),
+        price: 123,
         color: Colors.black,
         regTs: DateTime.now()),
     Clothes(
@@ -119,6 +124,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.long,
           neckline: Neckline.vNeck,
         ),
+        price: 124,
         color: Colors.white,
         regTs: DateTime.now()),
     Clothes(
@@ -131,6 +137,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.long,
           neckline: Neckline.round,
         ),
+        price: 125,
         color: Colors.blue,
         regTs: DateTime.now()),
     Clothes(
@@ -143,6 +150,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.sleeveless,
           neckline: Neckline.round,
         ),
+        price: 126,
         color: Colors.indigo,
         regTs: DateTime.now()),
     Clothes(
@@ -155,18 +163,20 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.sleeveless,
           neckline: Neckline.round,
         ),
+        price: 127,
         color: Colors.black,
         regTs: DateTime.now()),
     Clothes(
         id: 6,
         name: '레드 드레스',
         primaryCategoryId: 3,
-        secondaryCategoryId: 1,
+        secondaryCategoryId: 5,
         details: ClothesDetails(
           topLength: TopLength.long,
           sleeveLength: SleeveLength.short,
           neckline: Neckline.offShoulder,
         ),
+        price: 12300,
         color: Colors.red,
         regTs: DateTime.now()),
     Clothes(
@@ -179,6 +189,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.long,
           neckline: Neckline.round,
         ),
+        price: 1230,
         color: Colors.brown,
         regTs: DateTime.now()),
     Clothes(
@@ -191,6 +202,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.short,
           neckline: Neckline.round,
         ),
+        price: 1231234,
         color: Colors.white,
         regTs: DateTime.now()),
     Clothes(
@@ -203,6 +215,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.sleeveless,
           neckline: Neckline.round,
         ),
+        price: 1,
         color: Colors.green,
         regTs: DateTime.now()),
     Clothes(
@@ -215,6 +228,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.long,
           neckline: Neckline.vNeck,
         ),
+        price: 123,
         color: Colors.pink,
         regTs: DateTime.now()),
     Clothes(
@@ -227,6 +241,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.short,
           neckline: Neckline.round,
         ),
+        price: 123,
         color: Colors.black,
         regTs: DateTime.now()),
     Clothes(
@@ -239,6 +254,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.long,
           neckline: Neckline.vNeck,
         ),
+        price: 123,
         color: Colors.white,
         regTs: DateTime.now()),
     Clothes(
@@ -251,6 +267,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.long,
           neckline: Neckline.round,
         ),
+        price: 123,
         color: Colors.blue,
         regTs: DateTime.now()),
     Clothes(
@@ -263,6 +280,7 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.sleeveless,
           neckline: Neckline.round,
         ),
+        price: 123,
         color: Colors.indigo,
         regTs: DateTime.now()),
     Clothes(
@@ -275,18 +293,20 @@ List<Clothes> generateDummyClothes() {
           sleeveLength: SleeveLength.sleeveless,
           neckline: Neckline.round,
         ),
+        price: 123,
         color: Colors.black,
         regTs: DateTime.now()),
     Clothes(
         id: 16,
         name: '레드 드레스',
         primaryCategoryId: 5,
-        secondaryCategoryId: 1,
+        secondaryCategoryId: 5,
         details: ClothesDetails(
           topLength: TopLength.long,
           sleeveLength: SleeveLength.short,
           neckline: Neckline.offShoulder,
         ),
+        price: 123,
         color: Colors.red,
         regTs: DateTime.now()),
   ];
