@@ -125,10 +125,15 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   ClothesGrid getClothesGrid() {
     return tab1Index == 0
-        ? ClothesGrid(clothesList: sortClothesList(clothesList))
+        ? ClothesGrid(
+            clothesList: sortClothesList(clothesList),
+            isOnboarding: false,
+          )
         : ClothesGrid(
-            clothesList: sortClothesList(getCategorizedClothes()[
-                getSortedCategories()[tab1Index - 1]]!));
+            clothesList: sortClothesList(
+                getCategorizedClothes()[getSortedCategories()[tab1Index - 1]]!),
+            isOnboarding: false,
+          );
   }
 
   List<Clothes> sortClothesList(List<Clothes> clothesList) {
@@ -203,11 +208,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    print("_outerTabController: ${getCategorizedClothes().length}");
-    print(getSecondTabs().length);
-    _outerTabController = TabController(length: getTabs().length, vsync: this);
-    _innerTabController =
-        TabController(length: getSecondTabs().length, vsync: this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       List<Clothes> loadedClothes = await ClothesRepository().loadClothes();

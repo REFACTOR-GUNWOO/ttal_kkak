@@ -1,12 +1,89 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
-import 'package:ttal_kkak/onboarding_clothes_grid.dart';
+import 'package:ttal_kkak/styles/colors_styles.dart';
+import 'package:ttal_kkak/styles/text_styles.dart';
 
-class OnboardingAddClothesPage extends StatelessWidget {
+class OnboardingAddClothesPage extends StatefulWidget {
+  @override
+  _OnboardingAddClothesPagetate createState() =>
+      _OnboardingAddClothesPagetate();
+}
+
+class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
   final List<Clothes> clothesList = generateDummyClothes();
+  late int tab1Index = 0;
+
+  Map<FirstCategory, List<Clothes>> getCategorizedClothes() {
+    Map<FirstCategory, List<Clothes>> categorizedClothes = {};
+    clothesList.forEach((clothes) {
+      FirstCategory category = firstCategories
+          .firstWhere((element) => element.id == clothes.primaryCategoryId);
+
+      if (!categorizedClothes.containsKey(category)) {
+        categorizedClothes[category] = [];
+      }
+      categorizedClothes[category]!.add(clothes);
+    });
+    return categorizedClothes;
+  }
+
+  TextButton getTab(int index, bool isAllTab, FirstCategory? category) {
+    int itemCount = isAllTab
+        ? clothesList.length
+        : getCategorizedClothes()[category]!.length;
+
+    String categoryName = isAllTab
+        ? "전체"
+        : category?.name != null
+            ? category!.name
+            : "";
+
+    return tab1Index == index
+        ? TextButton(
+            onPressed: () {
+              setState(() {
+                tab1Index = index;
+              });
+            },
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              Text('$categoryName',
+                  style: OneLineTextStyles.Bold14.copyWith(
+                      color: SystemColors.black)),
+              Text(' $itemCount',
+                  style: OneLineTextStyles.Bold14.copyWith(
+                      color: SignatureColors.orange400))
+            ]))
+        : TextButton(
+            onPressed: () {
+              setState(() {
+                tab1Index = index;
+              });
+            },
+            child: Text('$categoryName $itemCount',
+                style: OneLineTextStyles.Medium14.copyWith(
+                    color: SystemColors.gray700)));
+  }
+
+  List<FirstCategory> getSortedCategories() {
+    List<FirstCategory> categories = getCategorizedClothes().keys.toList();
+
+    categories.sort((a, b) => a.priority.compareTo(b.priority));
+    return categories;
+  }
+
+  List<TextButton> getTabs() {
+    TextButton allTab = getTab(0, true, null);
+    List<TextButton> tabList = getSortedCategories().map((category) {
+      return getTab(
+          getSortedCategories().indexOf(category) + 1, false, category);
+    }).toList();
+    tabList.insert(0, allTab);
+    return tabList;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,56 +104,83 @@ class OnboardingAddClothesPage extends StatelessWidget {
 
       categories.sort((a, b) => a.priority.compareTo(b.priority));
       return categories;
-    };
-
-    List<Tab> getTabs() {
-      Tab allTab = Tab(text: '전체 ${clothesList.length}');
-      List<Tab> tabList = getSortedCategories().map((category) {
-        int itemCount = categorizedClothes[category]!.length;
-        return Tab(text: '${category.name} $itemCount');
-      }).toList();
-      tabList.insert(0, allTab);
-      return tabList;
     }
 
-    List<OnboardingClothesGrid> getTabBarViews() {
-      OnboardingClothesGrid allTabView =
-          OnboardingClothesGrid(clothesList: clothesList);
+    ;
 
-      List<OnboardingClothesGrid> allTabViews =
-          getSortedCategories().map((category) {
-        List<Clothes> clothesToShow = categorizedClothes[category]!;
-        return OnboardingClothesGrid(clothesList: clothesToShow);
-      }).toList();
+    TextButton getTab(int index, bool isAllTab, FirstCategory? category) {
+      int itemCount = isAllTab
+          ? clothesList.length
+          : getCategorizedClothes()[category]!.length;
 
-      allTabViews.insert(0, allTabView);
-      return allTabViews;
+      String categoryName = isAllTab
+          ? "전체"
+          : category?.name != null
+              ? category!.name
+              : "";
+
+      return tab1Index == index
+          ? TextButton(
+              onPressed: () {
+                setState(() {
+                  tab1Index = index;
+                });
+              },
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                Text('$categoryName',
+                    style: OneLineTextStyles.Bold14.copyWith(
+                        color: SystemColors.black)),
+                Text(' $itemCount',
+                    style: OneLineTextStyles.Bold14.copyWith(
+                        color: SignatureColors.orange400))
+              ]))
+          : TextButton(
+              onPressed: () {
+                setState(() {
+                  tab1Index = index;
+                });
+              },
+              child: Text('$categoryName $itemCount',
+                  style: OneLineTextStyles.Medium14.copyWith(
+                      color: SystemColors.gray700)));
     }
 
-    return DefaultTabController(
-      length: getSortedCategories().length + 1,
-      child: Scaffold(
+    ClothesGrid getClothesGrid() {
+      return tab1Index == 0
+          ? ClothesGrid(
+              clothesList: clothesList,
+              isOnboarding: true,
+            )
+          : ClothesGrid(
+              clothesList: (getCategorizedClothes()[
+                  getSortedCategories()[tab1Index - 1]]!),
+              isOnboarding: true,
+            );
+    }
+
+    return Scaffold(
+        backgroundColor: SignatureColors.begie200,
         appBar: AppBar(
-          title: Text('기본템 패키지', style: TextStyle(color: Colors.black)),
-          backgroundColor: Colors.white,
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(48.0),
-            child: Container(
-              color: Colors.white,
-              child: TabBar(
-                indicatorColor: Colors.purple,
-                isScrollable: true,
-                labelColor: Colors.red,
-                unselectedLabelColor: Colors.black,
-                tabs: getTabs(),
+            backgroundColor: SignatureColors.begie200,
+            title: Text(
+              "기본템 패키지",
+              textAlign: TextAlign.center,
+              style:
+                  OneLineTextStyles.Bold18.copyWith(color: SystemColors.black),
+            ),
+            centerTitle: true,
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(60.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: getTabs(),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ),
+                ],
               ),
             ),
-          ),
-        ),
-        body: TabBarView(
-          children: getTabBarViews(),
-        ),
-      ),
-    );
+            elevation: 0),
+        body: getClothesGrid());
   }
 }
