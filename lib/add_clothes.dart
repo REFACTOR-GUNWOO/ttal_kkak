@@ -14,42 +14,54 @@ class AddClothes extends StatelessWidget {
 }
 
 void ShowAddClothesBottomSheet(BuildContext context) {
+  final TextEditingController _controller = TextEditingController();
+
   showModalBottomSheet(
       context: context,
-      // isScrollControlled: true,
       builder: (BuildContext context) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            BottomSheetHandle(),
-            BottomSheetAppBar(),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: '메모를 입력해주세요.',
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 12.0, horizontal: 14.0),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text('옷을 잘 구분할 수 있는 옷 이름으로 등록해주세요.',
-                      textAlign: TextAlign.left,
-                      style: BodyTextStyles.Regular14),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Close'),
-                  ),
-                ],
-              ),
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0), // 상단 왼쪽 라운드값
+              topRight: Radius.circular(20.0), // 상단 오른쪽 라운드값
             ),
-          ],
+          ),
+          height: 240, // 고정된 높이 설정
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              BottomSheetHandle(),
+              BottomSheetAppBar(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    TextField(
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                        hintText: '메모를 입력해주세요.',
+                        enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: SystemColors.gray500)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: SystemColors.gray500)),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 14.0),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text('옷을 잘 구분할 수 있는 옷 이름으로 등록해주세요.',
+                        textAlign: TextAlign.left,
+                        style: BodyTextStyles.Regular14),
+                    SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       });
 }
@@ -60,27 +72,28 @@ class BottomSheetAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        height: 56.0, // 일반적인 앱바 높이
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        height: 48, // 일반적인 앱바 높이
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.close, color: Color(0xff1e1e1e)),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+            // IconButton(
+            //   icon: const Icon(Icons.close, color: Color(0xff1e1e1e)),
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            // ),
             Text(
               '등록할 옷 이름',
-              style: TextStyle(color: Color(0xff1e1e1e), fontSize: 20.0),
+              style:
+                  OneLineTextStyles.Bold16.copyWith(color: SystemColors.black),
             ),
-            IconButton(
-              icon: Icon(Icons.more_vert, color: Color(0xff1e1e1e)),
-              onPressed: () {
-                // 추가 기능
-              },
-            ),
+            // IconButton(
+            //   icon: const Icon(Icons.more_vert, color: Color(0xff1e1e1e)),
+            //   onPressed: () {
+            //     // 추가 기능
+            //   },
+            // ),
           ],
         ));
   }
@@ -98,7 +111,7 @@ class BottomSheetHandle extends StatelessWidget {
         width: 48,
         height: 4,
         decoration: BoxDecoration(
-          color: Colors.grey,
+          color: SignatureColors.begie600,
           borderRadius: BorderRadius.circular(10),
         ),
       ),
