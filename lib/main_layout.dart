@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ttal_kkak/add_clothes.dart';
 import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/setting_page.dart';
+import 'package:ttal_kkak/styles/colors_styles.dart';
 
 class MainLayout extends StatefulWidget {
   @override
@@ -20,6 +21,7 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: SignatureColors.begie500,
       body: IndexedStack(
         index: _selectedIndex,
         children: [
@@ -30,7 +32,7 @@ class _MainLayoutState extends State<MainLayout> {
         ], // 설정 페이지
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black,
+        backgroundColor: SignatureColors.begie500,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.checkroom),

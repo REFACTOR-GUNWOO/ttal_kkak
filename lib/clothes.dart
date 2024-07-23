@@ -3,29 +3,32 @@ import 'package:flutter/material.dart';
 class Clothes {
   int id;
   String name;
-  String primaryCategory;
-  String secondaryCategory;
+  int primaryCategoryId;
+  int secondaryCategoryId;
   ClothesDetails details; // 상세 설정
   Color color;
+  int? price;
   DateTime regTs = DateTime.now();
 
   Clothes(
       {required this.id,
       required this.name,
-      required this.primaryCategory,
-      required this.secondaryCategory,
+      required this.primaryCategoryId,
+      required this.secondaryCategoryId,
       required this.details,
       required this.color,
+      required this.price,
       required this.regTs});
 
   factory Clothes.fromJson(Map<String, dynamic> json) {
     return Clothes(
         id: json['id'],
         name: json['name'],
-        primaryCategory: json['primaryCategory'],
-        secondaryCategory: json['secondaryCategory'],
+        primaryCategoryId: json['primaryCategoryId'],
+        secondaryCategoryId: json['secondaryCategoryId'],
         details: ClothesDetails.fromJson(json['details']),
         color: Color(json['color']),
+        price: json["price"],
         regTs: DateTime.fromMillisecondsSinceEpoch(json['regTs'] as int));
   }
 
@@ -33,10 +36,11 @@ class Clothes {
     return {
       'id': id,
       'name': name,
-      'primaryCategory': primaryCategory,
-      'secondaryCategory': secondaryCategory,
+      'primaryCategoryId': primaryCategoryId,
+      'secondaryCategoryId': secondaryCategoryId,
       'details': details.toJson(),
       'color': color.value,
+      'price': price,
       'regTs': regTs.millisecondsSinceEpoch
     };
   }
@@ -100,193 +104,209 @@ List<Clothes> generateDummyClothes() {
     Clothes(
         id: 1,
         name: '블랙 티셔츠',
-        primaryCategory: '상의',
-        secondaryCategory: '티셔츠',
+        primaryCategoryId: 1,
+        secondaryCategoryId: 1,
         details: ClothesDetails(
           topLength: TopLength.medium,
           sleeveLength: SleeveLength.short,
           neckline: Neckline.round,
         ),
+        price: 123,
         color: Colors.black,
         regTs: DateTime.now()),
     Clothes(
         id: 2,
         name: '화이트 셔츠',
-        primaryCategory: '상의',
-        secondaryCategory: '셔츠',
+        primaryCategoryId: 1,
+        secondaryCategoryId: 2,
         details: ClothesDetails(
           topLength: TopLength.long,
           sleeveLength: SleeveLength.long,
           neckline: Neckline.vNeck,
         ),
+        price: 124,
         color: Colors.white,
         regTs: DateTime.now()),
     Clothes(
         id: 3,
         name: '데님 재킷',
-        primaryCategory: '아우터',
-        secondaryCategory: '재킷',
+        primaryCategoryId: 2,
+        secondaryCategoryId: 1,
         details: ClothesDetails(
           topLength: TopLength.medium,
           sleeveLength: SleeveLength.long,
           neckline: Neckline.round,
         ),
+        price: 125,
         color: Colors.blue,
         regTs: DateTime.now()),
     Clothes(
         id: 4,
         name: '스키니 진',
-        primaryCategory: '하의',
-        secondaryCategory: '바지',
+        primaryCategoryId: 2,
+        secondaryCategoryId: 2,
         details: ClothesDetails(
           topLength: TopLength.long,
           sleeveLength: SleeveLength.sleeveless,
           neckline: Neckline.round,
         ),
+        price: 126,
         color: Colors.indigo,
         regTs: DateTime.now()),
     Clothes(
         id: 5,
         name: '블랙 스커트',
-        primaryCategory: '하의',
-        secondaryCategory: '스커트',
+        primaryCategoryId: 2,
+        secondaryCategoryId: 1,
         details: ClothesDetails(
           topLength: TopLength.short,
           sleeveLength: SleeveLength.sleeveless,
           neckline: Neckline.round,
         ),
+        price: 127,
         color: Colors.black,
         regTs: DateTime.now()),
     Clothes(
         id: 6,
         name: '레드 드레스',
-        primaryCategory: '원피스',
-        secondaryCategory: '드레스',
+        primaryCategoryId: 3,
+        secondaryCategoryId: 5,
         details: ClothesDetails(
           topLength: TopLength.long,
           sleeveLength: SleeveLength.short,
           neckline: Neckline.offShoulder,
         ),
+        price: 12300,
         color: Colors.red,
         regTs: DateTime.now()),
     Clothes(
         id: 7,
         name: '베이지 코트',
-        primaryCategory: '아우터',
-        secondaryCategory: '코트',
+        primaryCategoryId: 3,
+        secondaryCategoryId: 1,
         details: ClothesDetails(
           topLength: TopLength.long,
           sleeveLength: SleeveLength.long,
           neckline: Neckline.round,
         ),
+        price: 1230,
         color: Colors.brown,
         regTs: DateTime.now()),
     Clothes(
         id: 8,
         name: '흰색 반팔 티셔츠',
-        primaryCategory: '상의',
-        secondaryCategory: '티셔츠',
+        primaryCategoryId: 4,
+        secondaryCategoryId: 1,
         details: ClothesDetails(
           topLength: TopLength.short,
           sleeveLength: SleeveLength.short,
           neckline: Neckline.round,
         ),
+        price: 1231234,
         color: Colors.white,
         regTs: DateTime.now()),
     Clothes(
         id: 9,
         name: '카키색 치마',
-        primaryCategory: '하의',
-        secondaryCategory: '치마',
+        primaryCategoryId: 4,
+        secondaryCategoryId: 1,
         details: ClothesDetails(
           topLength: TopLength.medium,
           sleeveLength: SleeveLength.sleeveless,
           neckline: Neckline.round,
         ),
+        price: 1,
         color: Colors.green,
         regTs: DateTime.now()),
     Clothes(
         id: 10,
         name: '핑크 블라우스',
-        primaryCategory: '상의',
-        secondaryCategory: '블라우스',
+        primaryCategoryId: 4,
+        secondaryCategoryId: 2,
         details: ClothesDetails(
           topLength: TopLength.medium,
           sleeveLength: SleeveLength.long,
           neckline: Neckline.vNeck,
         ),
+        price: 123,
         color: Colors.pink,
         regTs: DateTime.now()),
     Clothes(
         id: 11,
         name: '블랙 티셔츠',
-        primaryCategory: '상의',
-        secondaryCategory: '티셔츠',
+        primaryCategoryId: 4,
+        secondaryCategoryId: 2,
         details: ClothesDetails(
           topLength: TopLength.medium,
           sleeveLength: SleeveLength.short,
           neckline: Neckline.round,
         ),
+        price: 123,
         color: Colors.black,
         regTs: DateTime.now()),
     Clothes(
         id: 12,
         name: '화이트 셔츠',
-        primaryCategory: '상의',
-        secondaryCategory: '셔츠',
+        primaryCategoryId: 5,
+        secondaryCategoryId: 1,
         details: ClothesDetails(
           topLength: TopLength.long,
           sleeveLength: SleeveLength.long,
           neckline: Neckline.vNeck,
         ),
+        price: 123,
         color: Colors.white,
         regTs: DateTime.now()),
     Clothes(
         id: 13,
         name: '데님 재킷',
-        primaryCategory: '아우터',
-        secondaryCategory: '재킷',
+        primaryCategoryId: 5,
+        secondaryCategoryId: 2,
         details: ClothesDetails(
           topLength: TopLength.medium,
           sleeveLength: SleeveLength.long,
           neckline: Neckline.round,
         ),
+        price: 123,
         color: Colors.blue,
         regTs: DateTime.now()),
     Clothes(
         id: 14,
         name: '스키니 진',
-        primaryCategory: '하의',
-        secondaryCategory: '바지',
+        primaryCategoryId: 5,
+        secondaryCategoryId: 1,
         details: ClothesDetails(
           topLength: TopLength.long,
           sleeveLength: SleeveLength.sleeveless,
           neckline: Neckline.round,
         ),
+        price: 123,
         color: Colors.indigo,
         regTs: DateTime.now()),
     Clothes(
         id: 15,
         name: '블랙 스커트',
-        primaryCategory: '하의',
-        secondaryCategory: '스커트',
+        primaryCategoryId: 5,
+        secondaryCategoryId: 2,
         details: ClothesDetails(
           topLength: TopLength.short,
           sleeveLength: SleeveLength.sleeveless,
           neckline: Neckline.round,
         ),
+        price: 123,
         color: Colors.black,
         regTs: DateTime.now()),
     Clothes(
         id: 16,
         name: '레드 드레스',
-        primaryCategory: '원피스',
-        secondaryCategory: '드레스',
+        primaryCategoryId: 5,
+        secondaryCategoryId: 5,
         details: ClothesDetails(
           topLength: TopLength.long,
           sleeveLength: SleeveLength.short,
           neckline: Neckline.offShoulder,
         ),
+        price: 123,
         color: Colors.red,
         regTs: DateTime.now()),
   ];
