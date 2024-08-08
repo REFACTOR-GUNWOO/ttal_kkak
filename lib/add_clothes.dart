@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ttal_kkak/utils/length_limited_text_input.dart';
 import 'styles/text_styles.dart';
 import 'styles/colors_styles.dart';
@@ -11,7 +12,7 @@ void ShowAddClothesBottomSheet(BuildContext context) {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (BuildContext context) {
-        return StepContainer();
+        return Wrap(children: [StepContainer()]);
       });
 }
 
@@ -41,7 +42,7 @@ class _StepContainerState extends State<StepContainer> {
     print("_previousStep:${_currentStep}");
   }
 
-  List<Widget> _buildSteps() {
+  List<BottomSheetStep> _buildSteps() {
     return [
       BottomSheetBody1(),
       BottomSheetBody2(),
@@ -55,21 +56,34 @@ class _StepContainerState extends State<StepContainer> {
         children: [
           BottomSheetHandle(),
           BottomSheetAppBar(
-            nextStep: _nextStep,
-            previousStep: _previousStep,
-            isLast: _currentStep == _buildSteps().length - 1,
-            isStart: _currentStep == 0,
+            nextStepFun: _nextStep,
+            previousStepFun: _previousStep,
+            nextStep: _currentStep == _buildSteps().length - 1
+                ? null
+                : _buildSteps()[_currentStep + 1],
+            previousStep:
+                _currentStep == 0 ? null : _buildSteps()[_currentStep - 1],
+            currentStep: _buildSteps()[_currentStep],
           ),
-          _buildSteps()[_currentStep],
+          _buildSteps()[_currentStep] as Widget,
         ],
       ),
     );
   }
 }
 
-class BottomSheetBody1 extends StatefulWidget {
+abstract class BottomSheetStep {
+  String getTitle();
+}
+
+class BottomSheetBody1 extends StatefulWidget implements BottomSheetStep {
   @override
   _BottomSheetBody1State createState() => _BottomSheetBody1State();
+
+  @override
+  String getTitle() {
+    return "옷 이름";
+  }
 }
 
 class _BottomSheetBody1State extends State<BottomSheetBody1> {
@@ -97,9 +111,14 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
   }
 }
 
-class BottomSheetBody2 extends StatefulWidget {
+class BottomSheetBody2 extends StatefulWidget implements BottomSheetStep {
   @override
   _BottomSheetBody2State createState() => _BottomSheetBody2State();
+
+  @override
+  String getTitle() {
+    return "옷 카테고리";
+  }
 }
 
 class _BottomSheetBody2State extends State<BottomSheetBody2> {
@@ -128,16 +147,18 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
 }
 
 class BottomSheetAppBar extends StatelessWidget {
-  final VoidCallback nextStep;
-  final VoidCallback previousStep;
-  final bool isStart;
-  final bool isLast;
+  final VoidCallback nextStepFun;
+  final VoidCallback previousStepFun;
+  final BottomSheetStep? nextStep;
+  final BottomSheetStep? previousStep;
+  final BottomSheetStep currentStep;
   const BottomSheetAppBar({
     super.key,
-    required this.nextStep,
-    required this.previousStep,
-    required this.isStart,
-    required this.isLast,
+    required this.nextStepFun,
+    required this.previousStepFun,
+    this.nextStep,
+    this.previousStep,
+    required this.currentStep,
   });
 
   @override
@@ -150,35 +171,47 @@ class BottomSheetAppBar extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: TextButton(
-                child: isStart
+                child: previousStep == null
                     ? Container()
-                    : Text(
-                        '이전',
-                        style: OneLineTextStyles.Bold16.copyWith(
-                            color: SystemColors.black),
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SvgPicture.asset('assets/icons/arrow_left.svg'),
+                          Text(
+                            previousStep!.getTitle(),
+                            style: OneLineTextStyles.Medium14.copyWith(
+                                color: SystemColors.gray700),
+                          ),
+                        ],
                       ),
-                onPressed: previousStep,
+                onPressed: previousStepFun,
               ),
               flex: 2,
             ),
             Expanded(
                 child: Text(
-                  '등록할 옷 이름',
+                  currentStep.getTitle(),
                   textAlign: TextAlign.center,
-                  style: OneLineTextStyles.Bold16.copyWith(
+                  style: OneLineTextStyles.SemiBold16.copyWith(
                       color: SystemColors.black),
                 ),
                 flex: 2),
             Expanded(
-                child: isLast
-                    ? SizedBox()
-                    : TextButton(
-                        child: Text(
-                          '다음',
-                          style: OneLineTextStyles.Bold16.copyWith(
-                              color: SystemColors.black),
-                        ),
-                        onPressed: nextStep),
+                child: TextButton(
+                    child: nextStep == null
+                        ? Container()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                nextStep!.getTitle(),
+                                style: OneLineTextStyles.Medium14.copyWith(
+                                    color: SystemColors.gray700),
+                              ),
+                              SvgPicture.asset('assets/icons/arrow_right.svg'),
+                            ],
+                          ),
+                    onPressed: nextStepFun),
                 flex: 2),
           ],
         ));
