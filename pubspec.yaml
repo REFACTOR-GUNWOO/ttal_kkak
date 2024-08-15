@@ -36,7 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_colorpicker: ^1.1.0
   shared_preferences: ^2.2.3
-  flutter_svg: ^2.0.10+1
+  flutter_svg: ^1.0.3
+  path_drawing: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -69,11 +70,16 @@ flutter:
     - assets/icons/arrow_right.png
     - assets/icons/arrow_left.svg
     - assets/icons/arrow_right.svg
+    - assets/icons/arrow_up.svg
+    - assets/icons/arrow_down.svg
     - assets/icons/closet_title_update_button.svg
     - assets/icons/LeftCloset.svg
     - assets/icons/RightCloset.svg
     - assets/icons/MiddleCloset.svg
     - assets/icons/hanger.svg
+    - assets/icons/test_tshirt.svg
+    - assets/icons/test_outline.svg
+    - assets/icons/test_outline_2.svg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -7,7 +7,7 @@ import 'package:ttal_kkak/setting_page.dart';
 import 'package:ttal_kkak/splash_page.dart';
 
 void main() {
-  // debugPaintSizeEnabled = true;
+  debugPaintSizeEnabled = true;
   runApp(MyApp());
 }
 

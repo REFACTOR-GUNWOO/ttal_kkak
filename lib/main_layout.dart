@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ttal_kkak/add_clothes.dart';
+import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
 import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/setting_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
