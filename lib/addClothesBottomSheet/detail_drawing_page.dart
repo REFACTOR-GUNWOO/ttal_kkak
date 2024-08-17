@@ -7,7 +7,7 @@ import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 void main() {
-  debugPaintSizeEnabled = true;
+  // debugPaintSizeEnabled = true;
   runApp(MyApp());
 }
 
@@ -40,6 +40,100 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   ];
   bool _isErasing = false;
 
+  final List<Color> colors = [
+    Colors.white,
+    Colors.black,
+    Colors.grey,
+    Colors.red,
+    Colors.orange,
+    Colors.yellow,
+    Colors.green,
+    Colors.blue,
+    Colors.purple,
+    Colors.pink,
+    Colors.brown,
+    Colors.black87,
+  ];
+
+  void _showColorPicker(BuildContext context) {
+    print("_showColorPicker");
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 4.0,
+                width: 40.0,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2.0),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                '펜 컬러',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 6,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: colors.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context, colors[index]);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: colors[index],
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.check,
+                          color: colors[index] == brushColor
+                              ? Colors.orange
+                              : Colors.transparent,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    ).then((selectedColor) {
+      if (selectedColor != null) {
+        // 선택된 색상을 처리
+        print('선택된 색상: $selectedColor');
+        setState(() {
+          brushColor = selectedColor;
+        });
+      }
+    });
+  }
+
   void _selectPencil(int index) {
     _isErasing = false;
     setState(() {
@@ -56,7 +150,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     setState(() {
       _expandedIndex = -1;
       if (!_isErasing) {
-        brushWidth = 10;
+        brushWidth = 5;
         _isErasing = true;
       } else {
         _isErasing = false;
@@ -215,7 +309,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                       children: [
                         ...pencilInfos.asMap().entries.map((e) {
                           return Pencil(
-                            color: Colors.green,
+                            color: brushColor,
                             width: e.value.width,
                             isExpanded: _expandedIndex == e.key,
                             onTap: () => _selectPencil(e.key),
@@ -231,13 +325,20 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                   Positioned(
                       top: 14,
                       right: 14,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0))),
-                        width: 32,
-                        height: 32,
+                      child: GestureDetector(
+                        onTap: () => _showColorPicker(context),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.white, // 테두리 색상
+                                width: 3.0, // 테두리 두께
+                              ),
+                              color: brushColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5.0))),
+                          width: 32,
+                          height: 32,
+                        ),
                       ))
                 ],
               ),
@@ -313,57 +414,6 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
       lines.clear();
       undoneLines.clear();
     });
-  }
-
-  void selectColor() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        Color tempColor = brushColor;
-        return AlertDialog(
-          title: Text('Select Color'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text('Brightness'),
-              Slider(
-                value: 1.0,
-                min: 0.0,
-                max: 1.0,
-                onChanged: (value) {
-                  setState(() {
-                    brushColor = tempColor.withOpacity(value);
-                  });
-                },
-              ),
-              Text('Saturation'),
-              Slider(
-                value: 1.0,
-                min: 0.0,
-                max: 1.0,
-                onChanged: (value) {
-                  setState(() {
-                    HSLColor hslColor = HSLColor.fromColor(tempColor);
-                    brushColor = hslColor.withSaturation(value).toColor();
-                  });
-                },
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            ElevatedButton(
-              child: const Text('Done'),
-              onPressed: () {
-                setState(() {
-                  brushColor = tempColor;
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }
 
@@ -527,7 +577,7 @@ class Pencil extends StatelessWidget {
               child: Center(
                 child: SvgPicture.asset(
                   "assets/icons/pencil_top.svg",
-                  color: Colors.black,
+                  color: color,
                   width: width - 5,
                 ),
               ),
@@ -563,7 +613,6 @@ class Eraser extends StatelessWidget {
             duration: Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             height: isExpanded ? 80 : 62,
-            color: Colors.blue,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
