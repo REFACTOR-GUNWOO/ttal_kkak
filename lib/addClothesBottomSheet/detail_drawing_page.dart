@@ -6,20 +6,6 @@ import 'package:path_drawing/path_drawing.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
-void main() {
-  // debugPaintSizeEnabled = true;
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DetailDrawingPage(),
-    );
-  }
-}
-
 class DetailDrawingPage extends StatefulWidget {
   @override
   _DetailDrawingPageState createState() => _DetailDrawingPageState();

@@ -30,9 +30,11 @@ class BottomSheetAppBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Expanded(
+              flex: 2,
               child: previousStep == null
                   ? Container()
                   : TextButton(
+                      onPressed: previousStepFun,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -44,22 +46,22 @@ class BottomSheetAppBar extends StatelessWidget {
                           ),
                         ],
                       ),
-                      onPressed: previousStepFun,
                     ),
-              flex: 2,
             ),
             Expanded(
+                flex: 2,
                 child: Text(
                   currentStep.getTitle(),
                   textAlign: TextAlign.center,
                   style: OneLineTextStyles.SemiBold16.copyWith(
                       color: SystemColors.black),
-                ),
-                flex: 2),
+                )),
             Expanded(
+                flex: 2,
                 child: nextStep == null
                     ? Container()
                     : TextButton(
+                        onPressed: nextStepFun,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -70,9 +72,7 @@ class BottomSheetAppBar extends StatelessWidget {
                             ),
                             SvgPicture.asset('assets/icons/arrow_right.svg'),
                           ],
-                        ),
-                        onPressed: nextStepFun),
-                flex: 2),
+                        ))),
           ],
         ));
   }

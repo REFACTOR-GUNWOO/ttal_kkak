@@ -34,21 +34,15 @@ class _StepContainerState extends State<StepContainer> {
   int _currentStep = 0;
 
   void _nextStep() {
-    print("_nextStep:${_currentStep}");
-
     setState(() {
       _currentStep++;
     });
-    print("_nextStep:${_currentStep}");
   }
 
   void _previousStep() {
-    print("_previousStep:${_currentStep}");
-
     setState(() {
       _currentStep--;
     });
-    print("_previousStep:${_currentStep}");
   }
 
   List<BottomSheetStep> _buildSteps() {
@@ -64,7 +58,7 @@ class _StepContainerState extends State<StepContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SingleChildScrollView(
       child: Column(
         children: [
           BottomSheetHandle(),

@@ -8,9 +8,12 @@ class LengthLimitedTextInput extends StatefulWidget {
   final String hintText;
   final String description;
   final ValueChanged<String> onTextChanged;
+  final ValueChanged<String> onSubmit;
+  final TextEditingController controller;
 
-  LengthLimitedTextInput(
-      this.maxLength, this.hintText, this.description, this.onTextChanged);
+  const LengthLimitedTextInput(this.maxLength, this.hintText, this.description,
+      this.onTextChanged, this.onSubmit,
+      {super.key, required this.controller});
 
   @override
   _LengthLimitedTextInputStatue createState() =>
@@ -28,7 +31,7 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = widget.controller;
     _controller.addListener(_handleTextChanged);
     _controller.addListener(() {
       setState(() {
@@ -49,6 +52,7 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
       children: [
         TextField(
           controller: _controller,
+          onSubmitted: (value) => {widget.onSubmit(value)},
           inputFormatters: [LengthLimitingTextInputFormatter(8)],
           decoration: InputDecoration(
             suffix: AnimatedBuilder(
