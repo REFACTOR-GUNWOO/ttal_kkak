@@ -41,6 +41,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   bool _isErasing = false;
 
   void _selectPencil(int index) {
+    _isErasing = false;
     setState(() {
       if (_expandedIndex == index) {
         _expandedIndex = -1; // 클릭한 게 이미 확장된 상태면 축소
@@ -220,7 +221,10 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                             onTap: () => _selectPencil(e.key),
                           );
                         }),
-                        Eraser(onTap: () => _selectErase())
+                        Eraser(
+                          onTap: () => _selectErase(),
+                          isExpanded: _isErasing,
+                        )
                       ],
                     ),
                   ),
@@ -269,7 +273,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     Offset localPosition = details.localPosition;
 
     setState(() {
-      currentLine = DrawnLine([localPosition], brushWidth, brushColor);
+      currentLine = DrawnLine([localPosition], brushWidth,
+          _isErasing ? Colors.transparent : brushColor);
       lines.add(currentLine!);
     });
   }
@@ -434,6 +439,7 @@ class DrawingPainter extends CustomPainter {
 
       canvas.clipPath(scaledPath.transform(matrix2.storage));
     }
+    canvas.saveLayer(null, Paint());
 
     List<DrawnLine> erasedLines = lines
         .where(
@@ -446,29 +452,23 @@ class DrawingPainter extends CustomPainter {
           (e) => e.color != Colors.transparent,
         )
         .toList();
-    canvas.saveLayer(null, Paint());
 
-    for (var line in unerasedLines) {
-      Paint paint = Paint()
-        ..color = line.color
-        ..strokeCap = StrokeCap.round
-        ..strokeWidth = line.width;
-      for (int i = 0; i < line.points.length - 1; i++) {
-        canvas.drawLine(line.points[i], line.points[i + 1], paint);
-      }
-    }
-
-    for (var line in erasedLines) {
-      Paint paint = Paint()
-        ..strokeCap = StrokeCap.round
-        ..strokeWidth = 20
-        ..blendMode = BlendMode.clear;
-      print(paint);
+    for (var line in lines) {
+      Paint paint = (line.color != Colors.transparent)
+          ? (Paint()
+            ..color = line.color
+            ..strokeCap = StrokeCap.round
+            ..strokeWidth = line.width)
+          : (Paint()
+            ..strokeCap = StrokeCap.round
+            ..strokeWidth = line.width
+            ..blendMode = BlendMode.clear);
 
       for (int i = 0; i < line.points.length - 1; i++) {
         canvas.drawLine(line.points[i], line.points[i + 1], paint);
       }
     }
+
     canvas.restore();
   }
 
@@ -551,24 +551,30 @@ class Pencil extends StatelessWidget {
 
 class Eraser extends StatelessWidget {
   final VoidCallback onTap;
+  final bool isExpanded;
 
-  const Eraser({super.key, required this.onTap});
+  const Eraser({super.key, required this.onTap, required this.isExpanded});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10.0),
-              topRight: Radius.circular(10.0),
-            ),
-          ),
-          height: 80,
-          width: 30,
-        ));
+        child: AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            height: isExpanded ? 80 : 62,
+            color: Colors.blue,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  topRight: Radius.circular(10.0),
+                ),
+              ),
+              height: 80,
+              width: 30,
+            )));
     ;
   }
 }
