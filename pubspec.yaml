@@ -80,6 +80,10 @@ flutter:
     - assets/icons/test_tshirt.svg
     - assets/icons/test_outline.svg
     - assets/icons/test_outline_2.svg
+    - assets/icons/pencil_top.svg
+    - assets/icons/left_curve_arrow.svg
+    - assets/icons/right_curve_arrow.svg
+    - assets/icons/retry.svg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
