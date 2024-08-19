@@ -7,6 +7,9 @@ import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 class BottomSheetBody6 extends StatefulWidget implements BottomSheetStep {
+    final VoidCallback onNextStep;
+  const BottomSheetBody6({super.key, required this.onNextStep});
+
   @override
   DetailInfoCards createState() => DetailInfoCards();
 

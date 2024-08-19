@@ -5,6 +5,9 @@ import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 class BottomSheetBody3 extends StatefulWidget implements BottomSheetStep {
+  final VoidCallback onNextStep;
+  const BottomSheetBody3({super.key, required this.onNextStep});
+
   @override
   _BottomSheetBody3State createState() => _BottomSheetBody3State();
 
@@ -45,9 +48,9 @@ class CategoryScreen extends StatelessWidget {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // 한 행에 두 개의 아이템
-        crossAxisSpacing: 16.0, // 수평 간격
-        mainAxisSpacing: 16.0, // 수직 간격
-        childAspectRatio: 4 / 1, // 아이템의 가로세로 비율
+        crossAxisSpacing: 6.0, // 수평 간격
+        mainAxisSpacing: 6.0, // 수직 간격
+        childAspectRatio: 4, // 아이템의 가로세로 비율
       ),
       itemCount: categories.length,
       itemBuilder: (context, index) {

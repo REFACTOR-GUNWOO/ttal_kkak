@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
+import 'package:ttal_kkak/category.dart';
+import 'package:ttal_kkak/clothes_draft.dart';
+import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 class BottomSheetBody2 extends StatefulWidget implements BottomSheetStep {
+  final VoidCallback onNextStep;
+  const BottomSheetBody2({super.key, required this.onNextStep});
+
   @override
   _BottomSheetBody2State createState() => _BottomSheetBody2State();
 
@@ -15,76 +20,92 @@ class BottomSheetBody2 extends StatefulWidget implements BottomSheetStep {
 }
 
 class _BottomSheetBody2State extends State<BottomSheetBody2> {
-  String _childText = '';
+  int? selectedCategoryId;
 
   @override
   void initState() {
-    print("_AddClothesState");
     super.initState();
-  }
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ClothesDraft? draft = await ClothesDraftRepository().load();
+      int? primaryCategoryId = draft?.primaryCategoryId;
 
-  void _handleTextChanged(String newText) {
-    print(_childText);
-    setState(() {
-      _childText = newText;
+      setState(() {
+        selectedCategoryId = primaryCategoryId;
+      });
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(height: 1200, child: CategoryScreen());
+  void save(int categoryId) async {
+    ClothesDraft? draft = await ClothesDraftRepository().load();
+    if (draft != null) {
+      draft.primaryCategoryId = categoryId;
+      ClothesDraftRepository().save(draft);
+      widget.onNextStep();
+      return;
+    }
   }
-}
-
-class CategoryScreen extends StatelessWidget {
-  final List<Map<String, String>> categories = [
-    {'title': '상의', 'description': '티셔츠 블라우스, 니트, 조끼 등의 옷이 있어요.'},
-    {'title': '하의', 'description': '청바지, 슬랙스, 반바지, 레깅스 등의 옷이 있어요.'},
-    {'title': '아우터', 'description': '야상, 가디건, 자켓 코트, 패딩 등의 옷이 있어요.'},
-    {'title': '원피스', 'description': '원피스, 점프슈트 등의 옷이 있어요.'},
-    {'title': '신발', 'description': '슬리퍼, 운동화, 구두 등의 옷이 있어요.'},
-  ];
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      scrollDirection: Axis.vertical,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16.0,
-        mainAxisSpacing: 16.0,
-        childAspectRatio: 3 / 2,
-      ),
-      itemCount: categories.length,
-      itemBuilder: (context, index) {
-        final category = categories[index];
-        return TextButton(
-            onPressed: () => {},
-            child: Card(
-              elevation: 2.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      category['title']!,
-                      style: OneLineTextStyles.SemiBold16.copyWith(
-                          color: SystemColors.black),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(category['description']!,
-                        style: BodyTextStyles.Medium12.copyWith(
-                            color: SystemColors.gray700)),
-                  ],
+    return Container(
+      height: 1200,
+      child: GridView.builder(
+        scrollDirection: Axis.vertical,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 0.0,
+          mainAxisSpacing: 0.0,
+          childAspectRatio: 3 / 2,
+        ),
+        itemCount: firstCategories.length,
+        itemBuilder: (context, index) {
+          final category = firstCategories[index];
+
+          return Padding(
+            padding: const EdgeInsets.all(0.0), // 카드와 그리드 간의 패딩
+
+            child: TextButton(
+                onPressed: () async => {save(category.id)},
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero, // 패딩 제거
+                  minimumSize: Size(0, 0), // 버튼의 최소 크기 제거
                 ),
-              ),
-            ));
-      },
+                child: Card(
+                  elevation: 0.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    side: selectedCategoryId == category.id
+                        ? BorderSide(
+                            color: SystemColors.black, // 테두리 색상
+                            width: 1.5, // 테두리 두께
+                          )
+                        : BorderSide(
+                            color: SystemColors.gray500, // 테두리 색상
+                            width: 1.0, // 테두리 두께
+                          ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          category.name,
+                          style: OneLineTextStyles.SemiBold16.copyWith(
+                              color: SystemColors.black),
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(category.description,
+                            style: BodyTextStyles.Medium12.copyWith(
+                                color: SystemColors.gray700)),
+                      ],
+                    ),
+                  ),
+                )),
+          );
+        },
+      ),
     );
   }
 }

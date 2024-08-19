@@ -5,7 +5,8 @@ import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/utils/length_limited_text_input.dart';
 
 class BottomSheetBody1 extends StatefulWidget implements BottomSheetStep {
-  const BottomSheetBody1({super.key});
+  const BottomSheetBody1({super.key, required this.onNextStep});
+  final VoidCallback onNextStep;
 
   @override
   _BottomSheetBody1State createState() => _BottomSheetBody1State();
@@ -52,6 +53,7 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
     }
     draft.name = text;
     ClothesDraftRepository().save(draft);
+    widget.onNextStep();
   }
 
   @override

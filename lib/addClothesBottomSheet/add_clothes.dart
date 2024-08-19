@@ -47,12 +47,12 @@ class _StepContainerState extends State<StepContainer> {
 
   List<BottomSheetStep> _buildSteps() {
     return [
-      BottomSheetBody1(),
-      BottomSheetBody2(),
-      BottomSheetBody3(),
-      BottomSheetBody4(),
-      BottomSheetBody5(),
-      BottomSheetBody6()
+      BottomSheetBody1(onNextStep: _nextStep),
+      BottomSheetBody2(onNextStep: _nextStep),
+      BottomSheetBody3(onNextStep: _nextStep),
+      BottomSheetBody4(onNextStep: _nextStep),
+      BottomSheetBody5(onNextStep: _nextStep),
+      BottomSheetBody6(onNextStep: _nextStep)
     ];
   }
 

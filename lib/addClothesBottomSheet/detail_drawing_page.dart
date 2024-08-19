@@ -25,6 +25,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     PencilInfo(pencilSize: 2, width: 18)
   ];
   bool _isErasing = false;
+  final double minDistance = 4.0; // 손떨림 방지를 위한 최소 거리 설정
 
   final List<Color> colors = [
     Colors.white,
@@ -42,7 +43,6 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   ];
 
   void _showColorPicker(BuildContext context) {
-    print("_showColorPicker");
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -112,7 +112,6 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     ).then((selectedColor) {
       if (selectedColor != null) {
         // 선택된 색상을 처리
-        print('선택된 색상: $selectedColor');
         setState(() {
           brushColor = selectedColor;
         });
@@ -136,7 +135,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     setState(() {
       _expandedIndex = -1;
       if (!_isErasing) {
-        brushWidth = 5;
+        brushWidth = 10;
         _isErasing = true;
       } else {
         _isErasing = false;
@@ -358,7 +357,6 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
 
   void _startDrawing(DragStartDetails details) {
     Offset localPosition = details.localPosition;
-
     setState(() {
       currentLine = DrawnLine([localPosition], brushWidth,
           _isErasing ? Colors.transparent : brushColor);
@@ -368,15 +366,22 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
 
   void _updateDrawing(DragUpdateDetails details) {
     Offset localPosition = details.localPosition;
-    print("_updateDrawing :${localPosition}");
-
     setState(() {
-      currentLine?.points.add(localPosition);
+      if (currentLine != null &&
+          (currentLine!.points.isEmpty ||
+              (localPosition - currentLine!.points.last).distance >
+                  minDistance)) {
+        currentLine?.points.add(localPosition);
+      }
     });
   }
 
   void _endDrawing(DragEndDetails details) {
     setState(() {
+      if (currentLine != null && currentLine!.points.length == 1) {
+        currentLine?.points.add(currentLine!.points.first);
+      }
+
       currentLine = null;
     });
   }
@@ -455,6 +460,36 @@ class DrawingPainter extends CustomPainter {
   final DrawableRoot? drawableRoot;
 
   DrawingPainter(this.lines, this.drawableRoot);
+
+  Path createSmoothPath(List<Offset> points) {
+    Path path = Path();
+
+    if (points.isEmpty) return path;
+
+    path.moveTo(points.first.dx, points.first.dy);
+
+    for (int i = 1; i < points.length - 1; i++) {
+      final p0 = points[i - 1];
+      final p1 = points[i];
+      final p2 = points[i + 1];
+
+      final controlPoint = Offset(
+        (p0.dx + p2.dx) / 2,
+        (p0.dy + p2.dy) / 2,
+      );
+
+      path.quadraticBezierTo(
+        p1.dx,
+        p1.dy,
+        controlPoint.dx,
+        controlPoint.dy,
+      );
+    }
+
+    path.lineTo(points.last.dx, points.last.dy);
+
+    return path;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
