@@ -59,8 +59,13 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: ClampingScrollPhysics(),
       child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom),
           child: LengthLimitedTextInput(
             8,
             "메모를 입력해주세요.",
