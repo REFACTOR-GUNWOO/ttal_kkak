@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
+import 'package:ttal_kkak/category.dart';
+import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/clothes_draft.dart';
+import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 class BottomSheetBody4 extends StatefulWidget implements BottomSheetStep {
-    final VoidCallback onNextStep;
+  final VoidCallback onNextStep;
   const BottomSheetBody4({super.key, required this.onNextStep});
 
   @override
@@ -19,12 +23,57 @@ class BottomSheetBody4 extends StatefulWidget implements BottomSheetStep {
 }
 
 class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
-  String _selectedLength = '중간길이';
-  String _selectedSleeve = '반팔';
-  String _selectedNeckline = '라운드넥';
+  TopLength _selectedLength = TopLength.long;
+  SleeveLength _selectedSleeve = SleeveLength.short;
+  Neckline _selectedNeckline = Neckline.round;
   bool _isLengthDropdownVisible = false;
   bool _isSleeveDropdownVisible = false;
   bool _isNecklineDropdownVisible = false;
+  List<TopLength> topLengthOptions = [TopLength.long];
+  List<SleeveLength> sleeveLengthOptions = [SleeveLength.short];
+  List<Neckline> necklineOptions = [Neckline.round];
+  @override
+  void initState() {
+    print("_AddClothesState");
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ClothesDraft? draft = await ClothesDraftRepository().load();
+      int? secondaryCategoryId = draft?.secondaryCategoryId;
+
+      SecondCategory? secondCategory = secondaryCategoryId == null
+          ? null
+          : secondCategories.firstWhere((e) => e.id == secondaryCategoryId);
+
+      setState(() {
+        if (secondCategory != null) {
+          topLengthOptions = secondCategory.topLengths;
+          sleeveLengthOptions = secondCategory.sleeveLengths;
+          necklineOptions = secondCategory.necklines;
+        }
+
+        ClothesDetails? details = draft?.details;
+        _selectedLength = details?.topLength ?? topLengthOptions.first;
+        _selectedSleeve = details?.sleeveLength ?? sleeveLengthOptions.first;
+        _selectedNeckline = details?.neckline ?? necklineOptions.first;
+        if (details == null) {
+          save();
+        }
+      });
+    });
+  }
+
+  void save() async {
+    ClothesDraft? draft = await ClothesDraftRepository().load();
+    if (draft != null) {
+      draft.details = ClothesDetails(
+          topLength: _selectedLength,
+          sleeveLength: _selectedSleeve,
+          neckline: _selectedNeckline);
+      ClothesDraftRepository().save(draft);
+      // widget.onNextStep();
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +86,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
           _buildCategorySection(
             '상의 길이',
             _selectedLength,
-            ['중간길이', '짧은길이', '긴길이'],
+            topLengthOptions,
             _isLengthDropdownVisible,
             () {
               setState(() {
@@ -51,7 +100,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
           _buildCategorySection(
             '팔 길이',
             _selectedSleeve,
-            ['반팔', '긴팔', '중간팔', '민소매'],
+            sleeveLengthOptions,
             _isSleeveDropdownVisible,
             () {
               setState(() {
@@ -65,7 +114,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
           _buildCategorySection(
             '넥 라인',
             _selectedNeckline,
-            ['브이넥', '라운드넥', '스퀘어넥'],
+            necklineOptions,
             _isNecklineDropdownVisible,
             () {
               setState(() {
@@ -82,8 +131,8 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
 
   Widget _buildCategorySection(
     String title,
-    String selectedValue,
-    List<String> options,
+    Descriptive? selectedValue,
+    List<Descriptive> options,
     bool isDropdownVisible,
     VoidCallback toggleDropdown,
   ) {
@@ -107,7 +156,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                       Icon(Icons.check_circle, color: Colors.orange, size: 16),
                       SizedBox(width: 2),
                       Text(
-                        '$selectedValue 적용됨',
+                        '${selectedValue == null ? options.first.label : selectedValue.label} 적용됨',
                         style: OneLineTextStyles.Medium12.copyWith(
                             color: SignatureColors.orange400),
                       ),
@@ -152,22 +201,19 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                 ),
                 itemCount: options.length,
                 itemBuilder: (context, index) {
-                  String option = options[index];
+                  Descriptive option = options[index];
                   return GestureDetector(
                     onTap: () {
                       setState(() {
                         switch (title) {
                           case '상의 길이':
-                            _selectedLength = option;
-                            break;
+                            _selectedLength = option as TopLength;
                           case '팔 길이':
-                            _selectedSleeve = option;
-                            break;
+                            _selectedSleeve = option as SleeveLength;
                           case '넥 라인':
-                            _selectedNeckline = option;
-                            break;
+                            _selectedNeckline = option as Neckline;
                         }
-                        toggleDropdown(); // 옵션 선택 후 드롭다운 닫기
+                        save();
                       });
                     },
                     child: Container(
@@ -183,7 +229,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        option,
+                        option.label,
                         style: TextStyle(
                           color: selectedValue == option
                               ? Colors.black

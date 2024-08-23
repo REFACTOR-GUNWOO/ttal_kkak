@@ -77,26 +77,44 @@ class ClothesDetails {
   }
 }
 
+mixin Descriptive {
+  String get label;
+}
+
+class ClothesDetail {}
+
 // 상의 길이
-enum TopLength {
-  short,
-  medium,
-  long,
+enum TopLength with Descriptive {
+  short("중간길이"),
+  medium("짧은길이"),
+  long("긴길이");
+
+  final String label;
+
+  const TopLength(this.label);
 }
 
 // 팔 길이
-enum SleeveLength {
-  short,
-  medium,
-  long,
-  sleeveless,
+enum SleeveLength with Descriptive {
+  short("반팔"),
+  medium("중간팔"),
+  long("긴팔"),
+  sleeveless("민소매");
+
+  final String label;
+
+  const SleeveLength(this.label);
 }
 
 // 넥 라인
-enum Neckline {
-  round,
-  vNeck,
-  offShoulder,
+enum Neckline with Descriptive {
+  round("라운드넥"),
+  vNeck("브이넥"),
+  square("스퀘어넥");
+
+  final String label;
+
+  const Neckline(this.label);
 }
 
 List<Clothes> generateDummyClothes() {
@@ -174,7 +192,7 @@ List<Clothes> generateDummyClothes() {
         details: ClothesDetails(
           topLength: TopLength.long,
           sleeveLength: SleeveLength.short,
-          neckline: Neckline.offShoulder,
+          neckline: Neckline.vNeck,
         ),
         price: 12300,
         color: Colors.red,
@@ -304,7 +322,7 @@ List<Clothes> generateDummyClothes() {
         details: ClothesDetails(
           topLength: TopLength.long,
           sleeveLength: SleeveLength.short,
-          neckline: Neckline.offShoulder,
+          neckline: Neckline.vNeck,
         ),
         price: 123,
         color: Colors.red,

@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttal_kkak/clothes.dart';
 
 class ClothesRepository {
-  static const String _clothesKey = 'clothes:v9';
+  static const String _clothesKey = 'clothes:v10';
 
   Future<void> saveClothes(List<Clothes> clothesList) async {
     print("saveClothes");

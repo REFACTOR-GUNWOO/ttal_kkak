@@ -1,3 +1,5 @@
+import 'package:ttal_kkak/clothes.dart';
+
 class FirstCategory {
   int id;
   String name;
@@ -38,23 +40,190 @@ class SecondCategory {
   String name;
   int priority;
   int firstCategoryId;
+  List<TopLength> topLengths;
+  List<SleeveLength> sleeveLengths;
+  List<Neckline> necklines;
 
-  SecondCategory(
-      {required this.id,
-      required this.name,
-      required this.priority,
-      required this.firstCategoryId});
+  SecondCategory({
+    required this.id,
+    required this.name,
+    required this.priority,
+    required this.firstCategoryId,
+    required this.topLengths,
+    required this.sleeveLengths,
+    required this.necklines,
+  });
 }
 
 List<SecondCategory> secondCategories = [
-  SecondCategory(id: 1, name: "티셔츠", priority: 1, firstCategoryId: 1),
-  SecondCategory(id: 2, name: "나시", priority: 2, firstCategoryId: 1),
-  SecondCategory(id: 3, name: "청바지", priority: 3, firstCategoryId: 2),
-  SecondCategory(id: 4, name: "면바지", priority: 4, firstCategoryId: 2),
-  SecondCategory(id: 5, name: "자켓", priority: 5, firstCategoryId: 3),
-  SecondCategory(id: 6, name: "바람막이", priority: 6, firstCategoryId: 3),
-  SecondCategory(id: 7, name: "원피스1", priority: 7, firstCategoryId: 4),
-  SecondCategory(id: 8, name: "원피스2", priority: 3, firstCategoryId: 4),
-  SecondCategory(id: 7, name: "구두", priority: 4, firstCategoryId: 5),
-  SecondCategory(id: 8, name: "슬리퍼", priority: 1, firstCategoryId: 5),
+  SecondCategory(
+      id: 1,
+      name: "티셔츠",
+      priority: 1,
+      firstCategoryId: 1,
+      topLengths: [
+        TopLength.long
+      ],
+      sleeveLengths: [
+        SleeveLength.long,
+        SleeveLength.medium,
+        SleeveLength.short
+      ],
+      necklines: [
+        Neckline.round,
+        Neckline.square
+      ]),
+  SecondCategory(
+      id: 2,
+      name: "나시",
+      priority: 2,
+      firstCategoryId: 1,
+      topLengths: [
+        TopLength.long
+      ],
+      sleeveLengths: [
+        SleeveLength.long,
+        SleeveLength.medium,
+        SleeveLength.short
+      ],
+      necklines: [
+        Neckline.round,
+        Neckline.square
+      ]),
+  SecondCategory(
+      id: 3,
+      name: "청바지",
+      priority: 3,
+      firstCategoryId: 2,
+      topLengths: [
+        TopLength.medium
+      ],
+      sleeveLengths: [
+        SleeveLength.long,
+        SleeveLength.medium,
+        SleeveLength.short
+      ],
+      necklines: [
+        Neckline.round,
+        Neckline.square
+      ]),
+  SecondCategory(
+      id: 4,
+      name: "면바지",
+      priority: 4,
+      firstCategoryId: 2,
+      topLengths: [
+        TopLength.medium
+      ],
+      sleeveLengths: [
+        SleeveLength.long,
+        SleeveLength.medium,
+        SleeveLength.short
+      ],
+      necklines: [
+        Neckline.round,
+        Neckline.square
+      ]),
+  SecondCategory(
+      id: 5,
+      name: "자켓",
+      priority: 5,
+      firstCategoryId: 3,
+      topLengths: [
+        TopLength.medium
+      ],
+      sleeveLengths: [
+        SleeveLength.long,
+        SleeveLength.medium,
+        SleeveLength.short
+      ],
+      necklines: [
+        Neckline.round,
+        Neckline.square
+      ]),
+  SecondCategory(
+      id: 6,
+      name: "바람막이",
+      priority: 6,
+      firstCategoryId: 3,
+      topLengths: [
+        TopLength.medium
+      ],
+      sleeveLengths: [
+        SleeveLength.long,
+        SleeveLength.medium,
+        SleeveLength.short
+      ],
+      necklines: [
+        Neckline.round,
+        Neckline.square
+      ]),
+  SecondCategory(
+      id: 7,
+      name: "원피스1",
+      priority: 7,
+      firstCategoryId: 4,
+      topLengths: [
+        TopLength.short
+      ],
+      sleeveLengths: [
+        SleeveLength.long,
+        SleeveLength.medium,
+        SleeveLength.short
+      ],
+      necklines: [
+        Neckline.round,
+        Neckline.square
+      ]),
+  SecondCategory(
+      id: 8,
+      name: "원피스2",
+      priority: 3,
+      firstCategoryId: 4,
+      topLengths: [
+        TopLength.short
+      ],
+      sleeveLengths: [
+        SleeveLength.long,
+        SleeveLength.medium,
+        SleeveLength.short
+      ],
+      necklines: [
+        Neckline.round,
+        Neckline.square
+      ]),
+  SecondCategory(
+      id: 7,
+      name: "구두",
+      priority: 4,
+      firstCategoryId: 5,
+      topLengths: [
+        TopLength.short
+      ],
+      sleeveLengths: [
+        SleeveLength.long,
+        SleeveLength.medium,
+        SleeveLength.short
+      ],
+      necklines: [
+        Neckline.round,
+        Neckline.square
+      ]),
+  SecondCategory(
+      id: 8,
+      name: "슬리퍼",
+      priority: 1,
+      firstCategoryId: 5,
+      topLengths: [
+        TopLength.short
+      ],
+      sleeveLengths: [
+        SleeveLength.long,
+        SleeveLength.medium,
+        SleeveLength.short
+      ],
+      necklines: [
+        Neckline.round,
+        Neckline.square
+      ]),
 ];
