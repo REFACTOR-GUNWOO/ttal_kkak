@@ -3,11 +3,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 
 class ClothesDraftRepository {
-  static const String _clothesKey = 'clothes:draft:v1';
+  static const String _clothesKey = 'clothes:draft:v6';
 
   Future<void> save(ClothesDraft clothes) async {
     print("saveClothes");
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("save ${clothes.toJson()}");
     await prefs.setString(_clothesKey, jsonEncode(clothes.toJson()));
   }
 
@@ -23,7 +24,7 @@ class ClothesDraftRepository {
     return ClothesDraft.fromJson(jsonMap);
   }
 
-  Future<void> delete(ClothesDraft clothes) async {
+  Future<void> delete() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(_clothesKey);
   }

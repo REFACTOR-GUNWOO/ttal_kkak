@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
+import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/main_layout.dart';
@@ -18,7 +21,12 @@ class ClothesGrid extends StatefulWidget {
 }
 
 class _ClothesGridState extends State<ClothesGrid> {
-  late Map<int, bool> selected;
+  List<DrawnLine> lines = [];
+  Color clothesColor = Colors.transparent;
+  DrawableRoot? svgBgRoot;
+  DrawableRoot? svgLineRoot;
+
+  late Map<String, bool> selected;
   static const int columnCount = 4;
 
   Widget _buildFloatingActionButton() {
@@ -55,7 +63,6 @@ class _ClothesGridState extends State<ClothesGrid> {
   @override
   void initState() {
     super.initState();
-    // 선택 상태를 초기화
     selected = {for (var clothes in widget.clothesList) clothes.id: false};
   }
 
@@ -123,10 +130,7 @@ class _ClothesGridState extends State<ClothesGrid> {
         child: Column(children: [
           Stack(alignment: Alignment.center, children: [
             SvgPicture.asset("assets/icons/MiddleCloset.svg"),
-            Positioned.fill(
-                child: Align(
-                    alignment: Alignment.topCenter,
-                    child: SvgPicture.asset("assets/icons/hanger.svg"))),
+            ClothesItem(clothes: clothes),
             if (isSelected)
               AnimatedOpacity(
                 opacity: 1.0,
@@ -197,4 +201,73 @@ void showClothesOptionsBottomSheet(BuildContext context, Clothes clothes) {
       );
     },
   );
+}
+
+class ClothesItem extends StatefulWidget {
+  final Clothes clothes;
+  ClothesItem({required this.clothes});
+
+  @override
+  _ClothesItemState createState() => _ClothesItemState();
+}
+
+class _ClothesItemState extends State<ClothesItem> {
+  List<DrawnLine> lines = [];
+  Color clothesColor = Colors.transparent;
+  DrawableRoot? svgBgRoot;
+  DrawableRoot? svgLineRoot;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        lines = widget.clothes.drawLines;
+        clothesColor = widget.clothes.color;
+        SecondCategory secondCategory = secondCategories.firstWhere(
+            (element) => element.id == widget.clothes.secondaryCategoryId);
+        ClothesDetails clothesDetails = widget.clothes.details;
+        _loadDrawableRoot(clothesDetails, secondCategory);
+      });
+    });
+  }
+
+  Future<void> _loadDrawableRoot(
+      ClothesDetails clothesDetails, SecondCategory secondCategory) async {
+    final String svgBgString = await rootBundle.loadString(
+        "assets/images/clothes/bg/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
+    final String svgLineString = await rootBundle.loadString(
+        "assets/images/clothes/line/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
+    DrawableRoot bgDrawableRoot =
+        await svg.fromSvgString(svgBgString, svgBgString);
+    DrawableRoot lineDrawableRoot =
+        await svg.fromSvgString(svgLineString, svgLineString);
+    setState(() {
+      svgBgRoot = bgDrawableRoot;
+      svgLineRoot = lineDrawableRoot;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center, // Stack 내에서 모든 위젯을 중앙 정렬
+      children: [
+        if (svgBgRoot != null)
+          CustomPaint(
+            size: Size(10, 10),
+            painter: SvgBgPainter(svgBgRoot!, clothesColor, 0.5),
+          ),
+        if (svgBgRoot != null)
+          CustomPaint(
+            size: Size(10, 10),
+            painter: SvgLinePainter(svgLineRoot!, 0.5),
+          ),
+        CustomPaint(
+          size: Size(50, 50),
+          painter: DrawingPainter(lines, svgBgRoot, 0.5),
+        ),
+      ],
+    );
+  }
 }

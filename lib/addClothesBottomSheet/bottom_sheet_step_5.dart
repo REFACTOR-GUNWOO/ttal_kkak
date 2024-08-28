@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
+import 'package:ttal_kkak/clothes_draft.dart';
+import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 class BottomSheetBody5 extends StatefulWidget implements BottomSheetStep {
-    final VoidCallback onNextStep;
+  final VoidCallback onNextStep;
   const BottomSheetBody5({super.key, required this.onNextStep});
 
   @override
@@ -20,6 +22,29 @@ class BottomSheetBody5 extends StatefulWidget implements BottomSheetStep {
 
 class _ColorSelectionGridState extends State<BottomSheetBody5> {
   Color _selectedColor = Colors.transparent;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ClothesDraft? draft = await ClothesDraftRepository().load();
+
+      setState(() {
+        Color? color = draft?.color;
+        if (color != null) {
+          _selectedColor = color;
+        }
+      });
+    });
+  }
+
+  void save() async {
+    ClothesDraft? draft = await ClothesDraftRepository().load();
+    if (draft != null) {
+      draft.color = _selectedColor;
+      ClothesDraftRepository().save(draft);
+    }
+  }
 
   final List<Color> colors = [
     Colors.white,
@@ -61,6 +86,7 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
             onTap: () {
               setState(() {
                 _selectedColor = color;
+                save();
               });
             },
             child: Container(

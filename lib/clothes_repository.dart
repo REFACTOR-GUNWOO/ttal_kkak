@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttal_kkak/clothes.dart';
 
 class ClothesRepository {
-  static const String _clothesKey = 'clothes:v10';
+  static const String _clothesKey = 'clothes:v14';
 
   Future<void> saveClothes(List<Clothes> clothesList) async {
     print("saveClothes");
@@ -12,6 +12,12 @@ class ClothesRepository {
     List<String> clothesJsonList =
         clothesList.map((clothes) => jsonEncode(clothes.toJson())).toList();
     await prefs.setStringList(_clothesKey, clothesJsonList);
+  }
+
+  Future<void> save(Clothes clothes) async {
+    print("saveClothes");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_clothesKey, jsonEncode(clothes.toJson()));
   }
 
   Future<List<Clothes>> loadClothes() async {

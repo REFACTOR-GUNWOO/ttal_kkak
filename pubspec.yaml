@@ -38,6 +38,8 @@ dependencies:
   shared_preferences: ^2.2.3
   flutter_svg: ^1.0.3
   path_drawing: ^1.0.1
+  uuid: ^4.2.2
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +86,23 @@ flutter:
     - assets/icons/left_curve_arrow.svg
     - assets/icons/right_curve_arrow.svg
     - assets/icons/retry.svg
+    - assets/icons/NewClothes.svg
+    - assets/images/clothes/bg/tshirt_round_crop_long.svg
+    - assets/images/clothes/bg/tshirt_round_short_long.svg
+    - assets/images/clothes/bg/tshirt_round_medium_long.svg
+    - assets/images/clothes/bg/tshirt_round_long_long.svg
+    - assets/images/clothes/bg/tshirt_round_crop_short.svg
+    - assets/images/clothes/bg/tshirt_round_short_short.svg
+    - assets/images/clothes/bg/tshirt_round_medium_short.svg
+    - assets/images/clothes/bg/tshirt_round_long_short.svg
+    - assets/images/clothes/line/tshirt_round_crop_long.svg
+    - assets/images/clothes/line/tshirt_round_short_long.svg
+    - assets/images/clothes/line/tshirt_round_medium_long.svg
+    - assets/images/clothes/line/tshirt_round_long_long.svg
+    - assets/images/clothes/line/tshirt_round_crop_short.svg
+    - assets/images/clothes/line/tshirt_round_short_short.svg
+    - assets/images/clothes/line/tshirt_round_medium_short.svg
+    - assets/images/clothes/line/tshirt_round_long_short.svg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

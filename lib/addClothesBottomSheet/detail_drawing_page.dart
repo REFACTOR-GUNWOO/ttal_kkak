@@ -3,6 +3,13 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path_drawing/path_drawing.dart';
+import 'package:ttal_kkak/Category.dart';
+import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/clothes_draft.dart';
+import 'package:ttal_kkak/clothes_draft_repository.dart';
+import 'package:ttal_kkak/clothes_repository.dart';
+import 'package:ttal_kkak/main_layout.dart';
+import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
@@ -17,7 +24,9 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   DrawnLine? currentLine;
   double brushWidth = 5.0;
   Color brushColor = Colors.black;
-  DrawableRoot? svgRoot;
+  Color clothesColor = Colors.transparent;
+  DrawableRoot? svgBgRoot;
+  DrawableRoot? svgLineRoot;
   int _expandedIndex = -1;
   List<PencilInfo> pencilInfos = [
     PencilInfo(pencilSize: 10, width: 40),
@@ -41,6 +50,38 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     Colors.brown,
     Colors.black87,
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ClothesDraft? draft = await ClothesDraftRepository().load();
+
+      setState(() {
+        if (draft != null) {
+          lines = draft.drawLines ?? [];
+          clothesColor = draft.color!;
+          SecondCategory secondCategory = secondCategories
+              .firstWhere((element) => element.id == draft.secondaryCategoryId);
+          ClothesDetails clothesDetails = draft.details!;
+          _loadDrawableRoot(clothesDetails, secondCategory);
+        }
+      });
+    });
+  }
+
+  void save() async {
+    ClothesDraft? draft = await ClothesDraftRepository().load();
+    if (draft != null) {
+      print(lines);
+      draft.drawLines = lines;
+      ClothesDraftRepository().save(draft);
+      List<Clothes> clothes = await ClothesRepository().loadClothes();
+      clothes.add(draft.toClotehs());
+      ClothesRepository().saveClothes(clothes);
+      ClothesDraftRepository().delete();
+    }
+  }
 
   void _showColorPicker(BuildContext context) {
     showModalBottomSheet(
@@ -143,20 +184,19 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _loadDrawableRoot();
-  }
-
-  Future<void> _loadDrawableRoot() async {
-    final String svgString =
-        await rootBundle.loadString('assets/icons/test_outline_2.svg');
-    final DrawableRoot drawableSvgRoot =
-        await svg.fromSvgString(svgString, svgString);
-
+  Future<void> _loadDrawableRoot(
+      ClothesDetails clothesDetails, SecondCategory secondCategory) async {
+    final String svgBgString = await rootBundle.loadString(
+        "assets/images/clothes/bg/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
+    final String svgLineString = await rootBundle.loadString(
+        "assets/images/clothes/line/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
+    DrawableRoot bgDrawableRoot =
+        await svg.fromSvgString(svgBgString, svgBgString);
+    DrawableRoot lineDrawableRoot =
+        await svg.fromSvgString(svgLineString, svgLineString);
     setState(() {
-      svgRoot = drawableSvgRoot;
+      svgBgRoot = bgDrawableRoot;
+      svgLineRoot = lineDrawableRoot;
     });
   }
 
@@ -173,8 +213,11 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
             children: [
               SvgPicture.asset('assets/icons/arrow_left.svg'),
               TextButton(
-                onPressed: () {
-                  // 저장 로직
+                onPressed: () => {
+                  save(),
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => MainLayout()),
+                  )
                 },
                 child: Text(
                   '저장',
@@ -335,10 +378,15 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
         child: Stack(
           alignment: Alignment.center, // Stack 내에서 모든 위젯을 중앙 정렬
           children: [
-            if (svgRoot != null)
+            if (svgBgRoot != null)
               CustomPaint(
                 size: Size(300, 300),
-                painter: SvgPainter(svgRoot!),
+                painter: SvgBgPainter(svgBgRoot!, clothesColor, 3.0),
+              ),
+            if (svgBgRoot != null)
+              CustomPaint(
+                size: Size(300, 300),
+                painter: SvgLinePainter(svgLineRoot!, 3.0),
               ),
             GestureDetector(
               onPanStart: _startDrawing,
@@ -346,7 +394,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
               onPanEnd: _endDrawing,
               child: CustomPaint(
                 size: Size(300, 300),
-                painter: DrawingPainter(lines, svgRoot),
+                painter: DrawingPainter(lines, svgBgRoot, 3.0),
               ),
             ),
           ],
@@ -421,10 +469,46 @@ Path extractPathDataFromDrawableRoot(DrawableRoot root) {
   return path;
 }
 
-class SvgPainter extends CustomPainter {
+class SvgBgPainter extends CustomPainter {
   final DrawableRoot drawableRoot;
+  final color;
+  final scale;
+  SvgBgPainter(this.drawableRoot, this.color, this.scale);
 
-  SvgPainter(this.drawableRoot);
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 2.0;
+
+    final Matrix4 matrix = Matrix4.identity()..scale(scale, scale);
+    final Path scaledPath =
+        extractPathDataFromDrawableRoot(drawableRoot).transform(matrix.storage);
+    final Rect bounds = scaledPath.getBounds();
+
+    // 중앙에 그리도록 평행 이동 (translate)
+    final Offset offset = Offset(
+      (size.width - bounds.width) / 2 - bounds.left,
+      (size.height - bounds.height) / 2 - bounds.top,
+    );
+
+    canvas.translate(offset.dx, offset.dy);
+
+    canvas.drawPath(scaledPath, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class SvgLinePainter extends CustomPainter {
+  final DrawableRoot drawableRoot;
+  final scale;
+
+  SvgLinePainter(this.drawableRoot, this.scale);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -433,9 +517,9 @@ class SvgPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0;
 
-    final Matrix4 matrix = Matrix4.identity()..scale(3.0, 3.0);
-    final Path scaledPath = extractPathDataFromDrawableRoot(drawableRoot!)
-        .transform(matrix.storage);
+    final Matrix4 matrix = Matrix4.identity()..scale(scale, scale);
+    final Path scaledPath =
+        extractPathDataFromDrawableRoot(drawableRoot).transform(matrix.storage);
     final Rect bounds = scaledPath.getBounds();
 
     // 중앙에 그리도록 평행 이동 (translate)
@@ -458,43 +542,14 @@ class SvgPainter extends CustomPainter {
 class DrawingPainter extends CustomPainter {
   final List<DrawnLine> lines;
   final DrawableRoot? drawableRoot;
+  final scale;
 
-  DrawingPainter(this.lines, this.drawableRoot);
-
-  Path createSmoothPath(List<Offset> points) {
-    Path path = Path();
-
-    if (points.isEmpty) return path;
-
-    path.moveTo(points.first.dx, points.first.dy);
-
-    for (int i = 1; i < points.length - 1; i++) {
-      final p0 = points[i - 1];
-      final p1 = points[i];
-      final p2 = points[i + 1];
-
-      final controlPoint = Offset(
-        (p0.dx + p2.dx) / 2,
-        (p0.dy + p2.dy) / 2,
-      );
-
-      path.quadraticBezierTo(
-        p1.dx,
-        p1.dy,
-        controlPoint.dx,
-        controlPoint.dy,
-      );
-    }
-
-    path.lineTo(points.last.dx, points.last.dy);
-
-    return path;
-  }
+  DrawingPainter(this.lines, this.drawableRoot, this.scale);
 
   @override
   void paint(Canvas canvas, Size size) {
     if (drawableRoot != null) {
-      final Matrix4 matrix = Matrix4.identity()..scale(3.0, 3.0);
+      final Matrix4 matrix = Matrix4.identity()..scale(scale, scale);
 
       final Path scaledPath = extractPathDataFromDrawableRoot(drawableRoot!)
           .transform(matrix.storage);
@@ -512,31 +567,20 @@ class DrawingPainter extends CustomPainter {
     }
     canvas.saveLayer(null, Paint());
 
-    List<DrawnLine> erasedLines = lines
-        .where(
-          (e) => e.color == Colors.transparent,
-        )
-        .toList();
-
-    List<DrawnLine> unerasedLines = lines
-        .where(
-          (e) => e.color != Colors.transparent,
-        )
-        .toList();
-
     for (var line in lines) {
       Paint paint = (line.color != Colors.transparent)
           ? (Paint()
             ..color = line.color
             ..strokeCap = StrokeCap.round
-            ..strokeWidth = line.width)
+            ..strokeWidth = line.width * scale / 3)
           : (Paint()
             ..strokeCap = StrokeCap.round
-            ..strokeWidth = line.width
+            ..strokeWidth = line.width * scale / 3
             ..blendMode = BlendMode.clear);
 
       for (int i = 0; i < line.points.length - 1; i++) {
-        canvas.drawLine(line.points[i], line.points[i + 1], paint);
+        canvas.drawLine(
+            line.points[i] * scale / 3, line.points[i + 1] * scale / 3, paint);
       }
     }
 
@@ -555,6 +599,26 @@ class DrawnLine {
   Color color;
 
   DrawnLine(this.points, this.width, this.color);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'points':
+          points.map((point) => {'dx': point.dx, 'dy': point.dy}).toList(),
+      'width': width,
+      'color': color.value, // Color를 정수값으로 변환
+    };
+  }
+
+  // JSON에서 객체로 변환
+  static DrawnLine fromJson(Map<String, dynamic> json) {
+    return DrawnLine(
+      (json['points'] as List)
+          .map((point) => Offset(point['dx'], point['dy']))
+          .toList(),
+      json['width'],
+      Color(json['color']),
+    );
+  }
 }
 
 class PencilInfo {

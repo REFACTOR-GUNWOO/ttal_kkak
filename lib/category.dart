@@ -38,192 +38,161 @@ List<FirstCategory> firstCategories = [
 class SecondCategory {
   int id;
   String name;
+  String code;
   int priority;
   int firstCategoryId;
   List<TopLength> topLengths;
   List<SleeveLength> sleeveLengths;
   List<Neckline> necklines;
+  Map<ClothesDetails, String> clothesImageMap;
 
-  SecondCategory({
-    required this.id,
-    required this.name,
-    required this.priority,
-    required this.firstCategoryId,
-    required this.topLengths,
-    required this.sleeveLengths,
-    required this.necklines,
-  });
+  SecondCategory(
+      {required this.id,
+      required this.name,
+      required this.priority,
+      required this.firstCategoryId,
+      required this.topLengths,
+      required this.sleeveLengths,
+      required this.necklines,
+      required this.clothesImageMap,
+      required this.code});
 }
 
 List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 1,
       name: "티셔츠",
+      code: "tshirt",
       priority: 1,
       firstCategoryId: 1,
-      topLengths: [
-        TopLength.long
-      ],
-      sleeveLengths: [
-        SleeveLength.long,
-        SleeveLength.medium,
-        SleeveLength.short
-      ],
-      necklines: [
-        Neckline.round,
-        Neckline.square
-      ]),
+      topLengths: [TopLength.long, TopLength.medium, TopLength.short],
+      sleeveLengths: [SleeveLength.long, SleeveLength.short],
+      necklines: [Neckline.round, Neckline.square],
+      clothesImageMap: {}),
   SecondCategory(
       id: 2,
       name: "나시",
+      code: "thsirt",
       priority: 2,
       firstCategoryId: 1,
-      topLengths: [
-        TopLength.long
-      ],
+      topLengths: [TopLength.long],
       sleeveLengths: [
         SleeveLength.long,
         SleeveLength.medium,
         SleeveLength.short
       ],
-      necklines: [
-        Neckline.round,
-        Neckline.square
-      ]),
+      necklines: [Neckline.round, Neckline.square],
+      clothesImageMap: Map()),
   SecondCategory(
       id: 3,
       name: "청바지",
+      code: "thsirt",
       priority: 3,
       firstCategoryId: 2,
-      topLengths: [
-        TopLength.medium
-      ],
+      topLengths: [TopLength.medium],
       sleeveLengths: [
         SleeveLength.long,
         SleeveLength.medium,
         SleeveLength.short
       ],
-      necklines: [
-        Neckline.round,
-        Neckline.square
-      ]),
+      necklines: [Neckline.round, Neckline.square],
+      clothesImageMap: Map()),
   SecondCategory(
       id: 4,
       name: "면바지",
+      code: "thsirt",
       priority: 4,
       firstCategoryId: 2,
-      topLengths: [
-        TopLength.medium
-      ],
+      topLengths: [TopLength.medium],
       sleeveLengths: [
         SleeveLength.long,
         SleeveLength.medium,
         SleeveLength.short
       ],
-      necklines: [
-        Neckline.round,
-        Neckline.square
-      ]),
+      necklines: [Neckline.round, Neckline.square],
+      clothesImageMap: Map()),
   SecondCategory(
       id: 5,
       name: "자켓",
+      code: "thsirt",
       priority: 5,
       firstCategoryId: 3,
-      topLengths: [
-        TopLength.medium
-      ],
+      topLengths: [TopLength.medium],
       sleeveLengths: [
         SleeveLength.long,
         SleeveLength.medium,
         SleeveLength.short
       ],
-      necklines: [
-        Neckline.round,
-        Neckline.square
-      ]),
+      necklines: [Neckline.round, Neckline.square],
+      clothesImageMap: Map()),
   SecondCategory(
       id: 6,
       name: "바람막이",
+      code: "thsirt",
       priority: 6,
       firstCategoryId: 3,
-      topLengths: [
-        TopLength.medium
-      ],
+      topLengths: [TopLength.medium],
       sleeveLengths: [
         SleeveLength.long,
         SleeveLength.medium,
         SleeveLength.short
       ],
-      necklines: [
-        Neckline.round,
-        Neckline.square
-      ]),
+      necklines: [Neckline.round, Neckline.square],
+      clothesImageMap: Map()),
   SecondCategory(
       id: 7,
       name: "원피스1",
+      code: "thsirt",
       priority: 7,
       firstCategoryId: 4,
-      topLengths: [
-        TopLength.short
-      ],
+      topLengths: [TopLength.short],
       sleeveLengths: [
         SleeveLength.long,
         SleeveLength.medium,
         SleeveLength.short
       ],
-      necklines: [
-        Neckline.round,
-        Neckline.square
-      ]),
+      necklines: [Neckline.round, Neckline.square],
+      clothesImageMap: Map()),
   SecondCategory(
       id: 8,
       name: "원피스2",
+      code: "thsirt",
       priority: 3,
       firstCategoryId: 4,
-      topLengths: [
-        TopLength.short
-      ],
+      topLengths: [TopLength.short],
       sleeveLengths: [
         SleeveLength.long,
         SleeveLength.medium,
         SleeveLength.short
       ],
-      necklines: [
-        Neckline.round,
-        Neckline.square
-      ]),
+      necklines: [Neckline.round, Neckline.square],
+      clothesImageMap: Map()),
   SecondCategory(
       id: 7,
       name: "구두",
+      code: "thsirt",
       priority: 4,
       firstCategoryId: 5,
-      topLengths: [
-        TopLength.short
-      ],
+      topLengths: [TopLength.short],
       sleeveLengths: [
         SleeveLength.long,
         SleeveLength.medium,
         SleeveLength.short
       ],
-      necklines: [
-        Neckline.round,
-        Neckline.square
-      ]),
+      necklines: [Neckline.round, Neckline.square],
+      clothesImageMap: Map()),
   SecondCategory(
       id: 8,
       name: "슬리퍼",
+      code: "thsirt",
       priority: 1,
       firstCategoryId: 5,
-      topLengths: [
-        TopLength.short
-      ],
+      topLengths: [TopLength.short],
       sleeveLengths: [
         SleeveLength.long,
         SleeveLength.medium,
         SleeveLength.short
       ],
-      necklines: [
-        Neckline.round,
-        Neckline.square
-      ]),
+      necklines: [Neckline.round, Neckline.square],
+      clothesImageMap: Map()),
 ];
