@@ -12,6 +12,8 @@ class BottomSheetAppBar extends StatelessWidget {
   final BottomSheetStep? nextStep;
   final BottomSheetStep? previousStep;
   final BottomSheetStep currentStep;
+  final int currentDraftLevel;
+  final int currentStepCount;
   const BottomSheetAppBar({
     super.key,
     required this.nextStepFun,
@@ -19,6 +21,8 @@ class BottomSheetAppBar extends StatelessWidget {
     this.nextStep,
     this.previousStep,
     required this.currentStep,
+    required this.currentDraftLevel,
+    required this.currentStepCount,
   });
 
   @override
@@ -38,11 +42,14 @@ class BottomSheetAppBar extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SvgPicture.asset('assets/icons/arrow_left.svg'),
+                          SvgPicture.asset(
+                            'assets/icons/arrow_left.svg',
+                            color: SystemColors.black,
+                          ),
                           Text(
                             previousStep!.getTitle(),
                             style: OneLineTextStyles.Medium14.copyWith(
-                                color: SystemColors.gray700),
+                                color: SystemColors.black),
                           ),
                         ],
                       ),
@@ -61,16 +68,25 @@ class BottomSheetAppBar extends StatelessWidget {
                 child: nextStep == null
                     ? Container()
                     : TextButton(
-                        onPressed: nextStepFun,
+                        onPressed: currentStepCount < currentDraftLevel
+                            ? nextStepFun
+                            : null,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
                               nextStep!.getTitle(),
                               style: OneLineTextStyles.Medium14.copyWith(
-                                  color: SystemColors.gray700),
+                                  color: currentStepCount < currentDraftLevel
+                                      ? SystemColors.black
+                                      : SystemColors.gray500),
                             ),
-                            SvgPicture.asset('assets/icons/arrow_right.svg'),
+                            SvgPicture.asset(
+                              'assets/icons/arrow_right.svg',
+                              color: currentStepCount < currentDraftLevel
+                                  ? SystemColors.black
+                                  : SystemColors.gray500,
+                            ),
                           ],
                         ))),
           ],

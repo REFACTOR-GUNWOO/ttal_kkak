@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -13,8 +14,10 @@ import 'package:ttal_kkak/utils/custom_floating_action_button_location.dart';
 class ClothesGrid extends StatefulWidget {
   final List<Clothes> clothesList;
   final bool isOnboarding;
+  final ClothesDraft? draft;
 
-  ClothesGrid({required this.clothesList, required this.isOnboarding});
+  ClothesGrid(
+      {required this.clothesList, required this.isOnboarding, this.draft});
 
   @override
   _ClothesGridState createState() => _ClothesGridState();
@@ -220,6 +223,7 @@ class _ClothesItemState extends State<ClothesItem> {
   @override
   void initState() {
     super.initState();
+    print("ClothesItem : name :${widget.clothes.name}");
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       setState(() {
         lines = widget.clothes.drawLines;

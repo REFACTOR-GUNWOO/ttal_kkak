@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_draft_repository.dart';
+import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
@@ -21,10 +23,16 @@ class BottomSheetBody2 extends StatefulWidget implements BottomSheetStep {
 
 class _BottomSheetBody2State extends State<BottomSheetBody2> {
   int? selectedCategoryId;
+  late ClothesDraftProvider provider;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      provider = Provider.of<ClothesDraftProvider>(context, listen: false);
+      provider.loadDraftFromLocal();
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ClothesDraft? draft = await ClothesDraftRepository().load();
       int? primaryCategoryId = draft?.primaryCategoryId;
@@ -40,6 +48,8 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
     if (draft != null) {
       draft.primaryCategoryId = categoryId;
       ClothesDraftRepository().save(draft);
+      provider.updateDraft(draft);
+
       widget.onNextStep();
       return;
     }
@@ -47,64 +57,65 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 1200,
-      child: GridView.builder(
-        scrollDirection: Axis.vertical,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 0.0,
-          mainAxisSpacing: 0.0,
-          childAspectRatio: 3 / 2,
-        ),
-        itemCount: firstCategories.length,
-        itemBuilder: (context, index) {
-          final category = firstCategories[index];
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0), // 카드와 그리드 간의 패딩
 
-          return Padding(
-            padding: const EdgeInsets.all(0.0), // 카드와 그리드 간의 패딩
+        child: GridView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 0.0,
+            mainAxisSpacing: 0.0,
+            childAspectRatio: 3 / 2,
+          ),
+          itemCount: firstCategories.length,
+          itemBuilder: (context, index) {
+            final category = firstCategories[index];
 
-            child: TextButton(
-                onPressed: () async => {save(category.id)},
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero, // 패딩 제거
-                  minimumSize: Size(0, 0), // 버튼의 최소 크기 제거
-                ),
-                child: Card(
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    side: selectedCategoryId == category.id
-                        ? BorderSide(
-                            color: SystemColors.black, // 테두리 색상
-                            width: 1.5, // 테두리 두께
-                          )
-                        : BorderSide(
-                            color: SystemColors.gray500, // 테두리 색상
-                            width: 1.0, // 테두리 두께
-                          ),
+            return Padding(
+              padding: const EdgeInsets.all(5.0), // 카드와 그리드 간의 패딩
+
+              child: TextButton(
+                  onPressed: () async => {save(category.id)},
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero, // 패딩 제거
+                    minimumSize: Size(0, 0), // 버튼의 최소 크기 제거
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          category.name,
-                          style: OneLineTextStyles.SemiBold16.copyWith(
-                              color: SystemColors.black),
-                        ),
-                        SizedBox(height: 8.0),
-                        Text(category.description,
-                            style: BodyTextStyles.Medium12.copyWith(
-                                color: SystemColors.gray700)),
-                      ],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: selectedCategoryId == category.id
+                          ? Border.all(color: SystemColors.black, width: 1.5)
+                          : Border.all(
+                              color: SystemColors.gray500,
+                              width: 1.0), // 테두리 색상
+
+                      borderRadius: BorderRadius.circular(6.0), // 모서리 둥글게
+                      color: Colors.white,
                     ),
-                  ),
-                )),
-          );
-        },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            category.name,
+                            style: OneLineTextStyles.SemiBold16.copyWith(
+                                color: SystemColors.black),
+                          ),
+                          SizedBox(height: 8.0),
+                          Text(category.description,
+                              style: BodyTextStyles.Medium12.copyWith(
+                                  color: SystemColors.gray700)),
+                        ],
+                      ),
+                    ),
+                  )),
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_draft_repository.dart';
+import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
@@ -32,10 +34,17 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
   List<TopLength> topLengthOptions = [TopLength.long];
   List<SleeveLength> sleeveLengthOptions = [SleeveLength.short];
   List<Neckline> necklineOptions = [Neckline.round];
+  late ClothesDraftProvider provider;
+
   @override
   void initState() {
     print("_AddClothesState");
     super.initState();
+    setState(() {
+      provider = Provider.of<ClothesDraftProvider>(context, listen: false);
+      provider.loadDraftFromLocal();
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ClothesDraft? draft = await ClothesDraftRepository().load();
       int? secondaryCategoryId = draft?.secondaryCategoryId;
@@ -70,6 +79,8 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
           sleeveLength: _selectedSleeve,
           neckline: _selectedNeckline);
       ClothesDraftRepository().save(draft);
+      provider.updateDraft(draft);
+
       // widget.onNextStep();
       return;
     }

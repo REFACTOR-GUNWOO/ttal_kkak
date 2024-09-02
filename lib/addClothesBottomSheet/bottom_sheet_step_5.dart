@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_draft_repository.dart';
+import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
@@ -22,10 +24,16 @@ class BottomSheetBody5 extends StatefulWidget implements BottomSheetStep {
 
 class _ColorSelectionGridState extends State<BottomSheetBody5> {
   Color _selectedColor = Colors.transparent;
+  late ClothesDraftProvider provider;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      provider = Provider.of<ClothesDraftProvider>(context, listen: false);
+      provider.loadDraftFromLocal();
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ClothesDraft? draft = await ClothesDraftRepository().load();
 
@@ -43,6 +51,7 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
     if (draft != null) {
       draft.color = _selectedColor;
       ClothesDraftRepository().save(draft);
+      provider.updateDraft(draft);
     }
   }
 
