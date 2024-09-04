@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
+import 'package:ttal_kkak/addClothesBottomSheet/draft_clear_warning_dialog.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_draft_repository.dart';
@@ -46,6 +47,18 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
   void save(int categoryId) async {
     ClothesDraft? draft = await ClothesDraftRepository().load();
     if (draft != null) {
+      if (draft.primaryCategoryId != null &&
+          (draft.primaryCategoryId != categoryId)) {
+        draft.primaryCategoryId = categoryId;
+        draft.resetFieldsAfterIndex(1);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return DraftClearWarningDialog("상위 카테고리", draft, widget.onNextStep);
+          },
+        );
+        return;
+      }
       draft.primaryCategoryId = categoryId;
       ClothesDraftRepository().save(draft);
       provider.updateDraft(draft);
@@ -60,7 +73,6 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(15.0), // 카드와 그리드 간의 패딩
-
         child: GridView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.vertical,

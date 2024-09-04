@@ -45,6 +45,7 @@ class SecondCategory {
   List<SleeveLength> sleeveLengths;
   List<Neckline> necklines;
   Map<ClothesDetails, String> clothesImageMap;
+  String defaultImage;
 
   SecondCategory(
       {required this.id,
@@ -55,6 +56,7 @@ class SecondCategory {
       required this.sleeveLengths,
       required this.necklines,
       required this.clothesImageMap,
+      required this.defaultImage,
       required this.code});
 }
 
@@ -68,7 +70,8 @@ List<SecondCategory> secondCategories = [
       topLengths: [TopLength.long, TopLength.medium, TopLength.short],
       sleeveLengths: [SleeveLength.long, SleeveLength.short],
       necklines: [Neckline.round, Neckline.square],
-      clothesImageMap: {}),
+      clothesImageMap: {},
+      defaultImage: "assets/images/clothes/bg/tshirt_round_crop_long.svg"),
   SecondCategory(
       id: 2,
       name: "나시",
@@ -82,7 +85,8 @@ List<SecondCategory> secondCategories = [
         SleeveLength.short
       ],
       necklines: [Neckline.round, Neckline.square],
-      clothesImageMap: Map()),
+      clothesImageMap: Map(),
+      defaultImage: "assets/images/clothes/bg/tshirt_round_crop_long.svg"),
   SecondCategory(
       id: 3,
       name: "청바지",
@@ -96,7 +100,8 @@ List<SecondCategory> secondCategories = [
         SleeveLength.short
       ],
       necklines: [Neckline.round, Neckline.square],
-      clothesImageMap: Map()),
+      clothesImageMap: Map(),
+      defaultImage: "assets/images/clothes/bg/tshirt_round_crop_long.svg"),
   SecondCategory(
       id: 4,
       name: "면바지",
@@ -110,7 +115,8 @@ List<SecondCategory> secondCategories = [
         SleeveLength.short
       ],
       necklines: [Neckline.round, Neckline.square],
-      clothesImageMap: Map()),
+      clothesImageMap: Map(),
+      defaultImage: "assets/images/clothes/bg/tshirt_round_crop_long.svg"),
   SecondCategory(
       id: 5,
       name: "자켓",
@@ -124,7 +130,8 @@ List<SecondCategory> secondCategories = [
         SleeveLength.short
       ],
       necklines: [Neckline.round, Neckline.square],
-      clothesImageMap: Map()),
+      clothesImageMap: Map(),
+      defaultImage: "assets/images/clothes/bg/tshirt_round_crop_long.svg"),
   SecondCategory(
       id: 6,
       name: "바람막이",
@@ -138,7 +145,8 @@ List<SecondCategory> secondCategories = [
         SleeveLength.short
       ],
       necklines: [Neckline.round, Neckline.square],
-      clothesImageMap: Map()),
+      clothesImageMap: Map(),
+      defaultImage: "assets/images/clothes/bg/tshirt_round_crop_long.svg"),
   SecondCategory(
       id: 7,
       name: "원피스1",
@@ -152,7 +160,8 @@ List<SecondCategory> secondCategories = [
         SleeveLength.short
       ],
       necklines: [Neckline.round, Neckline.square],
-      clothesImageMap: Map()),
+      clothesImageMap: Map(),
+      defaultImage: "assets/images/clothes/bg/tshirt_round_crop_long.svg"),
   SecondCategory(
       id: 8,
       name: "원피스2",
@@ -166,7 +175,8 @@ List<SecondCategory> secondCategories = [
         SleeveLength.short
       ],
       necklines: [Neckline.round, Neckline.square],
-      clothesImageMap: Map()),
+      clothesImageMap: Map(),
+      defaultImage: "assets/images/clothes/bg/tshirt_round_crop_long.svg"),
   SecondCategory(
       id: 7,
       name: "구두",
@@ -180,7 +190,8 @@ List<SecondCategory> secondCategories = [
         SleeveLength.short
       ],
       necklines: [Neckline.round, Neckline.square],
-      clothesImageMap: Map()),
+      clothesImageMap: Map(),
+      defaultImage: "assets/images/clothes/bg/tshirt_round_crop_long.svg"),
   SecondCategory(
       id: 8,
       name: "슬리퍼",
@@ -194,5 +205,6 @@ List<SecondCategory> secondCategories = [
         SleeveLength.short
       ],
       necklines: [Neckline.round, Neckline.square],
-      clothesImageMap: Map()),
+      clothesImageMap: Map(),
+      defaultImage: "assets/images/clothes/bg/tshirt_round_crop_long.svg"),
 ];

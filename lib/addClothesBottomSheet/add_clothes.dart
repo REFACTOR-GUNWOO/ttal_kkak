@@ -76,7 +76,7 @@ class _StepContainerState extends State<StepContainer> {
   }
 
   int getCurrentDraftLevel() {
-    print("getCurrentDraftLevel : ${provider?.currentDraft}");
+    print("getCurrentDraftLevel : ${provider?.currentDraft?.countLevel()}");
     return provider?.currentDraft?.countLevel() ?? 0;
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
+import 'package:ttal_kkak/addClothesBottomSheet/draft_clear_warning_dialog.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
@@ -74,6 +75,22 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
   void save() async {
     ClothesDraft? draft = await ClothesDraftRepository().load();
     if (draft != null) {
+      if (draft.details != null) {
+        draft.details = ClothesDetails(
+            topLength: _selectedLength,
+            sleeveLength: _selectedSleeve,
+            neckline: _selectedNeckline);
+
+        draft.resetFieldsAfterIndex(3);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return DraftClearWarningDialog("상세설정", draft, widget.onNextStep);
+          },
+        );
+        return;
+      }
+
       draft.details = ClothesDetails(
           topLength: _selectedLength,
           sleeveLength: _selectedSleeve,
@@ -90,7 +107,8 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding:
+          const EdgeInsets.only(left: 16.0, right: 16, top: 16, bottom: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -157,10 +175,13 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: OneLineTextStyles.ExtraBold16.copyWith(
-                        color: SystemColors.black),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      title,
+                      style: OneLineTextStyles.ExtraBold16.copyWith(
+                          color: SystemColors.black),
+                    ),
                   ),
                   Row(
                     children: [
@@ -229,7 +250,6 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(
@@ -241,11 +261,8 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                       ),
                       child: Text(
                         option.label,
-                        style: TextStyle(
-                          color: selectedValue == option
-                              ? Colors.black
-                              : Colors.grey,
-                        ),
+                        style: OneLineTextStyles.SemiBold16.copyWith(
+                            color: Colors.black),
                       ),
                     ),
                   );
