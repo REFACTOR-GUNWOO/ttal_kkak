@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 
-class Clothes {
+abstract class ClothesFamily {}
+
+class Clothes implements ClothesFamily{
   String id;
   String name;
   int primaryCategoryId;

@@ -374,29 +374,34 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
           ),
         ),
       ),
-      body: Center(
+      body: Align(
+        alignment: Alignment.center,
         child: Stack(
-          alignment: Alignment.center, // Stack 내에서 모든 위젯을 중앙 정렬
+          alignment: Alignment.topCenter, // Stack 내에서 모든 위젯을 중앙 정렬
           children: [
             if (svgBgRoot != null)
               CustomPaint(
-                size: Size(300, 300),
+                size: Size(svgBgRoot!.viewport.width * 3,
+                    svgBgRoot!.viewport.height * 3),
                 painter: SvgBgPainter(svgBgRoot!, clothesColor, 3.0),
               ),
             if (svgBgRoot != null)
               CustomPaint(
-                size: Size(300, 300),
+                size: Size(svgBgRoot!.viewport.width * 3,
+                    svgBgRoot!.viewport.height * 3),
                 painter: SvgLinePainter(svgLineRoot!, 3.0),
               ),
-            GestureDetector(
-              onPanStart: _startDrawing,
-              onPanUpdate: _updateDrawing,
-              onPanEnd: _endDrawing,
-              child: CustomPaint(
-                size: Size(300, 300),
-                painter: DrawingPainter(lines, svgBgRoot, 3.0),
+            if (svgBgRoot != null)
+              GestureDetector(
+                onPanStart: _startDrawing,
+                onPanUpdate: _updateDrawing,
+                onPanEnd: _endDrawing,
+                child: CustomPaint(
+                  size: Size(svgBgRoot!.viewport.width * 3,
+                      svgBgRoot!.viewport.height * 3),
+                  painter: DrawingPainter(lines, svgBgRoot, 3.0),
+                ),
               ),
-            ),
           ],
         ),
       ),

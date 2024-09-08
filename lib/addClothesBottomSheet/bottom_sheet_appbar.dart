@@ -3,6 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
+import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/clothes_draft.dart';
+import 'package:ttal_kkak/clothes_draft_repository.dart';
+import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
@@ -66,7 +70,32 @@ class BottomSheetAppBar extends StatelessWidget {
             Expanded(
                 flex: 2,
                 child: nextStep == null
-                    ? Container()
+                    ? TextButton(
+                        onPressed: () async {
+                          ClothesDraft? draft =
+                              await ClothesDraftRepository().load();
+                          if (draft != null) {
+                            draft.drawLines = [];
+                            ClothesDraftRepository().save(draft);
+                            List<Clothes> clothes =
+                                await ClothesRepository().loadClothes();
+                            clothes.add(draft.toClotehs());
+                            ClothesRepository().saveClothes(clothes);
+                            ClothesDraftRepository().delete();
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "등록",
+                              style: OneLineTextStyles.Medium14.copyWith(
+                                  color: SystemColors.black),
+                            ),
+                            SvgPicture.asset('assets/icons/arrow_right.svg',
+                                color: SystemColors.black),
+                          ],
+                        ))
                     : TextButton(
                         onPressed: currentStepCount < currentDraftLevel
                             ? nextStepFun

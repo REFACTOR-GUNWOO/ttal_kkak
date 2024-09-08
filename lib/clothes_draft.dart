@@ -3,7 +3,7 @@ import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:uuid/uuid.dart';
 
-class ClothesDraft {
+class ClothesDraft implements ClothesFamily {
   String? name;
   int? primaryCategoryId;
   int? secondaryCategoryId;

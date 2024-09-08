@@ -47,8 +47,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
   void save(int categoryId) async {
     ClothesDraft? draft = await ClothesDraftRepository().load();
     if (draft != null) {
-      if (draft.primaryCategoryId != null &&
-          (draft.primaryCategoryId != categoryId)) {
+      if (draft.primaryCategoryId != null && draft.primaryCategoryId!=categoryId) {
         draft.primaryCategoryId = categoryId;
         draft.resetFieldsAfterIndex(1);
         showDialog(
