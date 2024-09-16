@@ -78,7 +78,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
       ClothesDraftRepository().save(draft);
       List<Clothes> clothes = await ClothesRepository().loadClothes();
       clothes.add(draft.toClotehs());
-      ClothesRepository().saveClothes(clothes);
+      ClothesRepository().addClothesList(clothes.toSet());
       ClothesDraftRepository().delete();
     }
   }

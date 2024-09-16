@@ -80,7 +80,7 @@ class BottomSheetAppBar extends StatelessWidget {
                             List<Clothes> clothes =
                                 await ClothesRepository().loadClothes();
                             clothes.add(draft.toClotehs());
-                            ClothesRepository().saveClothes(clothes);
+                            ClothesRepository().addClothesList(clothes.toSet());
                             ClothesDraftRepository().delete();
                           }
                         },

@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 
 abstract class ClothesFamily {}
 
-class Clothes implements ClothesFamily{
-  String id;
+class Clothes implements ClothesFamily {
+  int? id;
   String name;
   int primaryCategoryId;
   int secondaryCategoryId;
@@ -31,10 +33,11 @@ class Clothes implements ClothesFamily{
         name: json['name'],
         primaryCategoryId: json['primaryCategoryId'],
         secondaryCategoryId: json['secondaryCategoryId'],
-        details: ClothesDetails.fromJson(json['details']),
-        color: Color(json['color']),
+        details: ClothesDetails.fromJson(jsonDecode(json['details'])),
+        color: Color(json['colorValue']),
         price: json["price"],
-        regTs: DateTime.fromMillisecondsSinceEpoch(json['regTs'] as int),
+        regTs: DateTime.fromMillisecondsSinceEpoch(
+            json['millisecondsSinceEpoch'] as int),
         drawLines: (json['drawLines'] as List)
             .map((lineJson) => DrawnLine.fromJson(lineJson))
             .toList());
@@ -46,11 +49,11 @@ class Clothes implements ClothesFamily{
       'name': name,
       'primaryCategoryId': primaryCategoryId,
       'secondaryCategoryId': secondaryCategoryId,
-      'details': details.toJson(),
-      'color': color.value,
+      'details': jsonEncode(details.toJson()),
+      'colorValue': color.value,
       'price': price,
-      'regTs': regTs.millisecondsSinceEpoch,
-      'drawLines': drawLines.map((e) => e.toJson()).toList()
+      'millisecondsSinceEpoch': regTs.millisecondsSinceEpoch,
+      'drawLines': drawLines.map((e) => jsonEncode(e.toJson())).toList()
     };
   }
 }
@@ -128,7 +131,7 @@ enum Neckline with Descriptive {
 List<Clothes> generateDummyClothes() {
   return [
     Clothes(
-        id: "123",
+        id: 1,
         name: '블랙 티셔츠',
         primaryCategoryId: 1,
         secondaryCategoryId: 1,

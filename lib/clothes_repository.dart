@@ -1,67 +1,82 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:ttal_kkak/clothes.dart';
+import 'package:path/path.dart';
 
 class ClothesRepository {
-  static const String _clothesKey = 'clothes:v15';
+  static Database? _database;
 
-  Future<void> saveClothes(List<Clothes> clothesList) async {
-    print("saveClothes");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> clothesJsonList =
-        clothesList.map((clothes) => jsonEncode(clothes.toJson())).toList();
-    await prefs.setStringList(_clothesKey, clothesJsonList);
-  }
+  static const String _tableName = 'clothes';
+  static const String _dbName = 'clothes_test.db';
 
   Future<List<Clothes>> loadClothes() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? clothesJsonList = prefs.getStringList(_clothesKey);
-    print(clothesJsonList);
-    if (clothesJsonList == null) {
-      return [];
-    }
+    final res = await (await database).rawQuery("SELECT * FROM ${_tableName}");
+    return List.generate(res.length, (index) {
+      print("loadClothes : ${res[index]}");
+      return Clothes.fromJson(res[index]);
+    });
+  }
 
-    return clothesJsonList.map((jsonString) {
-      Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-      return Clothes.fromJson(jsonMap);
-    }).toList();
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await initDatabase();
+    return _database!;
+  }
+
+  /// 데이터베이스를 초기화하고 'todos' 테이블이 없으면 생성합니다.
+  Future<Database> initDatabase() async {
+    // 데이터베이스 파일 경로를 얻어옵니다 ('todo.db').
+    String path = join(await getDatabasesPath(), _dbName);
+    // 지정된 버전 및 생성 콜백으로 데이터베이스를 엽니다.
+    return await openDatabase(
+      path,
+      version: 2,
+      onCreate: (db, version) async {
+        // 'todos' 테이블을 생성하는 SQL 쿼리를 실행합니다.
+        await db.execute('''
+          CREATE TABLE clothes(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT not null,
+            primaryCategoryId INTEGER not null,
+            secondaryCategoryId INTEGER not null,
+            colorValue INTEGER not null,
+            price INTEGER,
+            millisecondsSinceEpoch INTEGER not null,
+            drawLines TEXT not null,
+            details TEXT not null
+          )
+        ''');
+      },
+    );
   }
 
   Future<void> addClothes(Clothes clothes) async {
-    List<Clothes> clothesList = await loadClothes();
-    clothesList.add(clothes);
-    print(clothesList);
-    await saveClothes(clothesList);
+    print("addClothes");
+
+    final db = await database;
+    clothes.id = null;
+    final res = await db.insert(_tableName, clothes.toJson());
+    print("addClothes: ${res}");
   }
 
   Future<void> updateClothes(Clothes clothes) async {
-    List<Clothes> clothesList = await loadClothes();
-    List<Clothes> updatedClothesList = clothesList.map((e) {
-      if (e.id == clothes.id) {
-        return clothes;
-      } else {
-        return e;
-      }
-    }).toList();
-    print(updatedClothesList);
-    await saveClothes(updatedClothesList);
+    final db = await database;
+    await db.update(_tableName, clothes.toJson(),
+        where: 'id = ?', whereArgs: [clothes.id]);
   }
 
   Future<void> addClothesList(Set<Clothes> clothesList) async {
-    List<Clothes> oldClothesList = await loadClothes();
-    oldClothesList.addAll(clothesList);
-    await saveClothes(oldClothesList);
+    final db = await database;
+    print("addClothesList: ${clothesList.length}");
+    // final batch = db.batch();
+    // clothesList.map((e) => batch.insert(_tableName, e.toJson()));
+    // await batch.commit();
+    Future.wait(clothesList.map((e) async => await addClothes(e)));
   }
 
   Future<void> removeClothes(Clothes clothes) async {
-    List<Clothes> clothesList = await loadClothes();
-    clothesList.removeWhere((c) => c.name == clothes.name); // Name으로 비교하여 삭제
-    await saveClothes(clothesList);
-  }
-
-  Future<void> clearClothes() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_clothesKey);
+    final db = await database;
+    await db.delete(_tableName, where: 'id = ?', whereArgs: [clothes.id]);
   }
 }

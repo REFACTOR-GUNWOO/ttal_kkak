@@ -36,7 +36,7 @@ class _ClothesGridState extends State<ClothesGrid> {
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
 
-  late Map<String, bool> selected;
+  late Map<int, bool> selected;
   static const int columnCount = 4;
 
   Widget _buildFloatingActionButton() {
@@ -73,7 +73,7 @@ class _ClothesGridState extends State<ClothesGrid> {
   @override
   void initState() {
     super.initState();
-    selected = {for (var clothes in widget.clothesList) clothes.id: false};
+    selected = {for (var clothes in widget.clothesList) clothes.id!: false};
   }
 
   @override
@@ -160,7 +160,7 @@ class _ClothesGridState extends State<ClothesGrid> {
         onTap: () => {
               widget.isOnboarding
                   ? setState(() {
-                      selected[clothes.id] = !selected[clothes.id]!;
+                      selected[clothes.id!] = !selected[clothes.id]!;
                     })
                   : showClothesOptionsBottomSheet(context, clothes)
             },

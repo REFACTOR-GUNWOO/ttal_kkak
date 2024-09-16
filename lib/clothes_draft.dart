@@ -86,7 +86,7 @@ class ClothesDraft implements ClothesFamily {
 
   Clothes toClotehs() {
     return Clothes(
-        id: Uuid().v4(),
+        id: -1,
         name: name!,
         primaryCategoryId: primaryCategoryId!,
         secondaryCategoryId: secondaryCategoryId!,
