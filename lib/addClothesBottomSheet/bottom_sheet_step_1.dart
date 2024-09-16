@@ -4,11 +4,20 @@ import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
+import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/utils/length_limited_text_input.dart';
 
 class BottomSheetBody1 extends StatefulWidget implements BottomSheetStep {
-  const BottomSheetBody1({super.key, required this.onNextStep});
+  const BottomSheetBody1(
+      {super.key,
+      required this.onNextStep,
+      required this.isUpdate,
+      required this.draftProvider,
+      required this.updateProvider});
   final VoidCallback onNextStep;
+  final bool isUpdate;
+  final ClothesDraftProvider draftProvider;
+  final ClothesUpdateProvider updateProvider;
 
   @override
   _BottomSheetBody1State createState() => _BottomSheetBody1State();
@@ -51,17 +60,20 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
   }
 
   void _onSubmit(String text) async {
-    print("_onSubmit");
-    ClothesDraft? draft = await ClothesDraftRepository().load();
-    if (draft == null) {
-      ClothesDraftRepository().save(ClothesDraft(name: text));
-      provider.updateDraft(ClothesDraft(name: text));
+    if (widget.isUpdate) {
+    } else {
+      print("_onSubmit");
+      ClothesDraft? draft = await ClothesDraftRepository().load();
+      if (draft == null) {
+        ClothesDraftRepository().save(ClothesDraft(name: text));
+        provider.updateDraft(ClothesDraft(name: text));
 
-      return;
+        return;
+      }
+      draft.name = text;
+      ClothesDraftRepository().save(draft);
+      provider.updateDraft(ClothesDraft(name: text));
     }
-    draft.name = text;
-    ClothesDraftRepository().save(draft);
-    provider.updateDraft(ClothesDraft(name: text));
     widget.onNextStep();
   }
 

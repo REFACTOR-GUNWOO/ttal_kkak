@@ -14,12 +14,6 @@ class ClothesRepository {
     await prefs.setStringList(_clothesKey, clothesJsonList);
   }
 
-  Future<void> save(Clothes clothes) async {
-    print("saveClothes");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_clothesKey, jsonEncode(clothes.toJson()));
-  }
-
   Future<List<Clothes>> loadClothes() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? clothesJsonList = prefs.getStringList(_clothesKey);
@@ -39,6 +33,19 @@ class ClothesRepository {
     clothesList.add(clothes);
     print(clothesList);
     await saveClothes(clothesList);
+  }
+
+  Future<void> updateClothes(Clothes clothes) async {
+    List<Clothes> clothesList = await loadClothes();
+    List<Clothes> updatedClothesList = clothesList.map((e) {
+      if (e.id == clothes.id) {
+        return clothes;
+      } else {
+        return e;
+      }
+    }).toList();
+    print(updatedClothesList);
+    await saveClothes(updatedClothesList);
   }
 
   Future<void> addClothesList(Set<Clothes> clothesList) async {

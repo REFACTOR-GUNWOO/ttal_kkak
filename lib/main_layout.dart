@@ -54,7 +54,7 @@ class _MainLayoutState extends State<MainLayout> {
             icon: IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
-                ShowAddClothesBottomSheet(context);
+                ShowAddClothesBottomSheet(context, true);
               },
             ),
             label: '추가',

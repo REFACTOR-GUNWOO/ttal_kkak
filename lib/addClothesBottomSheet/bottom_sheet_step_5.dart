@@ -6,12 +6,21 @@ import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
+import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 class BottomSheetBody5 extends StatefulWidget implements BottomSheetStep {
   final VoidCallback onNextStep;
-  const BottomSheetBody5({super.key, required this.onNextStep});
+  const BottomSheetBody5(
+      {super.key,
+      required this.onNextStep,
+      required this.isUpdate,
+      required this.draftProvider,
+      required this.updateProvider});
+  final bool isUpdate;
+  final ClothesDraftProvider draftProvider;
+  final ClothesUpdateProvider updateProvider;
 
   @override
   _ColorSelectionGridState createState() => _ColorSelectionGridState();

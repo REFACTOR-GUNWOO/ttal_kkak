@@ -12,11 +12,12 @@ import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_4.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_5.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_6.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
+import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/utils/length_limited_text_input.dart';
 import '../styles/text_styles.dart';
 import '../styles/colors_styles.dart';
 
-void ShowAddClothesBottomSheet(BuildContext context) {
+void ShowAddClothesBottomSheet(BuildContext context, bool isUpdate) {
   showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -24,13 +25,20 @@ void ShowAddClothesBottomSheet(BuildContext context) {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (BuildContext context) {
-        return Wrap(children: [StepContainer()]);
+        return Wrap(children: [
+          StepContainer(
+            isUpdate: isUpdate,
+          )
+        ]);
       });
 }
 
 class StepContainer extends StatefulWidget {
+  const StepContainer({super.key, required this.isUpdate});
+
   @override
   _StepContainerState createState() => _StepContainerState();
+  final bool isUpdate;
 }
 
 class _StepContainerState extends State<StepContainer> {
@@ -66,12 +74,42 @@ class _StepContainerState extends State<StepContainer> {
 
   List<BottomSheetStep> _buildSteps() {
     return [
-      BottomSheetBody1(onNextStep: _nextStep),
-      BottomSheetBody2(onNextStep: _nextStep),
-      BottomSheetBody3(onNextStep: _nextStep),
-      BottomSheetBody4(onNextStep: _nextStep),
-      BottomSheetBody5(onNextStep: _nextStep),
-      BottomSheetBody6(onNextStep: _nextStep)
+      BottomSheetBody1(
+        onNextStep: _nextStep,
+        isUpdate: widget.isUpdate,
+        draftProvider: Provider.of<ClothesDraftProvider>(context),
+        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+      ),
+      BottomSheetBody2(
+        onNextStep: _nextStep,
+        isUpdate: widget.isUpdate,
+        draftProvider: Provider.of<ClothesDraftProvider>(context),
+        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+      ),
+      BottomSheetBody3(
+        onNextStep: _nextStep,
+        isUpdate: widget.isUpdate,
+        draftProvider: Provider.of<ClothesDraftProvider>(context),
+        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+      ),
+      BottomSheetBody4(
+        onNextStep: _nextStep,
+        isUpdate: widget.isUpdate,
+        draftProvider: Provider.of<ClothesDraftProvider>(context),
+        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+      ),
+      BottomSheetBody5(
+        onNextStep: _nextStep,
+        isUpdate: widget.isUpdate,
+        draftProvider: Provider.of<ClothesDraftProvider>(context),
+        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+      ),
+      BottomSheetBody6(
+        onNextStep: _nextStep,
+        isUpdate: widget.isUpdate,
+        draftProvider: Provider.of<ClothesDraftProvider>(context),
+        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+       )
     ];
   }
 

@@ -6,12 +6,21 @@ import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
+import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 class BottomSheetBody2 extends StatefulWidget implements BottomSheetStep {
   final VoidCallback onNextStep;
-  const BottomSheetBody2({super.key, required this.onNextStep});
+  const BottomSheetBody2(
+      {super.key,
+      required this.onNextStep,
+      required this.isUpdate,
+      required this.draftProvider,
+      required this.updateProvider});
+  final bool isUpdate;
+  final ClothesDraftProvider draftProvider;
+  final ClothesUpdateProvider updateProvider;
 
   @override
   _BottomSheetBody2State createState() => _BottomSheetBody2State();
@@ -47,7 +56,8 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
   void save(int categoryId) async {
     ClothesDraft? draft = await ClothesDraftRepository().load();
     if (draft != null) {
-      if (draft.primaryCategoryId != null && draft.primaryCategoryId!=categoryId) {
+      if (draft.primaryCategoryId != null &&
+          draft.primaryCategoryId != categoryId) {
         draft.primaryCategoryId = categoryId;
         draft.resetFieldsAfterIndex(1);
         showDialog(
