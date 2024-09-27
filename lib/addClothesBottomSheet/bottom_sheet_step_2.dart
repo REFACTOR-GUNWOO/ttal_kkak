@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/draft_clear_warning_dialog.dart';
 import 'package:ttal_kkak/category.dart';
+import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/clothes_draft_repository.dart';
+// import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -33,19 +34,17 @@ class BottomSheetBody2 extends StatefulWidget implements BottomSheetStep {
 
 class _BottomSheetBody2State extends State<BottomSheetBody2> {
   int? selectedCategoryId;
-  late ClothesDraftProvider provider;
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      provider = Provider.of<ClothesDraftProvider>(context, listen: false);
-      provider.loadDraftFromLocal();
-    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ClothesDraft? draft = await ClothesDraftRepository().load();
-      int? primaryCategoryId = draft?.primaryCategoryId;
+      ClothesDraft? draft = widget.draftProvider.currentDraft;
+      Clothes? clothes = widget.updateProvider.currentClothes;
+      int? primaryCategoryId = widget.isUpdate
+          ? clothes?.primaryCategoryId
+          : draft?.primaryCategoryId;
 
       setState(() {
         selectedCategoryId = primaryCategoryId;
@@ -54,26 +53,36 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
   }
 
   void save(int categoryId) async {
-    ClothesDraft? draft = await ClothesDraftRepository().load();
-    if (draft != null) {
-      if (draft.primaryCategoryId != null &&
-          draft.primaryCategoryId != categoryId) {
-        draft.primaryCategoryId = categoryId;
-        draft.resetFieldsAfterIndex(1);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return DraftClearWarningDialog("상위 카테고리", draft, widget.onNextStep);
-          },
-        );
-        return;
-      }
-      draft.primaryCategoryId = categoryId;
-      ClothesDraftRepository().save(draft);
-      provider.updateDraft(draft);
+    if (widget.isUpdate) {
+      final clothes = widget.updateProvider.currentClothes!;
+      print("update : ${clothes}");
 
+      clothes.updatePrimaryCategoryId(categoryId);
+      await widget.updateProvider.update(clothes);
       widget.onNextStep();
       return;
+    } else {
+      ClothesDraft? draft = widget.draftProvider.currentDraft;
+      if (draft != null) {
+        if (draft.primaryCategoryId != null &&
+            draft.primaryCategoryId != categoryId) {
+          draft.primaryCategoryId = categoryId;
+          draft.resetFieldsAfterIndex(1);
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DraftClearWarningDialog(
+                  "상위 카테고리", draft, widget.onNextStep);
+            },
+          );
+          return;
+        }
+        draft.primaryCategoryId = categoryId;
+        await widget.draftProvider.updateDraft(draft);
+
+        widget.onNextStep();
+        return;
+      }
     }
   }
 

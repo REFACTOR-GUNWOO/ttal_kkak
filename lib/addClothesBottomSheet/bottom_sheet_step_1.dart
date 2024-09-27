@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/utils/length_limited_text_input.dart';
@@ -30,49 +28,36 @@ class BottomSheetBody1 extends StatefulWidget implements BottomSheetStep {
 
 class _BottomSheetBody1State extends State<BottomSheetBody1> {
   late TextEditingController _controller;
-  late ClothesDraftProvider provider;
+  // late ClothesDraftProvider provider;
 
   @override
   void initState() {
     print("_AddClothesState");
     super.initState();
     _controller = TextEditingController();
-    setState(() {
-      provider = Provider.of<ClothesDraftProvider>(context, listen: false);
-      provider.loadDraftFromLocal();
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ClothesDraft? draft = await ClothesDraftRepository().load();
-      String? name = draft?.name;
-      print("initState : ${name}");
-
-      if (name != null) {
-        _controller.text = name;
-      }
-    });
+    if (widget.isUpdate) {
+      _controller.text = widget.updateProvider.currentClothes?.name ?? "";
+    } else {
+      _controller.text = widget.draftProvider.currentDraft?.name ?? "";
+    }
   }
 
-  void _handleTextChanged(String newText) {
-    // print(_childText);
-    // setState(() {
-    //   _childText = newText;
-    // });
-  }
+  void _handleTextChanged(String newText) {}
 
   void _onSubmit(String text) async {
     if (widget.isUpdate) {
+      final clothes = widget.updateProvider.currentClothes!;
+      clothes.updateName(text);
+      await widget.updateProvider.update(clothes);
     } else {
       print("_onSubmit");
-      ClothesDraft? draft = await ClothesDraftRepository().load();
+      ClothesDraft? draft = widget.draftProvider.currentDraft;
       if (draft == null) {
-        ClothesDraftRepository().save(ClothesDraft(name: text));
-        provider.updateDraft(ClothesDraft(name: text));
-
+        widget.draftProvider.updateDraft(ClothesDraft(name: text));
         return;
       }
       draft.name = text;
-      ClothesDraftRepository().save(draft);
-      provider.updateDraft(ClothesDraft(name: text));
+      await widget.draftProvider.updateDraft(ClothesDraft(name: text));
     }
     widget.onNextStep();
   }

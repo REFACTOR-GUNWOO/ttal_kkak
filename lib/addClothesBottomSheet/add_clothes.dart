@@ -11,6 +11,8 @@ import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_3.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_4.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_5.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_6.dart';
+import 'package:ttal_kkak/clothes_draft.dart';
+import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/utils/length_limited_text_input.dart';
@@ -50,11 +52,12 @@ class _StepContainerState extends State<StepContainer> {
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     super.didChangeDependencies();
-    // 여기서 Provider에 접근
+    // provider = Provider.of<ClothesDraftProvider>(context, listen: false);
+    // provider?.loadFromLocal();
     setState(() {
-      provider = Provider.of<ClothesDraftProvider>(context);
+      provider = Provider.of<ClothesDraftProvider>(context, listen: false);
     });
   }
 
@@ -109,7 +112,7 @@ class _StepContainerState extends State<StepContainer> {
         isUpdate: widget.isUpdate,
         draftProvider: Provider.of<ClothesDraftProvider>(context),
         updateProvider: Provider.of<ClothesUpdateProvider>(context),
-       )
+      )
     ];
   }
 
@@ -125,7 +128,7 @@ class _StepContainerState extends State<StepContainer> {
         children: [
           BottomSheetHandle(),
           BottomSheetAppBar(
-              currentDraftLevel: getCurrentDraftLevel(),
+              currentDraftLevel: widget.isUpdate ? 100 : getCurrentDraftLevel(),
               nextStepFun: _nextStep,
               previousStepFun: _previousStep,
               nextStep: _currentStep == _buildSteps().length - 1

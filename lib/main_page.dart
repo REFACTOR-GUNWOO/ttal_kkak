@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:ttal_kkak/Category.dart';
 import 'package:ttal_kkak/closet_repository.dart';
 import 'package:ttal_kkak/clothes.dart';
@@ -24,7 +25,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   late int tab2Index = 0;
   late TabController _outerTabController;
   late TabController _innerTabController;
-  ClothesDraftProvider? provider;
+  // ClothesDraftProvider? provider;
   List<String> secondTabNames = ["등록일순", "카테고리순", "컬러순", "가격순"];
 
   void _showSaveClosetNameBottomSheet(BuildContext context) {
@@ -128,7 +129,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return tabList;
   }
 
-  ClothesGrid getClothesGrid(ClothesDraft? draft) {
+  ClothesGrid getClothesGrid() {
     return tab1Index == 0
         ? ClothesGrid(
             clothesList: sortClothesList(clothesList),
@@ -213,8 +214,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    // ClothesDraftProvider provider =
-    //     Provider.of<ClothesDraftProvider>(context, listen: false);
+    Provider.of<ClothesDraftProvider>(context, listen: false).loadFromLocal();
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       List<Clothes> loadedClothes = await ClothesRepository().loadClothes();
       String? loadedClosetName = await ClosetRepository().loadClosetName();
@@ -278,6 +279,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               ),
             ),
             elevation: 0),
-        body: getClothesGrid(provider?.currentDraft));
+        body: getClothesGrid());
   }
 }

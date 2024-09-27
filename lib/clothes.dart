@@ -38,7 +38,7 @@ class Clothes implements ClothesFamily {
         price: json["price"],
         regTs: DateTime.fromMillisecondsSinceEpoch(
             json['millisecondsSinceEpoch'] as int),
-        drawLines: (json['drawLines'] as List)
+        drawLines: (jsonDecode(json['drawLines']) as List)
             .map((lineJson) => DrawnLine.fromJson(lineJson))
             .toList());
   }
@@ -53,8 +53,36 @@ class Clothes implements ClothesFamily {
       'colorValue': color.value,
       'price': price,
       'millisecondsSinceEpoch': regTs.millisecondsSinceEpoch,
-      'drawLines': drawLines.map((e) => jsonEncode(e.toJson())).toList()
+      'drawLines': jsonEncode(drawLines.map((e) => (e.toJson())).toList())
     };
+  }
+
+  void updateName(String name) {
+    this.name = name;
+  }
+
+  void updatePrimaryCategoryId(int primaryCategoryId) {
+    this.primaryCategoryId = primaryCategoryId;
+  }
+
+  void updateSecondaryCategoryId(int secondaryCategoryId) {
+    this.secondaryCategoryId = secondaryCategoryId;
+  }
+
+  void updateDetails(ClothesDetails clothesDetails) {
+    details = clothesDetails;
+  }
+
+  void updateColor(Color color) {
+    this.color = color;
+  }
+
+  void updatePrice(int price) {
+    this.price = price;
+  }
+
+  void updateDrawlines(List<DrawnLine> lines) {
+    this.drawLines = lines;
   }
 }
 

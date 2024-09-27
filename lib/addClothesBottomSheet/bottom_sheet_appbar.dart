@@ -77,10 +77,7 @@ class BottomSheetAppBar extends StatelessWidget {
                           if (draft != null) {
                             draft.drawLines = [];
                             ClothesDraftRepository().save(draft);
-                            List<Clothes> clothes =
-                                await ClothesRepository().loadClothes();
-                            clothes.add(draft.toClotehs());
-                            ClothesRepository().addClothesList(clothes.toSet());
+                            ClothesRepository().addClothes(draft.toClotehs());
                             ClothesDraftRepository().delete();
                           }
                         },

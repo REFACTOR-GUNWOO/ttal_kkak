@@ -31,7 +31,7 @@ class ClothesRepository {
     // 지정된 버전 및 생성 콜백으로 데이터베이스를 엽니다.
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         // 'todos' 테이블을 생성하는 SQL 쿼리를 실행합니다.
         await db.execute('''
@@ -52,12 +52,12 @@ class ClothesRepository {
   }
 
   Future<void> addClothes(Clothes clothes) async {
-    print("addClothes");
+    print("addClothes: ${clothes}");
 
     final db = await database;
     clothes.id = null;
+
     final res = await db.insert(_tableName, clothes.toJson());
-    print("addClothes: ${res}");
   }
 
   Future<void> updateClothes(Clothes clothes) async {
@@ -78,5 +78,10 @@ class ClothesRepository {
   Future<void> removeClothes(Clothes clothes) async {
     final db = await database;
     await db.delete(_tableName, where: 'id = ?', whereArgs: [clothes.id]);
+  }
+
+    Future<void> deleteAllClothes() async {
+    final db = await database;
+    await db.delete(_tableName);
   }
 }

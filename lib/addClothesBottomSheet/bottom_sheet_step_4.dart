@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
@@ -7,7 +6,6 @@ import 'package:ttal_kkak/addClothesBottomSheet/draft_clear_warning_dialog.dart'
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -44,71 +42,77 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
   List<TopLength> topLengthOptions = [TopLength.long];
   List<SleeveLength> sleeveLengthOptions = [SleeveLength.short];
   List<Neckline> necklineOptions = [Neckline.round];
-  late ClothesDraftProvider provider;
 
   @override
   void initState() {
     print("_AddClothesState");
     super.initState();
+
+    ClothesDraft? draft = widget.draftProvider.currentDraft;
+    Clothes? clothes = widget.updateProvider.currentClothes;
+    int? secondaryCategoryId = widget.isUpdate
+        ? clothes?.secondaryCategoryId
+        : draft?.secondaryCategoryId;
+
+    SecondCategory? secondCategory = secondaryCategoryId == null
+        ? null
+        : secondCategories.firstWhere((e) => e.id == secondaryCategoryId);
+
     setState(() {
-      provider = Provider.of<ClothesDraftProvider>(context, listen: false);
-      provider.loadDraftFromLocal();
-    });
+      if (secondCategory != null) {
+        topLengthOptions = secondCategory.topLengths;
+        sleeveLengthOptions = secondCategory.sleeveLengths;
+        necklineOptions = secondCategory.necklines;
+      }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ClothesDraft? draft = await ClothesDraftRepository().load();
-      int? secondaryCategoryId = draft?.secondaryCategoryId;
-
-      SecondCategory? secondCategory = secondaryCategoryId == null
-          ? null
-          : secondCategories.firstWhere((e) => e.id == secondaryCategoryId);
-
-      setState(() {
-        if (secondCategory != null) {
-          topLengthOptions = secondCategory.topLengths;
-          sleeveLengthOptions = secondCategory.sleeveLengths;
-          necklineOptions = secondCategory.necklines;
-        }
-
-        ClothesDetails? details = draft?.details;
-        _selectedLength = details?.topLength ?? topLengthOptions.first;
-        _selectedSleeve = details?.sleeveLength ?? sleeveLengthOptions.first;
-        _selectedNeckline = details?.neckline ?? necklineOptions.first;
-        if (details == null) {
-          save();
-        }
-      });
+      ClothesDetails? details =
+          widget.isUpdate ? clothes?.details : draft?.details;
+      _selectedLength = details?.topLength ?? topLengthOptions.first;
+      _selectedSleeve = details?.sleeveLength ?? sleeveLengthOptions.first;
+      _selectedNeckline = details?.neckline ?? necklineOptions.first;
+      if (details == null) {
+        save();
+      }
     });
   }
 
   void save() async {
-    ClothesDraft? draft = await ClothesDraftRepository().load();
-    if (draft != null) {
-      if (draft.details != null) {
+    if (widget.isUpdate) {
+      final clothes = widget.updateProvider.currentClothes!;
+      clothes.updateDetails(ClothesDetails(
+          topLength: _selectedLength,
+          sleeveLength: _selectedSleeve,
+          neckline: _selectedNeckline));
+      await widget.updateProvider.update(clothes);
+      return;
+    } else {
+      ClothesDraft? draft = widget.draftProvider.currentDraft;
+      if (draft != null) {
+        if (draft.details != null) {
+          draft.details = ClothesDetails(
+              topLength: _selectedLength,
+              sleeveLength: _selectedSleeve,
+              neckline: _selectedNeckline);
+
+          draft.resetFieldsAfterIndex(3);
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DraftClearWarningDialog("상세설정", draft, widget.onNextStep);
+            },
+          );
+          return;
+        }
+
         draft.details = ClothesDetails(
             topLength: _selectedLength,
             sleeveLength: _selectedSleeve,
             neckline: _selectedNeckline);
+        await widget.draftProvider.updateDraft(draft);
 
-        draft.resetFieldsAfterIndex(3);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return DraftClearWarningDialog("상세설정", draft, widget.onNextStep);
-          },
-        );
+        // widget.onNextStep();
         return;
       }
-
-      draft.details = ClothesDetails(
-          topLength: _selectedLength,
-          sleeveLength: _selectedSleeve,
-          neckline: _selectedNeckline);
-      ClothesDraftRepository().save(draft);
-      provider.updateDraft(draft);
-
-      // widget.onNextStep();
-      return;
     }
   }
 

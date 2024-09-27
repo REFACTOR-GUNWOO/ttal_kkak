@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:path_drawing/path_drawing.dart';
+import 'package:provider/provider.dart';
 import 'package:ttal_kkak/Category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/main_layout.dart';
-import 'package:ttal_kkak/main_page.dart';
+import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
+import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 class DetailDrawingPage extends StatefulWidget {
   @override
   _DetailDrawingPageState createState() => _DetailDrawingPageState();
+  const DetailDrawingPage(
+      {super.key,
+      required this.isUpdate,
+      required this.draftProvider,
+      required this.updateProvider});
+
+  final bool isUpdate;
+  final ClothesDraftProvider draftProvider;
+  final ClothesUpdateProvider updateProvider;
 }
 
 class _DetailDrawingPageState extends State<DetailDrawingPage> {
@@ -55,11 +63,19 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ClothesDraft? draft = await ClothesDraftRepository().load();
+      ClothesDraft? draft = widget.draftProvider.currentDraft;
+      Clothes? clothes = widget.updateProvider.currentClothes;
 
       setState(() {
-        if (draft != null) {
-          lines = draft.drawLines ?? [];
+        if (widget.isUpdate) {
+          lines = clothes!.drawLines;
+          clothesColor = clothes.color;
+          SecondCategory secondCategory = secondCategories.firstWhere(
+              (element) => element.id == clothes.secondaryCategoryId);
+          ClothesDetails clothesDetails = clothes.details!;
+          _loadDrawableRoot(clothesDetails, secondCategory);
+        } else {
+          lines = draft!.drawLines ?? [];
           clothesColor = draft.color!;
           SecondCategory secondCategory = secondCategories
               .firstWhere((element) => element.id == draft.secondaryCategoryId);
@@ -71,15 +87,22 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   }
 
   void save() async {
-    ClothesDraft? draft = await ClothesDraftRepository().load();
-    if (draft != null) {
-      print(lines);
-      draft.drawLines = lines;
-      ClothesDraftRepository().save(draft);
-      List<Clothes> clothes = await ClothesRepository().loadClothes();
-      clothes.add(draft.toClotehs());
-      ClothesRepository().addClothesList(clothes.toSet());
-      ClothesDraftRepository().delete();
+    if (widget.isUpdate) {
+      final clothes = widget.updateProvider.currentClothes!;
+      clothes.updateDrawlines(lines);
+      await widget.updateProvider.update(clothes);
+    } else {
+      final provider =
+          Provider.of<ClothesDraftProvider>(context, listen: false);
+
+      ClothesDraft? draft = provider.currentDraft;
+      print("drawing Save: ${draft}");
+      if (draft != null) {
+        print("draft lines${lines}");
+        draft.drawLines = lines;
+        await ClothesRepository().addClothes(draft.toClotehs());
+        provider.clearDraft();
+      }
     }
   }
 

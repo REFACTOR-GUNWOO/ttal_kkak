@@ -7,21 +7,22 @@ class ClothesDraftProvider with ChangeNotifier {
 
   ClothesDraft? get currentDraft => _currentDraft;
 
-  void updateDraft(ClothesDraft draft) {
+  Future<void> loadFromLocal() async {
+    print("loadDraftFromLocal");
+    _currentDraft = await ClothesDraftRepository().load();
+    notifyListeners(); // 상태 변경 알림
+  }
+  
+  updateDraft(ClothesDraft draft) async {
     print("updateDraft");
-
     _currentDraft = draft;
+    await ClothesDraftRepository().save(draft);
     notifyListeners(); // 상태 변경 알림
   }
 
   void clearDraft() {
     _currentDraft = null;
-    notifyListeners(); // 상태 변경 알림
-  }
-
-  Future<void> loadDraftFromLocal() async {
-    print("loadDraftFromLocal");
-    _currentDraft = await ClothesDraftRepository().load();
+    ClothesDraftRepository().delete();
     notifyListeners(); // 상태 변경 알림
   }
 }

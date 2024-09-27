@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
@@ -9,6 +10,7 @@ import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
+import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/utils/custom_floating_action_button_location.dart';
@@ -28,7 +30,8 @@ class ClothesGrid extends StatefulWidget {
 }
 
 class _ClothesGridState extends State<ClothesGrid> {
-  ClothesDraftProvider? provider;
+  ClothesDraftProvider? draftProvider;
+  ClothesUpdateProvider? updateProvider;
   List<ClothesFamily> clothesWithDraft = [];
 
   List<DrawnLine> lines = [];
@@ -81,12 +84,14 @@ class _ClothesGridState extends State<ClothesGrid> {
     super.didChangeDependencies();
     // 여기서 Provider에 접근
     setState(() {
-      provider = Provider.of<ClothesDraftProvider>(context);
+      draftProvider = Provider.of<ClothesDraftProvider>(context);
+      updateProvider = Provider.of<ClothesUpdateProvider>(context);
     });
   }
 
   int getClothesListLength() {
-    return (provider?.currentDraft == null ? 0 : 1) + widget.clothesList.length;
+    return (draftProvider?.currentDraft == null ? 0 : 1) +
+        widget.clothesList.length;
   }
 
   @override
@@ -103,14 +108,22 @@ class _ClothesGridState extends State<ClothesGrid> {
               ? start + columnCount
               : getClothesListLength();
 
-          List<ClothesFamily> rowClothes = (provider?.currentDraft != null)
-              ? (index == 0)
-                  ? [
-                      provider!.currentDraft!,
-                      ...widget.clothesList.sublist(start, end - 1)
-                    ]
-                  : widget.clothesList.sublist(start - 1, end - 1)
-              : widget.clothesList.sublist(start, end);
+          print(
+              "updateProvider?.currentClothes: ${updateProvider?.currentClothes?.color}");
+          final clothesList = widget.clothesList
+              .map((e) => updateProvider?.currentClothes?.id == e.id
+                  ? updateProvider!.currentClothes!
+                  : e)
+              .toList();
+          List<ClothesFamily> rowClothes =
+              ((draftProvider?.currentDraft != null)
+                  ? (index == 0)
+                      ? [
+                          draftProvider!.currentDraft!,
+                          ...clothesList.sublist(start, end - 1)
+                        ]
+                      : clothesList.sublist(start - 1, end - 1)
+                  : widget.clothesList.sublist(start, end));
 
           return Container(
             width: double.infinity,
@@ -162,7 +175,8 @@ class _ClothesGridState extends State<ClothesGrid> {
                   ? setState(() {
                       selected[clothes.id!] = !selected[clothes.id]!;
                     })
-                  : showClothesOptionsBottomSheet(context, clothes)
+                  : showClothesOptionsBottomSheet(
+                      context, clothes, updateProvider)
             },
         child: Column(children: [
           Stack(alignment: Alignment.topCenter, children: [
@@ -171,8 +185,8 @@ class _ClothesGridState extends State<ClothesGrid> {
                 top: 17, child: SvgPicture.asset("assets/icons/hanger.svg")),
             Positioned(
                 top: 30,
-                child:
-                    ClothesItem(clothes: clothes, key: ValueKey(clothes.id))),
+                child: ClothesItem(
+                    clothes: clothes, key: ValueKey(ValueKey(Uuid().v4())))),
             if (isSelected)
               AnimatedOpacity(
                 opacity: 1.0,
@@ -227,7 +241,8 @@ class _ClothesGridState extends State<ClothesGrid> {
   }
 }
 
-void showClothesOptionsBottomSheet(BuildContext context, Clothes clothes) {
+void showClothesOptionsBottomSheet(BuildContext context, Clothes clothes,
+    ClothesUpdateProvider? updateProvider) {
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
@@ -240,8 +255,11 @@ void showClothesOptionsBottomSheet(BuildContext context, Clothes clothes) {
               leading: Icon(Icons.info),
               title: Text('정보 수정하기'),
               onTap: () {
-                // 정보 수정 기능
                 Navigator.pop(context);
+
+                // 정보 수정 기능
+                updateProvider!.set(clothes);
+                ShowAddClothesBottomSheet(context, true);
               },
             ),
             ListTile(
@@ -288,18 +306,30 @@ class _ClothesItemState extends State<ClothesItem> {
   Color clothesColor = Colors.transparent;
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
-
+  ClothesUpdateProvider? updateProvider;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final updateProvider =
+          Provider.of<ClothesUpdateProvider>(context, listen: false);
+      final clothesToUpdate = updateProvider.currentClothes;
       setState(() {
-        lines = widget.clothes.drawLines;
-        clothesColor = widget.clothes.color;
-        SecondCategory secondCategory = secondCategories.firstWhere(
-            (element) => element.id == widget.clothes.secondaryCategoryId);
-        ClothesDetails clothesDetails = widget.clothes.details;
-        _loadDrawableRoot(clothesDetails, secondCategory);
+        if (clothesToUpdate != null) {
+          lines = clothesToUpdate.drawLines;
+          clothesColor = clothesToUpdate.color;
+          SecondCategory secondCategory = secondCategories.firstWhere(
+              (element) => element.id == clothesToUpdate.secondaryCategoryId);
+          ClothesDetails clothesDetails = clothesToUpdate.details;
+          _loadDrawableRoot(clothesDetails, secondCategory);
+        } else {
+          lines = widget.clothes.drawLines;
+          clothesColor = widget.clothes.color;
+          SecondCategory secondCategory = secondCategories.firstWhere(
+              (element) => element.id == widget.clothes.secondaryCategoryId);
+          ClothesDetails clothesDetails = widget.clothes.details;
+          _loadDrawableRoot(clothesDetails, secondCategory);
+        }
       });
     });
   }

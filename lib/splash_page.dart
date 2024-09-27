@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttal_kkak/onboarding_page.dart';
@@ -12,6 +13,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
+    // ClothesRepository().deleteAllClothes();
     _navigateToHome();
   }
 
