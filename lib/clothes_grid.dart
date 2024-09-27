@@ -109,7 +109,7 @@ class _ClothesGridState extends State<ClothesGrid> {
               : getClothesListLength();
 
           print(
-              "updateProvider?.currentClothes: ${updateProvider?.currentClothes?.color}");
+              "updateProvider?.currentClothes: ${updateProvider?.currentClothes?.id}");
           final clothesList = widget.clothesList
               .map((e) => updateProvider?.currentClothes?.id == e.id
                   ? updateProvider!.currentClothes!
@@ -315,21 +315,20 @@ class _ClothesItemState extends State<ClothesItem> {
           Provider.of<ClothesUpdateProvider>(context, listen: false);
       final clothesToUpdate = updateProvider.currentClothes;
       setState(() {
-        if (clothesToUpdate != null) {
-          lines = clothesToUpdate.drawLines;
-          clothesColor = clothesToUpdate.color;
-          SecondCategory secondCategory = secondCategories.firstWhere(
-              (element) => element.id == clothesToUpdate.secondaryCategoryId);
-          ClothesDetails clothesDetails = clothesToUpdate.details;
-          _loadDrawableRoot(clothesDetails, secondCategory);
-        } else {
-          lines = widget.clothes.drawLines;
-          clothesColor = widget.clothes.color;
-          SecondCategory secondCategory = secondCategories.firstWhere(
-              (element) => element.id == widget.clothes.secondaryCategoryId);
-          ClothesDetails clothesDetails = widget.clothes.details;
-          _loadDrawableRoot(clothesDetails, secondCategory);
-        }
+        // if (clothesToUpdate != null) {
+        //   lines = clothesToUpdate.drawLines;
+        //   clothesColor = clothesToUpdate.color;
+        //   SecondCategory secondCategory = secondCategories.firstWhere(
+        //       (element) => element.id == clothesToUpdate.secondaryCategoryId);
+        //   ClothesDetails clothesDetails = clothesToUpdate.details;
+        //   _loadDrawableRoot(clothesDetails, secondCategory);
+        // } else {
+        lines = widget.clothes.drawLines;
+        clothesColor = widget.clothes.color;
+        SecondCategory secondCategory = secondCategories.firstWhere(
+            (element) => element.id == widget.clothes.secondaryCategoryId);
+        ClothesDetails clothesDetails = widget.clothes.details;
+        _loadDrawableRoot(clothesDetails, secondCategory);
       });
     });
   }
