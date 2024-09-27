@@ -168,10 +168,15 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     }
 
     if (secondTabNames[tab2Index] == "컬러순") {
+      List<Color> sortedColors = colorContainers
+          .map((e) => e.colors)
+          .toList()
+          .expand((element) => element)
+          .toList();
       copied.sort((a, b) {
-        return HSLColor.fromColor(a.color)
-            .hue
-            .compareTo(HSLColor.fromColor(b.color).hue);
+        return sortedColors
+            .indexOf(a.color)
+            .compareTo(sortedColors.indexOf(b.color));
       });
 
       return copied;
