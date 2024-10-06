@@ -31,24 +31,39 @@ class ClothesRepository {
     // 지정된 버전 및 생성 콜백으로 데이터베이스를 엽니다.
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: (db, version) async {
         // 'todos' 테이블을 생성하는 SQL 쿼리를 실행합니다.
-        await db.execute('''
-          CREATE TABLE clothes(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT not null,
-            primaryCategoryId INTEGER not null,
-            secondaryCategoryId INTEGER not null,
-            colorValue INTEGER not null,
-            price INTEGER,
-            millisecondsSinceEpoch INTEGER not null,
-            drawLines TEXT not null,
-            details TEXT not null
-          )
-        ''');
+        await _createTable(db);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < newVersion) {
+          // 기존 테이블을 드롭하고 다시 만듭니다.
+          await _dropTable(db);
+          await _createTable(db);
+        }
       },
     );
+  }
+
+  Future<void> _createTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE $_tableName(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        primaryCategoryId INTEGER NOT NULL,
+        secondaryCategoryId INTEGER NOT NULL,
+        colorValue INTEGER NOT NULL,
+        price INTEGER,
+        millisecondsSinceEpoch INTEGER NOT NULL,
+        drawLines TEXT NOT NULL,
+        details TEXT NOT NULL
+      )
+    ''');
+  }
+
+  Future<void> _dropTable(Database db) async {
+    await db.execute('DROP TABLE IF EXISTS $_tableName');
   }
 
   Future<void> addClothes(Clothes clothes) async {
@@ -80,7 +95,7 @@ class ClothesRepository {
     await db.delete(_tableName, where: 'id = ?', whereArgs: [clothes.id]);
   }
 
-    Future<void> deleteAllClothes() async {
+  Future<void> deleteAllClothes() async {
     final db = await database;
     await db.delete(_tableName);
   }

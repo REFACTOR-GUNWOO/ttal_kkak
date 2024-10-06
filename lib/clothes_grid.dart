@@ -19,10 +19,12 @@ import 'package:uuid/uuid.dart';
 class ClothesGrid extends StatefulWidget {
   final List<Clothes> clothesList;
   final bool isOnboarding;
+  final VoidCallback onReload;
 
   ClothesGrid({
     required this.clothesList,
     required this.isOnboarding,
+    required this.onReload,
   });
 
   @override
@@ -32,7 +34,6 @@ class ClothesGrid extends StatefulWidget {
 class _ClothesGridState extends State<ClothesGrid> {
   ClothesDraftProvider? draftProvider;
   ClothesUpdateProvider? updateProvider;
-  List<ClothesFamily> clothesWithDraft = [];
 
   List<DrawnLine> lines = [];
   Color clothesColor = Colors.transparent;
@@ -167,6 +168,68 @@ class _ClothesGridState extends State<ClothesGrid> {
     return list;
   }
 
+  void showClothesOptionsBottomSheet(BuildContext context, Clothes clothes,
+      ClothesUpdateProvider? updateProvider) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.info),
+                title: Text('정보 수정하기'),
+                onTap: () {
+                  Navigator.pop(context);
+
+                  // 정보 수정 기능
+                  updateProvider!.set(clothes);
+                  ShowAddClothesBottomSheet(context, true);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.info),
+                title: Text('복제하기'),
+                onTap: () async {
+                  await ClothesRepository().addClothes(clothes);
+                  widget.onReload();
+                  Navigator.pop(context);
+                },
+              ),
+              // ListTile(
+              //   leading: Icon(Icons.note),
+              //   title: Text('메모 남기기'),
+              //   onTap: () {
+              //     // 메모 남기기 기능
+              //     Navigator.pop(context);
+              //   },
+              // ),
+              // ListTile(
+              //   leading: Icon(Icons.favorite),
+              //   title: Text('좋아하는 옷 OFF'),
+              //   onTap: () {
+              //     // 좋아하는 옷 기능
+              //     Navigator.pop(context);
+              //   },
+              // ),
+              ListTile(
+                leading: Icon(Icons.delete, color: Colors.red),
+                title: Text('삭제하기', style: TextStyle(color: Colors.red)),
+                onTap: () async {
+                  await ClothesRepository().removeClothes(clothes);
+                  widget.onReload();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildClothesCard(
       BuildContext context, Clothes clothes, bool isSelected) {
     return GestureDetector(
@@ -241,58 +304,6 @@ class _ClothesGridState extends State<ClothesGrid> {
   }
 }
 
-void showClothesOptionsBottomSheet(BuildContext context, Clothes clothes,
-    ClothesUpdateProvider? updateProvider) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Icon(Icons.info),
-              title: Text('정보 수정하기'),
-              onTap: () {
-                Navigator.pop(context);
-
-                // 정보 수정 기능
-                updateProvider!.set(clothes);
-                ShowAddClothesBottomSheet(context, true);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.note),
-              title: Text('메모 남기기'),
-              onTap: () {
-                // 메모 남기기 기능
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.favorite),
-              title: Text('좋아하는 옷 OFF'),
-              onTap: () {
-                // 좋아하는 옷 기능
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.delete, color: Colors.red),
-              title: Text('삭제하기', style: TextStyle(color: Colors.red)),
-              onTap: () {
-                // 삭제 기능
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
-
 class ClothesItem extends StatefulWidget {
   final Clothes clothes;
   const ClothesItem({Key? key, required this.clothes}) : super(key: key);
@@ -306,47 +317,47 @@ class _ClothesItemState extends State<ClothesItem> {
   Color clothesColor = Colors.transparent;
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
-  ClothesUpdateProvider? updateProvider;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final updateProvider =
-          Provider.of<ClothesUpdateProvider>(context, listen: false);
-      final clothesToUpdate = updateProvider.currentClothes;
-      setState(() {
-        // if (clothesToUpdate != null) {
-        //   lines = clothesToUpdate.drawLines;
-        //   clothesColor = clothesToUpdate.color;
-        //   SecondCategory secondCategory = secondCategories.firstWhere(
-        //       (element) => element.id == clothesToUpdate.secondaryCategoryId);
-        //   ClothesDetails clothesDetails = clothesToUpdate.details;
-        //   _loadDrawableRoot(clothesDetails, secondCategory);
-        // } else {
-        lines = widget.clothes.drawLines;
-        clothesColor = widget.clothes.color;
-        SecondCategory secondCategory = secondCategories.firstWhere(
-            (element) => element.id == widget.clothes.secondaryCategoryId);
-        ClothesDetails clothesDetails = widget.clothes.details;
-        _loadDrawableRoot(clothesDetails, secondCategory);
-      });
+      await _initializeClothesData();
     });
+  }
+
+  Future<void> _initializeClothesData() async {
+    lines = widget.clothes.drawLines;
+    clothesColor = widget.clothes.color;
+
+    SecondCategory secondCategory = secondCategories.firstWhere(
+        (element) => element.id == widget.clothes.secondaryCategoryId);
+
+    ClothesDetails clothesDetails = widget.clothes.details;
+
+    // SVG 데이터를 비동기적으로 불러오고, 완료된 후 상태 업데이트
+    await _loadDrawableRoot(clothesDetails, secondCategory);
+
+    if (mounted) {
+      // 불필요한 `setState` 호출을 최소화
+      setState(() {
+        // 데이터가 모두 불러와졌을 때 한 번만 UI 업데이트
+        svgBgRoot = svgBgRoot;
+        svgLineRoot = svgLineRoot;
+      });
+    }
   }
 
   Future<void> _loadDrawableRoot(
       ClothesDetails clothesDetails, SecondCategory secondCategory) async {
     final String svgBgString = await rootBundle.loadString(
         "assets/images/clothes/bg/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
+
     final String svgLineString = await rootBundle.loadString(
         "assets/images/clothes/line/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
-    DrawableRoot bgDrawableRoot =
-        await svg.fromSvgString(svgBgString, svgBgString);
-    DrawableRoot lineDrawableRoot =
-        await svg.fromSvgString(svgLineString, svgLineString);
-    setState(() {
-      svgBgRoot = bgDrawableRoot;
-      svgLineRoot = lineDrawableRoot;
-    });
+
+    svgBgRoot = await svg.fromSvgString(svgBgString, svgBgString);
+    svgLineRoot = await svg.fromSvgString(svgLineString, svgLineString);
   }
 
   @override
@@ -359,13 +370,13 @@ class _ClothesItemState extends State<ClothesItem> {
                 svgBgRoot!.viewport.width / 2, svgBgRoot!.viewport.height / 2),
             painter: SvgBgPainter(svgBgRoot!, clothesColor, 0.5),
           ),
-        if (svgBgRoot != null)
+        if (svgLineRoot != null)
           CustomPaint(
-            size: Size(
-                svgBgRoot!.viewport.width / 2, svgBgRoot!.viewport.height / 2),
+            size: Size(svgLineRoot!.viewport.width / 2,
+                svgLineRoot!.viewport.height / 2),
             painter: SvgLinePainter(svgLineRoot!, 0.5),
           ),
-        if (svgBgRoot != null)
+        if (lines.isNotEmpty)
           CustomPaint(
             size: Size(
                 svgBgRoot!.viewport.width / 2, svgBgRoot!.viewport.height / 2),

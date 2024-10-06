@@ -3,6 +3,7 @@ import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
 import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/setting_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
+import 'package:ttal_kkak/styles/text_styles.dart';
 
 class MainLayout extends StatefulWidget {
   @override
@@ -26,52 +27,52 @@ class _MainLayoutState extends State<MainLayout> {
         index: _selectedIndex,
         children: [
           MainPage(), // 내 옷장 페이지
-          MainPage(), // 통계 페이지
-          MainPage(), // 코디 페이지
+          SettingPage(),
+          SettingPage(),
           SettingPage()
         ], // 설정 페이지
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: SignatureColors.begie500,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.checkroom),
-            label: '내 옷장',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: '통계',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.style),
-            label: '코디',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: '설정',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                ShowAddClothesBottomSheet(context, false);
-              },
+      bottomNavigationBar: SizedBox(
+        height: 82,
+        child: BottomNavigationBar(
+          backgroundColor: SignatureColors.begie500,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.checkroom, size: 24),
+              label: '내 옷장',
             ),
-            label: '추가',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.orange, // 선택된 아이템 색상
-        unselectedItemColor: Colors.black, // 선택되지 않은 아이템 색상
-        selectedLabelStyle: TextStyle(fontSize: 14), // 선택된 텍스트 스타일
-        unselectedLabelStyle: TextStyle(fontSize: 14), // 선택되지 않은 텍스트 스타일
-        onTap: (index) {
-          if (index == 4) {
-            Navigator.pushNamed(context, '/addClothes');
-          } else {
-            _onItemTapped(index);
-          }
-        },
+            BottomNavigationBarItem(
+              icon: Icon(Icons.bar_chart, size: 24),
+              label: '통계',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.style, size: 24),
+              label: '코디',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings, size: 24),
+              label: '설정',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.add, size: 24),
+              label: '추가',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.orange, // 선택된 아이템 색상
+          unselectedItemColor: Colors.black, // 선택되지 않은 아이템 색상
+          selectedLabelStyle: OneLineTextStyles.Medium10.copyWith(
+              color: SystemColors.black), // 선택된 텍스트 스타일
+          unselectedLabelStyle: OneLineTextStyles.Medium10.copyWith(
+              color: SystemColors.gray700), // 선택되지 않은 텍스트 스타일
+          onTap: (index) {
+            if (index == 4) {
+              ShowAddClothesBottomSheet(context, false);
+            } else {
+              _onItemTapped(index);
+            }
+          },
+        ),
       ),
     );
   }

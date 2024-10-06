@@ -8,7 +8,7 @@ import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/splash_page.dart';
 
 void main() {
-  // debugPaintSizeEnabled = true;
+  debugPaintSizeEnabled = true;
   runApp(
     MultiProvider(
       providers: [

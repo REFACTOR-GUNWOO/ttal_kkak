@@ -148,11 +148,13 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
           ? ClothesGrid(
               clothesList: clothesList,
               isOnboarding: true,
+              onReload: () {},
             )
           : ClothesGrid(
               clothesList: (getCategorizedClothes()[
                   getSortedCategories()[tab1Index - 1]]!),
               isOnboarding: true,
+              onReload: () {},
             );
     }
 
