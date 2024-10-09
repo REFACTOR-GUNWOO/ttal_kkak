@@ -28,58 +28,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   late TabController _innerTabController;
   // ClothesDraftProvider? provider;
   List<String> secondTabNames = ["등록일순", "카테고리순", "컬러순", "가격순"];
-  OverlayEntry? _overlayEntry;
-  late AnimationController _controller;
-  late Animation<Offset> _offsetAnimation;
 
-  void _initializeAnimation() {
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
-    );
-
-    _offsetAnimation = Tween<Offset>(
-      begin: Offset(0, 1), // 아래에서 시작
-      end: Offset(0, 0), // 원래 위치로 이동
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
-  }
-
-  // 툴팁을 보여주는 함수
-  void _showTooltip() {
-    _overlayEntry = _createOverlayEntry();
-    Overlay.of(context).insert(_overlayEntry!);
-    _controller.forward(); // 애니메이션 시작
-
-    // // 3초 후에 툴팁을 자동으로 사라지게 함
-    // Future.delayed(Duration(seconds: 3), () {
-    //   _hideTooltip();
-    // });
-  }
-
-  // // 툴팁을 숨기는 함수
-  // void _hideTooltip() {
-  //   _controller.reverse().then((value) => _overlayEntry?.remove());
-  // }
-
-  // OverlayEntry 생성 함수
-  OverlayEntry _createOverlayEntry() {
-    return OverlayEntry(
-      builder: (context) => Positioned(
-        bottom: 100, // 바텀 탭 위에 위치
-        right: 20, // 중앙에서 약간 왼쪽에 위치
-        child: Material(
-          color: Colors.transparent,
-          child: SlideTransition(
-            position: _offsetAnimation,
-            child: RandomTooltipScreen(),
-          ),
-        ),
-      ),
-    );
-  }
 
   void reload() async {
     // 먼저 비동기 작업을 완료한 후에
@@ -285,12 +234,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _initializeAnimation(); // 애니메이션 초기화 함수 호출
 
     Provider.of<ClothesDraftProvider>(context, listen: false).loadFromLocal();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _showTooltip();
       List<Clothes> loadedClothes = await ClothesRepository().loadClothes();
       String? loadedClosetName = await ClosetRepository().loadClosetName();
       ClothesDraft? clothesDraft = await ClothesDraftRepository().load();

@@ -5,15 +5,19 @@ import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/setting_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
+import 'package:ttal_kkak/tool_tip_with_tail.dart';
 
 class MainLayout extends StatefulWidget {
   @override
   _MainLayoutState createState() => _MainLayoutState();
 }
 
-class _MainLayoutState extends State<MainLayout> {
+class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
   int _selectedIndex = 0;
   PageController _pageController = PageController();
+  OverlayEntry? _overlayEntry;
+  late AnimationController _controller;
+  late Animation<Offset> _offsetAnimation;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -25,6 +29,73 @@ class _MainLayoutState extends State<MainLayout> {
   void _onPageChanged(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  void _initializeAnimation() {
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    _offsetAnimation = Tween<Offset>(
+      begin: Offset(0, 1), // 아래에서 시작
+      end: Offset(0, 0), // 원래 위치로 이동
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  // 툴팁을 보여주는 함수
+  void _showTooltip() {
+    _overlayEntry = _createOverlayEntry();
+    Overlay.of(context).insert(_overlayEntry!);
+    _controller.forward(); // 애니메이션 시작
+  }
+
+  // 툴팁을 숨기는 함수
+  void _hideTooltip() {
+    _overlayEntry?.remove();
+  }
+
+  // OverlayEntry 생성 함수
+  OverlayEntry _createOverlayEntry() {
+    return OverlayEntry(
+      builder: (context) => Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
+              _hideTooltip(); // 화면 다른 곳을 클릭하면 툴팁이 사라짐
+            },
+            child: Container(
+              color: Colors.transparent, // 투명한 배경으로 다른 곳 클릭 인식
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            ),
+          ),
+          Positioned(
+            bottom: 100, // 바텀 탭 위에 위치
+            right: 20, // 중앙에서 약간 왼쪽에 위치
+            child: Material(
+              color: Colors.transparent,
+              child: SlideTransition(
+                position: _offsetAnimation,
+                child: RandomTooltipScreen(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _initializeAnimation(); // 애니메이션 초기화 함수 호출
+      _showTooltip();
     });
   }
 
@@ -147,6 +218,7 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   void dispose() {
     _pageController.dispose();
+    _controller.dispose(); // 애니메이션 컨트롤러도 해제
     super.dispose();
   }
 }
