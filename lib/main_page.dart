@@ -50,7 +50,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   // 툴팁을 보여주는 함수
   void _showTooltip() {
     _overlayEntry = _createOverlayEntry();
-    Overlay.of(context)?.insert(_overlayEntry!);
+    Overlay.of(context).insert(_overlayEntry!);
     _controller.forward(); // 애니메이션 시작
 
     // // 3초 후에 툴팁을 자동으로 사라지게 함
@@ -69,7 +69,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return OverlayEntry(
       builder: (context) => Positioned(
         bottom: 100, // 바텀 탭 위에 위치
-        left: MediaQuery.of(context).size.width / 4, // 중앙에서 약간 왼쪽에 위치
+        right: 20, // 중앙에서 약간 왼쪽에 위치
         child: Material(
           color: Colors.transparent,
           child: SlideTransition(
@@ -304,8 +304,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _outerTabController.dispose();
-    _innerTabController.dispose();
+    // _outerTabController.dispose();
+    // _innerTabController.dispose();
     super.dispose();
   }
 
