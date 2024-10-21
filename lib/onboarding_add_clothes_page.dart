@@ -162,17 +162,35 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
         backgroundColor: SignatureColors.begie200,
         appBar: AppBar(
             backgroundColor: SignatureColors.begie200,
-            title: Text(
-              "기본템 패키지",
-              textAlign: TextAlign.center,
-              style:
-                  OneLineTextStyles.Bold18.copyWith(color: SystemColors.black),
-            ),
             centerTitle: true,
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(60.0),
+              preferredSize: Size.fromHeight(160.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, bottom: 38),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "기본템 패키지",
+                          textAlign: TextAlign.left,
+                          style: OneLineTextStyles.Bold18.copyWith(
+                              color: SystemColors.black),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          "가지고 있는 기본템들을 터치 한 번으로\n쉽게 등록할 수 있게 해드릴게요\n상세한 정보는 나중에 편집할 수 있어요",
+                          textAlign: TextAlign.left,
+                          style: BodyTextStyles.Regular14.copyWith(
+                              color: SystemColors.black),
+                        ),
+                      ],
+                    ),
+                  ),
                   Row(
                     children: getTabs(),
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

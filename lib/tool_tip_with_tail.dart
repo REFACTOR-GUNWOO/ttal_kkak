@@ -16,7 +16,7 @@ class _RandomTooltipScreenState extends State<RandomTooltipScreen> {
     TooltipText(mainText: "오늘 입은 옷", subText: "이 옷장에 다 있어요?"),
     TooltipText(mainText: "등록을 깜빡한 아우터 ", subText: "없으신가요?"),
     TooltipText(mainText: "등록을 깜빡한 상의 ", subText: "없으신가요?"),
-    TooltipText(mainText: "제일 좋아하는 옷  ", subText: "을 등록하셨나요?"),
+    TooltipText(mainText: "제일 좋아하는 옷", subText: "을 등록하셨나요?"),
   ];
 
   // 랜덤하게 선택된 문구를 저장할 변수
