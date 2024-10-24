@@ -46,31 +46,22 @@ class _ClothesGridState extends State<ClothesGrid> {
   Widget _buildFloatingActionButton() {
     int selectedCount =
         selected.values.where((isSelected) => isSelected).length;
-    return FloatingActionButton.extended(
+
+    return FloatingActionButtonWidget(
+      selectedCount: selectedCount,
       onPressed: () async {
         var selectedIds = selected.entries
-            .where(
-              (it) => it.value == true,
-            )
-            .map(
-              (it) => it.key,
-            );
+            .where((it) => it.value == true)
+            .map((it) => it.key);
+
         await ClothesRepository().addClothesList(selectedIds
-            .map((it) => widget.clothesList.firstWhere(
-                  (e) => e.id == it,
-                ))
+            .map((it) => widget.clothesList.firstWhere((e) => e.id == it))
             .toSet());
-        // 플로팅 버튼 클릭 시의 동작
+
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => MainLayout()),
         );
       },
-      backgroundColor: Colors.black,
-      label: Text(
-        '총 $selectedCount개 선택',
-        style: TextStyle(color: Colors.white),
-      ),
-      icon: Icon(Icons.arrow_forward, color: Colors.white),
     );
   }
 
@@ -112,7 +103,8 @@ class _ClothesGridState extends State<ClothesGrid> {
           print(
               "updateProvider?.currentClothes: ${updateProvider?.currentClothes?.id}");
           final clothesList = widget.clothesList
-              .map((e) => updateProvider?.currentClothes?.id == e.id
+              .map((e) => updateProvider?.currentClothes?.id == e.id &&
+                      updateProvider?.currentClothes != null
                   ? updateProvider!.currentClothes!
                   : e)
               .toList();
@@ -136,11 +128,12 @@ class _ClothesGridState extends State<ClothesGrid> {
           );
         },
       ),
-      floatingActionButton:
-          widget.isOnboarding ? _buildFloatingActionButton() : null,
+      floatingActionButton: widget.isOnboarding &&
+              selected.values.where((isSelected) => isSelected).isNotEmpty
+          ? _buildFloatingActionButton()
+          : null,
       floatingActionButtonLocation: CustomFloatingActionButtonLocation(
         FloatingActionButtonLocation.endFloat, // 기본 위치를 기준으로
-        offsetX: -20.0, // X축 위치를 오른쪽으로 이동
       ),
     );
   }
@@ -339,9 +332,7 @@ class _ClothesItemState extends State<ClothesItem> {
     await _loadDrawableRoot(clothesDetails, secondCategory);
 
     if (mounted) {
-      // 불필요한 `setState` 호출을 최소화
       setState(() {
-        // 데이터가 모두 불러와졌을 때 한 번만 UI 업데이트
         svgBgRoot = svgBgRoot;
         svgLineRoot = svgLineRoot;
       });
@@ -463,5 +454,44 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
           ),
       ],
     );
+  }
+}
+
+class FloatingActionButtonWidget extends StatefulWidget {
+  final int selectedCount;
+  final VoidCallback onPressed;
+
+  FloatingActionButtonWidget({
+    required this.selectedCount,
+    required this.onPressed,
+  });
+
+  @override
+  _FloatingActionButtonWidgetState createState() =>
+      _FloatingActionButtonWidgetState();
+}
+
+class _FloatingActionButtonWidgetState
+    extends State<FloatingActionButtonWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+        onPressed: widget.onPressed,
+        backgroundColor: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8), // 모서리 둥글게
+        ),
+        label: Row(
+          children: [
+            Text(
+              '총 ${widget.selectedCount}개 선택',
+              style: OneLineTextStyles.Medium14.copyWith(
+                  color: SystemColors.white),
+            ),
+            SizedBox(width: 8), // 텍스트와 아이콘 사이 간격
+            SvgPicture.asset('assets/icons/arrow_right.svg',
+                color: SystemColors.white)
+          ],
+        ));
   }
 }

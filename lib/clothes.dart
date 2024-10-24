@@ -141,7 +141,7 @@ enum SleeveLength with Descriptive {
   sleeveless("민소매");
 
   final String label;
-  
+
   const SleeveLength(this.label);
 }
 
@@ -172,20 +172,20 @@ List<Clothes> generateDummyClothes() {
         color: Colors.black,
         regTs: DateTime.now(),
         drawLines: []),
-    // Clothes(
-    //     id: "1234",
-    //     name: '화이트 셔츠',
-    //     primaryCategoryId: 1,
-    //     secondaryCategoryId: 2,
-    //     details: ClothesDetails(
-    //       topLength: TopLength.long,
-    //       sleeveLength: SleeveLength.long,
-    //       neckline: Neckline.vNeck,
-    //     ),
-    //     price: 124,
-    //     color: Colors.white,
-    //     regTs: DateTime.now(),
-    //     drawLines: []),
+    Clothes(
+        id: 2,
+        name: '화이트 셔츠',
+        primaryCategoryId: 1,
+        secondaryCategoryId: 1,
+        details: ClothesDetails(
+          topLength: TopLength.medium,
+          sleeveLength: SleeveLength.short,
+          neckline: Neckline.round,
+        ),
+        price: 123,
+        color: Colors.white,
+        regTs: DateTime.now(),
+        drawLines: []),
     //   Clothes(
     //       id: 3,
     //       name: '데님 재킷',
@@ -378,42 +378,42 @@ class ColorContainer {
   ColorContainer(this.colors, this.representativeColor);
 }
 
-  List<ColorContainer> colorContainers = [
-    // 검정색
-    ColorContainer([Color(0xFF282828), Color(0xFF161616)], Color(0xFF161616)),
-    // 흰색
-    ColorContainer([Color(0xFFFFFFFF), Color(0xFFE7E7E7)], Color(0xFFE7E7E7)),
-    // 회색
-    ColorContainer([Color(0xFFC4C4C4), Color(0xFF8D8D8D), Color(0xFF606060)],
-        Color(0xFF8D8D8D)),
-    // 빨간색
-    ColorContainer([Color(0xFFDE9494), Color(0xFFC46060), Color(0xFFA84A4A)],
-        Color(0xFFC46060)),
-    // 주황색
-    ColorContainer([Color(0xFFE4B198), Color(0xFFD48E6A), Color(0xFFA76443)],
-        Color(0xFFD48E6A)),
-    // 주황색#2
-    ColorContainer([Color(0xFFF0E3A3), Color(0xFFE4D58B), Color(0xFFC4A151)],
-        Color(0xFFE4D58B)),
-    // 초록색
-    ColorContainer([Color(0xFFB6D9A1), Color(0xFF68A168), Color(0xFF467346)],
-        Color(0xFF68A168)),
-    // 초록색#2
-    ColorContainer([Color(0xFF9FB294), Color(0xFF627762), Color(0xFF3D513D)],
-        Color(0xFF627762)),
-    // 파란색
-    ColorContainer([Color(0xFFADCAD8), Color(0xFF5C8DBD), Color(0xFF304F85)],
-        Color(0xFF5C8DBD)),
-    // 파란색#2
-    ColorContainer([Color(0xFF8095A9), Color(0xFF43617F), Color(0xFF32485D)],
-        Color(0xFF43617F)),
-    // 보라색
-    ColorContainer([Color(0xFFB9A8DB), Color(0xFF957CC8), Color(0xFF5C4588)],
-        Color(0xFF957CC8)),
-    // 쿨핑크
-    ColorContainer([Color(0xFFD8B9D8), Color(0xFFAC6BAC), Color(0xFFA04D89)],
-        Color(0xFFAC6BAC)),
-    // 웜핑크
-    ColorContainer([Color(0xFFE1B5C2), Color(0xFFBE7187), Color(0xFFA04D65)],
-        Color(0xFFBE7187)),
-  ];
+List<ColorContainer> colorContainers = [
+  // 검정색
+  ColorContainer([Color(0xFF282828), Color(0xFF161616)], Color(0xFF161616)),
+  // 흰색
+  ColorContainer([Color(0xFFFFFFFF), Color(0xFFE7E7E7)], Color(0xFFE7E7E7)),
+  // 회색
+  ColorContainer([Color(0xFFC4C4C4), Color(0xFF8D8D8D), Color(0xFF606060)],
+      Color(0xFF8D8D8D)),
+  // 빨간색
+  ColorContainer([Color(0xFFDE9494), Color(0xFFC46060), Color(0xFFA84A4A)],
+      Color(0xFFC46060)),
+  // 주황색
+  ColorContainer([Color(0xFFE4B198), Color(0xFFD48E6A), Color(0xFFA76443)],
+      Color(0xFFD48E6A)),
+  // 주황색#2
+  ColorContainer([Color(0xFFF0E3A3), Color(0xFFE4D58B), Color(0xFFC4A151)],
+      Color(0xFFE4D58B)),
+  // 초록색
+  ColorContainer([Color(0xFFB6D9A1), Color(0xFF68A168), Color(0xFF467346)],
+      Color(0xFF68A168)),
+  // 초록색#2
+  ColorContainer([Color(0xFF9FB294), Color(0xFF627762), Color(0xFF3D513D)],
+      Color(0xFF627762)),
+  // 파란색
+  ColorContainer([Color(0xFFADCAD8), Color(0xFF5C8DBD), Color(0xFF304F85)],
+      Color(0xFF5C8DBD)),
+  // 파란색#2
+  ColorContainer([Color(0xFF8095A9), Color(0xFF43617F), Color(0xFF32485D)],
+      Color(0xFF43617F)),
+  // 보라색
+  ColorContainer([Color(0xFFB9A8DB), Color(0xFF957CC8), Color(0xFF5C4588)],
+      Color(0xFF957CC8)),
+  // 쿨핑크
+  ColorContainer([Color(0xFFD8B9D8), Color(0xFFAC6BAC), Color(0xFFA04D89)],
+      Color(0xFFAC6BAC)),
+  // 웜핑크
+  ColorContainer([Color(0xFFE1B5C2), Color(0xFFBE7187), Color(0xFFA04D65)],
+      Color(0xFFBE7187)),
+];
