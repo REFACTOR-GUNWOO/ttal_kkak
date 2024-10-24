@@ -183,7 +183,7 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
                           height: 8,
                         ),
                         Text(
-                          "가지고 있는 기본템들을 터치 한 번으로\n쉽게 등록할 수 있게 해드릴게요\n상세한 정보는 나중에 편집할 수 있어요",
+                          "가지고 있는 기본템들을 터치 한 번으로\n쉽게 등록할 수 있게 해드릴게요!\n상세한 정보는 나중에 편집할 수 있어요",
                           textAlign: TextAlign.left,
                           style: BodyTextStyles.Regular14.copyWith(
                               color: SystemColors.black),
