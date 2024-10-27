@@ -27,8 +27,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   late TabController _outerTabController;
   late TabController _innerTabController;
   // ClothesDraftProvider? provider;
-  List<String> secondTabNames = ["등록일순", "카테고리순", "컬러순", "가격순"];
-
+  List<String> secondTabNames = ["등록일순", "카테고리순", "컬러순"];
 
   void reload() async {
     // 먼저 비동기 작업을 완료한 후에
@@ -98,7 +97,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   TextButton getTab(int index, bool isAllTab, FirstCategory? category) {
     int itemCount = isAllTab
         ? clothesList.length
-        : getCategorizedClothes()[category]!.length;
+        : getCategorizedClothes()[category]?.length ?? 0;
 
     String categoryName = isAllTab
         ? "전체"
@@ -134,24 +133,31 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   List<TextButton> getTabs() {
     TextButton allTab = getTab(0, true, null);
-    List<TextButton> tabList = getSortedCategories().map((category) {
-      return getTab(
-          getSortedCategories().indexOf(category) + 1, false, category);
+    List<TextButton> tabList = firstCategories.map((category) {
+      return getTab(firstCategories.indexOf(category) + 1, false, category);
     }).toList();
     tabList.insert(0, allTab);
     return tabList;
   }
 
   ClothesGrid getClothesGrid() {
-    return tab1Index == 0
+    if (tab1Index == 0)
+      return ClothesGrid(
+        clothesList: sortClothesList(clothesList),
+        isOnboarding: false,
+        onReload: reload,
+      );
+
+    List<Clothes>? clothes =
+        getCategorizedClothes()[firstCategories[tab1Index - 1]];
+    return clothes != null
         ? ClothesGrid(
-            clothesList: sortClothesList(clothesList),
+            clothesList: sortClothesList(clothes),
             isOnboarding: false,
             onReload: reload,
           )
         : ClothesGrid(
-            clothesList: sortClothesList(
-                getCategorizedClothes()[getSortedCategories()[tab1Index - 1]]!),
+            clothesList: [],
             isOnboarding: false,
             onReload: reload,
           );
@@ -192,14 +198,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         return sortedColors
             .indexOf(a.color)
             .compareTo(sortedColors.indexOf(b.color));
-      });
-
-      return copied;
-    }
-
-    if (secondTabNames[tab2Index] == "가격순") {
-      copied.sort((a, b) {
-        return (a.price ?? 0).compareTo(b.price ?? 0);
       });
 
       return copied;

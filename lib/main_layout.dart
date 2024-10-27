@@ -127,6 +127,11 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
+                                child: Theme(
+                              data: ThemeData(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                              ),
                               child: BottomNavigationBar(
                                 backgroundColor: Colors.transparent,
                                 type: BottomNavigationBarType.fixed,
@@ -192,7 +197,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                                   _onItemTapped(index);
                                 },
                               ),
-                            ),
+                            )),
                             Padding(
                               padding: EdgeInsets.only(top: 6),
                               child: GestureDetector(
