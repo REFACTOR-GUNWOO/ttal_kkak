@@ -27,9 +27,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: true,
       title: 'Flutter Splash Screen',
       theme: ThemeData(
-        fontFamily: 'Pretendard',
-        primarySwatch: Colors.blue,
-      ),
+          fontFamily: 'Pretendard',
+          primarySwatch: Colors.blue,
+          textButtonTheme: TextButtonThemeData(
+              style: ButtonStyle(
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          ))),
       home: SplashPage(),
       routes: {
         '/addClothes': (context) => MainPage(),
