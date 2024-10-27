@@ -286,14 +286,20 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               preferredSize: Size.fromHeight(60.0),
               child: Column(
                 children: [
-                  Row(
-                    children: getTabs(),
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  ),
-                  Row(
-                    children: getSecondTabs(),
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  ),
+                  SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min, // 이 줄을 추가합니다
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: getTabs(),
+                      )),
+                  SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min, // 이 줄을 추가합니다
+                        children: getSecondTabs(),
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      )),
                 ],
               ),
             ),
