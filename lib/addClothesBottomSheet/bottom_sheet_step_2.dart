@@ -28,7 +28,7 @@ class BottomSheetBody2 extends StatefulWidget implements BottomSheetStep {
 
   @override
   String getTitle() {
-    return "옷 카테고리";
+    return "상위 카테고리";
   }
 }
 

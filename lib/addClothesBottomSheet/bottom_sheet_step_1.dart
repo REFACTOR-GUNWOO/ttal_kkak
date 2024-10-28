@@ -22,7 +22,7 @@ class BottomSheetBody1 extends StatefulWidget implements BottomSheetStep {
 
   @override
   String getTitle() {
-    return "등록할 옷 이름";
+    return "이름";
   }
 }
 

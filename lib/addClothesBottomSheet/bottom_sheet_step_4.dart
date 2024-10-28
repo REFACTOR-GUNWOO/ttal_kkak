@@ -28,7 +28,7 @@ class BottomSheetBody4 extends StatefulWidget implements BottomSheetStep {
 
   @override
   String getTitle() {
-    return "옷 상세설정";
+    return "디테일";
   }
 }
 

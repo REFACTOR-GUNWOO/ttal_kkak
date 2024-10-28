@@ -25,7 +25,7 @@ class BottomSheetBody5 extends StatefulWidget implements BottomSheetStep {
 
   @override
   String getTitle() {
-    return "옷 컬러";
+    return "컬러";
   }
 }
 
