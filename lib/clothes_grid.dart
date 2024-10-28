@@ -90,44 +90,61 @@ class _ClothesGridState extends State<ClothesGrid> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: ListView.builder(
-        scrollDirection: Axis.vertical,
-        padding: EdgeInsets.all(8.0),
-        itemCount: ((getClothesListLength()) / columnCount).ceil(),
-        itemBuilder: (context, index) {
-          int start = index * columnCount;
-          int end = (start + columnCount) < getClothesListLength()
-              ? start + columnCount
-              : getClothesListLength();
+      body: getClothesListLength() != 0
+          ? ListView.builder(
+              scrollDirection: Axis.vertical,
+              padding: EdgeInsets.all(8.0),
+              itemCount: ((getClothesListLength()) / columnCount).ceil(),
+              itemBuilder: (context, index) {
+                print("getClothesListLength() ${getClothesListLength()}");
+                int start = index * columnCount;
+                int end = (start + columnCount) < getClothesListLength()
+                    ? start + columnCount
+                    : getClothesListLength();
 
-          print(
-              "updateProvider?.currentClothes: ${updateProvider?.currentClothes?.id}");
-          final clothesList = widget.clothesList
-              .map((e) => updateProvider?.currentClothes?.id == e.id &&
-                      updateProvider?.currentClothes != null
-                  ? updateProvider!.currentClothes!
-                  : e)
-              .toList();
-          List<ClothesFamily> rowClothes =
-              ((draftProvider?.currentDraft != null)
-                  ? (index == 0)
-                      ? [
-                          draftProvider!.currentDraft!,
-                          ...clothesList.sublist(start, end - 1)
-                        ]
-                      : clothesList.sublist(start - 1, end - 1)
-                  : widget.clothesList.sublist(start, end));
+                print(
+                    "updateProvider?.currentClothes: ${updateProvider?.currentClothes?.id}");
+                final clothesList = widget.clothesList
+                    .map((e) => updateProvider?.currentClothes?.id == e.id &&
+                            updateProvider?.currentClothes != null
+                        ? updateProvider!.currentClothes!
+                        : e)
+                    .toList();
+                List<ClothesFamily> rowClothes =
+                    ((draftProvider?.currentDraft != null)
+                        ? (index == 0)
+                            ? [
+                                draftProvider!.currentDraft!,
+                                ...clothesList.sublist(start, end - 1)
+                              ]
+                            : clothesList.sublist(start - 1, end - 1)
+                        : widget.clothesList.sublist(start, end));
 
-          return Container(
-            width: double.infinity,
-            alignment: Alignment.center,
-            child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: _buildClothesCardRow(context, rowClothes)),
-          );
-        },
-      ),
+                return Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _buildClothesCardRow(context, rowClothes)),
+                );
+              },
+            )
+          : ListView.builder(
+              scrollDirection: Axis.vertical,
+              padding: EdgeInsets.all(8.0),
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _buildEmptyRow()),
+                );
+              },
+            ),
       floatingActionButton: widget.isOnboarding &&
               selected.values.where((isSelected) => isSelected).isNotEmpty
           ? _buildFloatingActionButton()
@@ -161,6 +178,17 @@ class _ClothesGridState extends State<ClothesGrid> {
     return list;
   }
 
+  List<Widget> _buildEmptyRow() {
+    List<Widget> list = [];
+    for (int i = 0; i < columnCount; i++) {
+      list.add(SvgPicture.asset("assets/icons/MiddleCloset.svg"));
+    }
+    list.insert(0, SvgPicture.asset("assets/icons/LeftCloset.svg"));
+    list.add(SvgPicture.asset("assets/icons/RightCloset.svg"));
+
+    return list;
+  }
+
   void showClothesOptionsBottomSheet(BuildContext context, Clothes clothes,
       ClothesUpdateProvider? updateProvider) {
     showModalBottomSheet(
@@ -191,22 +219,6 @@ class _ClothesGridState extends State<ClothesGrid> {
                   Navigator.pop(context);
                 },
               ),
-              // ListTile(
-              //   leading: Icon(Icons.note),
-              //   title: Text('메모 남기기'),
-              //   onTap: () {
-              //     // 메모 남기기 기능
-              //     Navigator.pop(context);
-              //   },
-              // ),
-              // ListTile(
-              //   leading: Icon(Icons.favorite),
-              //   title: Text('좋아하는 옷 OFF'),
-              //   onTap: () {
-              //     // 좋아하는 옷 기능
-              //     Navigator.pop(context);
-              //   },
-              // ),
               ListTile(
                 leading: Icon(Icons.delete, color: Colors.red),
                 title: Text('삭제하기', style: TextStyle(color: Colors.red)),
