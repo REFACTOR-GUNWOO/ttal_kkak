@@ -283,7 +283,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ]),
             centerTitle: true,
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(60.0),
+              preferredSize: Size.fromHeight(90.0),
               child: Column(
                 children: [
                   SingleChildScrollView(
