@@ -35,6 +35,7 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
     print("_AddClothesState");
     super.initState();
     _controller = TextEditingController();
+
     if (widget.isUpdate) {
       _controller.text = widget.updateProvider.currentClothes?.name ?? "";
     } else {
@@ -54,6 +55,7 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
       ClothesDraft? draft = widget.draftProvider.currentDraft;
       if (draft == null) {
         widget.draftProvider.updateDraft(ClothesDraft(name: text));
+        widget.onNextStep();
         return;
       }
       draft.name = text;
