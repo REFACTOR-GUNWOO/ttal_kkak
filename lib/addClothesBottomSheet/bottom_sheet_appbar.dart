@@ -49,7 +49,9 @@ class BottomSheetAppBar extends StatelessWidget {
                           SvgPicture.asset(
                             'assets/icons/arrow_left.svg',
                             color: SystemColors.black,
+                            height: 12,
                           ),
+                          SizedBox(width: 7),
                           Text(
                             previousStep!.getTitle(),
                             style: OneLineTextStyles.Medium14.copyWith(
@@ -84,13 +86,15 @@ class BottomSheetAppBar extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              "등록",
-                              style: OneLineTextStyles.Medium14.copyWith(
-                                  color: SystemColors.black),
+                            Text("등록",
+                                style: OneLineTextStyles.Medium14.copyWith(
+                                    color: SystemColors.black)),
+                            SizedBox(width: 7),
+                            SvgPicture.asset(
+                              'assets/icons/arrow_right.svg',
+                              color: SystemColors.black,
+                              height: 12,
                             ),
-                            SvgPicture.asset('assets/icons/arrow_right.svg',
-                                color: SystemColors.black),
                           ],
                         ))
                     : TextButton(
@@ -107,8 +111,10 @@ class BottomSheetAppBar extends StatelessWidget {
                                       ? SystemColors.black
                                       : SystemColors.gray500),
                             ),
+                            SizedBox(width: 7),
                             SvgPicture.asset(
                               'assets/icons/arrow_right.svg',
+                              height: 12,
                               color: currentStepCount < currentDraftLevel
                                   ? SystemColors.black
                                   : SystemColors.gray500,
