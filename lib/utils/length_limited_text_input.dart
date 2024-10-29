@@ -23,6 +23,7 @@ class LengthLimitedTextInput extends StatefulWidget {
 class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
   String? errorText;
   late TextEditingController _controller;
+  final FocusNode _focusNode = FocusNode();
 
   void _handleTextChanged() {
     widget.onTextChanged(_controller.text);
@@ -40,6 +41,15 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
             : null;
       });
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_focusNode);
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose(); // FocusNode 메모리 해제
+    super.dispose();
   }
 
   @override
@@ -51,6 +61,7 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
+          focusNode: _focusNode,
           controller: _controller,
           onSubmitted: (value) => {widget.onSubmit(value)},
           inputFormatters: [LengthLimitingTextInputFormatter(8)],
