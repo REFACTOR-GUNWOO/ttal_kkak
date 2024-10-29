@@ -98,7 +98,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
             crossAxisCount: 2,
             crossAxisSpacing: 0.0,
             mainAxisSpacing: 0.0,
-            childAspectRatio: 3 / 2,
+            childAspectRatio: 1.75,
           ),
           itemCount: firstCategories.length,
           itemBuilder: (context, index) {
