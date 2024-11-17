@@ -89,70 +89,69 @@ class _ClothesGridState extends State<ClothesGrid> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: getClothesListLength() != 0
-          ? ListView.builder(
-              scrollDirection: Axis.vertical,
-              padding: EdgeInsets.all(8.0),
-              itemCount: ((getClothesListLength()) / columnCount).ceil(),
-              itemBuilder: (context, index) {
-                print("getClothesListLength() ${getClothesListLength()}");
-                int start = index * columnCount;
-                int end = (start + columnCount) < getClothesListLength()
-                    ? start + columnCount
-                    : getClothesListLength();
+        backgroundColor: Colors.transparent,
+        body: getClothesListLength() != 0
+            ? ListView.builder(
+                scrollDirection: Axis.vertical,
+                padding: EdgeInsets.all(8.0),
+                itemCount: ((getClothesListLength()) / columnCount).ceil(),
+                itemBuilder: (context, index) {
+                  print("getClothesListLength() ${getClothesListLength()}");
+                  int start = index * columnCount;
+                  int end = (start + columnCount) < getClothesListLength()
+                      ? start + columnCount
+                      : getClothesListLength();
 
-                print(
-                    "updateProvider?.currentClothes: ${updateProvider?.currentClothes?.id}");
-                final clothesList = widget.clothesList
-                    .map((e) => updateProvider?.currentClothes?.id == e.id &&
-                            updateProvider?.currentClothes != null
-                        ? updateProvider!.currentClothes!
-                        : e)
-                    .toList();
-                List<ClothesFamily> rowClothes =
-                    ((draftProvider?.currentDraft != null)
-                        ? (index == 0)
-                            ? [
-                                draftProvider!.currentDraft!,
-                                ...clothesList.sublist(start, end - 1)
-                              ]
-                            : clothesList.sublist(start - 1, end - 1)
-                        : widget.clothesList.sublist(start, end));
+                  print(
+                      "updateProvider?.currentClothes: ${updateProvider?.currentClothes?.id}");
+                  final clothesList = widget.clothesList
+                      .map((e) => updateProvider?.currentClothes?.id == e.id &&
+                              updateProvider?.currentClothes != null
+                          ? updateProvider!.currentClothes!
+                          : e)
+                      .toList();
+                  List<ClothesFamily> rowClothes =
+                      ((draftProvider?.currentDraft != null)
+                          ? (index == 0)
+                              ? [
+                                  draftProvider!.currentDraft!,
+                                  ...clothesList.sublist(start, end - 1)
+                                ]
+                              : clothesList.sublist(start - 1, end - 1)
+                          : widget.clothesList.sublist(start, end));
 
-                return Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: _buildClothesCardRow(context, rowClothes)),
-                );
-              },
-            )
-          : ListView.builder(
-              scrollDirection: Axis.vertical,
-              padding: EdgeInsets.all(8.0),
-              itemCount: 1,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: _buildEmptyRow()),
-                );
-              },
-            ),
-      floatingActionButton: widget.isOnboarding &&
-              selected.values.where((isSelected) => isSelected).isNotEmpty
-          ? _buildFloatingActionButton()
-          : null,
-      floatingActionButtonLocation: CustomFloatingActionButtonLocation(
-        FloatingActionButtonLocation.endFloat, // 기본 위치를 기준으로
-      ),
-    );
+                  return Container(
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: _buildClothesCardRow(context, rowClothes)),
+                  );
+                },
+              )
+            : ListView.builder(
+                scrollDirection: Axis.vertical,
+                padding: EdgeInsets.all(8.0),
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: _buildEmptyRow()),
+                  );
+                },
+              ),
+        floatingActionButton: AnimatedSwitcher(
+          duration: Duration(milliseconds: 0), // 애니메이션 시간을 0으로 설정
+          child: widget.isOnboarding &&
+                  selected.values.where((isSelected) => isSelected).isNotEmpty
+              ? _buildFloatingActionButton()
+              : null,
+        ));
   }
 
   List<Widget> _buildClothesCardRow(
@@ -487,6 +486,9 @@ class _FloatingActionButtonWidgetState
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
+        isExtended: true,
+        enableFeedback: false,
+        elevation: 0,
         onPressed: widget.onPressed,
         backgroundColor: Colors.black,
         shape: RoundedRectangleBorder(
