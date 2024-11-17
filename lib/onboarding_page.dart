@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:ttal_kkak/is_newbie_repository.dart';
 import 'package:ttal_kkak/onboarding_add_clothes_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 
@@ -58,7 +59,8 @@ class BottomSheetContent extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {
+            onPressed: () async {
+              await IsNewbieRepository().save(false);
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                     builder: (context) => OnboardingAddClothesPage()),
