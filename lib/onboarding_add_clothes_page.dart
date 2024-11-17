@@ -161,6 +161,7 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
     return Scaffold(
         backgroundColor: SignatureColors.begie200,
         appBar: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: SignatureColors.begie200,
             centerTitle: true,
             bottom: PreferredSize(
@@ -176,7 +177,7 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
                         Text(
                           "기본템 패키지",
                           textAlign: TextAlign.left,
-                          style: OneLineTextStyles.Bold18.copyWith(
+                          style: BodyTextStyles.Bold24.copyWith(
                               color: SystemColors.black),
                         ),
                         SizedBox(
