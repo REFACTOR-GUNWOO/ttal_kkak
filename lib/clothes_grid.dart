@@ -256,13 +256,12 @@ class _ClothesGridState extends State<ClothesGrid> {
                 child: ClothesItem(
                     clothes: clothes, key: ValueKey(ValueKey(Uuid().v4())))),
             if (isSelected)
-              AnimatedOpacity(
-                opacity: 1.0,
-                duration: Duration(milliseconds: 300),
+              Positioned(
+                top: 40,
                 child: Icon(
                   Icons.check_circle,
                   color: Colors.orange,
-                  size: 40,
+                  size: 30,
                 ),
               ),
           ]),
