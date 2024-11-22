@@ -272,47 +272,6 @@ class SettingList extends StatelessWidget {
               ])
             ]),
           ),
-          SizedBox(
-            height: 0,
-            child: Divider(
-              color: SignatureColors.begie500, // Divider 색상
-              thickness: 2, // Divider 두께
-              indent: 16, // Divider 시작 지점의 패딩
-              endIndent: 16, // Divider 끝 지점의 패딩
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(16, 14, 16, 14),
-            child: Column(//리스트컬럼#1
-                children: [
-              Column(children: [
-                Row(
-                  //타이틀
-                  children: [
-                    Image.asset(
-                      'assets/icons/setting_4.png', // 아이콘 파일 경로
-                      width: 20, // 아이콘 너비
-                      height: 20, // 아이콘 높이
-                    ),
-                    SizedBox(width: 8), // 아이콘과 텍스트 사이 간격
-                    Expanded(
-                      child: Container(
-                        child: Text('데이터 백업',
-                            style: OneLineTextStyles.SemiBold16.copyWith(
-                                color: SystemColors.gray800)),
-                      ),
-                    ),
-                    Image.asset(
-                      'assets/icons/arrow_right.png',
-                      width: 16,
-                      height: 16,
-                    ),
-                    // ),
-                  ],
-                )
-              ])
-            ]),
-          ),
         ],
       ),
     );
