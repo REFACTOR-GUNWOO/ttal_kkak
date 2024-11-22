@@ -406,6 +406,7 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
       setState(() {
         lines = widget.clothesDraft.drawLines ?? [];
         clothesColor = widget.clothesDraft.color ?? Colors.white;
@@ -434,6 +435,8 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
         await svg.fromSvgString(svgBgString, svgBgString);
     DrawableRoot lineDrawableRoot =
         await svg.fromSvgString(svgLineString, svgLineString);
+    if (!mounted) return; // 위젯이 제거된 경우 작업 중단
+
     setState(() {
       svgBgRoot = bgDrawableRoot;
       svgLineRoot = lineDrawableRoot;

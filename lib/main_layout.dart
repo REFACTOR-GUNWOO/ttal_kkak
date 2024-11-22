@@ -69,6 +69,15 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
             onTap: () {
               _hideTooltip(); // 화면 다른 곳을 클릭하면 툴팁이 사라짐
             },
+            onPanStart: (details) {
+              _hideTooltip(); // 드래그 시작 시 툴팁 숨김
+            },
+            onPanUpdate: (details) {
+              _hideTooltip(); // 드래그 중에도 툴팁 숨김
+            },
+            onPanEnd: (details) {
+              _hideTooltip(); // 드래그 끝에도 툴팁 숨김
+            },
             child: Container(
               color: Colors.transparent, // 투명한 배경으로 다른 곳 클릭 인식
               width: MediaQuery.of(context).size.width,
@@ -232,6 +241,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
   void dispose() {
     _pageController.dispose();
     _controller.dispose(); // 애니메이션 컨트롤러도 해제
+    _overlayEntry?.dispose(); // 오버레이 엔트리도 해제
     super.dispose();
   }
 }
