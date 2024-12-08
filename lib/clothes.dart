@@ -101,9 +101,8 @@ class ClothesDetails {
         .expand((e) => e.details)
         .toList();
 
-    List<String> detailCodes = (json["details"] as List<dynamic>)
-        .map((e) => e.toString())
-        .toList();
+    List<String> detailCodes =
+        (json["details"] as List<dynamic>).map((e) => e.toString()).toList();
 
     return ClothesDetails(
         details: detailCodes
@@ -154,9 +153,13 @@ enum SleeveLength with ClothesDetail {
 
 // 넥 라인
 enum Neckline with ClothesDetail {
+  polo("카라", 0, "neck_line_polo"),
   round("라운드넥", 1, "neck_line_round"),
-  vNeck("브이넥", 2, "neck_line_vNeck"),
-  square("스퀘어넥", 3, "neck_line_square");
+  uNeck("u넥", 2, "neck_line_uNeck"),
+  vNeck("브이넥", 3, "neck_line_vNeck"),
+  square("스퀘어넥", 4, "neck_line_square"),
+  offShoulder("오프숄더", 5, "off_shoulder"),
+  line("끈", 6, "neck_line_line");
 
   final String label;
   final int priority;
