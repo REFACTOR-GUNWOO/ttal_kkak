@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
-
-import 'package:flutter/material.dart';
 
 class BottomSheetBody5 extends StatefulWidget implements BottomSheetStep {
   final VoidCallback onNextStep;

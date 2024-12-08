@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:path/path.dart';
+import 'dart:io';
+import 'dart:typed_data';
 
 class ClothesRepository {
   static Database? _database;
@@ -14,7 +17,9 @@ class ClothesRepository {
     final res = await (await database).rawQuery("SELECT * FROM ${_tableName}");
     return List.generate(res.length, (index) {
       print("loadClothes : ${res[index]}");
-      return Clothes.fromJson(res[index]);
+      Clothes clothes = Clothes.fromJson(res[index]);
+      compareDataSizes(clothes.drawLines);
+      return clothes;
     });
   }
 
@@ -31,7 +36,7 @@ class ClothesRepository {
     // 지정된 버전 및 생성 콜백으로 데이터베이스를 엽니다.
     return await openDatabase(
       path,
-      version: 7,
+      version: 15,
       onCreate: (db, version) async {
         // 'todos' 테이블을 생성하는 SQL 쿼리를 실행합니다.
         await _createTable(db);
@@ -71,7 +76,7 @@ class ClothesRepository {
 
     final db = await database;
     clothes.id = null;
-
+    print("addClothes: ${clothes.toJson()}");
     final res = await db.insert(_tableName, clothes.toJson());
   }
 
@@ -98,5 +103,18 @@ class ClothesRepository {
   Future<void> deleteAllClothes() async {
     final db = await database;
     await db.delete(_tableName);
+  }
+
+  Future<void> compareDataSizes(List<DrawnLine> lines) async {
+    // 원본 데이터를 JSON으로 인코딩
+    final jsonData = jsonEncode(lines.map((line) => line.toJson()).toList());
+    final originalDataSize = utf8.encode(jsonData).length;
+
+    // 데이터를 압축하여 인코딩
+    final compressed = gzip.encode(utf8.encode(jsonData));
+    final compressedDataSize = compressed.length;
+
+    print('Original Data Size: $originalDataSize bytes');
+    print('Compressed Data Size: $compressedDataSize bytes');
   }
 }

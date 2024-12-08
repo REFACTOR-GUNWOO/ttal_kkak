@@ -116,7 +116,8 @@ class ClothesDraft implements ClothesFamily {
         secondaryCategoryId: json['secondaryCategoryId'],
         details: json['details'] == null
             ? null
-            : ClothesDetails.fromJson(json['details']),
+            : ClothesDetails.fromJson(
+                json['secondaryCategoryId'], json['details']),
         color: json['color'] == null ? null : Color(json['color']),
         drawLines: (json['drawLines'] as List?)
                 ?.map((lineJson) => DrawnLine.fromJson(lineJson))

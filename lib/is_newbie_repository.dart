@@ -8,6 +8,7 @@ class IsNewbieRepository {
 
   Future<bool?> load() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    return true;
     return prefs.getBool(_key);
   }
 

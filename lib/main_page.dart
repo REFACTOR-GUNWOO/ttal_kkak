@@ -9,9 +9,9 @@ import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
+import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
-import 'package:ttal_kkak/tool_tip_with_tail.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -24,8 +24,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   late String closetName = "내 옷장";
   late int tab1Index = 0;
   late int tab2Index = 0;
-  late TabController _outerTabController;
-  late TabController _innerTabController;
   // ClothesDraftProvider? provider;
   List<String> secondTabNames = ["등록일순", "카테고리순", "컬러순"];
 
@@ -177,12 +175,47 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
     if (secondTabNames[tab2Index] == "카테고리순") {
       copied.sort((a, b) {
-        return secondCategories
-            .firstWhere((element) => element.id == a.secondaryCategoryId)
-            .priority
-            .compareTo(secondCategories
-                .firstWhere((element) => element.id == b.secondaryCategoryId)
-                .priority);
+        FirstCategory firstCategoryA = firstCategories
+            .firstWhere((category) => category.id == a.primaryCategoryId);
+        FirstCategory firstCategoryB = firstCategories
+            .firstWhere((category) => category.id == b.primaryCategoryId);
+
+        int primaryComparison =
+            firstCategoryA.priority.compareTo(firstCategoryB.priority);
+        if (primaryComparison != 0) {
+          return primaryComparison;
+        }
+
+        // 2. secondaryCategory 정렬 (priority 기준)
+        SecondCategory secondCategoryA = secondCategories
+            .firstWhere((category) => category.id == a.secondaryCategoryId);
+        SecondCategory secondCategoryB = secondCategories
+            .firstWhere((category) => category.id == b.secondaryCategoryId);
+
+        int secondaryComparison =
+            secondCategoryA.priority.compareTo(secondCategoryB.priority);
+        if (secondaryComparison != 0) {
+          return secondaryComparison;
+        }
+
+        // 3. categoryDetail 정렬
+        List<ClothesDetail> detailsA = a.details.details;
+        List<ClothesDetail> detailsB = b.details.details;
+
+        // 각 디테일을 priority 순으로 비교
+        for (int i = 0; i < secondCategoryA.details.length; i++) {
+          CategoryDetail detailToCompare = secondCategoryA.details[i];
+          ClothesDetail detailA = detailsA
+              .firstWhere((detail) => detailToCompare.details.contains(detail));
+          ClothesDetail detailB = detailsB
+              .firstWhere((detail) => detailToCompare.details.contains(detail));
+
+          int detailComparison = detailA.priority.compareTo(detailB.priority);
+          if (detailComparison != 0) {
+            return detailComparison;
+          }
+        }
+        return 0;
       });
 
       return copied;
@@ -258,52 +291,63 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     // 카테고리별로 옷 데이터를 그룹화
 
-    return Scaffold(
-        backgroundColor: SignatureColors.begie200,
-        appBar: AppBar(
-            backgroundColor: SignatureColors.begie200,
-            title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                closetName,
-                textAlign: TextAlign.center,
-                style: OneLineTextStyles.Bold18.copyWith(
-                    color: SystemColors.black),
-              ),
-              IconButton(
-                padding: null,
-                icon: SvgPicture.asset(
-                  'assets/icons/closet_title_update_button.svg',
-                  width: 16, // 원하는 크기로 설정할 수 있습니다.
-                  height: 16, // 원하는 크기로 설정할 수 있습니다.
+    return Consumer<ReloadHomeProvider>(
+        builder: (context, reloadNotifier, child) {
+      if (reloadNotifier.shouldReload) {  // ReloadHomeProvider에 boolean 필드 추가 필요
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          reload();
+          // 리로드 후 상태 리셋
+          reloadNotifier.resetReload();
+        });
+      }
+      return Scaffold(
+          backgroundColor: SignatureColors.begie200,
+          appBar: AppBar(
+              backgroundColor: SignatureColors.begie200,
+              title:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(
+                  closetName,
+                  textAlign: TextAlign.center,
+                  style: OneLineTextStyles.Bold18.copyWith(
+                      color: SystemColors.black),
                 ),
-                onPressed: () {
-                  _showSaveClosetNameBottomSheet(context);
-                },
+                IconButton(
+                  padding: null,
+                  icon: SvgPicture.asset(
+                    'assets/icons/closet_title_update_button.svg',
+                    width: 16, // 원하는 크기로 설정할 수 있습니다.
+                    height: 16, // 원하는 크기로 설정할 수 있습니다.
+                  ),
+                  onPressed: () {
+                    _showSaveClosetNameBottomSheet(context);
+                  },
+                ),
+              ]),
+              centerTitle: true,
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(90.0),
+                child: Column(
+                  children: [
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min, // 이 줄을 추가합니다
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: getTabs(),
+                        )),
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min, // 이 줄을 추가합니다
+                          children: getSecondTabs(),
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        )),
+                  ],
+                ),
               ),
-            ]),
-            centerTitle: true,
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(90.0),
-              child: Column(
-                children: [
-                  SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min, // 이 줄을 추가합니다
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: getTabs(),
-                      )),
-                  SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min, // 이 줄을 추가합니다
-                        children: getSecondTabs(),
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      )),
-                ],
-              ),
-            ),
-            elevation: 0),
-        body: getClothesGrid());
+              elevation: 0),
+          body: getClothesGrid());
+    });
   }
 }

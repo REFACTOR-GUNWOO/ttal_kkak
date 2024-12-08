@@ -33,15 +33,15 @@ class BottomSheetBody4 extends StatefulWidget implements BottomSheetStep {
 }
 
 class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
-  TopLength _selectedLength = TopLength.long;
-  SleeveLength _selectedSleeve = SleeveLength.short;
-  Neckline _selectedNeckline = Neckline.round;
-  bool _isLengthDropdownVisible = false;
-  bool _isSleeveDropdownVisible = false;
-  bool _isNecklineDropdownVisible = false;
-  List<TopLength> topLengthOptions = [TopLength.long];
-  List<SleeveLength> sleeveLengthOptions = [SleeveLength.short];
-  List<Neckline> necklineOptions = [Neckline.round];
+  // TopLength _selectedLength = TopLength.long;
+  // SleeveLength _selectedSleeve = SleeveLength.short;
+  // Neckline _selectedNeckline = Neckline.round;
+  List<CategoryDetail> categoryDetails = [];
+  Map<CategoryDetail, ClothesDetail> selectedDetailMap = {};
+  Map<CategoryDetail, bool> dropdownVisibleMap = {};
+  // bool _isLengthDropdownVisible = false;
+  // bool _isSleeveDropdownVisible = false;
+  // bool _isNecklineDropdownVisible = false;
 
   @override
   void initState() {
@@ -60,16 +60,18 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
 
     setState(() {
       if (secondCategory != null) {
-        topLengthOptions = secondCategory.topLengths;
-        sleeveLengthOptions = secondCategory.sleeveLengths;
-        necklineOptions = secondCategory.necklines;
+        categoryDetails = secondCategory.details;
       }
 
       ClothesDetails? details =
           widget.isUpdate ? clothes?.details : draft?.details;
-      _selectedLength = details?.topLength ?? topLengthOptions.first;
-      _selectedSleeve = details?.sleeveLength ?? sleeveLengthOptions.first;
-      _selectedNeckline = details?.neckline ?? necklineOptions.first;
+      categoryDetails
+          .map((e) => selectedDetailMap[e] = details == null
+              ? e.defaultDetail
+              : e.details.firstWhere(
+                  (element) => details.details.contains(element),
+                  orElse: () => e.details.first))
+          .toList();
       if (details == null) {
         save();
       }
@@ -79,20 +81,16 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
   void save() async {
     if (widget.isUpdate) {
       final clothes = widget.updateProvider.currentClothes!;
-      clothes.updateDetails(ClothesDetails(
-          topLength: _selectedLength,
-          sleeveLength: _selectedSleeve,
-          neckline: _selectedNeckline));
+      clothes.updateDetails(
+          ClothesDetails(details: selectedDetailMap.values.toList()));
       await widget.updateProvider.update(clothes);
       return;
     } else {
       ClothesDraft? draft = widget.draftProvider.currentDraft;
       if (draft != null) {
         if (draft.details != null) {
-          draft.details = ClothesDetails(
-              topLength: _selectedLength,
-              sleeveLength: _selectedSleeve,
-              neckline: _selectedNeckline);
+          draft.details =
+              ClothesDetails(details: selectedDetailMap.values.toList());
 
           draft.resetFieldsAfterIndex(3);
           showDialog(
@@ -104,10 +102,8 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
           return;
         }
 
-        draft.details = ClothesDetails(
-            topLength: _selectedLength,
-            sleeveLength: _selectedSleeve,
-            neckline: _selectedNeckline);
+        draft.details =
+            ClothesDetails(details: selectedDetailMap.values.toList());
         await widget.draftProvider.updateDraft(draft);
 
         // widget.onNextStep();
@@ -124,57 +120,25 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
           const EdgeInsets.only(left: 16.0, right: 16, top: 16, bottom: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCategorySection(
-            '상의 길이',
-            _selectedLength,
-            topLengthOptions,
-            _isLengthDropdownVisible,
-            () {
-              setState(() {
-                _isLengthDropdownVisible = !_isLengthDropdownVisible;
-                _isSleeveDropdownVisible = false;
-                _isNecklineDropdownVisible = false;
-              });
-            },
-          ),
-          SizedBox(height: 24),
-          _buildCategorySection(
-            '팔 길이',
-            _selectedSleeve,
-            sleeveLengthOptions,
-            _isSleeveDropdownVisible,
-            () {
-              setState(() {
-                _isSleeveDropdownVisible = !_isSleeveDropdownVisible;
-                _isLengthDropdownVisible = false;
-                _isNecklineDropdownVisible = false;
-              });
-            },
-          ),
-          SizedBox(height: 24),
-          _buildCategorySection(
-            '넥 라인',
-            _selectedNeckline,
-            necklineOptions,
-            _isNecklineDropdownVisible,
-            () {
-              setState(() {
-                _isNecklineDropdownVisible = !_isNecklineDropdownVisible;
-                _isLengthDropdownVisible = false;
-                _isSleeveDropdownVisible = false;
-              });
-            },
-          ),
-        ],
+        children: categoryDetails
+            .map((e) => _buildCategorySection(
+                  e,
+                  selectedDetailMap[e],
+                  dropdownVisibleMap[e] ?? false,
+                  () {
+                    setState(() {
+                      dropdownVisibleMap = {e: true};
+                    });
+                  },
+                ))
+            .toList(),
       ),
     ));
   }
 
   Widget _buildCategorySection(
-    String title,
-    Descriptive? selectedValue,
-    List<Descriptive> options,
+    CategoryDetail categoryDetail,
+    ClothesDetail? selectedValue,
     bool isDropdownVisible,
     VoidCallback toggleDropdown,
   ) {
@@ -191,7 +155,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                   Padding(
                     padding: EdgeInsets.only(bottom: 8),
                     child: Text(
-                      title,
+                      categoryDetail.label,
                       style: OneLineTextStyles.ExtraBold16.copyWith(
                           color: SystemColors.black),
                     ),
@@ -201,7 +165,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                       Icon(Icons.check_circle, color: Colors.orange, size: 16),
                       SizedBox(width: 2),
                       Text(
-                        '${selectedValue == null ? options.first.label : selectedValue.label} 적용됨',
+                        '${selectedValue == null ? categoryDetail.details.first.label : selectedValue.label} 적용됨',
                         style: OneLineTextStyles.Medium12.copyWith(
                             color: SignatureColors.orange400),
                       ),
@@ -230,8 +194,9 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
           SizedBox(height: 8),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
-            height:
-                isDropdownVisible ? (options.length / 3).ceil() * 50.0 : 0.0,
+            height: isDropdownVisible
+                ? (categoryDetail.details.length / 3).ceil() * 50.0
+                : 0.0,
             curve: Curves.easeInOut,
             child: Visibility(
               visible: isDropdownVisible,
@@ -244,20 +209,13 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                   mainAxisSpacing: 10.0, // 아이템 간의 수직 간격
                   childAspectRatio: 3 / 1, // 가로 세로 비율
                 ),
-                itemCount: options.length,
+                itemCount: categoryDetail.details.length,
                 itemBuilder: (context, index) {
-                  Descriptive option = options[index];
+                  ClothesDetail option = categoryDetail.details[index];
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        switch (title) {
-                          case '상의 길이':
-                            _selectedLength = option as TopLength;
-                          case '팔 길이':
-                            _selectedSleeve = option as SleeveLength;
-                          case '넥 라인':
-                            _selectedNeckline = option as Neckline;
-                        }
+                        selectedDetailMap[categoryDetail] = option;
                         save();
                       });
                     },

@@ -5,7 +5,6 @@ import 'package:ttal_kkak/addClothesBottomSheet/draft_clear_warning_dialog.dart'
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
-// import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -98,7 +97,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
             crossAxisCount: 2,
             crossAxisSpacing: 0.0,
             mainAxisSpacing: 0.0,
-            childAspectRatio: 1.75,
+            childAspectRatio: 1.5,
           ),
           itemCount: firstCategories.length,
           itemBuilder: (context, index) {

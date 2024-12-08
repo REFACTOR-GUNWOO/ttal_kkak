@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
+import 'package:ttal_kkak/category.dart';
 
 abstract class ClothesFamily {}
 
@@ -33,7 +34,8 @@ class Clothes implements ClothesFamily {
         name: json['name'],
         primaryCategoryId: json['primaryCategoryId'],
         secondaryCategoryId: json['secondaryCategoryId'],
-        details: ClothesDetails.fromJson(jsonDecode(json['details'])),
+        details: ClothesDetails.fromJson(
+            json['secondaryCategoryId'], jsonDecode(json['details'])),
         color: Color(json['colorValue']),
         price: json["price"],
         regTs: DateTime.fromMillisecondsSinceEpoch(
@@ -87,73 +89,80 @@ class Clothes implements ClothesFamily {
 }
 
 class ClothesDetails {
-  TopLength topLength;
-  SleeveLength sleeveLength;
-  Neckline neckline;
+  List<ClothesDetail> details;
 
-  ClothesDetails({
-    required this.topLength,
-    required this.sleeveLength,
-    required this.neckline,
-  });
+  ClothesDetails({required this.details});
 
-  factory ClothesDetails.fromJson(Map<String, dynamic> json) {
+  factory ClothesDetails.fromJson(
+      int secondCategoryId, Map<String, dynamic> json) {
+    List<ClothesDetail> allDetails = secondCategories
+        .firstWhere((element) => element.id == secondCategoryId)
+        .details
+        .expand((e) => e.details)
+        .toList();
+
+    List<String> detailCodes = (json["details"] as List<dynamic>)
+        .map((e) => e.toString())
+        .toList();
+
     return ClothesDetails(
-      topLength:
-          TopLength.values.firstWhere((e) => e.toString() == json['topLength']),
-      sleeveLength: SleeveLength.values
-          .firstWhere((e) => e.toString() == json['sleeveLength']),
-      neckline:
-          Neckline.values.firstWhere((e) => e.toString() == json['neckline']),
-    );
+        details: detailCodes
+            .map((code) => allDetails.firstWhere(
+                (element) => element.code == code,
+                orElse: () => allDetails.first))
+            .toList());
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'topLength': topLength.toString(),
-      'sleeveLength': sleeveLength.toString(),
-      'neckline': neckline.toString(),
-    };
+    return {"details": details.map((e) => e.code).toList()};
   }
 }
 
-mixin Descriptive {
+mixin ClothesDetail {
   String get label;
+  int get priority;
+  String get code;
 }
 
 // 상의 길이
-enum TopLength with Descriptive {
-  crop("크롭"),
-  short("중간길이"),
-  medium("짧은길이"),
-  long("긴길이");
+enum TopLength with ClothesDetail {
+  crop("크롭", 4, "top_length_crop"),
+  short("짧은길이", 3, "top_length_short"),
+  medium("중간길이", 2, "top_length_medium"),
+  long("긴길이", 1, "top_length_long");
 
   final String label;
+  final int priority;
+  final String code;
 
-  const TopLength(this.label);
+  const TopLength(this.label, this.priority, this.code);
 }
 
 // 팔 길이
-enum SleeveLength with Descriptive {
-  short("반팔"),
-  medium("중간팔"),
-  long("긴팔"),
-  sleeveless("민소매");
+enum SleeveLength with ClothesDetail {
+  short("반팔", 1, "sleeve_length_short"),
+  medium("중간팔", 2, "sleeve_length_medium"),
+  long("긴팔", 3, "sleeve_length_long"),
+  sleeveless("민소매", 4, "sleeve_length_sleeveless");
 
   final String label;
+  final int priority;
+  final String code;
 
-  const SleeveLength(this.label);
+  const SleeveLength(this.label, this.priority, this.code);
 }
 
 // 넥 라인
-enum Neckline with Descriptive {
-  round("라운드넥"),
-  vNeck("브이넥"),
-  square("스퀘어넥");
+enum Neckline with ClothesDetail {
+  round("라운드넥", 1, "neck_line_round"),
+  vNeck("브이넥", 2, "neck_line_vNeck"),
+  square("스퀘어넥", 3, "neck_line_square");
 
   final String label;
+  final int priority;
+  final String code;
 
-  const Neckline(this.label);
+  const Neckline(this.label, this.priority, this.code);
 }
 
 List<Clothes> generateDummyClothes() {
@@ -164,12 +173,14 @@ List<Clothes> generateDummyClothes() {
         primaryCategoryId: 1,
         secondaryCategoryId: 1,
         details: ClothesDetails(
-          topLength: TopLength.medium,
-          sleeveLength: SleeveLength.short,
-          neckline: Neckline.round,
+          details: [
+            TopLength.medium,
+            SleeveLength.short,
+            Neckline.round,
+          ],
         ),
         price: 123,
-        color: Colors.black,
+        color: colorContainers[0].representativeColor,
         regTs: DateTime.now(),
         drawLines: []),
     Clothes(
@@ -178,12 +189,14 @@ List<Clothes> generateDummyClothes() {
         primaryCategoryId: 1,
         secondaryCategoryId: 1,
         details: ClothesDetails(
-          topLength: TopLength.medium,
-          sleeveLength: SleeveLength.short,
-          neckline: Neckline.round,
+          details: [
+            TopLength.long,
+            SleeveLength.long,
+            Neckline.round,
+          ],
         ),
         price: 123,
-        color: Colors.white,
+        color: colorContainers[1].representativeColor,
         regTs: DateTime.now(),
         drawLines: []),
     //   Clothes(

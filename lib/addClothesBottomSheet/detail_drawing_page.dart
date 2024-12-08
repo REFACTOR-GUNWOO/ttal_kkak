@@ -42,7 +42,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     PencilInfo(pencilSize: 2, width: 18)
   ];
   bool _isErasing = false;
-  final double minDistance = 4.0; // 손떨림 방지를 위한 최소 거리 설정
+  final double minDistance = 10.0; // 손떨림 방지를 위한 최소 거리 설정
 
   final List<Color> colors = [
     Colors.white,
@@ -209,10 +209,19 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
 
   Future<void> _loadDrawableRoot(
       ClothesDetails clothesDetails, SecondCategory secondCategory) async {
-    final String svgBgString = await rootBundle.loadString(
-        "assets/images/clothes/bg/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
-    final String svgLineString = await rootBundle.loadString(
-        "assets/images/clothes/line/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
+    List<ClothesDetail> details = clothesDetails.details;
+
+    // 카테고리 우선순위에 따라 정렬
+    details.sort((a, b) {
+      return b.code.compareTo(a.code);
+    });
+    var svgBgUrl =
+        "assets/images/clothes/bg/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
+    var svgLineUrl =
+        "assets/images/clothes/line/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
+
+    final String svgBgString = await rootBundle.loadString(svgBgUrl);
+    final String svgLineString = await rootBundle.loadString(svgLineUrl);
     DrawableRoot bgDrawableRoot =
         await svg.fromSvgString(svgBgString, svgBgString);
     DrawableRoot lineDrawableRoot =
@@ -720,23 +729,29 @@ class Eraser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double baseHeight = 62.0;
+    const double expandedHeight = 80.0;
+    const double width = 30.0;
+    const borderRadius = BorderRadius.only(
+      topLeft: Radius.circular(10.0),
+      topRight: Radius.circular(10.0),
+    );
+
     return GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            height: isExpanded ? 80 : 62,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  topRight: Radius.circular(10.0),
-                ),
-              ),
-              height: 80,
-              width: 30,
-            )));
-    ;
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        height: isExpanded ? expandedHeight : baseHeight,
+        child: Container(
+          height: expandedHeight,
+          width: width,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: borderRadius,
+          ),
+        ),
+      ),
+    );
   }
 }

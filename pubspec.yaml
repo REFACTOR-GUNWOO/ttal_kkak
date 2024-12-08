@@ -93,28 +93,27 @@ flutter:
     - assets/icons/tab_2_icon.svg
     - assets/icons/tab_3_icon.svg
     - assets/icons/tab_4_icon.svg
-    - assets/images/clothes/bg/tshirt_round_crop_long.svg
-    - assets/images/clothes/bg/tshirt_round_short_long.svg
-    - assets/images/clothes/bg/tshirt_round_medium_long.svg
-    - assets/images/clothes/bg/tshirt_round_long_long.svg
-    - assets/images/clothes/bg/tshirt_round_crop_short.svg
-    - assets/images/clothes/bg/tshirt_round_short_short.svg
-    - assets/images/clothes/bg/tshirt_round_medium_short.svg
-    - assets/images/clothes/bg/tshirt_round_long_short.svg
-    - assets/images/clothes/line/tshirt_round_crop_long.svg
-    - assets/images/clothes/line/tshirt_round_short_long.svg
-    - assets/images/clothes/line/tshirt_round_medium_long.svg
-    - assets/images/clothes/line/tshirt_round_long_long.svg
-    - assets/images/clothes/line/tshirt_round_crop_short.svg
-    - assets/images/clothes/line/tshirt_round_short_short.svg
-    - assets/images/clothes/line/tshirt_round_medium_short.svg
-    - assets/images/clothes/line/tshirt_round_long_short.svg
+    - assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg
+    - assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_short_neck_line_round.svg
+    - assets/images/clothes/bg/tshirt_top_length_long_sleeve_length_long_neck_line_round.svg
+    - assets/images/clothes/bg/tshirt_top_length_long_sleeve_length_short_neck_line_round.svg
+    - assets/images/clothes/bg/tshirt_top_length_medium_sleeve_length_long_neck_line_round.svg
+    - assets/images/clothes/bg/tshirt_top_length_medium_sleeve_length_short_neck_line_round.svg
+    - assets/images/clothes/bg/tshirt_top_length_short_sleeve_length_long_neck_line_round.svg
+    - assets/images/clothes/bg/tshirt_top_length_short_sleeve_length_short_neck_line_round.svg
+    - assets/images/clothes/line/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg
+    - assets/images/clothes/line/tshirt_top_length_crop_sleeve_length_short_neck_line_round.svg
+    - assets/images/clothes/line/tshirt_top_length_long_sleeve_length_long_neck_line_round.svg
+    - assets/images/clothes/line/tshirt_top_length_long_sleeve_length_short_neck_line_round.svg
+    - assets/images/clothes/line/tshirt_top_length_medium_sleeve_length_long_neck_line_round.svg
+    - assets/images/clothes/line/tshirt_top_length_medium_sleeve_length_short_neck_line_round.svg
+    - assets/images/clothes/line/tshirt_top_length_short_sleeve_length_long_neck_line_round.svg
+    - assets/images/clothes/line/tshirt_top_length_short_sleeve_length_short_neck_line_round.svg
     - assets/lotties/onboarding_present.json
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
   # assets:
   #   - assets/fonts/  # 폰트 파일이 저장된 폴더를 지정
 

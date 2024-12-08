@@ -351,11 +351,21 @@ class _ClothesItemState extends State<ClothesItem> {
 
   Future<void> _loadDrawableRoot(
       ClothesDetails clothesDetails, SecondCategory secondCategory) async {
-    final String svgBgString = await rootBundle.loadString(
-        "assets/images/clothes/bg/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
+    List<ClothesDetail> details = clothesDetails.details;
 
-    final String svgLineString = await rootBundle.loadString(
-        "assets/images/clothes/line/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
+    // 카테고리 우선순위에 따라 정렬
+    details.sort((a, b) {
+      return b.code.compareTo(a.code);
+    });
+
+    var svgBgUrl =
+        "assets/images/clothes/bg/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
+    var svgLineUrl =
+        "assets/images/clothes/line/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
+
+    final String svgBgString = await rootBundle.loadString(svgBgUrl);
+
+    final String svgLineString = await rootBundle.loadString(svgLineUrl);
 
     svgBgRoot = await svg.fromSvgString(svgBgString, svgBgString);
     svgLineRoot = await svg.fromSvgString(svgLineString, svgLineString);
@@ -417,9 +427,8 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
             secondCategories[0];
         ClothesDetails clothesDetails = widget.clothesDraft.details ??
             ClothesDetails(
-                topLength: secondCategory.topLengths[0],
-                sleeveLength: secondCategory.sleeveLengths[0],
-                neckline: secondCategory.necklines[0]);
+                details:
+                    secondCategory.details.map((e) => e.details[0]).toList());
         _loadDrawableRoot(clothesDetails, secondCategory);
       });
     });
@@ -427,10 +436,20 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
 
   Future<void> _loadDrawableRoot(
       ClothesDetails clothesDetails, SecondCategory secondCategory) async {
-    final String svgBgString = await rootBundle.loadString(
-        "assets/images/clothes/bg/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
-    final String svgLineString = await rootBundle.loadString(
-        "assets/images/clothes/line/${secondCategory.code}_${clothesDetails.neckline.name}_${clothesDetails.topLength.name}_${clothesDetails.sleeveLength.name}.svg");
+    List<ClothesDetail> details = clothesDetails.details;
+
+    // 카테고리 우선순위에 따라 정렬
+    details.sort((a, b) {
+      return b.code.compareTo(a.code);
+    });
+    var svgBgUrl =
+        "assets/images/clothes/bg/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
+    var svgLineUrl =
+        "assets/images/clothes/line/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
+
+    final String svgBgString = await rootBundle.loadString(svgBgUrl);
+
+    final String svgLineString = await rootBundle.loadString(svgLineUrl);
     DrawableRoot bgDrawableRoot =
         await svg.fromSvgString(svgBgString, svgBgString);
     DrawableRoot lineDrawableRoot =
