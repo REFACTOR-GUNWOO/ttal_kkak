@@ -239,7 +239,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0, // 그림자 제거
-
+          automaticallyImplyLeading: false,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

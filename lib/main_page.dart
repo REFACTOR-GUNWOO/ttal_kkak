@@ -293,7 +293,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
     return Consumer<ReloadHomeProvider>(
         builder: (context, reloadNotifier, child) {
-      if (reloadNotifier.shouldReload) {  // ReloadHomeProvider에 boolean 필드 추가 필요
+      if (reloadNotifier.shouldReload) {
+        // ReloadHomeProvider에 boolean 필드 추가 필요
         WidgetsBinding.instance.addPostFrameCallback((_) {
           reload();
           // 리로드 후 상태 리셋
@@ -303,6 +304,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       return Scaffold(
           backgroundColor: SignatureColors.begie200,
           appBar: AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: SignatureColors.begie200,
               title:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [

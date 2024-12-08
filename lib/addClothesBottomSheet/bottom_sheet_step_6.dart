@@ -129,6 +129,7 @@ class DetailDrawingInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('디테일 드로잉'),
         centerTitle: true,
         backgroundColor: Colors.white,

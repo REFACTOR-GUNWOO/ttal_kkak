@@ -9,6 +9,7 @@ class SettingPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: SignatureColors.begie200,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         //앱바
         backgroundColor: SignatureColors.begie200,
         title: Text('설정',
