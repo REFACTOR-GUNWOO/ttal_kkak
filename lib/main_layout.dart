@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
 import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/setting_page.dart';
+import 'package:ttal_kkak/statistics_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/tool_tip_with_tail.dart';
@@ -57,7 +58,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
 
   // 툴팁을 숨기는 함수
   void _hideTooltip() {
-    _overlayEntry?.remove();
+    if (_overlayEntry?.mounted == true) _overlayEntry?.remove();
   }
 
   // OverlayEntry 생성 함수
@@ -118,7 +119,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
           onPageChanged: _onPageChanged,
           children: [
             MainPage(), // 내 옷장 페이지
-            SettingPage(), // 통계 페이지
+            StatisticsPage(), // 통계 페이지
             SettingPage(), // 코디 페이지
             SettingPage(), // 설정 페이지
           ],

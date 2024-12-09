@@ -88,6 +88,7 @@ flutter:
     - assets/icons/left_curve_arrow.svg
     - assets/icons/right_curve_arrow.svg
     - assets/icons/retry.svg
+    - assets/icons/statistics_page_icon.svg
     - assets/icons/NewClothes.svg
     - assets/icons/tab_1_icon.svg
     - assets/icons/tab_2_icon.svg
