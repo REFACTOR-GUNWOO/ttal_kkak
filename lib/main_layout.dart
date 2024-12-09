@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
+import 'package:ttal_kkak/daily_outfit_page.dart';
 import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/setting_page.dart';
 import 'package:ttal_kkak/statistics_page.dart';
@@ -120,7 +121,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
           children: [
             MainPage(), // 내 옷장 페이지
             StatisticsPage(), // 통계 페이지
-            SettingPage(), // 코디 페이지
+            DailyOutfitPage(), // 코디 페이지
             SettingPage(), // 설정 페이지
           ],
         ),
