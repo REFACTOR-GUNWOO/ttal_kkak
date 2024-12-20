@@ -96,9 +96,9 @@ List<SecondCategory> secondCategories = [
             defaultDetail: Neckline.round,
             details: [
               Neckline.round,
-              Neckline.square,
-              Neckline.vNeck,
               Neckline.uNeck,
+              Neckline.vNeck,
+              Neckline.square,
               Neckline.offShoulder
             ]),
       ],
@@ -183,8 +183,8 @@ List<SecondCategory> secondCategories = [
             details: [
               Neckline.polo,
               Neckline.round,
-              Neckline.square,
               Neckline.vNeck,
+              Neckline.square,
             ]),
       ],
       defaultImage:
@@ -274,6 +274,7 @@ List<SecondCategory> secondCategories = [
               Neckline.round,
               Neckline.uNeck,
               Neckline.vNeck,
+              Neckline.square,
               Neckline.offShoulder,
             ]),
       ],
@@ -352,12 +353,631 @@ List<SecondCategory> secondCategories = [
             defaultDetail: Neckline.round,
             details: [
               Neckline.round,
-              Neckline.square,
-              Neckline.vNeck,
               Neckline.uNeck,
+              Neckline.vNeck,
+              Neckline.square,
               Neckline.offShoulder
             ]),
       ],
       defaultImage:
           "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 11,
+      name: "가디건",
+      code: "cardigan",
+      priority: 11,
+      firstCategoryId: 3,
+      details: [
+        CategoryDetail(
+            priority: 2,
+            label: "상의 길이",
+            defaultDetail: TopLength.medium,
+            details: [
+              TopLength.long,
+              TopLength.medium,
+              TopLength.short,
+            ]),
+        CategoryDetail(
+            priority: 3,
+            label: "넥 라인",
+            defaultDetail: Neckline.round,
+            details: [
+              Neckline.round,
+              Neckline.uNeck,
+              Neckline.vNeck,
+            ]),
+      ],
+      defaultImage:
+          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 12,
+      name: "집업/후리스",
+      code: "zip_up",
+      priority: 12,
+      firstCategoryId: 3,
+      details: [
+        CategoryDetail(
+            priority: 2,
+            label: "상의 길이",
+            defaultDetail: TopLength.medium,
+            details: [
+              TopLength.long,
+              TopLength.medium,
+              TopLength.short,
+              TopLength.crop
+            ]),
+        CategoryDetail(
+            priority: 3,
+            label: "넥 라인",
+            defaultDetail: Neckline.round,
+            details: [
+              Neckline.round,
+              Neckline.uNeck,
+              Neckline.vNeck,
+              Neckline.high,
+              Neckline.polo,
+              Neckline.hoodie,
+            ]),
+      ],
+      defaultImage:
+          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 13,
+      name: "재킷",
+      code: "jacket",
+      priority: 13,
+      firstCategoryId: 3,
+      details: [
+        CategoryDetail(
+            priority: 2,
+            label: "상의 길이",
+            defaultDetail: TopLength.medium,
+            details: [
+              TopLength.long,
+              TopLength.medium,
+              TopLength.short,
+              TopLength.crop
+            ]),
+        CategoryDetail(
+            priority: 3,
+            label: "넥 라인",
+            defaultDetail: Neckline.round,
+            details: [
+              Neckline.polo,
+              Neckline.deepCollar,
+              Neckline.round,
+              Neckline.uNeck,
+              Neckline.vNeck,
+              Neckline.high,
+            ]),
+      ],
+      defaultImage:
+          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 14,
+      name: "바람막이",
+      code: "windbreaker",
+      priority: 14,
+      firstCategoryId: 3,
+      details: [
+        CategoryDetail(
+            priority: 2,
+            label: "상의 길이",
+            defaultDetail: TopLength.medium,
+            details: [
+              TopLength.long,
+              TopLength.medium,
+              TopLength.short,
+            ]),
+        CategoryDetail(
+            priority: 3,
+            label: "넥 라인",
+            defaultDetail: Neckline.round,
+            details: [Neckline.high, Neckline.vNeck, Neckline.hoodie]),
+      ],
+      defaultImage:
+          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 15,
+      name: "무스탕",
+      code: "mushtang",
+      priority: 15,
+      firstCategoryId: 3,
+      details: [
+        CategoryDetail(
+            priority: 2,
+            label: "상의 길이",
+            defaultDetail: TopLength.medium,
+            details: [
+              TopLength.long,
+              TopLength.medium,
+              TopLength.short,
+            ]),
+      ],
+      defaultImage:
+          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 16,
+      name: "야상",
+      code: "field_jacket",
+      priority: 16,
+      firstCategoryId: 3,
+      details: [
+        CategoryDetail(
+            priority: 2,
+            label: "상의 길이",
+            defaultDetail: TopLength.medium,
+            details: [
+              TopLength.long,
+              TopLength.medium,
+              TopLength.short,
+            ]),
+      ],
+      defaultImage:
+          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 17,
+      name: "트렌치 코트",
+      code: "trench_coat",
+      priority: 17,
+      firstCategoryId: 3,
+      details: [
+        CategoryDetail(
+            priority: 2,
+            label: "상의 길이",
+            defaultDetail: TopLength.medium,
+            details: [
+              TopLength.long,
+              TopLength.medium,
+              TopLength.short,
+            ]),
+      ],
+      defaultImage:
+          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 18,
+      name: "코트",
+      code: "coat",
+      priority: 18,
+      firstCategoryId: 3,
+      details: [
+        CategoryDetail(
+            priority: 2,
+            label: "상의 길이",
+            defaultDetail: TopLength.medium,
+            details: [
+              TopLength.long,
+              TopLength.medium,
+              TopLength.short,
+            ]),
+        CategoryDetail(
+            priority: 3,
+            label: "넥 라인",
+            defaultDetail: Neckline.polo,
+            details: [
+              Neckline.polo,
+              Neckline.deepCollar,
+              Neckline.hoodie,
+              Neckline.round,
+            ]),
+      ],
+      defaultImage:
+          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 19,
+      name: "패딩",
+      code: "padded_jacket",
+      priority: 19,
+      firstCategoryId: 3,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "상의 길이",
+            defaultDetail: TopLength.medium,
+            details: [
+              TopLength.long,
+              TopLength.medium,
+              TopLength.short,
+            ]),
+        CategoryDetail(
+            priority: 2,
+            label: "팔 길이",
+            defaultDetail: SleeveLength.long,
+            details: [SleeveLength.sleeveless, SleeveLength.long]),
+        CategoryDetail(
+            priority: 3,
+            label: "넥 라인",
+            defaultDetail: Neckline.polo,
+            details: [
+              Neckline.high,
+              Neckline.round,
+              Neckline.polo,
+            ]),
+      ],
+      defaultImage:
+          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 20,
+      name: "조끼",
+      code: "outer_vest",
+      priority: 20,
+      firstCategoryId: 3,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "상의 길이",
+            defaultDetail: TopLength.medium,
+            details: [
+              TopLength.long,
+              TopLength.medium,
+              TopLength.short,
+            ]),
+        CategoryDetail(
+            priority: 3,
+            label: "넥 라인",
+            defaultDetail: Neckline.polo,
+            details: [
+              Neckline.round,
+              Neckline.vNeck,
+              Neckline.hoodie,
+              Neckline.high
+            ]),
+      ],
+      defaultImage:
+          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 21,
+      name: "청바지",
+      code: "jeans",
+      priority: 21,
+      firstCategoryId: 2,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "핏",
+            defaultDetail: BottomFit.straight,
+            details: [
+              BottomFit.skinny,
+              BottomFit.straight,
+              BottomFit.bootCut,
+              BottomFit.wide
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/pants_jeans.svg"),
+  SecondCategory(
+      id: 22,
+      name: "슬랙스",
+      code: "slacks",
+      priority: 22,
+      firstCategoryId: 2,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "핏",
+            defaultDetail: BottomFit.straight,
+            details: [BottomFit.straight, BottomFit.bootCut, BottomFit.wide]),
+      ],
+      defaultImage: "assets/images/clothes/bg/pants_slacks.svg"),
+  SecondCategory(
+      id: 23,
+      name: "면바지",
+      code: "cotton pants",
+      priority: 23,
+      firstCategoryId: 2,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "핏",
+            defaultDetail: BottomFit.straight,
+            details: [
+              BottomFit.skinny,
+              BottomFit.straight,
+              BottomFit.bootCut,
+              BottomFit.wide
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/pants_slacks.svg"),
+  SecondCategory(
+      id: 24,
+      name: "트레이닝",
+      code: "training",
+      priority: 24,
+      firstCategoryId: 2,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "핏",
+            defaultDetail: BottomFit.straight,
+            details: [BottomFit.skinny, BottomFit.straight, BottomFit.wide]),
+      ],
+      defaultImage: "assets/images/clothes/bg/pants_training.svg"),
+  SecondCategory(
+      id: 25,
+      name: "레깅스",
+      code: "leggings",
+      priority: 25,
+      firstCategoryId: 2,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "기장",
+            defaultDetail: BottomLength.long,
+            details: [
+              BottomLength.long,
+              BottomLength.medium,
+              BottomLength.mini
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/pants_leggings.svg"),
+  SecondCategory(
+      id: 26,
+      name: "치마",
+      code: "skirt",
+      priority: 26,
+      firstCategoryId: 2,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "기장",
+            defaultDetail: BottomLength.mini,
+            details: [
+              BottomLength.long,
+              BottomLength.medium,
+              BottomLength.mini
+            ]),
+        CategoryDetail(
+            priority: 2,
+            label: "핏",
+            defaultDetail: SkirtFit.aLine,
+            details: [SkirtFit.aLine, SkirtFit.hLine, SkirtFit.tennis]),
+      ],
+      defaultImage: "assets/images/clothes/bg/pants_skirt.svg"),
+  SecondCategory(
+      id: 27,
+      name: "반바지",
+      code: "shorts",
+      priority: 27,
+      firstCategoryId: 2,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "기장",
+            defaultDetail: BottomLength.medium,
+            details: [BottomLength.medium, BottomLength.short]),
+        CategoryDetail(
+            priority: 2,
+            label: "핏",
+            defaultDetail: BottomFit.straight,
+            details: [BottomFit.skinny, BottomFit.straight, BottomFit.wide]),
+      ],
+      defaultImage: "assets/images/clothes/bg/pants_shorts.svg"),
+  SecondCategory(
+      id: 28,
+      name: "미니원피스",
+      code: "mini_dress",
+      priority: 28,
+      firstCategoryId: 4,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "팔길이",
+            defaultDetail: SleeveLength.long,
+            details: [
+              SleeveLength.long,
+              SleeveLength.short,
+              SleeveLength.sleeveless
+            ]),
+        CategoryDetail(
+            priority: 2,
+            label: "목라인",
+            defaultDetail: Neckline.round,
+            details: [
+              Neckline.round,
+              Neckline.uNeck,
+              Neckline.vNeck,
+              Neckline.square,
+              Neckline.polo,
+              Neckline.offShoulder
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/mini_dress.svg"),
+  SecondCategory(
+      id: 29,
+      name: "롱원피스",
+      code: "long_dress",
+      priority: 29,
+      firstCategoryId: 4,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "팔길이",
+            defaultDetail: SleeveLength.long,
+            details: [
+              SleeveLength.long,
+              SleeveLength.short,
+              SleeveLength.sleeveless
+            ]),
+        CategoryDetail(
+            priority: 2,
+            label: "목라인",
+            defaultDetail: Neckline.round,
+            details: [
+              Neckline.round,
+              Neckline.uNeck,
+              Neckline.vNeck,
+              Neckline.square,
+              Neckline.polo,
+              Neckline.offShoulder
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/long_dress.svg"),
+  SecondCategory(
+      id: 30,
+      name: "운동화",
+      code: "sneakers",
+      priority: 30,
+      firstCategoryId: 5,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "길이",
+            defaultDetail: ShoesLength.high,
+            details: [
+              ShoesLength.high,
+              ShoesLength.low,
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/sneakers.svg"),
+  SecondCategory(
+      id: 31,
+      name: "슬립온",
+      code: "slip_on",
+      priority: 31,
+      firstCategoryId: 5,
+      details: [],
+      defaultImage: "assets/images/clothes/bg/slippers.svg"),
+  SecondCategory(
+      id: 32,
+      name: "구두",
+      code: "shoes",
+      priority: 32,
+      firstCategoryId: 5,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "굽",
+            defaultDetail: ShoesHill.middle,
+            details: [
+              ShoesHill.middle,
+              ShoesHill.low,
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/shoes.svg"),
+  SecondCategory(
+      id: 33,
+      name: "로퍼",
+      code: "loafers",
+      priority: 33,
+      firstCategoryId: 5,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "굽",
+            defaultDetail: ShoesHill.middle,
+            details: [
+              ShoesHill.middle,
+              ShoesHill.low,
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/loafers.svg"),
+  SecondCategory(
+      id: 34,
+      name: "플랫",
+      code: "flats",
+      priority: 34,
+      firstCategoryId: 5,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "스트랩유무",
+            defaultDetail: ShoesStrap.withStrap,
+            details: [
+              ShoesStrap.withStrap,
+              ShoesStrap.withoutStrap,
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/flats.svg"),
+  SecondCategory(
+      id: 35,
+      name: "부츠",
+      code: "boots",
+      priority: 35,
+      firstCategoryId: 5,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "길이",
+            defaultDetail: ShoesLength.long,
+            details: [
+              ShoesLength.long,
+              ShoesLength.middle,
+              ShoesLength.short,
+            ]),
+        CategoryDetail(
+            priority: 2,
+            label: "굽",
+            defaultDetail: ShoesHill.high,
+            details: [
+              ShoesHill.high,
+              ShoesHill.low,
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/boots.svg"),
+  SecondCategory(
+      id: 36,
+      name: "어그부츠",
+      code: "ugg_boots",
+      priority: 36,
+      firstCategoryId: 5,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "길이",
+            defaultDetail: ShoesLength.middle,
+            details: [
+              ShoesLength.middle,
+              ShoesLength.short,
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/ugg_boots.svg"),
+  SecondCategory(
+      id: 37,
+      name: "레인부츠",
+      code: "rain_boots",
+      priority: 37,
+      firstCategoryId: 5,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "길이",
+            defaultDetail: ShoesLength.middle,
+            details: [
+              ShoesLength.high,
+              ShoesLength.middle,
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/rain_boots.svg"),
+  SecondCategory(
+      id: 38,
+      name: "힐",
+      code: "heels",
+      priority: 38,
+      firstCategoryId: 5,
+      details: [
+        CategoryDetail(
+            priority: 1,
+            label: "굽",
+            defaultDetail: ShoesHill.high,
+            details: [
+              ShoesHill.high,
+              ShoesHill.middle,
+            ]),
+      ],
+      defaultImage: "assets/images/clothes/bg/heels.svg"),
+  SecondCategory(
+      id: 39,
+      name: "슬리퍼",
+      code: "slippers",
+      priority: 39,
+      firstCategoryId: 5,
+      details: [],
+      defaultImage: "assets/images/clothes/bg/sandals.svg"),
+  SecondCategory(
+      id: 40,
+      name: "샌들",
+      code: "sandals",
+      priority: 40,
+      firstCategoryId: 5,
+      details: [],
+      defaultImage: "assets/images/clothes/bg/sandals.svg"),
 ];

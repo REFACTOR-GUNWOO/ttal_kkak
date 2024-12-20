@@ -119,7 +119,6 @@ class ClothesDetails {
 
 mixin ClothesDetail {
   String get label;
-  int get priority;
   String get code;
 }
 
@@ -154,11 +153,14 @@ enum SleeveLength with ClothesDetail {
 // 넥 라인
 enum Neckline with ClothesDetail {
   polo("카라", 0, "neck_line_polo"),
+  deepCollar("깊은 카라", 0, "neck_line_deep_collar"),
   round("라운드넥", 1, "neck_line_round"),
   uNeck("u넥", 2, "neck_line_uNeck"),
   vNeck("브이넥", 3, "neck_line_vNeck"),
   square("스퀘어넥", 4, "neck_line_square"),
-  offShoulder("오프숄더", 5, "off_shoulder"),
+  offShoulder("오프숄더", 5, "neck_line_off_shoulder"),
+  high("하이", 5, "neck_line_high"),
+  hoodie("후드", 5, "neck_line_hoodie"),
   line("끈", 6, "neck_line_line");
 
   final String label;
@@ -166,6 +168,77 @@ enum Neckline with ClothesDetail {
   final String code;
 
   const Neckline(this.label, this.priority, this.code);
+}
+
+enum BottomFit with ClothesDetail {
+  wide("와이드", "bottom_fit_wide"),
+  straight("일자", "bottom_fit_straight"),
+  slim("슬림", "bottom_fit_slim"),
+  skinny("스키니", "bottom_fit_skinny"),
+  bootCut("부츠", "bottom_fit_bootcut"),
+  flare("플레어", "bottom_fit_flare");
+
+  final String label;
+  final String code;
+
+  const BottomFit(this.label, this.code);
+}
+
+enum BottomLength with ClothesDetail {
+  short("짧은길이", "bottom_length_short"),
+  medium("중간길이", "bottom_length_medium"),
+  long("긴길이", "bottom_length_long"),
+  mini("미니", "bottom_length_mini");
+
+  final String label;
+  final String code;
+
+  const BottomLength(this.label, this.code);
+}
+
+enum SkirtFit with ClothesDetail {
+  aLine("a라인", "skirt_fit_a_line"),
+  hLine("h라인", "skirt_fit_h_line"),
+  tennis("테니스", "skirt_fit_tennis");
+
+  final String label;
+  final String code;
+
+  const SkirtFit(this.label, this.code);
+}
+
+enum ShoesLength with ClothesDetail {
+  high("하이", "shoes_length_high"),
+  long("롱", "shoes_length_long"),
+  middle("미들", "shoes_length_middle"),
+  short("숏", "shoes_length_short"),
+  low("로우", "shoes_length_low");
+
+  final String label;
+  final String code;
+
+  const ShoesLength(this.label, this.code);
+}
+
+enum ShoesStrap with ClothesDetail {
+  withStrap("있음", "shoes_strap_with"),
+  withoutStrap("없음", "shoes_strap_without");
+
+  final String label;
+  final String code;
+
+  const ShoesStrap(this.label, this.code);
+}
+
+enum ShoesHill with ClothesDetail {
+  high("높은", "shoes_hill_high"),
+  middle("미들", "shoes_hill_middle"),
+  low("낮은", "shoes_hill_low");
+
+  final String label;
+  final String code;
+
+  const ShoesHill(this.label, this.code);
 }
 
 List<Clothes> generateDummyClothes() {

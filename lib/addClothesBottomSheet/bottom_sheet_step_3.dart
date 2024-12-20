@@ -129,7 +129,7 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
                           color: SystemColors.black),
                     ),
                     SvgPicture.asset(
-                      categories[index].defaultImage,
+                      "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg",
                       width: 24,
                     )
                   ],
