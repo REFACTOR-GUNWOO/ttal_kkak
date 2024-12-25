@@ -5,7 +5,6 @@ import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:path/path.dart';
 import 'dart:io';
-import 'dart:typed_data';
 
 class ClothesRepository {
   static Database? _database;
@@ -16,7 +15,6 @@ class ClothesRepository {
   Future<List<Clothes>> loadClothes() async {
     final res = await (await database).rawQuery("SELECT * FROM ${_tableName}");
     return List.generate(res.length, (index) {
-      print("loadClothes : ${res[index]}");
       Clothes clothes = Clothes.fromJson(res[index]);
       compareDataSizes(clothes.drawLines);
       return clothes;
@@ -72,11 +70,8 @@ class ClothesRepository {
   }
 
   Future<void> addClothes(Clothes clothes) async {
-    print("addClothes: ${clothes}");
-
     final db = await database;
     clothes.id = null;
-    print("addClothes: ${clothes.toJson()}");
     final res = await db.insert(_tableName, clothes.toJson());
   }
 
@@ -88,10 +83,6 @@ class ClothesRepository {
 
   Future<void> addClothesList(Set<Clothes> clothesList) async {
     final db = await database;
-    print("addClothesList: ${clothesList.length}");
-    // final batch = db.batch();
-    // clothesList.map((e) => batch.insert(_tableName, e.toJson()));
-    // await batch.commit();
     Future.wait(clothesList.map((e) async => await addClothes(e)));
   }
 

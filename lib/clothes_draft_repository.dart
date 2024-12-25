@@ -8,14 +8,12 @@ class ClothesDraftRepository {
   Future<void> save(ClothesDraft clothes) async {
     print("saveClothes");
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("save ${clothes.toJson()}");
     await prefs.setString(_clothesKey, jsonEncode(clothes.toJson()));
   }
 
   Future<ClothesDraft?> load() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? clothesJson = prefs.getString(_clothesKey);
-    print(clothesJson);
     if (clothesJson == null) {
       return null;
     }

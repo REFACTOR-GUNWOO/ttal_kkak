@@ -96,7 +96,6 @@ class _ClothesGridState extends State<ClothesGrid> {
                 padding: EdgeInsets.all(8.0),
                 itemCount: ((getClothesListLength()) / columnCount).ceil(),
                 itemBuilder: (context, index) {
-                  print("getClothesListLength() ${getClothesListLength()}");
                   int start = index * columnCount;
                   int end = (start + columnCount) < getClothesListLength()
                       ? start + columnCount
@@ -363,12 +362,15 @@ class _ClothesItemState extends State<ClothesItem> {
     var svgLineUrl =
         "assets/images/clothes/line/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
 
-    final String svgBgString = await rootBundle.loadString(svgBgUrl);
+    if (svgBgRoot == null) {
+      final String svgBgString = await rootBundle.loadString(svgBgUrl);
+      svgBgRoot = await svg.fromSvgString(svgBgString, svgBgString);
+    }
 
-    final String svgLineString = await rootBundle.loadString(svgLineUrl);
-
-    svgBgRoot = await svg.fromSvgString(svgBgString, svgBgString);
-    svgLineRoot = await svg.fromSvgString(svgLineString, svgLineString);
+    if (svgLineRoot == null) {
+      final String svgLineString = await rootBundle.loadString(svgLineUrl);
+      svgLineRoot = await svg.fromSvgString(svgLineString, svgLineString);
+    }
   }
 
   @override

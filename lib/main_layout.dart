@@ -59,7 +59,11 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
 
   // 툴팁을 숨기는 함수
   void _hideTooltip() {
-    if (_overlayEntry?.mounted == true) _overlayEntry?.remove();
+    try {
+      if (_overlayEntry?.mounted == true) _overlayEntry?.remove();
+    } catch (e) {
+      print(e);
+    }
   }
 
   // OverlayEntry 생성 함수

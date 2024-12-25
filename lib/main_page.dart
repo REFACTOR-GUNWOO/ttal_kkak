@@ -204,26 +204,17 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         List<ClothesDetail> detailsA = a.details.details;
         List<ClothesDetail> detailsB = b.details.details;
 
-        print("detailsA :${detailsA}");
-        print("detailsB :${detailsB}");
         // 각 디테일을 priority 순으로 비교
         for (int i = 0; i < secondCategoryA.details.length; i++) {
           CategoryDetail detailToCompare = secondCategoryA.details[i];
-          print("detailToCompare :${detailToCompare.details}");
-
           ClothesDetail detailA = detailsA
               .firstWhere((detail) => detailToCompare.details.contains(detail));
           ClothesDetail detailB = detailsB
               .firstWhere((detail) => detailToCompare.details.contains(detail));
-          print("detailA :${detailA}");
-          print("detailB :${detailB}");
           int detailAIndex = detailToCompare.details.indexOf(detailA);
           int detailBIndex = detailToCompare.details.indexOf(detailB);
-          print("detailAIndex :${detailAIndex}");
-          print("detailBIndex :${detailBIndex}");
 
           int detailComparison = detailAIndex.compareTo(detailBIndex);
-          print(detailComparison);
           if (detailComparison != 0) {
             return detailComparison;
           }
