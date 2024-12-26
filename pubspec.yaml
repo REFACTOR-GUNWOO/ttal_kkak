@@ -81,6 +81,8 @@ flutter:
     - assets/icons/RightCloset.svg
     - assets/icons/MiddleCloset.svg
     - assets/icons/hanger.svg
+    - assets/icons/pants_hanger.svg
+    - assets/icons/shoes_hanger.svg
     - assets/icons/test_tshirt.svg
     - assets/icons/test_outline.svg
     - assets/icons/test_outline_2.svg

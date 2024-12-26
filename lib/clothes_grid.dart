@@ -238,6 +238,8 @@ class _ClothesGridState extends State<ClothesGrid> {
 
   Widget _buildClothesCard(
       BuildContext context, Clothes clothes, bool isSelected) {
+    FirstCategory firstCategory = firstCategories
+        .firstWhere((element) => element.id == clothes.primaryCategoryId);
     return GestureDetector(
         onTap: () => {
               widget.isOnboarding
@@ -251,7 +253,8 @@ class _ClothesGridState extends State<ClothesGrid> {
           Stack(alignment: Alignment.topCenter, children: [
             SvgPicture.asset("assets/icons/MiddleCloset.svg"),
             Positioned(
-                top: 17, child: SvgPicture.asset("assets/icons/hanger.svg")),
+                top: firstCategory.hangerPosition,
+                child: SvgPicture.asset(firstCategory.hangerUrl)),
             Positioned(
                 top: 30,
                 child: ClothesItem(
@@ -282,11 +285,15 @@ class _ClothesGridState extends State<ClothesGrid> {
     BuildContext context,
     ClothesDraft clothes,
   ) {
+    FirstCategory firstCategory = firstCategories
+        .firstWhere((element) => element.id == clothes.primaryCategoryId);
     return GestureDetector(
         child: Column(children: [
       Stack(alignment: Alignment.center, children: [
         SvgPicture.asset("assets/icons/MiddleCloset.svg"),
-        Positioned(top: 17, child: SvgPicture.asset("assets/icons/hanger.svg")),
+        Positioned(
+            top: firstCategory.hangerPosition,
+            child: SvgPicture.asset(firstCategory.hangerUrl)),
         if (clothes.primaryCategoryId == null)
           Positioned(
               top: 19, child: SvgPicture.asset("assets/icons/NewClothes.svg"))
@@ -360,10 +367,14 @@ class _ClothesItemState extends State<ClothesItem> {
       return b.code.compareTo(a.code);
     });
 
+    // var svgBgUrl =
+    //     "assets/images/clothes/bg/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
+    // var svgLineUrl =
+    //     "assets/images/clothes/line/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
     var svgBgUrl =
-        "assets/images/clothes/bg/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
+        "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg";
     var svgLineUrl =
-        "assets/images/clothes/line/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
+        "assets/images/clothes/line/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg";
 
     if (svgBgRoot == null) {
       final String svgBgString = await rootBundle.loadString(svgBgUrl);
@@ -453,10 +464,14 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
     details.sort((a, b) {
       return b.code.compareTo(a.code);
     });
+    // var svgBgUrl =
+    //     "assets/images/clothes/bg/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
+    // var svgLineUrl =
+    //     "assets/images/clothes/line/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
     var svgBgUrl =
-        "assets/images/clothes/bg/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
+        "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg";
     var svgLineUrl =
-        "assets/images/clothes/line/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
+        "assets/images/clothes/line/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg";
 
     final String svgBgString = await rootBundle.loadString(svgBgUrl);
 
