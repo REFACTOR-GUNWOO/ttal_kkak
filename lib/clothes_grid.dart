@@ -119,13 +119,16 @@ class _ClothesGridState extends State<ClothesGrid> {
                               : clothesList.sublist(start - 1, end - 1)
                           : widget.clothesList.sublist(start, end));
 
-                  return Container(
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: _buildClothesCardRow(context, rowClothes)),
+                  return Padding(
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: _buildClothesCardRow(context, rowClothes)),
+                    ),
+                    padding: EdgeInsets.only(bottom: 32),
                   );
                 },
               )

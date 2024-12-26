@@ -627,11 +627,6 @@ class DrawingPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     print("shouldRepaint");
-    if (oldDelegate is DrawingPainter) {
-      bool res = oldDelegate.lines != lines;
-      print("shouldRepaint: ${res}");
-      return res;
-    }
     return true;
   }
 }
