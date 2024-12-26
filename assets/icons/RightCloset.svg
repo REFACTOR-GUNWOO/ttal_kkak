@@ -1,9 +1,9 @@
 <svg width="20" height="148" viewBox="0 0 20 148" fill="none" xmlns="http://www.w3.org/2000/svg">
-<mask id="path-1-inside-1_391_29145" fill="white">
+<mask id="path-1-inside-1_1312_36457" fill="white">
 <path d="M20 0H0V148H20V0Z"/>
 </mask>
 <path d="M20 0H0V148H20V0Z" fill="white"/>
-<path d="M20 0V-1H21V0H20ZM20 148H21V149H20V148ZM20 1H0V-1H20V1ZM0 147H20V149H0V147ZM19 148V0H21V148H19Z" fill="#CAC8B7" mask="url(#path-1-inside-1_391_29145)"/>
+<path d="M20 0V-1H21V0H20ZM20 148H21V149H20V148ZM20 1H0V-1H20V1ZM0 147H20V149H0V147ZM19 148V0H21V148H19Z" fill="#A9A38A" mask="url(#path-1-inside-1_1312_36457)"/>
 <path d="M6 131L19 147" stroke="#DFDDCF"/>
 <path d="M6 131V1" stroke="#DFDDCF"/>
 <path d="M6 131H-2.38419e-07" stroke="#DFDDCF"/>
