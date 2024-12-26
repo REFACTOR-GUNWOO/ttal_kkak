@@ -12,6 +12,7 @@ class SystemColors {
   static const Color gray600 = Color(0xFFBDBDBD);
   static const Color gray700 = Color(0xFF999999);
   static const Color gray800 = Color(0xFF717171);
+  static const Color gray900 = Color(0xFF5B5B5B);
 
   static const Color caution = Color(0xFFFF453A);
 }

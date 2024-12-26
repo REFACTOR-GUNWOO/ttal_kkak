@@ -421,7 +421,13 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
               CustomPaint(
                 size: Size(svgBgRoot!.viewport.width * 3,
                     svgBgRoot!.viewport.height * 3),
-                painter: SvgLinePainter(svgLineRoot!, 3.0),
+                painter: SvgLinePainter(
+                    svgLineRoot!,
+                    3.0,
+                    2.0,
+                    clothesColor == SystemColors.black
+                        ? SystemColors.gray900
+                        : SystemColors.black),
               ),
             if (svgBgRoot != null)
               GestureDetector(
@@ -544,15 +550,18 @@ class SvgBgPainter extends CustomPainter {
 class SvgLinePainter extends CustomPainter {
   final DrawableRoot drawableRoot;
   final scale;
+  final double strokeWidth;
+  final Color strokeColor;
 
-  SvgLinePainter(this.drawableRoot, this.scale);
+  SvgLinePainter(
+      this.drawableRoot, this.scale, this.strokeWidth, this.strokeColor);
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Colors.grey.withOpacity(0.3)
+      ..color = strokeColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
+      ..strokeWidth = strokeWidth;
 
     final Matrix4 matrix = Matrix4.identity()..scale(scale, scale);
     final Path scaledPath =

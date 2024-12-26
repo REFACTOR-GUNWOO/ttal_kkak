@@ -390,7 +390,13 @@ class _ClothesItemState extends State<ClothesItem> {
           CustomPaint(
             size: Size(svgLineRoot!.viewport.width / 2,
                 svgLineRoot!.viewport.height / 2),
-            painter: SvgLinePainter(svgLineRoot!, 0.5),
+            painter: SvgLinePainter(
+                svgLineRoot!,
+                0.5,
+                1.0,
+                clothesColor == SystemColors.black
+                    ? SystemColors.gray900
+                    : SystemColors.black),
           ),
         if (lines.isNotEmpty)
           CustomPaint(
@@ -481,7 +487,13 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
           CustomPaint(
             size: Size(
                 svgBgRoot!.viewport.width / 2, svgBgRoot!.viewport.height / 2),
-            painter: SvgLinePainter(svgLineRoot!, 0.5),
+            painter: SvgLinePainter(
+                svgLineRoot!,
+                0.5,
+                1.0,
+                clothesColor == SystemColors.black
+                    ? SystemColors.gray900
+                    : SystemColors.black),
           ),
         if (svgBgRoot != null)
           CustomPaint(
