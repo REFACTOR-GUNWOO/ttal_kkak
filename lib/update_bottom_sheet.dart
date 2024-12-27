@@ -14,7 +14,10 @@ class UpdateBottomSheet extends StatelessWidget {
   ClothesUpdateProvider? updateProvider;
   final VoidCallback onReload;
 
-  UpdateBottomSheet({required this.clothes, required this.updateProvider, required this.onReload});
+  UpdateBottomSheet(
+      {required this.clothes,
+      required this.updateProvider,
+      required this.onReload});
   @override
   Widget build(BuildContext context) {
     return CommonBottomSheet(
@@ -45,10 +48,26 @@ class UpdateBottomSheet extends StatelessWidget {
             _buildOptionButton(
               iconPath: "assets/icons/delete_icon.svg",
               label: "삭제하기",
-              onTap: () async {
-                await ClothesRepository().removeClothes(clothes);
-                onReload();
+              onTap: () {
                 Navigator.pop(context);
+                showModalBottomSheet(
+                  context: context,
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20.0)),
+                  ),
+                  builder: (BuildContext context) {
+                    return DeleteConfirmationDialog(
+                      itemName: '나이키반팔티',
+                      onConfirm: () async {
+                        // 삭제 로직 추가
+                        await ClothesRepository().removeClothes(clothes);
+                        onReload();
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                );
               },
             ),
           ]),
@@ -85,4 +104,66 @@ Widget _buildOptionButton({
       ),
     ),
   );
+}
+
+class DeleteConfirmationDialog extends StatelessWidget {
+  final String itemName;
+  final VoidCallback onConfirm;
+
+  const DeleteConfirmationDialog({
+    Key? key,
+    required this.itemName,
+    required this.onConfirm,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '$itemName 삭제',
+            style: BodyTextStyles.Bold24,
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            '옷 삭제 시 복구가 어려워요.\n삭제하시겠어요?',
+            textAlign: TextAlign.center,
+            style: BodyTextStyles.Regular14,
+          ),
+          const SizedBox(height: 20),
+          TextButton(
+            onPressed: onConfirm,
+            style: TextButton.styleFrom(
+              side: const BorderSide(color: Colors.red),
+              minimumSize: Size.zero,
+              padding: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+            child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      "assets/icons/delete_icon.svg",
+                      height: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "삭제하기",
+                      style: OneLineTextStyles.SemiBold16.copyWith(
+                          color: SystemColors.caution),
+                    ),
+                  ],
+                )),
+          ),
+        ],
+      ),
+    );
+  }
 }
