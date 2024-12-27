@@ -1,6 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 
+class CommonBottomSheet extends StatelessWidget {
+  Widget child;
+  CommonBottomSheet({required this.child});
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [BottomSheetHandle(), child, SizedBox(height: 34)],
+      ),
+    );
+  }
+}
+
 class BottomSheetHandle extends StatelessWidget {
   const BottomSheetHandle({super.key});
 

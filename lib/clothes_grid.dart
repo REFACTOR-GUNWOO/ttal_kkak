@@ -8,11 +8,13 @@ import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
+import 'package:ttal_kkak/common/common_bottom_sheet.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
+import 'package:ttal_kkak/update_bottom_sheet.dart';
 import 'package:ttal_kkak/utils/custom_floating_action_button_location.dart';
 import 'package:uuid/uuid.dart';
 
@@ -194,43 +196,14 @@ class _ClothesGridState extends State<ClothesGrid> {
       ClothesUpdateProvider? updateProvider) {
     showModalBottomSheet(
       context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
       builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: Icon(Icons.info),
-                title: Text('정보 수정하기'),
-                onTap: () {
-                  Navigator.pop(context);
-
-                  // 정보 수정 기능
-                  updateProvider!.set(clothes);
-                  ShowAddClothesBottomSheet(context, true);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.info),
-                title: Text('복제하기'),
-                onTap: () async {
-                  await ClothesRepository().addClothes(clothes);
-                  widget.onReload();
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.delete, color: Colors.red),
-                title: Text('삭제하기', style: TextStyle(color: Colors.red)),
-                onTap: () async {
-                  await ClothesRepository().removeClothes(clothes);
-                  widget.onReload();
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
+        return UpdateBottomSheet(
+          onReload: () => widget.onReload(),
+          clothes: clothes,
+          updateProvider: updateProvider,
         );
       },
     );

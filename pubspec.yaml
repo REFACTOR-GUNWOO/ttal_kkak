@@ -97,6 +97,8 @@ flutter:
     - assets/icons/tab_2_icon.svg
     - assets/icons/tab_3_icon.svg
     - assets/icons/tab_4_icon.svg
+    - assets/icons/delete_icon.svg
+    - assets/icons/update_icon.svg
     - assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg
     - assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_short_neck_line_round.svg
     - assets/images/clothes/bg/tshirt_top_length_long_sleeve_length_long_neck_line_round.svg

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_appbar.dart';
-import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_handle.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_1.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_2.dart';
@@ -13,6 +12,7 @@ import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_5.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_6.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_draft_repository.dart';
+import 'package:ttal_kkak/common/common_bottom_sheet.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/utils/length_limited_text_input.dart';
@@ -123,10 +123,9 @@ class _StepContainerState extends State<StepContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return CommonBottomSheet(
       child: Column(
         children: [
-          BottomSheetHandle(),
           BottomSheetAppBar(
               currentDraftLevel: widget.isUpdate ? 100 : getCurrentDraftLevel(),
               nextStepFun: _nextStep,
