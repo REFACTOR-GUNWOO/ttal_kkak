@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/Category.dart';
+import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_5.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
@@ -31,7 +32,9 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   List<DrawnLine> undoneLines = [];
   DrawnLine? currentLine;
   double brushWidth = 5.0;
-  Color brushColor = Colors.black;
+  Color brushColor = colorContainers.first.colors.first;
+  List<Color> brushColorColorGroup = colorContainers.first.colors;
+
   Color clothesColor = Colors.transparent;
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
@@ -41,23 +44,9 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     PencilInfo(pencilSize: 5, width: 26),
     PencilInfo(pencilSize: 2, width: 18)
   ];
+
   bool _isErasing = false;
   final double minDistance = 10.0; // 손떨림 방지를 위한 최소 거리 설정
-
-  final List<Color> colors = [
-    Colors.white,
-    Colors.black,
-    Colors.grey,
-    Colors.red,
-    Colors.orange,
-    Colors.yellow,
-    Colors.green,
-    Colors.blue,
-    Colors.purple,
-    Colors.pink,
-    Colors.brown,
-    Colors.black87,
-  ];
 
   @override
   void initState() {
@@ -108,78 +97,24 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
 
   void _showColorPicker(BuildContext context) {
     showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-      ),
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 4.0,
-                width: 40.0,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(2.0),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              Text(
-                '펜 컬러',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16.0),
-              GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 6,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: colors.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context, colors[index]);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: colors[index],
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.check,
-                          color: colors[index] == brushColor
-                              ? Colors.orange
-                              : Colors.transparent,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((selectedColor) {
-      if (selectedColor != null) {
-        // 선택된 색상을 처리
-        setState(() {
-          brushColor = selectedColor;
-        });
-      }
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+        ),
+        builder: (BuildContext context) {
+          return ColorPalette(
+              colorContainers: colorContainers,
+              selectedColorGroup: brushColorColorGroup,
+              selectedColor: brushColor,
+              onColorSelected: (selectedColorGroup, selectedColor) {
+                setState(() {
+                  print("setState");
+                  brushColor = selectedColor;
+                  brushColorColorGroup = selectedColorGroup;
+                });
+              });
+        }).whenComplete(() {
+      setState(() {}); // Ensure UI is updated after the color picker is closed
     });
   }
 

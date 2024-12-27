@@ -37,18 +37,16 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ClothesDraft? draft = widget.draftProvider.currentDraft;
-      Clothes? clothes = widget.updateProvider.currentClothes;
-      setState(() {
-        Color? color = widget.isUpdate ? clothes?.color : draft?.color;
-        if (color != null) {
-          _selectedColor = color;
-          _selectedColorGroup = colorContainers
-              .firstWhere((element) => element.colors.contains(color))
-              .colors;
-        }
-      });
+    ClothesDraft? draft = widget.draftProvider.currentDraft;
+    Clothes? clothes = widget.updateProvider.currentClothes;
+    setState(() {
+      Color? color = widget.isUpdate ? clothes?.color : draft?.color;
+      if (color != null) {
+        _selectedColor = color;
+        _selectedColorGroup = colorContainers
+            .firstWhere((element) => element.colors.contains(color))
+            .colors;
+      }
     });
   }
 
@@ -78,13 +76,14 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
         setState(() {
           _selectedColorGroup = selectedColorGroup;
           _selectedColor = selectedColor;
+          save();
         });
       },
     );
   }
 }
 
-class ColorPalette extends StatelessWidget {
+class ColorPalette extends StatefulWidget {
   final List<ColorContainer> colorContainers;
   final List<Color> selectedColorGroup;
   final Color selectedColor;
@@ -97,27 +96,56 @@ class ColorPalette extends StatelessWidget {
     required this.selectedColor,
     required this.onColorSelected,
   }) : super(key: key);
+
+  @override
+  _ColorPaletteState createState() => _ColorPaletteState();
+}
+
+class _ColorPaletteState extends State<ColorPalette> {
+  late Color? _selectedColor;
+  late List<Color>? _selectedColorGroup;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedColor = widget.selectedColor;
+    _selectedColorGroup = widget.selectedColorGroup;
+  }
+
+  _onSelected(List<Color> selectedColorGroup, Color selectedColor) {
+    setState(() {
+      _selectedColorGroup = selectedColorGroup;
+      _selectedColor = selectedColor;
+    });
+    widget.onColorSelected(selectedColorGroup, selectedColor);
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("ColorPalette build :${widget.selectedColorGroup}");
     return SingleChildScrollView(
       child: Column(
         children: [
           ColorPaletteItem(
-            colorContainers: colorContainers,
-            selectedColorGroup: selectedColorGroup,
-            selectedColor: selectedColor,
-            onColorSelected: onColorSelected,
+            colorContainers: widget.colorContainers,
+            selectedColorGroup:
+                _selectedColorGroup ?? widget.selectedColorGroup,
+            selectedColor: _selectedColor ?? widget.selectedColor,
+            onColorSelected: _onSelected,
           ),
           const SizedBox(height: 20),
-          if (selectedColorGroup.isNotEmpty)
+          if (widget.selectedColorGroup.isNotEmpty)
             ColorPaletteItem(
-              colorContainers: selectedColorGroup
-                  .map((color) => ColorContainer([color], color))
-                  .toList(),
-              selectedColorGroup: selectedColorGroup,
-              selectedColor: selectedColor,
-              onColorSelected: onColorSelected,
-            ),
+                colorContainers:
+                    (_selectedColorGroup ?? widget.selectedColorGroup)
+                        .map((color) => ColorContainer(
+                            _selectedColorGroup ?? widget.selectedColorGroup,
+                            color))
+                        .toList(),
+                selectedColorGroup:
+                    _selectedColorGroup ?? widget.selectedColorGroup,
+                selectedColor: _selectedColor ?? widget.selectedColor,
+                onColorSelected: _onSelected),
         ],
       ),
     );
