@@ -240,6 +240,8 @@ class _ClothesGridState extends State<ClothesGrid> {
       BuildContext context, Clothes clothes, bool isSelected) {
     FirstCategory firstCategory = firstCategories
         .firstWhere((element) => element.id == clothes.primaryCategoryId);
+    SecondCategory secondCategory = secondCategories
+        .firstWhere((element) => element.id == clothes.secondaryCategoryId);
     return GestureDetector(
         onTap: () => {
               widget.isOnboarding
@@ -256,7 +258,8 @@ class _ClothesGridState extends State<ClothesGrid> {
                 top: firstCategory.hangerPosition,
                 child: SvgPicture.asset(firstCategory.hangerUrl)),
             Positioned(
-                top: 30,
+                top: secondCategory.clothesTopPosition,
+                bottom: secondCategory.clothesBottomPosition,
                 child: ClothesItem(
                     clothes: clothes, key: ValueKey(ValueKey(Uuid().v4())))),
             if (isSelected)
@@ -287,6 +290,8 @@ class _ClothesGridState extends State<ClothesGrid> {
   ) {
     FirstCategory firstCategory = firstCategories
         .firstWhere((element) => element.id == clothes.primaryCategoryId);
+    SecondCategory secondCategory = secondCategories
+        .firstWhere((element) => element.id == clothes.secondaryCategoryId);
     return GestureDetector(
         child: Column(children: [
       Stack(alignment: Alignment.center, children: [
@@ -299,7 +304,8 @@ class _ClothesGridState extends State<ClothesGrid> {
               top: 19, child: SvgPicture.asset("assets/icons/NewClothes.svg"))
         else
           Positioned(
-              top: 30,
+              top: secondCategory.clothesTopPosition,
+              bottom: secondCategory.clothesBottomPosition,
               child: ClothesDraftItem(
                   clothesDraft: clothes, key: ValueKey(Uuid().v4()))),
       ]),

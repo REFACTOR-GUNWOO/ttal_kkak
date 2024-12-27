@@ -22,27 +22,27 @@ List<FirstCategory> firstCategories = [
       name: "상의",
       priority: 1,
       hangerUrl: "assets/icons/hanger.svg",
-      hangerPosition: 17,
+      hangerPosition: 10,
       description: '티셔츠 블라우스, 니트, 조끼 등의 옷이 있어요.'),
   FirstCategory(
       id: 2,
       name: "하의",
       priority: 2,
-      hangerPosition: 17,
+      hangerPosition: 10,
       hangerUrl: "assets/icons/pants_hanger.svg",
       description: "청바지, 슬랙스, 반바지, 레깅스 등의 옷이 있어요."),
   FirstCategory(
       id: 3,
       name: "아우터",
       priority: 3,
-      hangerPosition: 17,
+      hangerPosition: 10,
       hangerUrl: "assets/icons/hanger.svg",
       description: "야상, 가디건, 자켓 코트, 패딩 등의 옷이 있어요."),
   FirstCategory(
       id: 4,
       name: "원피스",
       priority: 4,
-      hangerPosition: 17,
+      hangerPosition: 10,
       hangerUrl: "assets/icons/hanger.svg",
       description: "원피스, 점프슈트 등의 옷이 있어요."),
   FirstCategory(
@@ -73,6 +73,8 @@ class SecondCategory {
   int priority;
   int firstCategoryId;
   String defaultImage;
+  double? clothesTopPosition;
+  double? clothesBottomPosition;
   List<CategoryDetail> details;
 
   SecondCategory({
@@ -83,6 +85,8 @@ class SecondCategory {
     required this.defaultImage,
     required this.code,
     required this.details,
+    this.clothesTopPosition,
+    this.clothesBottomPosition,
   });
 }
 
@@ -93,6 +97,7 @@ List<SecondCategory> secondCategories = [
       code: "tshirt",
       priority: 1,
       firstCategoryId: 1,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -129,6 +134,7 @@ List<SecondCategory> secondCategories = [
       code: "polo_shirt",
       priority: 2,
       firstCategoryId: 1,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -154,6 +160,7 @@ List<SecondCategory> secondCategories = [
       code: "shirt",
       priority: 3,
       firstCategoryId: 1,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -179,6 +186,7 @@ List<SecondCategory> secondCategories = [
       code: "blouse",
       priority: 4,
       firstCategoryId: 1,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -214,6 +222,7 @@ List<SecondCategory> secondCategories = [
       code: "sleeveless",
       priority: 5,
       firstCategoryId: 1,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -244,6 +253,7 @@ List<SecondCategory> secondCategories = [
       code: "turtleneck",
       priority: 6,
       firstCategoryId: 1,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -269,6 +279,7 @@ List<SecondCategory> secondCategories = [
       code: "knit",
       priority: 7,
       firstCategoryId: 1,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -305,6 +316,7 @@ List<SecondCategory> secondCategories = [
       code: "sweatshirt",
       priority: 8,
       firstCategoryId: 1,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -335,6 +347,7 @@ List<SecondCategory> secondCategories = [
       code: "hoodie",
       priority: 9,
       firstCategoryId: 1,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -355,6 +368,7 @@ List<SecondCategory> secondCategories = [
       code: "vest",
       priority: 10,
       firstCategoryId: 1,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -386,6 +400,7 @@ List<SecondCategory> secondCategories = [
       code: "cardigan",
       priority: 11,
       firstCategoryId: 3,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -414,6 +429,7 @@ List<SecondCategory> secondCategories = [
       code: "zip_up",
       priority: 12,
       firstCategoryId: 3,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -446,6 +462,7 @@ List<SecondCategory> secondCategories = [
       code: "jacket",
       priority: 13,
       firstCategoryId: 3,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -478,6 +495,7 @@ List<SecondCategory> secondCategories = [
       code: "windbreaker",
       priority: 14,
       firstCategoryId: 3,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -502,6 +520,7 @@ List<SecondCategory> secondCategories = [
       code: "mushtang",
       priority: 15,
       firstCategoryId: 3,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -521,6 +540,7 @@ List<SecondCategory> secondCategories = [
       code: "field_jacket",
       priority: 16,
       firstCategoryId: 3,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -540,6 +560,7 @@ List<SecondCategory> secondCategories = [
       code: "trench_coat",
       priority: 17,
       firstCategoryId: 3,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -559,6 +580,7 @@ List<SecondCategory> secondCategories = [
       code: "coat",
       priority: 18,
       firstCategoryId: 3,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 2,
@@ -588,6 +610,7 @@ List<SecondCategory> secondCategories = [
       code: "padded_jacket",
       priority: 19,
       firstCategoryId: 3,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -621,6 +644,7 @@ List<SecondCategory> secondCategories = [
       code: "outer_vest",
       priority: 20,
       firstCategoryId: 3,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -650,6 +674,7 @@ List<SecondCategory> secondCategories = [
       code: "jeans",
       priority: 21,
       firstCategoryId: 2,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -683,6 +708,7 @@ List<SecondCategory> secondCategories = [
       code: "cotton pants",
       priority: 23,
       firstCategoryId: 2,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -702,6 +728,7 @@ List<SecondCategory> secondCategories = [
       code: "training",
       priority: 24,
       firstCategoryId: 2,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -715,6 +742,7 @@ List<SecondCategory> secondCategories = [
       name: "레깅스",
       code: "leggings",
       priority: 25,
+      clothesTopPosition: 12,
       firstCategoryId: 2,
       details: [
         CategoryDetail(
@@ -734,6 +762,7 @@ List<SecondCategory> secondCategories = [
       code: "skirt",
       priority: 26,
       firstCategoryId: 2,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
@@ -755,6 +784,7 @@ List<SecondCategory> secondCategories = [
       id: 27,
       name: "반바지",
       code: "shorts",
+      clothesTopPosition: 12,
       priority: 27,
       firstCategoryId: 2,
       details: [
@@ -775,6 +805,7 @@ List<SecondCategory> secondCategories = [
       name: "미니원피스",
       code: "mini_dress",
       priority: 28,
+      clothesTopPosition: 12,
       firstCategoryId: 4,
       details: [
         CategoryDetail(
@@ -804,6 +835,7 @@ List<SecondCategory> secondCategories = [
       id: 29,
       name: "롱원피스",
       code: "long_dress",
+      clothesTopPosition: 12,
       priority: 29,
       firstCategoryId: 4,
       details: [
@@ -834,6 +866,7 @@ List<SecondCategory> secondCategories = [
       id: 30,
       name: "운동화",
       code: "sneakers",
+      clothesBottomPosition: 40,
       priority: 30,
       firstCategoryId: 5,
       details: [
@@ -852,6 +885,7 @@ List<SecondCategory> secondCategories = [
       name: "슬립온",
       code: "slip_on",
       priority: 31,
+      clothesBottomPosition: 40,
       firstCategoryId: 5,
       details: [],
       defaultImage: "assets/images/clothes/bg/slippers.svg"),
@@ -860,6 +894,7 @@ List<SecondCategory> secondCategories = [
       name: "구두",
       code: "shoes",
       priority: 32,
+      clothesBottomPosition: 40,
       firstCategoryId: 5,
       details: [
         CategoryDetail(
@@ -877,6 +912,7 @@ List<SecondCategory> secondCategories = [
       name: "로퍼",
       code: "loafers",
       priority: 33,
+      clothesBottomPosition: 40,
       firstCategoryId: 5,
       details: [
         CategoryDetail(
@@ -894,6 +930,7 @@ List<SecondCategory> secondCategories = [
       name: "플랫",
       code: "flats",
       priority: 34,
+      clothesBottomPosition: 40,
       firstCategoryId: 5,
       details: [
         CategoryDetail(
@@ -911,6 +948,7 @@ List<SecondCategory> secondCategories = [
       name: "부츠",
       code: "boots",
       priority: 35,
+      clothesBottomPosition: 40,
       firstCategoryId: 5,
       details: [
         CategoryDetail(
@@ -937,6 +975,7 @@ List<SecondCategory> secondCategories = [
       name: "어그부츠",
       code: "ugg_boots",
       priority: 36,
+      clothesBottomPosition: 40,
       firstCategoryId: 5,
       details: [
         CategoryDetail(
@@ -954,6 +993,7 @@ List<SecondCategory> secondCategories = [
       name: "레인부츠",
       code: "rain_boots",
       priority: 37,
+      clothesBottomPosition: 40,
       firstCategoryId: 5,
       details: [
         CategoryDetail(
@@ -971,6 +1011,7 @@ List<SecondCategory> secondCategories = [
       name: "힐",
       code: "heels",
       priority: 38,
+      clothesBottomPosition: 40,
       firstCategoryId: 5,
       details: [
         CategoryDetail(
@@ -988,6 +1029,7 @@ List<SecondCategory> secondCategories = [
       name: "슬리퍼",
       code: "slippers",
       priority: 39,
+      clothesBottomPosition: 40,
       firstCategoryId: 5,
       details: [],
       defaultImage: "assets/images/clothes/bg/sandals.svg"),
@@ -996,6 +1038,7 @@ List<SecondCategory> secondCategories = [
       name: "샌들",
       code: "sandals",
       priority: 40,
+      clothesBottomPosition: 40,
       firstCategoryId: 5,
       details: [],
       defaultImage: "assets/images/clothes/bg/sandals.svg"),
