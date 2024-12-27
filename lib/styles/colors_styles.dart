@@ -29,5 +29,6 @@ class SignatureColors {
   static const Color begie500 = Color(0xFFE3E0D3);
   static const Color begie600 = Color(0xFFD6D3C4);
   static const Color begie700 = Color(0xFFCCC7B3);
+  static const Color begie750 = Color(0xFFA9A38A);
   static const Color begie800 = Color(0xFF847F69);
 }
