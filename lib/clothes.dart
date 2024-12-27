@@ -471,7 +471,8 @@ List<ColorContainer> colorContainers = [
   // 검정색
   ColorContainer([Color(0xFF282828), Color(0xFF161616)], Color(0xFF161616)),
   // 흰색
-  ColorContainer([Color(0xFFFFFFFF), Color(0xFFE7E7E7)], Color(0xFFE7E7E7)),
+  ColorContainer([Color(0xFFFFFFFF), Color(0xFFE7E7E7), Color(0xFFEBE3D2)],
+      Color(0xFFFFFFFF)),
   // 회색
   ColorContainer([Color(0xFFC4C4C4), Color(0xFF8D8D8D), Color(0xFF606060)],
       Color(0xFF8D8D8D)),
