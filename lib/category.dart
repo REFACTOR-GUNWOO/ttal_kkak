@@ -694,6 +694,7 @@ List<SecondCategory> secondCategories = [
       code: "slacks",
       priority: 22,
       firstCategoryId: 2,
+      clothesTopPosition: 12,
       details: [
         CategoryDetail(
             priority: 1,
