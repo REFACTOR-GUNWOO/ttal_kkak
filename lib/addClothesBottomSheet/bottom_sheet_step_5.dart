@@ -70,38 +70,16 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          ColorPalette(
-            colorContainers: colorContainers,
-            selectedColorGroup: _selectedColorGroup,
-            selectedColor: _selectedColor,
-            onColorSelected: (colorGroup, color) {
-              setState(() {
-                _selectedColorGroup = colorGroup;
-                _selectedColor = color;
-                save();
-              });
-            },
-          ),
-          const SizedBox(height: 20),
-          if (_selectedColorGroup.isNotEmpty)
-            ColorPalette(
-              colorContainers: _selectedColorGroup
-                  .map((color) => ColorContainer([color], color))
-                  .toList(),
-              selectedColorGroup: _selectedColorGroup,
-              selectedColor: _selectedColor,
-              onColorSelected: (colorGroup, color) {
-                setState(() {
-                  _selectedColor = color;
-                  save();
-                });
-              },
-            ),
-        ],
-      ),
+    return ColorPalette(
+      colorContainers: colorContainers,
+      selectedColorGroup: _selectedColorGroup,
+      selectedColor: _selectedColor,
+      onColorSelected: (selectedColorGroup, selectedColor) {
+        setState(() {
+          _selectedColorGroup = selectedColorGroup;
+          _selectedColor = selectedColor;
+        });
+      },
     );
   }
 }
@@ -113,6 +91,46 @@ class ColorPalette extends StatelessWidget {
   final Function(List<Color>, Color) onColorSelected;
 
   const ColorPalette({
+    Key? key,
+    required this.colorContainers,
+    required this.selectedColorGroup,
+    required this.selectedColor,
+    required this.onColorSelected,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ColorPaletteItem(
+            colorContainers: colorContainers,
+            selectedColorGroup: selectedColorGroup,
+            selectedColor: selectedColor,
+            onColorSelected: onColorSelected,
+          ),
+          const SizedBox(height: 20),
+          if (selectedColorGroup.isNotEmpty)
+            ColorPaletteItem(
+              colorContainers: selectedColorGroup
+                  .map((color) => ColorContainer([color], color))
+                  .toList(),
+              selectedColorGroup: selectedColorGroup,
+              selectedColor: selectedColor,
+              onColorSelected: onColorSelected,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class ColorPaletteItem extends StatelessWidget {
+  final List<ColorContainer> colorContainers;
+  final List<Color> selectedColorGroup;
+  final Color selectedColor;
+  final Function(List<Color>, Color) onColorSelected;
+
+  const ColorPaletteItem({
     Key? key,
     required this.colorContainers,
     required this.selectedColorGroup,
@@ -154,4 +172,3 @@ class ColorPalette extends StatelessWidget {
     );
   }
 }
-
