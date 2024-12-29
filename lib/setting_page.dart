@@ -1,6 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'styles/text_styles.dart';
 import 'styles/colors_styles.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:in_app_review/in_app_review.dart';
+
+final InAppReview inAppReview = InAppReview.instance;
 
 class SettingPage extends StatelessWidget {
   //원본위젯
@@ -95,64 +102,80 @@ class CommunicationList extends StatelessWidget {
       child: Column(
         // 리스트 전체
         children: [
-          Container(
-            //첫번째 리스트
-            margin: EdgeInsets.fromLTRB(16, 14, 16, 14),
-            child: Column(//텍스트뭉치
-                children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                        //리스트#1
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            //타이틀
+          GestureDetector(
+              onTap: () async {
+                if (Platform.isAndroid) {
+                  inAppReview.openStoreListing();
+                }
+                if (Platform.isIOS) {
+                  if (!await launchUrl(Uri(
+                      scheme: 'https',
+                      host: 'www.instagram.com',
+                      path: "/ttal_kkak_2",
+                      queryParameters: {'igsh': 'ZWlqMWhhZWE1bmd2-review'}))) {
+                    throw Exception('Could not launch');
+                  }
+                }
+              },
+              child: Container(
+                //첫번째 리스트
+                margin: EdgeInsets.fromLTRB(16, 14, 16, 14),
+                child: Column(//텍스트뭉치
+                    children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                            //리스트#1
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset(
-                                'assets/icons/setting_1.png', // 아이콘 파일 경로
-                                width: 20, // 아이콘 너비
-                                height: 20, // 아이콘 높이
+                              Row(
+                                //타이틀
+                                children: [
+                                  Image.asset(
+                                    'assets/icons/setting_1.png', // 아이콘 파일 경로
+                                    width: 20, // 아이콘 너비
+                                    height: 20, // 아이콘 높이
+                                  ),
+                                  SizedBox(width: 8), // 아이콘과 텍스트 사이 간격
+                                  Text('딸깍에게 응원의 메세지 보내기',
+                                      style:
+                                          OneLineTextStyles.SemiBold16.copyWith(
+                                              color: SystemColors.black)),
+                                ],
                               ),
-                              SizedBox(width: 8), // 아이콘과 텍스트 사이 간격
-                              Text('00에게 응원의 메세지 보내기',
-                                  style: OneLineTextStyles.SemiBold16.copyWith(
-                                      color: SystemColors.black)),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Row(
-                            children: [
-                              // 본문
                               SizedBox(
-                                width: 28,
+                                height: 6,
                               ),
-                              Flexible(
-                                child: Text(
-                                  '따뜻한 메세지가 00와 00의 능률을 크게 높여요!',
-                                  style: BodyTextStyles.Regular14.copyWith(
-                                      color: SystemColors.gray800),
-                                ),
+                              Row(
+                                children: [
+                                  // 본문
+                                  SizedBox(
+                                    width: 28,
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      '따뜻한 메세지가 00와 00의 능률을 크게 높여요!',
+                                      style: BodyTextStyles.Regular14.copyWith(
+                                          color: SystemColors.gray800),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ]),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Image.asset(
-                    'assets/icons/arrow_right.png', // 아이콘 파일 경로
-                    width: 16, // 아이콘 너비
-                    height: 16, // 아이콘 높이
-                  ),
-                ],
-              )
-            ]),
-          ),
+                            ]),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Image.asset(
+                        'assets/icons/arrow_right.png', // 아이콘 파일 경로
+                        width: 16, // 아이콘 너비
+                        height: 16, // 아이콘 높이
+                      ),
+                    ],
+                  )
+                ]),
+              )),
           SizedBox(
             // 디바이더
             height: 0,
@@ -163,64 +186,81 @@ class CommunicationList extends StatelessWidget {
               endIndent: 16, // Divider 끝 지점의 패딩
             ),
           ),
-          Container(
-            //첫번째 리스트
-            margin: EdgeInsets.fromLTRB(16, 14, 16, 14),
-            child: Column(//텍스트뭉치
-                children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                        //리스트#1
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            //타이틀
-                            children: [
-                              Image.asset(
-                                'assets/icons/setting_1.png', // 아이콘 파일 경로
-                                width: 20, // 아이콘 너비
-                                height: 20, // 아이콘 높이
-                              ),
-                              SizedBox(width: 8), // 아이콘과 텍스트 사이 간격
-                              Text('00에게 피드백 메세지 보내기',
-                                  style: OneLineTextStyles.SemiBold16.copyWith(
-                                      color: SystemColors.black)),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Row(
-                            children: [
-                              // 본문
-                              SizedBox(
-                                width: 28,
-                              ),
-                              Flexible(
-                                child: Text(
-                                    '추가됐으면 하는 기능이나 사용하면서 불편했던 점이 있나요? 사소한 내용이라도 좋아요!',
-                                    softWrap: true,
-                                    overflow: TextOverflow.visible,
-                                    style: BodyTextStyles.Regular14.copyWith(
-                                        color: SystemColors.gray800)),
-                              ),
-                            ],
-                          ),
-                        ]),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Image.asset(
-                    'assets/icons/arrow_right.png', // 아이콘 파일 경로
-                    width: 16, // 아이콘 너비
-                    height: 16, // 아이콘 높이
-                  ),
-                ],
-              )
-            ]),
+          GestureDetector(
+            child: Container(
+              //첫번째 리스트
+              margin: EdgeInsets.fromLTRB(16, 14, 16, 14),
+              child: Column(//텍스트뭉치
+                  children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                          //리스트#1
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              //타이틀
+                              children: [
+                                Image.asset(
+                                  'assets/icons/setting_1.png', // 아이콘 파일 경로
+                                  width: 20, // 아이콘 너비
+                                  height: 20, // 아이콘 높이
+                                ),
+                                SizedBox(width: 8), // 아이콘과 텍스트 사이 간격
+                                Text('딸깍에게 피드백 메세지 보내기',
+                                    style:
+                                        OneLineTextStyles.SemiBold16.copyWith(
+                                            color: SystemColors.black)),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Row(
+                              children: [
+                                // 본문
+                                SizedBox(
+                                  width: 28,
+                                ),
+                                Flexible(
+                                  child: Text(
+                                      '추가됐으면 하는 기능이나 사용하면서 불편했던 점이 있나요? 사소한 내용이라도 좋아요!',
+                                      softWrap: true,
+                                      overflow: TextOverflow.visible,
+                                      style: BodyTextStyles.Regular14.copyWith(
+                                          color: SystemColors.gray800)),
+                                ),
+                              ],
+                            ),
+                          ]),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Image.asset(
+                      'assets/icons/arrow_right.png', // 아이콘 파일 경로
+                      width: 16, // 아이콘 너비
+                      height: 16, // 아이콘 높이
+                    ),
+                  ],
+                )
+              ]),
+            ),
+            onTap: () async {
+              if (Platform.isAndroid) {
+                inAppReview.openStoreListing();
+              }
+              if (Platform.isIOS) {
+                if (!await launchUrl(Uri(
+                    scheme: 'https',
+                    host: 'itunes.apple.com',
+                    path: "/app/id6471259154",
+                    queryParameters: {'action': 'write-review'}))) {
+                  throw Exception('Could not launch');
+                }
+              }
+            },
           ),
         ],
       ),
@@ -228,8 +268,26 @@ class CommunicationList extends StatelessWidget {
   }
 }
 
-class SettingList extends StatelessWidget {
-  //앱리뷰,유저피드백
+class SettingList extends StatefulWidget {
+  SettingList({Key? key}) : super(key: key);
+
+  @override
+  _SettingListState createState() => _SettingListState();
+}
+
+class _SettingListState extends State<SettingList> {
+  String version = "";
+
+  @override
+  void initState() {
+    super.initState();
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      setState(() {
+        version = packageInfo.version;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -265,7 +323,7 @@ class SettingList extends StatelessWidget {
                                 color: SystemColors.black)),
                       ),
                     ),
-                    Text('1.0.1',
+                    Text(version,
                         style: OneLineTextStyles.SemiBold16.copyWith(
                             color: SystemColors.gray800))
                   ],

@@ -164,7 +164,7 @@ class DetailDrawingInfoPage extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.black,
+                  backgroundColor: Colors.black,
                   padding:
                       EdgeInsets.symmetric(horizontal: 64.0, vertical: 16.0),
                 ),

@@ -45,7 +45,8 @@ class BottomSheetContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.5, // 화면의 50% 높이를 사용
+      height: MediaQuery.of(context).size.height * 0.5,
+      width: double.infinity, // 화면의 50% 높이를 사용
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

@@ -51,7 +51,7 @@ class DraftClearWarningDialog extends StatelessWidget {
               Navigator.of(context).pop(); // 모달 닫기
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.black, // 버튼 색상
+              backgroundColor: Colors.black, // 버튼 색상
               padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
