@@ -57,11 +57,10 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
       await widget.updateProvider.update(clothes);
       return;
     } else {
-      ClothesDraft? draft = widget.draftProvider.currentDraft;
-      if (draft != null) {
-        draft.color = _selectedColor;
-        await widget.draftProvider.updateDraft(draft);
-      }
+      ClothesDraft draft = widget.draftProvider.currentDraft!;
+      draft.color = _selectedColor;
+      await widget.draftProvider.updateDraft(draft);
+
       return;
     }
   }

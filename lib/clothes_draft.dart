@@ -46,6 +46,7 @@ class ClothesDraft implements ClothesFamily {
     final map = toMap();
     for (int i = fieldOrder.length - 1; i >= 0; i--) {
       if (map[fieldOrder[i]] != null) {
+        print('getLastFilledFieldIndex: $i');
         return i;
       }
     }

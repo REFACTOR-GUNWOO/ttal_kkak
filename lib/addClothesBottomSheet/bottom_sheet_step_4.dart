@@ -86,29 +86,27 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
       await widget.updateProvider.update(clothes);
       return;
     } else {
-      ClothesDraft? draft = widget.draftProvider.currentDraft;
-      if (draft != null) {
-        if (draft.details != null) {
-          draft.details =
-              ClothesDetails(details: selectedDetailMap.values.toList());
-
-          draft.resetFieldsAfterIndex(3);
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return DraftClearWarningDialog("상세설정", draft, widget.onNextStep);
-            },
-          );
-          return;
-        }
-
+      ClothesDraft draft = widget.draftProvider.currentDraft!;
+      if (draft.getLastFilledFieldIndex() > 3) {
         draft.details =
             ClothesDetails(details: selectedDetailMap.values.toList());
-        await widget.draftProvider.updateDraft(draft);
 
-        // widget.onNextStep();
+        draft.resetFieldsAfterIndex(3);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return DraftClearWarningDialog("상세설정", draft, widget.onNextStep);
+          },
+        );
         return;
       }
+
+      draft.details =
+          ClothesDetails(details: selectedDetailMap.values.toList());
+      await widget.draftProvider.updateDraft(draft);
+
+      // widget.onNextStep();
+      return;
     }
   }
 

@@ -14,7 +14,7 @@ class DraftClearWarningDialog extends StatelessWidget {
         Provider.of<ClothesDraftProvider>(context, listen: false);
 
     await ClothesDraftRepository().save(draft);
-    provider.updateDraft(draft);
+    await provider.updateDraft(draft);
     onNextStep();
   }
 

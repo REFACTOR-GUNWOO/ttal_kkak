@@ -61,27 +61,31 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
       widget.onNextStep();
       return;
     } else {
-      ClothesDraft? draft = widget.draftProvider.currentDraft;
-      if (draft != null) {
-        if (draft.primaryCategoryId != null &&
-            draft.primaryCategoryId != categoryId) {
-          draft.primaryCategoryId = categoryId;
-          draft.resetFieldsAfterIndex(1);
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return DraftClearWarningDialog(
-                  "상위 카테고리", draft, widget.onNextStep);
-            },
-          );
-          return;
-        }
+      ClothesDraft draft = widget.draftProvider.currentDraft!;
+      if (draft.getLastFilledFieldIndex() > 1) {
         draft.primaryCategoryId = categoryId;
-        await widget.draftProvider.updateDraft(draft);
+        draft.secondaryCategoryId = secondCategories
+            .firstWhere((element) => element.firstCategoryId == categoryId)
+            .id;
 
-        widget.onNextStep();
+        draft.resetFieldsAfterIndex(2);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return DraftClearWarningDialog("상위 카테고리", draft, widget.onNextStep);
+          },
+        );
         return;
       }
+      draft.primaryCategoryId = categoryId;
+      draft.secondaryCategoryId = secondCategories
+          .firstWhere((element) => element.firstCategoryId == categoryId)
+          .id;
+
+      await widget.draftProvider.updateDraft(draft);
+
+      widget.onNextStep();
+      return;
     }
   }
 

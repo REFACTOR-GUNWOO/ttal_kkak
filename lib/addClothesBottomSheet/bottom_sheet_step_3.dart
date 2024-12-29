@@ -64,27 +64,25 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
       widget.onNextStep();
       return;
     } else {
-      ClothesDraft? draft = widget.draftProvider.currentDraft;
-      if (draft != null) {
-        if (draft.secondaryCategoryId != null) {
-          draft.secondaryCategoryId = categoryId;
-
-          draft.resetFieldsAfterIndex(2);
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return DraftClearWarningDialog(
-                  "하위 카테고리", draft, widget.onNextStep);
-            },
-          );
-          return;
-        }
+      ClothesDraft? draft = widget.draftProvider.currentDraft!;
+      if (draft.getLastFilledFieldIndex() > 2) {
         draft.secondaryCategoryId = categoryId;
-        widget.draftProvider.updateDraft(draft);
 
-        widget.onNextStep();
+        draft.resetFieldsAfterIndex(2);
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return DraftClearWarningDialog("하위 카테고리", draft, widget.onNextStep);
+          },
+        );
         return;
       }
+      draft.secondaryCategoryId = categoryId;
+      widget.draftProvider.updateDraft(draft);
+
+      widget.onNextStep();
+      return;
     }
   }
 
