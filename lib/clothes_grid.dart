@@ -231,8 +231,8 @@ class _ClothesGridState extends State<ClothesGrid> {
                 top: firstCategory.hangerPosition,
                 child: SvgPicture.asset(firstCategory.hangerUrl)),
             Positioned(
-                top: secondCategory?.clothesTopPosition ?? 0,
-                bottom: secondCategory?.clothesBottomPosition ?? 0,
+                top: secondCategory.clothesTopPosition,
+                bottom: secondCategory.clothesBottomPosition,
                 child: ClothesItem(
                     clothes: clothes, key: ValueKey(ValueKey(Uuid().v4())))),
             if (isSelected)
