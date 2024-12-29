@@ -231,8 +231,8 @@ class _ClothesGridState extends State<ClothesGrid> {
                 top: firstCategory.hangerPosition,
                 child: SvgPicture.asset(firstCategory.hangerUrl)),
             Positioned(
-                top: secondCategory.clothesTopPosition,
-                bottom: secondCategory.clothesBottomPosition,
+                top: secondCategory?.clothesTopPosition ?? 0,
+                bottom: secondCategory?.clothesBottomPosition ?? 0,
                 child: ClothesItem(
                     clothes: clothes, key: ValueKey(ValueKey(Uuid().v4())))),
             if (isSelected)
@@ -261,27 +261,34 @@ class _ClothesGridState extends State<ClothesGrid> {
     BuildContext context,
     ClothesDraft clothes,
   ) {
-    FirstCategory firstCategory = firstCategories
-        .firstWhere((element) => element.id == clothes.primaryCategoryId);
-    SecondCategory secondCategory = secondCategories
-        .firstWhere((element) => element.id == clothes.secondaryCategoryId);
+    List<Widget> stackList = [];
+    stackList.add(SvgPicture.asset("assets/icons/MiddleCloset.svg"));
+    if (clothes.primaryCategoryId == null) {
+      stackList.add(Positioned(
+          top: 19, child: SvgPicture.asset("assets/icons/NewClothes.svg")));
+    } else {
+      FirstCategory? firstCategory = firstCategories
+          .where((element) => element.id == clothes.primaryCategoryId)
+          .firstOrNull;
+      SecondCategory? secondCategory = secondCategories
+          .where((element) => element.id == clothes.secondaryCategoryId)
+          .firstOrNull;
+      if (firstCategory != null) {
+        stackList.add(Positioned(
+            top: firstCategory.hangerPosition,
+            child: SvgPicture.asset(firstCategory.hangerUrl)));
+      }
+      if (secondCategory != null) {
+        stackList.add(Positioned(
+            top: secondCategory.clothesTopPosition,
+            bottom: secondCategory.clothesBottomPosition,
+            child: ClothesDraftItem(
+                clothesDraft: clothes, key: ValueKey(Uuid().v4()))));
+      }
+    }
     return GestureDetector(
         child: Column(children: [
-      Stack(alignment: Alignment.center, children: [
-        SvgPicture.asset("assets/icons/MiddleCloset.svg"),
-        Positioned(
-            top: firstCategory.hangerPosition,
-            child: SvgPicture.asset(firstCategory.hangerUrl)),
-        if (clothes.primaryCategoryId == null)
-          Positioned(
-              top: 19, child: SvgPicture.asset("assets/icons/NewClothes.svg"))
-        else
-          Positioned(
-              top: secondCategory.clothesTopPosition,
-              bottom: secondCategory.clothesBottomPosition,
-              child: ClothesDraftItem(
-                  clothesDraft: clothes, key: ValueKey(Uuid().v4()))),
-      ]),
+      Stack(alignment: Alignment.center, children: stackList),
       SizedBox(
         height: 8,
       ),

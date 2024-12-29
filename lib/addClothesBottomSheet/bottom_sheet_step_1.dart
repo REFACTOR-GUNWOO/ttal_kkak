@@ -75,10 +75,7 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
           // physics: ClampingScrollPhysics(),
           child: Padding(
               padding: EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 0,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 10),
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               child: LengthLimitedTextInput(
                 8,
                 "옷 이름을 입력해주세요.",

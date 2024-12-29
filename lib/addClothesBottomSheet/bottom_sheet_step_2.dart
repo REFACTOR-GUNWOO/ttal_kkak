@@ -88,63 +88,59 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0), // 카드와 그리드 간의 패딩
-        child: GridView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 0.0,
-            mainAxisSpacing: 0.0,
-            childAspectRatio: 1.5,
-          ),
-          itemCount: firstCategories.length,
-          itemBuilder: (context, index) {
-            final category = firstCategories[index];
-
-            return Padding(
-              padding: const EdgeInsets.all(5.0), // 카드와 그리드 간의 패딩
-
-              child: TextButton(
-                  onPressed: () async => {save(category.id)},
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero, // 패딩 제거
-                    minimumSize: Size(0, 0), // 버튼의 최소 크기 제거
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: selectedCategoryId == category.id
-                          ? Border.all(color: SystemColors.black, width: 1.5)
-                          : Border.all(
-                              color: SystemColors.gray500,
-                              width: 1.0), // 테두리 색상
-
-                      borderRadius: BorderRadius.circular(6.0), // 모서리 둥글게
-                      color: Colors.white,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            category.name,
-                            style: OneLineTextStyles.SemiBold16.copyWith(
-                                color: SystemColors.black),
-                          ),
-                          SizedBox(height: 8.0),
-                          Text(category.description,
-                              style: BodyTextStyles.Medium12.copyWith(
-                                  color: SystemColors.gray700)),
-                        ],
-                      ),
-                    ),
-                  )),
-            );
-          },
+      child: GridView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 0.0,
+          mainAxisSpacing: 0.0,
+          childAspectRatio: 1.5,
         ),
+        itemCount: firstCategories.length,
+        itemBuilder: (context, index) {
+          final category = firstCategories[index];
+
+          return Padding(
+            padding: const EdgeInsets.all(5.0), // 카드와 그리드 간의 패딩
+
+            child: TextButton(
+                onPressed: () async => {save(category.id)},
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero, // 패딩 제거
+                  minimumSize: Size(0, 0), // 버튼의 최소 크기 제거
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: selectedCategoryId == category.id
+                        ? Border.all(color: SystemColors.black, width: 1.5)
+                        : Border.all(
+                            color: SystemColors.gray500, width: 1.0), // 테두리 색상
+
+                    borderRadius: BorderRadius.circular(6.0), // 모서리 둥글게
+                    color: Colors.white,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          category.name,
+                          style: OneLineTextStyles.SemiBold16.copyWith(
+                              color: SystemColors.black),
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(category.description,
+                            style: BodyTextStyles.Medium12.copyWith(
+                                color: SystemColors.gray700)),
+                      ],
+                    ),
+                  ),
+                )),
+          );
+        },
       ),
     );
   }

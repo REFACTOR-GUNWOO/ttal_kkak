@@ -91,8 +91,6 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Padding(
-      padding: EdgeInsets.all(15),
       child: GridView.builder(
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -139,6 +137,6 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
           );
         },
       ),
-    ));
+    );
   }
 }

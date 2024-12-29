@@ -138,7 +138,10 @@ class _StepContainerState extends State<StepContainer> {
               currentStep: _buildSteps()[_currentStep],
               currentStepCount: _currentStep,
               isUpdate: widget.isUpdate),
-          _buildSteps()[_currentStep] as Widget,
+          Padding(
+            child: _buildSteps()[_currentStep] as Widget,
+            padding: EdgeInsets.all(20),
+          ),
         ],
       ),
     );

@@ -7,6 +7,7 @@ import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/splash_page.dart';
+import 'package:ttal_kkak/styles/colors_styles.dart';
 
 void main() {
   // debugPaintSizeEnabled = true;
@@ -31,7 +32,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Splash Screen',
       theme: ThemeData(
           fontFamily: 'Pretendard',
-          primarySwatch: Colors.blue,
+          useMaterial3: false,
+
+          // primarySwatch: SignatureColors.begie200,
           textButtonTheme: TextButtonThemeData(
               style: ButtonStyle(
             overlayColor: MaterialStateProperty.all(Colors.transparent),

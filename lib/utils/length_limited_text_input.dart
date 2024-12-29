@@ -103,7 +103,6 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
                 textAlign: TextAlign.left,
                 style: BodyTextStyles.Regular14.copyWith(
                     color: SystemColors.caution)),
-        SizedBox(height: 20),
       ],
     );
   }

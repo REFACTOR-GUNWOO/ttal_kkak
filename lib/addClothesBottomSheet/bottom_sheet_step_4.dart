@@ -115,9 +115,6 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Padding(
-      padding:
-          const EdgeInsets.only(left: 16.0, right: 16, top: 16, bottom: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: categoryDetails
@@ -133,7 +130,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                 ))
             .toList(),
       ),
-    ));
+    );
   }
 
   Widget _buildCategorySection(

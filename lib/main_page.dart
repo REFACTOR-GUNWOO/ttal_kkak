@@ -309,7 +309,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           backgroundColor: SignatureColors.begie200,
           appBar: AppBar(
               automaticallyImplyLeading: false,
-              backgroundColor: SignatureColors.begie200,
+              backgroundColor: Colors.transparent,
               title:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text(
