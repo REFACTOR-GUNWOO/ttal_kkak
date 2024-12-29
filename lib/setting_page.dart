@@ -203,7 +203,7 @@ class CommunicationList extends StatelessWidget {
                               //타이틀
                               children: [
                                 Image.asset(
-                                  'assets/icons/setting_1.png', // 아이콘 파일 경로
+                                  'assets/icons/setting_2.png', // 아이콘 파일 경로
                                   width: 20, // 아이콘 너비
                                   height: 20, // 아이콘 높이
                                 ),
