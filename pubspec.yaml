@@ -196,6 +196,15 @@ flutter:
     - assets/images/clothes/bg/blouse_short_short_uNeck.svg
     - assets/images/clothes/bg/blouse_short_short_vNeck.svg
     - assets/images/clothes/bg/blouse_short_short_polo.svg
+    #turtleneck
+    - assets/images/clothes/bg/turtleneck_crop_short.svg
+    - assets/images/clothes/bg/turtleneck_short_short.svg
+    - assets/images/clothes/bg/turtleneck_medium_short.svg
+    - assets/images/clothes/bg/turtleneck_long_short.svg
+    - assets/images/clothes/bg/turtleneck_crop_long.svg
+    - assets/images/clothes/bg/turtleneck_short_long.svg
+    - assets/images/clothes/bg/turtleneck_medium_long.svg
+    - assets/images/clothes/bg/turtleneck_long_long.svg
     ##line
     #tshirt
     - assets/images/clothes/line/t-shirt_crop_long_round.svg
@@ -289,6 +298,15 @@ flutter:
     - assets/images/clothes/line/blouse_short_short_uNeck.svg
     - assets/images/clothes/line/blouse_short_short_vNeck.svg
     - assets/images/clothes/line/blouse_short_short_polo.svg
+    #turtleneck
+    - assets/images/clothes/line/turtleneck_crop_short.svg
+    - assets/images/clothes/line/turtleneck_short_short.svg
+    - assets/images/clothes/line/turtleneck_medium_short.svg
+    - assets/images/clothes/line/turtleneck_long_short.svg
+    - assets/images/clothes/line/turtleneck_crop_long.svg
+    - assets/images/clothes/line/turtleneck_short_long.svg
+    - assets/images/clothes/line/turtleneck_medium_long.svg
+    - assets/images/clothes/line/turtleneck_long_long.svg
 
     - assets/lotties/onboarding_present.json
   # The following line ensures that the Material Icons font is
