@@ -154,6 +154,15 @@ flutter:
     - assets/images/clothes/bg/poloShirt_short_long.svg
     - assets/images/clothes/bg/poloShirt_medium_long.svg
     - assets/images/clothes/bg/poloShirt_long_long.svg
+    #shirt
+    - assets/images/clothes/bg/shirt_crop_short.svg
+    - assets/images/clothes/bg/shirt_short_short.svg
+    - assets/images/clothes/bg/shirt_medium_short.svg
+    - assets/images/clothes/bg/shirt_long_short.svg
+    - assets/images/clothes/bg/shirt_crop_long.svg
+    - assets/images/clothes/bg/shirt_short_long.svg
+    - assets/images/clothes/bg/shirt_medium_long.svg
+    - assets/images/clothes/bg/shirt_long_long.svg
     ##line
     #tshirt
     - assets/images/clothes/line/t-shirt_crop_long_round.svg
@@ -205,7 +214,15 @@ flutter:
     - assets/images/clothes/line/poloShirt_short_long.svg
     - assets/images/clothes/line/poloShirt_medium_long.svg
     - assets/images/clothes/line/poloShirt_long_long.svg
-
+    #shirt
+    - assets/images/clothes/line/shirt_crop_short.svg
+    - assets/images/clothes/line/shirt_short_short.svg
+    - assets/images/clothes/line/shirt_medium_short.svg
+    - assets/images/clothes/line/shirt_long_short.svg
+    - assets/images/clothes/line/shirt_crop_long.svg
+    - assets/images/clothes/line/shirt_short_long.svg
+    - assets/images/clothes/line/shirt_medium_long.svg
+    - assets/images/clothes/line/shirt_long_long.svg
     - assets/lotties/onboarding_present.json
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

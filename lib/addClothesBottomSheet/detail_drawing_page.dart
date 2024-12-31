@@ -153,9 +153,9 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
       return b.toString().compareTo(a.toString());
     });
     var svgBgUrl =
-        "assets/images/clothes/bg/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
+        "assets/images/clothes/bg/${secondCategory.code + details.map((e) => "_" + e.name).join()}.svg";
     var svgLineUrl =
-        "assets/images/clothes/line/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
+        "assets/images/clothes/line/${secondCategory.code + details.map((e) => "_" + e.name).join()}.svg";
 
     final String svgBgString = await rootBundle.loadString(svgBgUrl);
     final String svgLineString = await rootBundle.loadString(svgLineUrl);
