@@ -350,17 +350,13 @@ class _ClothesItemState extends State<ClothesItem> {
 
     // 카테고리 우선순위에 따라 정렬
     details.sort((a, b) {
-      return b.code.compareTo(a.code);
+      return b.toString().compareTo(a.toString());
     });
 
-    // var svgBgUrl =
-    //     "assets/images/clothes/bg/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
-    // var svgLineUrl =
-    //     "assets/images/clothes/line/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
     var svgBgUrl =
-        "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg";
+        "assets/images/clothes/bg/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
     var svgLineUrl =
-        "assets/images/clothes/line/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg";
+        "assets/images/clothes/line/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
 
     if (svgBgRoot == null) {
       final String svgBgString = await rootBundle.loadString(svgBgUrl);
@@ -375,34 +371,36 @@ class _ClothesItemState extends State<ClothesItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        if (svgBgRoot != null)
-          CustomPaint(
-            size: Size(
-                svgBgRoot!.viewport.width / 2, svgBgRoot!.viewport.height / 2),
-            painter: SvgBgPainter(svgBgRoot!, clothesColor, 0.5),
-          ),
-        if (svgLineRoot != null)
-          CustomPaint(
-            size: Size(svgLineRoot!.viewport.width / 2,
-                svgLineRoot!.viewport.height / 2),
-            painter: SvgLinePainter(
-                svgLineRoot!,
-                0.5,
-                1.0,
-                clothesColor == SystemColors.black
-                    ? SystemColors.gray900
-                    : SystemColors.black),
-          ),
-        if (lines.isNotEmpty)
-          CustomPaint(
-            size: Size(
-                svgBgRoot!.viewport.width / 2, svgBgRoot!.viewport.height / 2),
-            painter: DrawingPainter(lines, svgBgRoot, 0.5),
-          ),
-      ],
-    );
+    return Align(
+        alignment: Alignment.center,
+        child: Stack(
+          children: [
+            if (svgBgRoot != null)
+              CustomPaint(
+                size:
+                    Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
+                painter: SvgBgPainter(svgBgRoot!, clothesColor, 1.0),
+              ),
+            if (svgBgRoot != null)
+              CustomPaint(
+                size:
+                    Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
+                painter: SvgLinePainter(
+                    svgLineRoot!,
+                    1.0,
+                    1.0,
+                    clothesColor == Color(0xFF282828)
+                        ? SystemColors.gray900
+                        : SystemColors.black),
+              ),
+            if (lines.isNotEmpty)
+              CustomPaint(
+                size:
+                    Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
+                painter: DrawingPainter(lines, svgBgRoot, 1),
+              ),
+          ],
+        ));
   }
 }
 
@@ -420,6 +418,7 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
   Color clothesColor = Colors.transparent;
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
+
   @override
   void initState() {
     super.initState();
@@ -448,16 +447,12 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
 
     // 카테고리 우선순위에 따라 정렬
     details.sort((a, b) {
-      return b.code.compareTo(a.code);
+      return b.toString().compareTo(a.toString());
     });
-    // var svgBgUrl =
-    //     "assets/images/clothes/bg/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
-    // var svgLineUrl =
-    //     "assets/images/clothes/line/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
     var svgBgUrl =
-        "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg";
+        "assets/images/clothes/bg/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
     var svgLineUrl =
-        "assets/images/clothes/line/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg";
+        "assets/images/clothes/line/${secondCategory.code}${details.map((e) => '_${e.code}').join()}.svg";
 
     final String svgBgString = await rootBundle.loadString(svgBgUrl);
 
@@ -477,30 +472,24 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: Alignment.topCenter, // Stack 내에서 모든 위젯을 중앙 정렬
+
       children: [
         if (svgBgRoot != null)
           CustomPaint(
-            size: Size(
-                svgBgRoot!.viewport.width / 2, svgBgRoot!.viewport.height / 2),
-            painter: SvgBgPainter(svgBgRoot!, clothesColor, 0.5),
+            size: Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
+            painter: SvgBgPainter(svgBgRoot!, clothesColor, 1.0),
           ),
         if (svgBgRoot != null)
           CustomPaint(
-            size: Size(
-                svgBgRoot!.viewport.width / 2, svgBgRoot!.viewport.height / 2),
+            size: Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
             painter: SvgLinePainter(
                 svgLineRoot!,
-                0.5,
                 1.0,
-                clothesColor == SystemColors.black
+                1.0,
+                clothesColor == Color(0xFF282828)
                     ? SystemColors.gray900
                     : SystemColors.black),
-          ),
-        if (svgBgRoot != null)
-          CustomPaint(
-            size: Size(
-                svgBgRoot!.viewport.width / 2, svgBgRoot!.viewport.height / 2),
-            painter: DrawingPainter(lines, svgBgRoot, 0.5),
           ),
       ],
     );

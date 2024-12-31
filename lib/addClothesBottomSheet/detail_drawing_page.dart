@@ -34,6 +34,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   double brushWidth = 5.0;
   Color brushColor = colorContainers.first.colors.first;
   List<Color> brushColorColorGroup = colorContainers.first.colors;
+  String _svgBgUrl = "";
+  String _svgLineUrl = "";
 
   Color clothesColor = Colors.transparent;
   DrawableRoot? svgBgRoot;
@@ -46,7 +48,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   ];
 
   bool _isErasing = false;
-  final double minDistance = 10.0; // 손떨림 방지를 위한 최소 거리 설정
+  final double minDistance = 5.0; // 손떨림 방지를 위한 최소 거리 설정
 
   @override
   void initState() {
@@ -148,7 +150,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
 
     // 카테고리 우선순위에 따라 정렬
     details.sort((a, b) {
-      return b.code.compareTo(a.code);
+      return b.toString().compareTo(a.toString());
     });
     var svgBgUrl =
         "assets/images/clothes/bg/${secondCategory.code + details.map((e) => "_" + e.code).join()}.svg";
@@ -164,6 +166,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     setState(() {
       svgBgRoot = bgDrawableRoot;
       svgLineRoot = lineDrawableRoot;
+      _svgBgUrl = svgBgUrl;
+      _svgLineUrl = svgLineUrl;
     });
   }
 
@@ -360,7 +364,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                     svgLineRoot!,
                     3.0,
                     2.0,
-                    clothesColor == SystemColors.black
+                    clothesColor == Color(0xFF282828)
                         ? SystemColors.gray900
                         : SystemColors.black),
               ),
@@ -463,15 +467,14 @@ class SvgBgPainter extends CustomPainter {
     final Matrix4 matrix = Matrix4.identity()..scale(scale, scale);
     final Path scaledPath =
         extractPathDataFromDrawableRoot(drawableRoot).transform(matrix.storage);
-    final Rect bounds = scaledPath.getBounds();
 
-    // 중앙에 그리도록 평행 이동 (translate)
-    final Offset offset = Offset(
-      (size.width - bounds.width) / 2 - bounds.left,
-      (size.height - bounds.height) / 2 - bounds.top,
-    );
+    // // 중앙에 그리도록 평행 이동 (translate)
+    // final Offset offset = Offset(
+    //   (size.width - bounds.width) / 2 - bounds.left,
+    //   (size.height - bounds.height) / 2 - bounds.top,
+    // );
 
-    canvas.translate(offset.dx, offset.dy);
+    // canvas.translate(offset.dx, offset.dy);
 
     canvas.drawPath(scaledPath, paint);
   }
@@ -501,15 +504,14 @@ class SvgLinePainter extends CustomPainter {
     final Matrix4 matrix = Matrix4.identity()..scale(scale, scale);
     final Path scaledPath =
         extractPathDataFromDrawableRoot(drawableRoot).transform(matrix.storage);
-    final Rect bounds = scaledPath.getBounds();
 
     // 중앙에 그리도록 평행 이동 (translate)
-    final Offset offset = Offset(
-      (size.width - bounds.width) / 2 - bounds.left,
-      (size.height - bounds.height) / 2 - bounds.top,
-    );
+    // final Offset offset = Offset(
+    //   (size.width - bounds.width) / 2 - bounds.left,
+    //   (size.height - bounds.height) / 2 - bounds.top,
+    // );
 
-    canvas.translate(offset.dx, offset.dy);
+    // canvas.translate(offset.dx, offset.dy);
 
     canvas.drawPath(scaledPath, paint);
   }
@@ -523,7 +525,7 @@ class SvgLinePainter extends CustomPainter {
 class DrawingPainter extends CustomPainter {
   final List<DrawnLine> lines;
   final DrawableRoot? drawableRoot;
-  final scale;
+  final double scale;
 
   DrawingPainter(this.lines, this.drawableRoot, this.scale);
 
@@ -534,17 +536,9 @@ class DrawingPainter extends CustomPainter {
 
       final Path scaledPath = extractPathDataFromDrawableRoot(drawableRoot!)
           .transform(matrix.storage);
-      final Rect bounds = scaledPath.getBounds();
 
       // 중앙에 그리도록 평행 이동 (translate)
-
-      final Matrix4 matrix2 = Matrix4.identity()
-        ..translate(
-          (size.width - bounds.width) / 2 - bounds.left,
-          (size.height - bounds.height) / 2 - bounds.top,
-        );
-
-      canvas.clipPath(scaledPath.transform(matrix2.storage));
+      canvas.clipPath(scaledPath);
     }
     canvas.saveLayer(null, Paint());
 

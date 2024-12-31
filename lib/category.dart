@@ -94,7 +94,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 1,
       name: "티셔츠",
-      code: "tshirt",
+      code: "t-shirt",
       priority: 1,
       firstCategoryId: 1,
       clothesTopPosition: 12,
@@ -127,11 +127,11 @@ List<SecondCategory> secondCategories = [
             ]),
       ],
       defaultImage:
-          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+          "assets/images/clothes/bg/t-shirt_crop_long_offShoulder.svg"),
   SecondCategory(
       id: 2,
       name: "카라티",
-      code: "polo_shirt",
+      code: "poloShirt",
       priority: 2,
       firstCategoryId: 1,
       clothesTopPosition: 12,
@@ -153,7 +153,7 @@ List<SecondCategory> secondCategories = [
             ]),
       ],
       defaultImage:
-          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+          "assets/images/clothes/bg/t-shirt_crop_long_offShoulder.svg"),
   SecondCategory(
       id: 3,
       name: "셔츠",
@@ -179,7 +179,7 @@ List<SecondCategory> secondCategories = [
             ]),
       ],
       defaultImage:
-          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+          "assets/images/clothes/bg/t-shirt_crop_long_offShoulder.svg"),
   SecondCategory(
       id: 4,
       name: "블라우스",
@@ -215,7 +215,7 @@ List<SecondCategory> secondCategories = [
             ]),
       ],
       defaultImage:
-          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+          "assets/images/clothes/bg/t-shirt_crop_long_offShoulder.svg"),
   SecondCategory(
       id: 5,
       name: "민소매",

@@ -103,22 +103,90 @@ flutter:
     - assets/icons/tab_4_icon.svg
     - assets/icons/delete_icon.svg
     - assets/icons/update_icon.svg
-    - assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg
-    - assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_short_neck_line_round.svg
-    - assets/images/clothes/bg/tshirt_top_length_long_sleeve_length_long_neck_line_round.svg
-    - assets/images/clothes/bg/tshirt_top_length_long_sleeve_length_short_neck_line_round.svg
-    - assets/images/clothes/bg/tshirt_top_length_medium_sleeve_length_long_neck_line_round.svg
-    - assets/images/clothes/bg/tshirt_top_length_medium_sleeve_length_short_neck_line_round.svg
-    - assets/images/clothes/bg/tshirt_top_length_short_sleeve_length_long_neck_line_round.svg
-    - assets/images/clothes/bg/tshirt_top_length_short_sleeve_length_short_neck_line_round.svg
-    - assets/images/clothes/line/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg
-    - assets/images/clothes/line/tshirt_top_length_crop_sleeve_length_short_neck_line_round.svg
-    - assets/images/clothes/line/tshirt_top_length_long_sleeve_length_long_neck_line_round.svg
-    - assets/images/clothes/line/tshirt_top_length_long_sleeve_length_short_neck_line_round.svg
-    - assets/images/clothes/line/tshirt_top_length_medium_sleeve_length_long_neck_line_round.svg
-    - assets/images/clothes/line/tshirt_top_length_medium_sleeve_length_short_neck_line_round.svg
-    - assets/images/clothes/line/tshirt_top_length_short_sleeve_length_long_neck_line_round.svg
-    - assets/images/clothes/line/tshirt_top_length_short_sleeve_length_short_neck_line_round.svg
+    ##bg
+    #tshirt
+    - assets/images/clothes/bg/t-shirt_crop_long_round.svg
+    - assets/images/clothes/bg/t-shirt_crop_long_square.svg
+    - assets/images/clothes/bg/t-shirt_crop_long_uNeck.svg
+    - assets/images/clothes/bg/t-shirt_crop_long_vNeck.svg
+    - assets/images/clothes/bg/t-shirt_crop_long_offShoulder.svg
+    - assets/images/clothes/bg/t-shirt_crop_short_round.svg
+    - assets/images/clothes/bg/t-shirt_crop_short_square.svg
+    - assets/images/clothes/bg/t-shirt_crop_short_uNeck.svg
+    - assets/images/clothes/bg/t-shirt_crop_short_vNeck.svg
+    - assets/images/clothes/bg/t-shirt_crop_short_offShoulder.svg
+    - assets/images/clothes/bg/t-shirt_long_long_round.svg
+    - assets/images/clothes/bg/t-shirt_long_long_square.svg
+    - assets/images/clothes/bg/t-shirt_long_long_uNeck.svg
+    - assets/images/clothes/bg/t-shirt_long_long_vNeck.svg
+    - assets/images/clothes/bg/t-shirt_long_long_offShoulder.svg
+    - assets/images/clothes/bg/t-shirt_long_short_round.svg
+    - assets/images/clothes/bg/t-shirt_long_short_square.svg
+    - assets/images/clothes/bg/t-shirt_long_short_uNeck.svg
+    - assets/images/clothes/bg/t-shirt_long_short_vNeck.svg
+    - assets/images/clothes/bg/t-shirt_long_short_offShoulder.svg
+    - assets/images/clothes/bg/t-shirt_medium_long_round.svg
+    - assets/images/clothes/bg/t-shirt_medium_long_square.svg
+    - assets/images/clothes/bg/t-shirt_medium_long_uNeck.svg
+    - assets/images/clothes/bg/t-shirt_medium_long_vNeck.svg
+    - assets/images/clothes/bg/t-shirt_medium_long_offShoulder.svg
+    - assets/images/clothes/bg/t-shirt_medium_short_round.svg
+    - assets/images/clothes/bg/t-shirt_medium_short_square.svg
+    - assets/images/clothes/bg/t-shirt_medium_short_uNeck.svg
+    - assets/images/clothes/bg/t-shirt_medium_short_vNeck.svg
+    - assets/images/clothes/bg/t-shirt_medium_short_offShoulder.svg
+    - assets/images/clothes/bg/t-shirt_short_long_round.svg
+    - assets/images/clothes/bg/t-shirt_short_long_square.svg
+    - assets/images/clothes/bg/t-shirt_short_long_uNeck.svg
+    - assets/images/clothes/bg/t-shirt_short_long_vNeck.svg
+    - assets/images/clothes/bg/t-shirt_short_long_offShoulder.svg
+    - assets/images/clothes/bg/t-shirt_short_short_round.svg
+    - assets/images/clothes/bg/t-shirt_short_short_square.svg
+    - assets/images/clothes/bg/t-shirt_short_short_uNeck.svg
+    - assets/images/clothes/bg/t-shirt_short_short_vNeck.svg
+    - assets/images/clothes/bg/t-shirt_short_short_offShoulder.svg
+    ##line
+    #tshirt
+    - assets/images/clothes/line/t-shirt_crop_long_round.svg
+    - assets/images/clothes/line/t-shirt_crop_long_square.svg
+    - assets/images/clothes/line/t-shirt_crop_long_uNeck.svg
+    - assets/images/clothes/line/t-shirt_crop_long_vNeck.svg
+    - assets/images/clothes/line/t-shirt_crop_long_offShoulder.svg
+    - assets/images/clothes/line/t-shirt_crop_short_round.svg
+    - assets/images/clothes/line/t-shirt_crop_short_square.svg
+    - assets/images/clothes/line/t-shirt_crop_short_uNeck.svg
+    - assets/images/clothes/line/t-shirt_crop_short_vNeck.svg
+    - assets/images/clothes/line/t-shirt_crop_short_offShoulder.svg
+    - assets/images/clothes/line/t-shirt_long_long_round.svg
+    - assets/images/clothes/line/t-shirt_long_long_square.svg
+    - assets/images/clothes/line/t-shirt_long_long_uNeck.svg
+    - assets/images/clothes/line/t-shirt_long_long_vNeck.svg
+    - assets/images/clothes/line/t-shirt_long_long_offShoulder.svg
+    - assets/images/clothes/line/t-shirt_long_short_round.svg
+    - assets/images/clothes/line/t-shirt_long_short_square.svg
+    - assets/images/clothes/line/t-shirt_long_short_uNeck.svg
+    - assets/images/clothes/line/t-shirt_long_short_vNeck.svg
+    - assets/images/clothes/line/t-shirt_long_short_offShoulder.svg
+    - assets/images/clothes/line/t-shirt_medium_long_round.svg
+    - assets/images/clothes/line/t-shirt_medium_long_square.svg
+    - assets/images/clothes/line/t-shirt_medium_long_uNeck.svg
+    - assets/images/clothes/line/t-shirt_medium_long_vNeck.svg
+    - assets/images/clothes/line/t-shirt_medium_long_offShoulder.svg
+    - assets/images/clothes/line/t-shirt_medium_short_round.svg
+    - assets/images/clothes/line/t-shirt_medium_short_square.svg
+    - assets/images/clothes/line/t-shirt_medium_short_uNeck.svg
+    - assets/images/clothes/line/t-shirt_medium_short_vNeck.svg
+    - assets/images/clothes/line/t-shirt_medium_short_offShoulder.svg
+    - assets/images/clothes/line/t-shirt_short_long_round.svg
+    - assets/images/clothes/line/t-shirt_short_long_square.svg
+    - assets/images/clothes/line/t-shirt_short_long_uNeck.svg
+    - assets/images/clothes/line/t-shirt_short_long_vNeck.svg
+    - assets/images/clothes/line/t-shirt_short_long_offShoulder.svg
+    - assets/images/clothes/line/t-shirt_short_short_round.svg
+    - assets/images/clothes/line/t-shirt_short_short_square.svg
+    - assets/images/clothes/line/t-shirt_short_short_uNeck.svg
+    - assets/images/clothes/line/t-shirt_short_short_vNeck.svg
+    - assets/images/clothes/line/t-shirt_short_short_offShoulder.svg
     - assets/lotties/onboarding_present.json
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

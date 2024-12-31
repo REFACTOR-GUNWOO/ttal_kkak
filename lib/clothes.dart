@@ -29,6 +29,7 @@ class Clothes implements ClothesFamily {
       required this.regTs});
 
   factory Clothes.fromJson(Map<String, dynamic> json) {
+    print("Clothes.fromJson: ${json['drawLines']}");
     return Clothes(
         id: json['id'],
         name: json['name'],
@@ -124,10 +125,10 @@ mixin ClothesDetail {
 
 // 상의 길이
 enum TopLength with ClothesDetail {
-  crop("크롭", 4, "top_length_crop"),
-  short("짧은길이", 3, "top_length_short"),
-  medium("중간길이", 2, "top_length_medium"),
-  long("긴길이", 1, "top_length_long");
+  crop("크롭", 4, "crop"),
+  short("짧은길이", 3, "short"),
+  medium("중간길이", 2, "medium"),
+  long("긴길이", 1, "long");
 
   final String label;
   final int priority;
@@ -138,10 +139,10 @@ enum TopLength with ClothesDetail {
 
 // 팔 길이
 enum SleeveLength with ClothesDetail {
-  short("반팔", 1, "sleeve_length_short"),
-  medium("중간팔", 2, "sleeve_length_medium"),
-  long("긴팔", 3, "sleeve_length_long"),
-  sleeveless("민소매", 4, "sleeve_length_sleeveless");
+  short("반팔", 1, "short"),
+  medium("중간팔", 2, "medium"),
+  long("긴팔", 3, "long"),
+  sleeveless("민소매", 4, "sleeveless");
 
   final String label;
   final int priority;
@@ -152,16 +153,16 @@ enum SleeveLength with ClothesDetail {
 
 // 넥 라인
 enum Neckline with ClothesDetail {
-  polo("카라", 0, "neck_line_polo"),
-  deepCollar("깊은 카라", 0, "neck_line_deep_collar"),
-  round("라운드넥", 1, "neck_line_round"),
-  uNeck("u넥", 2, "neck_line_uNeck"),
-  vNeck("브이넥", 3, "neck_line_vNeck"),
-  square("스퀘어넥", 4, "neck_line_square"),
-  offShoulder("오프숄더", 5, "neck_line_off_shoulder"),
-  high("하이", 5, "neck_line_high"),
-  hoodie("후드", 5, "neck_line_hoodie"),
-  line("끈", 6, "neck_line_line");
+  polo("카라", 0, "polo"),
+  deepCollar("깊은 카라", 0, "deepCollar"),
+  round("라운드넥", 1, "round"),
+  uNeck("u넥", 2, "uNeck"),
+  vNeck("브이넥", 3, "vNeck"),
+  square("스퀘어넥", 4, "square"),
+  offShoulder("오프숄더", 5, "offShoulder"),
+  high("하이", 5, "high"),
+  hoodie("후드", 5, "hoodie"),
+  line("끈", 6, "line");
 
   final String label;
   final int priority;
@@ -469,7 +470,7 @@ class ColorContainer {
 
 List<ColorContainer> colorContainers = [
   // 검정색
-  ColorContainer([Color(0xFF282828), Color(0xFF161616)], Color(0xFF161616)),
+  ColorContainer([Color(0xFF282828), Color(0xFF161616)], Color(0xFF282828)),
   // 흰색
   ColorContainer([Color(0xFFFFFFFF), Color(0xFFE7E7E7), Color(0xFFEBE3D2)],
       Color(0xFFFFFFFF)),
