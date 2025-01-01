@@ -385,11 +385,43 @@ List<SecondCategory> secondCategories = [
             label: "넥 라인",
             defaultDetail: Neckline.round,
             details: [
+              Neckline.line,
               Neckline.round,
               Neckline.uNeck,
               Neckline.vNeck,
               Neckline.square,
-              Neckline.offShoulder
+            ]),
+      ],
+      defaultImage:
+          "assets/images/clothes/bg/tshirt_top_length_crop_sleeve_length_long_neck_line_round.svg"),
+  SecondCategory(
+      id: 101,
+      name: "민소매",
+      code: "sleeveless",
+      priority: 101,
+      firstCategoryId: 1,
+      clothesTopPosition: 12,
+      details: [
+        CategoryDetail(
+            priority: 2,
+            label: "상의 길이",
+            defaultDetail: TopLength.medium,
+            details: [
+              TopLength.long,
+              TopLength.medium,
+              TopLength.short,
+              TopLength.crop
+            ]),
+        CategoryDetail(
+            priority: 3,
+            label: "넥 라인",
+            defaultDetail: Neckline.round,
+            details: [
+              Neckline.line,
+              Neckline.round,
+              Neckline.uNeck,
+              Neckline.vNeck,
+              Neckline.square,
             ]),
       ],
       defaultImage:
