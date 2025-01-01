@@ -246,6 +246,28 @@ flutter:
     - assets/images/clothes/bg/knit_short_short_uNeck.svg
     - assets/images/clothes/bg/knit_short_short_vNeck.svg
     - assets/images/clothes/bg/knit_short_short_offShoulder.svg
+    #sweatshirt
+    - assets/images/clothes/bg/sweatshirt_crop_round.svg
+    - assets/images/clothes/bg/sweatshirt_crop_uNeck.svg
+    - assets/images/clothes/bg/sweatshirt_crop_vNeck.svg
+    - assets/images/clothes/bg/sweatshirt_crop_offShoulder.svg
+    - assets/images/clothes/bg/sweatshirt_long_round.svg
+    - assets/images/clothes/bg/sweatshirt_long_uNeck.svg
+    - assets/images/clothes/bg/sweatshirt_long_vNeck.svg
+    - assets/images/clothes/bg/sweatshirt_long_offShoulder.svg
+    - assets/images/clothes/bg/sweatshirt_medium_round.svg
+    - assets/images/clothes/bg/sweatshirt_medium_uNeck.svg
+    - assets/images/clothes/bg/sweatshirt_medium_vNeck.svg
+    - assets/images/clothes/bg/sweatshirt_medium_offShoulder.svg
+    - assets/images/clothes/bg/sweatshirt_short_round.svg
+    - assets/images/clothes/bg/sweatshirt_short_uNeck.svg
+    - assets/images/clothes/bg/sweatshirt_short_vNeck.svg
+    - assets/images/clothes/bg/sweatshirt_short_offShoulder.svg
+    #hoodie
+    - assets/images/clothes/bg/hoodie_crop.svg
+    - assets/images/clothes/bg/hoodie_short.svg
+    - assets/images/clothes/bg/hoodie_medium.svg
+    - assets/images/clothes/bg/hoodie_long.svg
     ##line
     #tshirt
     - assets/images/clothes/line/t-shirt_crop_long_round.svg
@@ -389,6 +411,28 @@ flutter:
     - assets/images/clothes/line/knit_short_short_uNeck.svg
     - assets/images/clothes/line/knit_short_short_vNeck.svg
     - assets/images/clothes/line/knit_short_short_offShoulder.svg
+    #sweatshirt
+    - assets/images/clothes/line/sweatshirt_crop_round.svg
+    - assets/images/clothes/line/sweatshirt_crop_uNeck.svg
+    - assets/images/clothes/line/sweatshirt_crop_vNeck.svg
+    - assets/images/clothes/line/sweatshirt_crop_offShoulder.svg
+    - assets/images/clothes/line/sweatshirt_long_round.svg
+    - assets/images/clothes/line/sweatshirt_long_uNeck.svg
+    - assets/images/clothes/line/sweatshirt_long_vNeck.svg
+    - assets/images/clothes/line/sweatshirt_long_offShoulder.svg
+    - assets/images/clothes/line/sweatshirt_medium_round.svg
+    - assets/images/clothes/line/sweatshirt_medium_uNeck.svg
+    - assets/images/clothes/line/sweatshirt_medium_vNeck.svg
+    - assets/images/clothes/line/sweatshirt_medium_offShoulder.svg
+    - assets/images/clothes/line/sweatshirt_short_round.svg
+    - assets/images/clothes/line/sweatshirt_short_uNeck.svg
+    - assets/images/clothes/line/sweatshirt_short_vNeck.svg
+    - assets/images/clothes/line/sweatshirt_short_offShoulder.svg
+    #hoodie
+    - assets/images/clothes/line/hoodie_crop.svg
+    - assets/images/clothes/line/hoodie_short.svg
+    - assets/images/clothes/line/hoodie_medium.svg
+    - assets/images/clothes/line/hoodie_long.svg
 
     - assets/lotties/onboarding_present.json
   # The following line ensures that the Material Icons font is
