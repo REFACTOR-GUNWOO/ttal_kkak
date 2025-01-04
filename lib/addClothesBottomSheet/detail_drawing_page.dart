@@ -7,6 +7,7 @@ import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_5.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
+import 'package:ttal_kkak/common/common_bottom_sheet.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
@@ -104,17 +105,27 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
         ),
         builder: (BuildContext context) {
-          return ColorPalette(
-              colorContainers: colorContainers,
-              selectedColorGroup: brushColorColorGroup,
-              selectedColor: brushColor,
-              onColorSelected: (selectedColorGroup, selectedColor) {
-                setState(() {
-                  print("setState");
-                  brushColor = selectedColor;
-                  brushColorColorGroup = selectedColorGroup;
-                });
-              });
+          return CommonBottomSheet(
+              child: Column(children: [
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Text("펜 컬러", style: OneLineTextStyles.SemiBold16),
+            ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: ColorPalette(
+                  colorContainers: colorContainers,
+                  selectedColorGroup: brushColorColorGroup,
+                  selectedColor: brushColor,
+                  onColorSelected: (selectedColorGroup, selectedColor) {
+                    setState(() {
+                      print("setState");
+                      brushColor = selectedColor;
+                      brushColorColorGroup = selectedColorGroup;
+                    });
+                  }),
+            ),
+          ]));
         }).whenComplete(() {
       setState(() {}); // Ensure UI is updated after the color picker is closed
     });
