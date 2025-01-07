@@ -458,7 +458,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 12,
       name: "집업/후리스",
-      code: "zip_up",
+      code: "zip-up",
       priority: 12,
       firstCategoryId: 3,
       clothesTopPosition: 12,
