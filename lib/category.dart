@@ -76,18 +76,19 @@ class SecondCategory {
   double? clothesTopPosition;
   double? clothesBottomPosition;
   List<CategoryDetail> details;
+  bool hasDecorationLayer = false;
 
-  SecondCategory({
-    required this.id,
-    required this.name,
-    required this.priority,
-    required this.firstCategoryId,
-    required this.defaultImage,
-    required this.code,
-    required this.details,
-    this.clothesTopPosition,
-    this.clothesBottomPosition,
-  });
+  SecondCategory(
+      {required this.id,
+      required this.name,
+      required this.priority,
+      required this.firstCategoryId,
+      required this.defaultImage,
+      required this.code,
+      required this.details,
+      this.clothesTopPosition,
+      this.clothesBottomPosition,
+      this.hasDecorationLayer = false});
 }
 
 List<SecondCategory> secondCategories = [
@@ -549,10 +550,11 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 15,
       name: "무스탕",
-      code: "mushtang",
+      code: "shearling jacket",
       priority: 15,
       firstCategoryId: 3,
       clothesTopPosition: 12,
+      hasDecorationLayer: true,
       details: [
         CategoryDetail(
             priority: 2,
