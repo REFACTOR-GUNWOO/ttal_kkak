@@ -345,7 +345,7 @@ flutter:
     - assets/images/clothes/bg/zip-up_short_high.svg
     - assets/images/clothes/bg/zip-up_short_hoodie.svg
     - assets/images/clothes/bg/zip-up_short_polo.svg
-      #jacket
+    #jacket
     - assets/images/clothes/bg/jacket_crop_round.svg
     - assets/images/clothes/bg/jacket_crop_uNeck.svg
     - assets/images/clothes/bg/jacket_crop_vNeck.svg
@@ -370,7 +370,16 @@ flutter:
     - assets/images/clothes/bg/jacket_short_high.svg
     - assets/images/clothes/bg/jacket_short_deepCollar.svg
     - assets/images/clothes/bg/jacket_short_polo.svg
-
+    #windbreaker
+    - assets/images/clothes/bg/windbreaker_long_hoodie.svg
+    - assets/images/clothes/bg/windbreaker_long_high.svg
+    - assets/images/clothes/bg/windbreaker_long_vNeck.svg
+    - assets/images/clothes/bg/windbreaker_medium_hoodie.svg
+    - assets/images/clothes/bg/windbreaker_medium_high.svg
+    - assets/images/clothes/bg/windbreaker_medium_vNeck.svg
+    - assets/images/clothes/bg/windbreaker_short_hoodie.svg
+    - assets/images/clothes/bg/windbreaker_short_high.svg
+    - assets/images/clothes/bg/windbreaker_short_vNeck.svg
     ##line
     #tshirt
     - assets/images/clothes/line/t-shirt_crop_long_round.svg
@@ -638,6 +647,16 @@ flutter:
     - assets/images/clothes/line/jacket_short_high.svg
     - assets/images/clothes/line/jacket_short_deepCollar.svg
     - assets/images/clothes/line/jacket_short_polo.svg
+    #windbreaker
+    - assets/images/clothes/line/windbreaker_long_hoodie.svg
+    - assets/images/clothes/line/windbreaker_long_high.svg
+    - assets/images/clothes/line/windbreaker_long_vNeck.svg
+    - assets/images/clothes/line/windbreaker_medium_hoodie.svg
+    - assets/images/clothes/line/windbreaker_medium_high.svg
+    - assets/images/clothes/line/windbreaker_medium_vNeck.svg
+    - assets/images/clothes/line/windbreaker_short_hoodie.svg
+    - assets/images/clothes/line/windbreaker_short_high.svg
+    - assets/images/clothes/line/windbreaker_short_vNeck.svg
 
     - assets/lotties/onboarding_present.json
   # The following line ensures that the Material Icons font is

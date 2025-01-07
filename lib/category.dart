@@ -541,7 +541,7 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 3,
             label: "넥 라인",
-            defaultDetail: Neckline.round,
+            defaultDetail: Neckline.high,
             details: [Neckline.high, Neckline.vNeck, Neckline.hoodie]),
       ],
       defaultImage:
