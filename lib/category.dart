@@ -571,7 +571,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 16,
       name: "야상",
-      code: "field_jacket",
+      code: "military jacket",
       priority: 16,
       firstCategoryId: 3,
       clothesTopPosition: 12,
@@ -591,10 +591,11 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 17,
       name: "트렌치 코트",
-      code: "trench_coat",
+      code: "trench coat",
       priority: 17,
       firstCategoryId: 3,
       clothesTopPosition: 12,
+      hasDecorationLayer: true,
       details: [
         CategoryDetail(
             priority: 2,
@@ -615,6 +616,7 @@ List<SecondCategory> secondCategories = [
       priority: 18,
       firstCategoryId: 3,
       clothesTopPosition: 12,
+      hasDecorationLayer: true,
       details: [
         CategoryDetail(
             priority: 2,
@@ -641,7 +643,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 19,
       name: "패딩",
-      code: "padded_jacket",
+      code: "down jacket",
       priority: 19,
       firstCategoryId: 3,
       clothesTopPosition: 12,
@@ -675,7 +677,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 20,
       name: "조끼",
-      code: "outer_vest",
+      code: "vest outer",
       priority: 20,
       firstCategoryId: 3,
       clothesTopPosition: 12,
@@ -692,7 +694,7 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 3,
             label: "넥 라인",
-            defaultDetail: Neckline.polo,
+            defaultDetail: Neckline.round,
             details: [
               Neckline.round,
               Neckline.vNeck,
