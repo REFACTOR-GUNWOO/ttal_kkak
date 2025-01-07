@@ -310,6 +310,16 @@ flutter:
     - assets/images/clothes/bg/sleeveless_short_vNeck.svg
     - assets/images/clothes/bg/sleeveless_short_line.svg
     - assets/images/clothes/bg/sleeveless_short_square.svg
+    #cardigan
+    - assets/images/clothes/bg/cardigan_long_round.svg
+    - assets/images/clothes/bg/cardigan_long_uNeck.svg
+    - assets/images/clothes/bg/cardigan_long_vNeck.svg
+    - assets/images/clothes/bg/cardigan_medium_round.svg
+    - assets/images/clothes/bg/cardigan_medium_uNeck.svg
+    - assets/images/clothes/bg/cardigan_medium_vNeck.svg
+    - assets/images/clothes/bg/cardigan_short_round.svg
+    - assets/images/clothes/bg/cardigan_short_uNeck.svg
+    - assets/images/clothes/bg/cardigan_short_vNeck.svg
     ##line
     #tshirt
     - assets/images/clothes/line/t-shirt_crop_long_round.svg
@@ -517,6 +527,16 @@ flutter:
     - assets/images/clothes/line/sleeveless_short_vNeck.svg
     - assets/images/clothes/line/sleeveless_short_line.svg
     - assets/images/clothes/line/sleeveless_short_square.svg
+    #cardigan
+    - assets/images/clothes/line/cardigan_long_round.svg
+    - assets/images/clothes/line/cardigan_long_uNeck.svg
+    - assets/images/clothes/line/cardigan_long_vNeck.svg
+    - assets/images/clothes/line/cardigan_medium_round.svg
+    - assets/images/clothes/line/cardigan_medium_uNeck.svg
+    - assets/images/clothes/line/cardigan_medium_vNeck.svg
+    - assets/images/clothes/line/cardigan_short_round.svg
+    - assets/images/clothes/line/cardigan_short_uNeck.svg
+    - assets/images/clothes/line/cardigan_short_vNeck.svg
 
     - assets/lotties/onboarding_present.json
   # The following line ensures that the Material Icons font is

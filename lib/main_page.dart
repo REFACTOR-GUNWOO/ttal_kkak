@@ -25,7 +25,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   late String closetName = "내 옷장";
   late int tab1Index = 0;
   late int tab2Index = 0;
-  // ClothesDraftProvider? provider;
   List<String> secondTabNames = ["등록일순", "카테고리순", "컬러순"];
 
   void reload() async {
