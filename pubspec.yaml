@@ -345,6 +345,32 @@ flutter:
     - assets/images/clothes/bg/zip-up_short_high.svg
     - assets/images/clothes/bg/zip-up_short_hoodie.svg
     - assets/images/clothes/bg/zip-up_short_polo.svg
+      #jacket
+    - assets/images/clothes/bg/jacket_crop_round.svg
+    - assets/images/clothes/bg/jacket_crop_uNeck.svg
+    - assets/images/clothes/bg/jacket_crop_vNeck.svg
+    - assets/images/clothes/bg/jacket_crop_high.svg
+    - assets/images/clothes/bg/jacket_crop_deepCollar.svg
+    - assets/images/clothes/bg/jacket_crop_polo.svg
+    - assets/images/clothes/bg/jacket_long_round.svg
+    - assets/images/clothes/bg/jacket_long_uNeck.svg
+    - assets/images/clothes/bg/jacket_long_vNeck.svg
+    - assets/images/clothes/bg/jacket_long_high.svg
+    - assets/images/clothes/bg/jacket_long_deepCollar.svg
+    - assets/images/clothes/bg/jacket_long_polo.svg
+    - assets/images/clothes/bg/jacket_medium_round.svg
+    - assets/images/clothes/bg/jacket_medium_uNeck.svg
+    - assets/images/clothes/bg/jacket_medium_vNeck.svg
+    - assets/images/clothes/bg/jacket_medium_high.svg
+    - assets/images/clothes/bg/jacket_medium_deepCollar.svg
+    - assets/images/clothes/bg/jacket_medium_polo.svg
+    - assets/images/clothes/bg/jacket_short_round.svg
+    - assets/images/clothes/bg/jacket_short_uNeck.svg
+    - assets/images/clothes/bg/jacket_short_vNeck.svg
+    - assets/images/clothes/bg/jacket_short_high.svg
+    - assets/images/clothes/bg/jacket_short_deepCollar.svg
+    - assets/images/clothes/bg/jacket_short_polo.svg
+
     ##line
     #tshirt
     - assets/images/clothes/line/t-shirt_crop_long_round.svg
@@ -562,7 +588,7 @@ flutter:
     - assets/images/clothes/line/cardigan_short_round.svg
     - assets/images/clothes/line/cardigan_short_uNeck.svg
     - assets/images/clothes/line/cardigan_short_vNeck.svg
-#zip-up
+    #zip-up
     - assets/images/clothes/line/zip-up_crop_round.svg
     - assets/images/clothes/line/zip-up_crop_uNeck.svg
     - assets/images/clothes/line/zip-up_crop_vNeck.svg
@@ -587,6 +613,31 @@ flutter:
     - assets/images/clothes/line/zip-up_short_high.svg
     - assets/images/clothes/line/zip-up_short_hoodie.svg
     - assets/images/clothes/line/zip-up_short_polo.svg
+    #jacket
+    - assets/images/clothes/line/jacket_crop_round.svg
+    - assets/images/clothes/line/jacket_crop_uNeck.svg
+    - assets/images/clothes/line/jacket_crop_vNeck.svg
+    - assets/images/clothes/line/jacket_crop_high.svg
+    - assets/images/clothes/line/jacket_crop_deepCollar.svg
+    - assets/images/clothes/line/jacket_crop_polo.svg
+    - assets/images/clothes/line/jacket_long_round.svg
+    - assets/images/clothes/line/jacket_long_uNeck.svg
+    - assets/images/clothes/line/jacket_long_vNeck.svg
+    - assets/images/clothes/line/jacket_long_high.svg
+    - assets/images/clothes/line/jacket_long_deepCollar.svg
+    - assets/images/clothes/line/jacket_long_polo.svg
+    - assets/images/clothes/line/jacket_medium_round.svg
+    - assets/images/clothes/line/jacket_medium_uNeck.svg
+    - assets/images/clothes/line/jacket_medium_vNeck.svg
+    - assets/images/clothes/line/jacket_medium_high.svg
+    - assets/images/clothes/line/jacket_medium_deepCollar.svg
+    - assets/images/clothes/line/jacket_medium_polo.svg
+    - assets/images/clothes/line/jacket_short_round.svg
+    - assets/images/clothes/line/jacket_short_uNeck.svg
+    - assets/images/clothes/line/jacket_short_vNeck.svg
+    - assets/images/clothes/line/jacket_short_high.svg
+    - assets/images/clothes/line/jacket_short_deepCollar.svg
+    - assets/images/clothes/line/jacket_short_polo.svg
 
     - assets/lotties/onboarding_present.json
   # The following line ensures that the Material Icons font is
