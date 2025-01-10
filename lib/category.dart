@@ -762,7 +762,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 24,
       name: "트레이닝",
-      code: "training",
+      code: "tracksuit",
       priority: 24,
       firstCategoryId: 2,
       clothesTopPosition: 12,
@@ -789,7 +789,7 @@ List<SecondCategory> secondCategories = [
             details: [
               BottomLength.long,
               BottomLength.medium,
-              BottomLength.mini
+              BottomLength.short
             ]),
       ],
       defaultImage: "assets/images/clothes/bg/pants_leggings.svg"),
@@ -804,11 +804,11 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 1,
             label: "기장",
-            defaultDetail: BottomLength.mini,
+            defaultDetail: BottomLength.short,
             details: [
               BottomLength.long,
               BottomLength.medium,
-              BottomLength.mini
+              BottomLength.short
             ]),
         CategoryDetail(
             priority: 2,
@@ -820,7 +820,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 27,
       name: "반바지",
-      code: "shorts",
+      code: "shorts pants",
       clothesTopPosition: 12,
       priority: 27,
       firstCategoryId: 2,

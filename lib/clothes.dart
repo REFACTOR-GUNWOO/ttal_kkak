@@ -180,7 +180,7 @@ enum BottomFit with ClothesDetail {
   straight("일자", "bottom_fit_straight", "straight"),
   slim("슬림", "bottom_fit_slim", "slim"),
   skinny("스키니", "bottom_fit_skinny", "skinny"),
-  bootCut("부츠", "bottom_fit_bootcut", "bootCut"),
+  bootCut("부츠", "bottom_fit_bootcut", "bootcut"),
   flare("플레어", "bottom_fit_flare", "flare");
 
   final String label;
