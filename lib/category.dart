@@ -840,7 +840,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 28,
       name: "미니원피스",
-      code: "mini_dress",
+      code: "mini dress",
       priority: 28,
       clothesTopPosition: 12,
       firstCategoryId: 4,
@@ -871,7 +871,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 29,
       name: "롱원피스",
-      code: "long_dress",
+      code: "long dress",
       clothesTopPosition: 12,
       priority: 29,
       firstCategoryId: 4,
@@ -920,7 +920,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 31,
       name: "슬립온",
-      code: "slip_on",
+      code: "slip-ons",
       priority: 31,
       clothesBottomPosition: 40,
       firstCategoryId: 5,
@@ -929,7 +929,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 32,
       name: "구두",
-      code: "shoes",
+      code: "dress shoes",
       priority: 32,
       clothesBottomPosition: 40,
       firstCategoryId: 5,
@@ -937,10 +937,10 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 1,
             label: "굽",
-            defaultDetail: ShoesHill.middle,
+            defaultDetail: ShoesHill.high,
             details: [
-              ShoesHill.middle,
-              ShoesHill.low,
+              ShoesLength.high,
+              ShoesLength.low,
             ]),
       ],
       defaultImage: "assets/images/clothes/bg/shoes.svg"),
@@ -955,9 +955,9 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 1,
             label: "굽",
-            defaultDetail: ShoesHill.middle,
+            defaultDetail: ShoesHill.high,
             details: [
-              ShoesHill.middle,
+              ShoesHill.high,
               ShoesHill.low,
             ]),
       ],
@@ -1010,7 +1010,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 36,
       name: "어그부츠",
-      code: "ugg_boots",
+      code: "ugg",
       priority: 36,
       clothesBottomPosition: 40,
       firstCategoryId: 5,
@@ -1028,7 +1028,7 @@ List<SecondCategory> secondCategories = [
   SecondCategory(
       id: 37,
       name: "레인부츠",
-      code: "rain_boots",
+      code: "rain boots",
       priority: 37,
       clothesBottomPosition: 40,
       firstCategoryId: 5,
@@ -1057,7 +1057,7 @@ List<SecondCategory> secondCategories = [
             defaultDetail: ShoesHill.high,
             details: [
               ShoesHill.high,
-              ShoesHill.middle,
+              ShoesHill.low,
             ]),
       ],
       defaultImage: "assets/images/clothes/bg/heels.svg"),
