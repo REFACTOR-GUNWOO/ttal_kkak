@@ -315,7 +315,8 @@ class _ClothesItemState extends State<ClothesItem> {
   Color clothesColor = Colors.transparent;
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
-
+  DrawableRoot? svgDecoRoot;
+  String? svgDecoUrl;
   @override
   void initState() {
     super.initState();
@@ -357,6 +358,10 @@ class _ClothesItemState extends State<ClothesItem> {
         "assets/images/clothes/bg/${secondCategory.code}${details.map((e) => '_${e.name}').join()}.svg";
     var svgLineUrl =
         "assets/images/clothes/line/${secondCategory.code}${details.map((e) => '_${e.name}').join()}.svg";
+    if (secondCategory.hasDecorationLayer) {
+      svgDecoUrl =
+          "assets/images/clothes/deco/${secondCategory.code}${details.map((e) => '_${e.name}').join()}.svg";
+    }
 
     if (svgBgRoot == null) {
       final String svgBgString = await rootBundle.loadString(svgBgUrl);
@@ -381,6 +386,13 @@ class _ClothesItemState extends State<ClothesItem> {
                     Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
                 painter: SvgBgPainter(svgBgRoot!, clothesColor, 1.0),
               ),
+            if (svgDecoUrl != null) SvgPicture.asset(svgDecoUrl!),
+            if (lines.isNotEmpty)
+              CustomPaint(
+                size:
+                    Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
+                painter: DrawingPainter(lines, svgBgRoot, 1),
+              ),
             if (svgBgRoot != null)
               CustomPaint(
                 size:
@@ -392,12 +404,6 @@ class _ClothesItemState extends State<ClothesItem> {
                     clothesColor == Color(0xFF282828)
                         ? SystemColors.gray900
                         : SystemColors.black),
-              ),
-            if (lines.isNotEmpty)
-              CustomPaint(
-                size:
-                    Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
-                painter: DrawingPainter(lines, svgBgRoot, 1),
               ),
           ],
         ));

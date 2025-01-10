@@ -1024,6 +1024,7 @@ List<SecondCategory> secondCategories = [
               ShoesLength.short,
             ]),
       ],
+      hasDecorationLayer: true,
       defaultImage: "assets/images/clothes/bg/ugg_boots.svg"),
   SecondCategory(
       id: 37,
