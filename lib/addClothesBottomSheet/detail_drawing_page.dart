@@ -37,7 +37,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   List<Color> brushColorColorGroup = colorContainers.first.colors;
   String _svgBgUrl = "";
   String _svgLineUrl = "";
-
+  String? _svgDecoUrl = "";
   Color clothesColor = Colors.transparent;
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
@@ -167,7 +167,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
         "assets/images/clothes/bg/${secondCategory.code + details.map((e) => "_" + e.name).join()}.svg";
     var svgLineUrl =
         "assets/images/clothes/line/${secondCategory.code + details.map((e) => "_" + e.name).join()}.svg";
-
+    _svgDecoUrl =
+        "assets/images/clothes/deco/${secondCategory.code + details.map((e) => "_" + e.name).join()}.svg";
     final String svgBgString = await rootBundle.loadString(svgBgUrl);
     final String svgLineString = await rootBundle.loadString(svgLineUrl);
     DrawableRoot bgDrawableRoot =
@@ -366,6 +367,11 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                 size: Size(svgBgRoot!.viewport.width * 3,
                     svgBgRoot!.viewport.height * 3),
                 painter: SvgBgPainter(svgBgRoot!, clothesColor, 3.0),
+              ),
+            if (_svgDecoUrl != null)
+              SvgPicture.asset(
+                _svgDecoUrl!,
+                width: 190,
               ),
             if (svgBgRoot != null)
               CustomPaint(

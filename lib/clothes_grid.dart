@@ -424,7 +424,7 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
   Color clothesColor = Colors.transparent;
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
-
+  String? svgDecoUrl;
   @override
   void initState() {
     super.initState();
@@ -463,6 +463,11 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
     final String svgBgString = await rootBundle.loadString(svgBgUrl);
 
     final String svgLineString = await rootBundle.loadString(svgLineUrl);
+    if (secondCategory.hasDecorationLayer) {
+      svgDecoUrl =
+          "assets/images/clothes/deco/${secondCategory.code}${details.map((e) => '_${e.name}').join()}.svg";
+    }
+
     DrawableRoot bgDrawableRoot =
         await svg.fromSvgString(svgBgString, svgBgString);
     DrawableRoot lineDrawableRoot =
@@ -486,6 +491,7 @@ class _ClothesDraftItemState extends State<ClothesDraftItem> {
             size: Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
             painter: SvgBgPainter(svgBgRoot!, clothesColor, 1.0),
           ),
+        if (svgDecoUrl != null) SvgPicture.asset(svgDecoUrl!),
         if (svgBgRoot != null)
           CustomPaint(
             size: Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
