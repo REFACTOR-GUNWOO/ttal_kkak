@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info/package_info.dart';
 import 'styles/text_styles.dart';
 import 'styles/colors_styles.dart';
@@ -51,15 +52,12 @@ class PageGuidanceIllust extends StatelessWidget {
     return Column(
       children: [
         Container(
-            //일러스트박스
-            width: 310,
-            height: 170,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage(
-                  'assets/images/setting_illust_makers.png'), // 이미지 경로
-              fit: BoxFit.cover, // 이미지 크기에 맞게 조정
-            ))),
+          //일러스트박스
+          width: 310,
+          height: 170,
+          child: SvgPicture.asset(
+              'assets/icons/setting_illust_makers.svg'), // 이미지 경로
+        ),
         Text.rich(
           //텍스트뭉치
           TextSpan(
