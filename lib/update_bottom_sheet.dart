@@ -41,6 +41,7 @@ class UpdateBottomSheet extends StatelessWidget {
               iconPath: "assets/icons/clone_clothes.svg",
               label: "복제하기",
               onTap: () async {
+                showToast("옷이 복제 되었습니다.", context);
                 await ClothesRepository().addClothes(clothes);
                 onReload();
                 Navigator.pop(context);
@@ -62,7 +63,7 @@ class UpdateBottomSheet extends StatelessWidget {
                       itemName: '나이키반팔티',
                       onConfirm: () async {
                         // 삭제 로직 추가
-                        showToast("삭제되었습니다.", context);
+                        showToast("옷이 삭제 되었습니다.", context);
                         await ClothesRepository().removeClothes(clothes);
                         onReload();
                         Navigator.pop(context);
