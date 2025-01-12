@@ -117,7 +117,7 @@ class CommunicationList extends StatelessWidget {
               },
               child: Container(
                 //첫번째 리스트
-                margin: EdgeInsets.fromLTRB(16, 14, 16, 14),
+                margin: EdgeInsets.fromLTRB(16, 22, 16, 14),
                 child: Column(//텍스트뭉치
                     children: [
                   Row(
@@ -187,7 +187,7 @@ class CommunicationList extends StatelessWidget {
           GestureDetector(
             child: Container(
               //첫번째 리스트
-              margin: EdgeInsets.fromLTRB(16, 14, 16, 14),
+              margin: EdgeInsets.fromLTRB(16, 14, 16, 22),
               child: Column(//텍스트뭉치
                   children: [
                 Row(
@@ -301,7 +301,7 @@ class _SettingListState extends State<SettingList> {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.fromLTRB(16, 14, 16, 14),
+            margin: EdgeInsets.fromLTRB(16, 22, 16, 22),
             child: Column(//리스트컬럼#1
                 children: [
               Column(children: [
