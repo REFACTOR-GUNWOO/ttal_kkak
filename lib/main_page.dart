@@ -167,8 +167,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
     if (secondTabNames[tab2Index] == "등록일순") {
       copied.sort((a, b) {
-        return a.regTs.microsecondsSinceEpoch
-            .compareTo(b.regTs.microsecondsSinceEpoch);
+        return b.regTs.microsecondsSinceEpoch
+            .compareTo(a.regTs.microsecondsSinceEpoch);
       });
 
       return copied;
