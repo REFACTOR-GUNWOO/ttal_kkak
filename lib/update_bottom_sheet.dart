@@ -60,7 +60,7 @@ class UpdateBottomSheet extends StatelessWidget {
                   ),
                   builder: (BuildContext context) {
                     return DeleteConfirmationDialog(
-                      itemName: '나이키반팔티',
+                      itemName: clothes.name,
                       onConfirm: () async {
                         // 삭제 로직 추가
                         showToast("옷이 삭제 되었습니다.", context);
