@@ -82,13 +82,14 @@ Widget _buildOptionButton({
   required String label,
   required VoidCallback onTap,
 }) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 17, bottom: 17),
-    child: GestureDetector(
-      onTap: onTap,
+  return GestureDetector(
+    onTap: onTap,
+    behavior: HitTestBehavior.opaque, // 빈 영역에서도 터치 인식
+    child: Padding(
+      padding: const EdgeInsets.only(top: 17, bottom: 17),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
             iconPath,
