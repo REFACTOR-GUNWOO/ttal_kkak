@@ -312,26 +312,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           appBar: AppBar(
               automaticallyImplyLeading: false,
               backgroundColor: Colors.transparent,
-              title:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text(
-                  closetName,
-                  textAlign: TextAlign.center,
-                  style: OneLineTextStyles.Bold18.copyWith(
-                      color: SystemColors.black),
-                ),
-                IconButton(
-                  padding: null,
-                  icon: SvgPicture.asset(
-                    'assets/icons/closet_title_update_button.svg',
-                    width: 16, // 원하는 크기로 설정할 수 있습니다.
-                    height: 16, // 원하는 크기로 설정할 수 있습니다.
-                  ),
-                  onPressed: () {
-                    _showSaveClosetNameBottomSheet(context);
-                  },
-                ),
-              ]),
+              title: Text(
+                closetName,
+                textAlign: TextAlign.center,
+                style: OneLineTextStyles.Bold18.copyWith(
+                    color: SystemColors.black),
+              ),
               centerTitle: true,
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(90.0),
