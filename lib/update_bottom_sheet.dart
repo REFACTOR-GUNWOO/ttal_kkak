@@ -38,7 +38,7 @@ class UpdateBottomSheet extends StatelessWidget {
               },
             ),
             _buildOptionButton(
-              iconPath: "assets/icons/update_icon.svg",
+              iconPath: "assets/icons/clone_clothes.svg",
               label: "복제하기",
               onTap: () async {
                 await ClothesRepository().addClothes(clothes);
