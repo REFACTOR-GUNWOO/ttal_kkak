@@ -66,14 +66,23 @@ class PageGuidanceIllust extends StatelessWidget {
             children: <TextSpan>[
               TextSpan(
                 text: '아경 디자이너',
-                style: TextStyle(fontWeight: FontWeight.w800),
+                style:
+                    BodyTextStyles.Bold16.copyWith(color: SystemColors.black),
               ),
-              TextSpan(text: '와 '),
+              TextSpan(
+                text: '와 ',
+                style: BodyTextStyles.Regular16.copyWith(
+                    color: SystemColors.black),
+              ),
               TextSpan(
                 text: '건우 개발자',
-                style: TextStyle(fontWeight: FontWeight.w800),
+                style:
+                    BodyTextStyles.Bold16.copyWith(color: SystemColors.black),
               ),
-              TextSpan(text: '가 \n딸깍을 열심히 만드는 중이에요!'),
+              TextSpan(
+                  text: '가 \n딸깍을 열심히 만드는 중이에요!',
+                  style: BodyTextStyles.Regular16.copyWith(
+                      color: SystemColors.black)),
             ],
           ),
           textAlign: TextAlign.center,
