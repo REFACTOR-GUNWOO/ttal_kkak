@@ -65,12 +65,12 @@ class PageGuidanceIllust extends StatelessWidget {
             // style: TextStyle(fontFamily: 'Pretendard', fontSize: 16),
             children: <TextSpan>[
               TextSpan(
-                text: '00 디자이너',
+                text: '아경 디자이너',
                 style: TextStyle(fontWeight: FontWeight.w800),
               ),
               TextSpan(text: '와 '),
               TextSpan(
-                text: '00 개발자',
+                text: '건우 개발자',
                 style: TextStyle(fontWeight: FontWeight.w800),
               ),
               TextSpan(text: '가 \n딸깍을 열심히 만드는 중이에요!'),
@@ -108,9 +108,9 @@ class CommunicationList extends StatelessWidget {
                 if (Platform.isIOS) {
                   if (!await launchUrl(Uri(
                       scheme: 'https',
-                      host: 'www.instagram.com',
-                      path: "/ttal_kkak_2",
-                      queryParameters: {'igsh': 'ZWlqMWhhZWE1bmd2-review'}))) {
+                      host: 'itunes.apple.com',
+                      path: "/app/id6471259154",
+                      queryParameters: {'action': 'write-review'}))) {
                     throw Exception('Could not launch');
                   }
                 }
@@ -136,7 +136,7 @@ class CommunicationList extends StatelessWidget {
                                     height: 20, // 아이콘 높이
                                   ),
                                   SizedBox(width: 8), // 아이콘과 텍스트 사이 간격
-                                  Text('딸깍에게 응원의 메세지 보내기',
+                                  Text('응원의 메세지 보내기',
                                       style:
                                           OneLineTextStyles.SemiBold16.copyWith(
                                               color: SystemColors.black)),
@@ -153,7 +153,7 @@ class CommunicationList extends StatelessWidget {
                                   ),
                                   Flexible(
                                     child: Text(
-                                      '따뜻한 메세지가 00와 00의 능률을 크게 높여요!',
+                                      '따뜻한 응원의 메시지를 남겨주시면 디자이너의 능률이 크게 높아져요',
                                       style: BodyTextStyles.Regular14.copyWith(
                                           color: SystemColors.gray800),
                                     ),
@@ -206,7 +206,7 @@ class CommunicationList extends StatelessWidget {
                                   height: 20, // 아이콘 높이
                                 ),
                                 SizedBox(width: 8), // 아이콘과 텍스트 사이 간격
-                                Text('딸깍에게 피드백 메세지 보내기',
+                                Text('피드백 보내기',
                                     style:
                                         OneLineTextStyles.SemiBold16.copyWith(
                                             color: SystemColors.black)),
@@ -252,9 +252,9 @@ class CommunicationList extends StatelessWidget {
               if (Platform.isIOS) {
                 if (!await launchUrl(Uri(
                     scheme: 'https',
-                    host: 'itunes.apple.com',
-                    path: "/app/id6471259154",
-                    queryParameters: {'action': 'write-review'}))) {
+                    host: 'www.instagram.com',
+                    path: "/ttal_kkak_2",
+                    queryParameters: {'igsh': 'ZWlqMWhhZWE1bmd2-review'}))) {
                   throw Exception('Could not launch');
                 }
               }
