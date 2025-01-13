@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
@@ -9,6 +10,7 @@ import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/common_bottom_sheet.dart';
+import 'package:ttal_kkak/common/select_motion_lottie.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
@@ -33,7 +35,8 @@ class ClothesGrid extends StatefulWidget {
   _ClothesGridState createState() => _ClothesGridState();
 }
 
-class _ClothesGridState extends State<ClothesGrid> {
+class _ClothesGridState extends State<ClothesGrid>
+    with TickerProviderStateMixin {
   ClothesDraftProvider? draftProvider;
   ClothesUpdateProvider? updateProvider;
 
@@ -71,6 +74,11 @@ class _ClothesGridState extends State<ClothesGrid> {
   void initState() {
     super.initState();
     selected = {for (var clothes in widget.clothesList) clothes.id!: false};
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -162,8 +170,18 @@ class _ClothesGridState extends State<ClothesGrid> {
       BuildContext context, List<ClothesFamily> rowClothes) {
     List<Widget> list = rowClothes.map((clothes) {
       if (clothes is Clothes) {
-        return _buildClothesCard(
-            context, clothes, selected[clothes.id] ?? false);
+        return ClothesCard(
+            clothes: clothes,
+            isSelected: selected[clothes.id] ?? false,
+            isOnboarding: widget.isOnboarding,
+            onTap: () => {
+                  widget.isOnboarding
+                      ? setState(() {
+                          selected[clothes.id!] = !selected[clothes.id]!;
+                        })
+                      : showClothesOptionsBottomSheet(
+                          context, clothes, updateProvider)
+                });
       } else if (clothes is ClothesDraft) {
         return _buildClothesDraftCard(context, clothes);
       } else {
@@ -237,11 +255,9 @@ class _ClothesGridState extends State<ClothesGrid> {
                     clothes: clothes, key: ValueKey(ValueKey(Uuid().v4())))),
             if (isSelected)
               Positioned(
-                top: 40,
-                child: Icon(
-                  Icons.check_circle,
-                  color: Colors.orange,
-                  size: 30,
+                top: 30,
+                child: SelectMotionLottie(
+                  isSelected: isSelected,
                 ),
               ),
           ]),
@@ -299,6 +315,106 @@ class _ClothesGridState extends State<ClothesGrid> {
         height: 8,
       ),
     ]));
+  }
+}
+
+class ClothesCard extends StatefulWidget {
+  final Clothes clothes;
+  final bool isSelected;
+  final bool isOnboarding;
+  final VoidCallback onTap;
+
+  ClothesCard({
+    required this.clothes,
+    required this.isSelected,
+    required this.isOnboarding,
+    required this.onTap,
+  });
+
+  @override
+  _ClothesCardState createState() => _ClothesCardState();
+}
+
+class _ClothesCardState extends State<ClothesCard>
+    with TickerProviderStateMixin {
+  late final AnimationController _controller;
+  Future<LottieComposition?> customDecoder(List<int> bytes) {
+    return LottieComposition.decodeZip(bytes, filePicker: (files) {
+      return files.firstWhere(
+          (f) => f.name.startsWith('animations/') && f.name.endsWith('.json'));
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  int _clickCount = 0;
+
+  void _toggleAnimation() {
+    setState(() {
+      _clickCount++;
+      if (_clickCount % 2 == 1) {
+        // 홀수 클릭: 앞으로 재생
+        _controller.forward(from: 0.0);
+      } else {
+        // 짝수 클릭: 뒤로 재생
+        _controller.reverse(from: 1.0);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Clothes clothes = widget.clothes;
+
+    FirstCategory firstCategory = firstCategories
+        .firstWhere((element) => element.id == clothes.primaryCategoryId);
+    SecondCategory secondCategory = secondCategories
+        .firstWhere((element) => element.id == clothes.secondaryCategoryId);
+    return GestureDetector(
+        onTap: () => {widget.onTap(), _toggleAnimation()},
+        child: Column(children: [
+          Stack(alignment: Alignment.topCenter, children: [
+            SvgPicture.asset("assets/icons/MiddleCloset.svg"),
+            Positioned(
+                top: firstCategory.hangerPosition,
+                child: SvgPicture.asset(firstCategory.hangerUrl)),
+            Positioned(
+                top: secondCategory.clothesTopPosition,
+                bottom: secondCategory.clothesBottomPosition,
+                child: ClothesItem(
+                    clothes: clothes, key: ValueKey(ValueKey(Uuid().v4())))),
+            Positioned(
+              top: 30,
+              child: Lottie.asset(
+                'assets/lotties/select_motion.lottie',
+                decoder: customDecoder,
+                controller: _controller,
+                onLoaded: (composition) {
+                  _controller.duration = composition.duration;
+                },
+              ),
+            ),
+          ]),
+          SizedBox(
+            height: 8,
+          ),
+          Text(clothes.name,
+              style: OneLineTextStyles.SemiBold10.copyWith(
+                  color: SystemColors.gray800)),
+          SizedBox(
+            height: 8,
+          ),
+        ]));
   }
 }
 
