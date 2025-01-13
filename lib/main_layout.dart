@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
 import 'package:ttal_kkak/daily_outfit_page.dart';
 import 'package:ttal_kkak/main_page.dart';
+import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
+import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/setting_page.dart';
 import 'package:ttal_kkak/statistics_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -217,6 +220,9 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                               padding: EdgeInsets.only(top: 6),
                               child: GestureDetector(
                                 onTap: () {
+                                  Provider.of<ScrollControllerProvider>(context,
+                                          listen: false)
+                                      .scrollToTop(); // 드래프트 초기화
                                   ShowAddClothesBottomSheet(context, false);
                                 },
                                 child: Container(

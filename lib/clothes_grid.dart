@@ -12,6 +12,7 @@ import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/common_bottom_sheet.dart';
 import 'package:ttal_kkak/common/select_motion_lottie.dart';
 import 'package:ttal_kkak/main_layout.dart';
+import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -102,6 +103,8 @@ class _ClothesGridState extends State<ClothesGrid>
         backgroundColor: Colors.transparent,
         body: getClothesListLength() != 0
             ? ListView.builder(
+                controller: Provider.of<ScrollControllerProvider>(context)
+                    .scrollController,
                 scrollDirection: Axis.vertical,
                 padding: EdgeInsets.all(8.0),
                 itemCount: ((getClothesListLength()) / columnCount).ceil(),
@@ -175,12 +178,17 @@ class _ClothesGridState extends State<ClothesGrid>
             isSelected: selected[clothes.id] ?? false,
             isOnboarding: widget.isOnboarding,
             onTap: () => {
-                  widget.isOnboarding
-                      ? setState(() {
-                          selected[clothes.id!] = !selected[clothes.id]!;
-                        })
-                      : showClothesOptionsBottomSheet(
+                  if (widget.isOnboarding)
+                    {
+                      setState(() {
+                        selected[clothes.id!] = !selected[clothes.id]!;
+                      })
+                    }
+                  else
+                    {
+                      showClothesOptionsBottomSheet(
                           context, clothes, updateProvider)
+                    }
                 });
       } else if (clothes is ClothesDraft) {
         return _buildClothesDraftCard(context, clothes);
@@ -381,7 +389,8 @@ class _ClothesCardState extends State<ClothesCard>
     SecondCategory secondCategory = secondCategories
         .firstWhere((element) => element.id == clothes.secondaryCategoryId);
     return GestureDetector(
-        onTap: () => {widget.onTap(), _toggleAnimation()},
+        onTap: () =>
+            {widget.onTap(), if (widget.isOnboarding) _toggleAnimation()},
         child: Column(children: [
           Stack(alignment: Alignment.topCenter, children: [
             SvgPicture.asset("assets/icons/MiddleCloset.svg"),
@@ -393,17 +402,18 @@ class _ClothesCardState extends State<ClothesCard>
                 bottom: secondCategory.clothesBottomPosition,
                 child: ClothesItem(
                     clothes: clothes, key: ValueKey(ValueKey(Uuid().v4())))),
-            Positioned(
-              top: 30,
-              child: Lottie.asset(
-                'assets/lotties/select_motion.lottie',
-                decoder: customDecoder,
-                controller: _controller,
-                onLoaded: (composition) {
-                  _controller.duration = composition.duration;
-                },
+            if (widget.isOnboarding)
+              Positioned(
+                top: 30,
+                child: Lottie.asset(
+                  'assets/lotties/select_motion.lottie',
+                  decoder: customDecoder,
+                  controller: _controller,
+                  onLoaded: (composition) {
+                    _controller.duration = composition.duration;
+                  },
+                ),
               ),
-            ),
           ]),
           SizedBox(
             height: 8,
