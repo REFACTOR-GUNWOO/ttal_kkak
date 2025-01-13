@@ -3,14 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
-import 'package:ttal_kkak/common/common_bottom_sheet.dart';
-import 'package:ttal_kkak/common/select_motion_lottie.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
@@ -18,7 +15,6 @@ import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/update_bottom_sheet.dart';
-import 'package:ttal_kkak/utils/custom_floating_action_button_location.dart';
 import 'package:uuid/uuid.dart';
 
 class ClothesGrid extends StatefulWidget {
@@ -233,52 +229,6 @@ class _ClothesGridState extends State<ClothesGrid>
         );
       },
     );
-  }
-
-  Widget _buildClothesCard(
-      BuildContext context, Clothes clothes, bool isSelected) {
-    FirstCategory firstCategory = firstCategories
-        .firstWhere((element) => element.id == clothes.primaryCategoryId);
-    SecondCategory secondCategory = secondCategories
-        .firstWhere((element) => element.id == clothes.secondaryCategoryId);
-    return GestureDetector(
-        onTap: () => {
-              widget.isOnboarding
-                  ? setState(() {
-                      selected[clothes.id!] = !selected[clothes.id]!;
-                    })
-                  : showClothesOptionsBottomSheet(
-                      context, clothes, updateProvider)
-            },
-        child: Column(children: [
-          Stack(alignment: Alignment.topCenter, children: [
-            SvgPicture.asset("assets/icons/MiddleCloset.svg"),
-            Positioned(
-                top: firstCategory.hangerPosition,
-                child: SvgPicture.asset(firstCategory.hangerUrl)),
-            Positioned(
-                top: secondCategory.clothesTopPosition,
-                bottom: secondCategory.clothesBottomPosition,
-                child: ClothesItem(
-                    clothes: clothes, key: ValueKey(ValueKey(Uuid().v4())))),
-            if (isSelected)
-              Positioned(
-                top: 30,
-                child: SelectMotionLottie(
-                  isSelected: isSelected,
-                ),
-              ),
-          ]),
-          SizedBox(
-            height: 8,
-          ),
-          Text(clothes.name,
-              style: OneLineTextStyles.SemiBold10.copyWith(
-                  color: SystemColors.gray800)),
-          SizedBox(
-            height: 8,
-          ),
-        ]));
   }
 
   Widget _buildClothesDraftCard(
