@@ -218,6 +218,8 @@ class _ClothesGridState extends State<ClothesGrid>
       ClothesUpdateProvider? updateProvider) {
     showModalBottomSheet(
       context: context,
+      elevation: 10,
+      barrierColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),

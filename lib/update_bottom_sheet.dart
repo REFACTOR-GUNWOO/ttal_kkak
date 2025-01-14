@@ -54,6 +54,7 @@ class UpdateBottomSheet extends StatelessWidget {
                 Navigator.pop(context);
                 showModalBottomSheet(
                   context: context,
+                  barrierColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20.0)),

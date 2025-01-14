@@ -101,6 +101,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   void _showColorPicker(BuildContext context) {
     showModalBottomSheet(
         context: context,
+        barrierColor: Colors.transparent,
+        elevation: 10,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
         ),

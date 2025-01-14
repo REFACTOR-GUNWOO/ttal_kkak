@@ -23,6 +23,7 @@ void ShowAddClothesBottomSheet(BuildContext context, bool isUpdate) {
   showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      barrierColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
