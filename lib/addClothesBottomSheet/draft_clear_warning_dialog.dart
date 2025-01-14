@@ -6,15 +6,24 @@ import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 
 class DraftClearWarningDialog extends StatelessWidget {
   final String draftFieldName;
-  final ClothesDraft draft;
+  final String? title;
+  final String? description;
+  final ClothesDraft? draft;
   final VoidCallback onNextStep;
-  DraftClearWarningDialog(this.draftFieldName, this.draft, this.onNextStep);
+  DraftClearWarningDialog(
+      {required this.draftFieldName,
+      this.draft,
+      required this.onNextStep,
+      this.title,
+      this.description});
   void clear(BuildContext context) async {
-    ClothesDraftProvider provider =
-        Provider.of<ClothesDraftProvider>(context, listen: false);
+    if (draft != null) {
+      ClothesDraftProvider provider =
+          Provider.of<ClothesDraftProvider>(context, listen: false);
 
-    await ClothesDraftRepository().save(draft);
-    await provider.updateDraft(draft);
+      await ClothesDraftRepository().save(draft!);
+      await provider.updateDraft(draft!);
+    }
     onNextStep();
   }
 
@@ -26,7 +35,7 @@ class DraftClearWarningDialog extends StatelessWidget {
       ),
       title: Center(
         child: Text(
-          '${draftFieldName} 변경',
+          title ?? '${draftFieldName} 변경',
           style: TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
@@ -37,7 +46,7 @@ class DraftClearWarningDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '하위 정보가 사라져요.\n${draftFieldName}를 변경하시겠어요?',
+            description ?? '하위 정보가 사라져요.\n${draftFieldName}를 변경하시겠어요?',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16.0,

@@ -95,7 +95,10 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return DraftClearWarningDialog("상세설정", draft, widget.onNextStep);
+            return DraftClearWarningDialog(
+                draftFieldName: "상세설정",
+                draft: draft,
+                onNextStep: widget.onNextStep);
           },
         );
         return;

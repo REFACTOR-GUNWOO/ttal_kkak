@@ -72,7 +72,10 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return DraftClearWarningDialog("상위 카테고리", draft, widget.onNextStep);
+            return DraftClearWarningDialog(
+                draftFieldName: "상위 카테고리",
+                draft: draft,
+                onNextStep: widget.onNextStep);
           },
         );
         return;

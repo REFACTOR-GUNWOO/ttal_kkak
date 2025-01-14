@@ -73,7 +73,10 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return DraftClearWarningDialog("하위 카테고리", draft, widget.onNextStep);
+            return DraftClearWarningDialog(
+                draftFieldName: "하위 카테고리",
+                draft: draft,
+                onNextStep: widget.onNextStep);
           },
         );
         return;

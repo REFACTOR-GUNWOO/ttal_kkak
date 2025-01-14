@@ -8,11 +8,14 @@ import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/common_bottom_sheet.dart';
+import 'package:ttal_kkak/common/show_toast.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
+
+import 'draft_clear_warning_dialog.dart';
 
 class DetailDrawingPage extends StatefulWidget {
   @override
@@ -200,8 +203,14 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SvgPicture.asset('assets/icons/arrow_left.svg',
-                      color: SystemColors.black),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => MainLayout()),
+                        );
+                      },
+                      child: SvgPicture.asset('assets/icons/arrow_left.svg',
+                          color: SystemColors.black)),
                   TextButton(
                     style: TextButton.styleFrom(
                       minimumSize: Size.zero,
@@ -236,6 +245,19 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return DraftClearWarningDialog(
+                                  title: "드로잉 초기화",
+                                  description: "드로잉 정보가 모두 사라져요\n초기화 하시겠어요?",
+                                  draftFieldName: "",
+                                  onNextStep: () {
+                                    showToast("초기화 되었습니다.", context);
+                                  });
+                            },
+                          );
+
                           clear();
                         },
                         child: Row(children: [
