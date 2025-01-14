@@ -52,7 +52,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   ];
 
   bool _isErasing = false;
-  final double minDistance = 5.0; // 손떨림 방지를 위한 최소 거리 설정
+  final double minDistance = 1.0; // 손떨림 방지를 위한 최소 거리 설정
 
   @override
   void initState() {
@@ -599,9 +599,11 @@ class DrawingPainter extends CustomPainter {
           ? (Paint()
             ..color = line.color
             ..strokeCap = StrokeCap.round
+            ..strokeJoin = StrokeJoin.round
             ..strokeWidth = line.width * scale / 3)
           : (Paint()
             ..strokeCap = StrokeCap.round
+            ..strokeJoin = StrokeJoin.round
             ..strokeWidth = line.width * scale / 3
             ..blendMode = BlendMode.clear);
 
