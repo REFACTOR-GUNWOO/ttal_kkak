@@ -193,24 +193,35 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
           backgroundColor: Colors.transparent,
           elevation: 0, // 그림자 제거
           automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SvgPicture.asset('assets/icons/arrow_left.svg'),
-              TextButton(
-                onPressed: () => {
-                  save(),
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => MainLayout()),
-                  )
-                },
-                child: Text(
-                  '저장',
-                  style: TextStyle(color: Colors.orange, fontSize: 16),
-                ),
-              ),
-            ],
-          )),
+          titleSpacing: 0,
+          title: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SvgPicture.asset('assets/icons/arrow_left.svg',
+                      color: SystemColors.black),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      minimumSize: Size.zero,
+                      padding: EdgeInsets.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: () => {
+                      save(),
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => MainLayout()),
+                      )
+                    },
+                    child: Text(
+                      '저장',
+                      style: OneLineTextStyles.SemiBold16.copyWith(
+                          color: SignatureColors.orange400),
+                    ),
+                  ),
+                ],
+              ))),
       bottomNavigationBar: Container(
         height: 180,
         child: Padding(
