@@ -8,6 +8,7 @@ import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
+import 'package:ttal_kkak/common/custom_decoder.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
@@ -36,7 +37,7 @@ class _ClothesGridState extends State<ClothesGrid>
     with TickerProviderStateMixin {
   ClothesDraftProvider? draftProvider;
   ClothesUpdateProvider? updateProvider;
-
+  late final AnimationController _controller;
   List<DrawnLine> lines = [];
   Color clothesColor = Colors.transparent;
   DrawableRoot? svgBgRoot;
@@ -71,10 +72,13 @@ class _ClothesGridState extends State<ClothesGrid>
   void initState() {
     super.initState();
     selected = {for (var clothes in widget.clothesList) clothes.id!: false};
+    _controller = AnimationController(vsync: this);
   }
 
   @override
   void dispose() {
+    _controller.dispose();
+
     super.dispose();
   }
 
@@ -241,7 +245,16 @@ class _ClothesGridState extends State<ClothesGrid>
     stackList.add(SvgPicture.asset("assets/icons/MiddleCloset.svg"));
     if (clothes.primaryCategoryId == null) {
       stackList.add(Positioned(
-          top: 19, child: SvgPicture.asset("assets/icons/NewClothes.svg")));
+          top: 12, child: SvgPicture.asset("assets/icons/hanger.svg")));
+      stackList.add(Positioned(
+          top: 12, child: SvgPicture.asset("assets/icons/NewClothes.svg")));
+      stackList.add(Positioned(
+          top: 32,
+          child: Lottie.asset(
+            'assets/lotties/add_clothes.lottie',
+            decoder: customDecoder,
+            width: 50,
+          )));
     } else {
       FirstCategory? firstCategory = firstCategories
           .where((element) => element.id == clothes.primaryCategoryId)
@@ -261,6 +274,13 @@ class _ClothesGridState extends State<ClothesGrid>
             child: ClothesDraftItem(
                 clothesDraft: clothes, key: ValueKey(Uuid().v4()))));
       }
+      stackList.add(Positioned(
+          top: 32,
+          child: Lottie.asset(
+            'assets/lotties/add_clothes.lottie',
+            decoder: customDecoder,
+            width: 50,
+          )));
     }
     return GestureDetector(
         child: Column(children: [
@@ -298,13 +318,6 @@ class ClothesCard extends StatefulWidget {
 class _ClothesCardState extends State<ClothesCard>
     with TickerProviderStateMixin {
   late final AnimationController _controller;
-  Future<LottieComposition?> customDecoder(List<int> bytes) {
-    return LottieComposition.decodeZip(bytes, filePicker: (files) {
-      return files.firstWhere(
-          (f) => f.name.startsWith('animations/') && f.name.endsWith('.json'));
-    });
-  }
-
   @override
   void initState() {
     super.initState();
