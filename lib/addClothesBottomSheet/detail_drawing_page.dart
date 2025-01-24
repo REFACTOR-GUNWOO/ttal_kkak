@@ -50,6 +50,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     PencilInfo(pencilSize: 5, width: 26),
     PencilInfo(pencilSize: 2, width: 18)
   ];
+  double clothesScale = 5.0;
 
   bool _isErasing = false;
   final double minDistance = 1.0; // 손떨림 방지를 위한 최소 거리 설정
@@ -254,11 +255,10 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                                   draftFieldName: "",
                                   onNextStep: () {
                                     showToast("초기화 되었습니다.", context);
+                                    clear();
                                   });
                             },
                           );
-
-                          clear();
                         },
                         child: Row(children: [
                           SvgPicture.asset(
@@ -392,53 +392,55 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
           ),
         ),
       ),
-      body: Align(
-        alignment: Alignment.center,
-        child: Stack(
-          alignment: Alignment.topCenter, // Stack 내에서 모든 위젯을 중앙 정렬
-          children: [
-            if (svgBgRoot != null)
-              CustomPaint(
-                size: Size(svgBgRoot!.viewport.width * 3,
-                    svgBgRoot!.viewport.height * 3),
-                painter: SvgBgPainter(svgBgRoot!, clothesColor, 3.0),
-              ),
-            if (_svgDecoUrl != null)
-              SvgPicture.asset(
-                _svgDecoUrl!,
-                width: 190,
-              ),
-            if (svgBgRoot != null)
-              CustomPaint(
-                size: Size(svgBgRoot!.viewport.width * 3,
-                    svgBgRoot!.viewport.height * 3),
-                painter: SvgLinePainter(
-                    svgLineRoot!,
-                    3.0,
-                    2.0,
-                    clothesColor == Color(0xFF282828)
-                        ? SystemColors.gray900
-                        : SystemColors.black),
-              ),
-            if (svgBgRoot != null)
-              GestureDetector(
-                onPanStart: _startDrawing,
-                onPanUpdate: _updateDrawing,
-                onPanEnd: _endDrawing,
-                child: CustomPaint(
-                  size: Size(svgBgRoot!.viewport.width * 3,
-                      svgBgRoot!.viewport.height * 3),
-                  painter: DrawingPainter(lines, svgBgRoot, 3.0),
+      body: SingleChildScrollView(
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: Stack(
+            alignment: Alignment.topCenter, // Stack 내에서 모든 위젯을 중앙 정렬
+            children: [
+              if (svgBgRoot != null)
+                CustomPaint(
+                  size: Size(svgBgRoot!.viewport.width * clothesScale,
+                      svgBgRoot!.viewport.height * clothesScale),
+                  painter: SvgBgPainter(svgBgRoot!, clothesColor, clothesScale),
                 ),
-              ),
-          ],
+              if (_svgDecoUrl != null)
+                SvgPicture.asset(
+                  _svgDecoUrl!,
+                  width: 190 * clothesScale / 3,
+                ),
+              if (svgBgRoot != null)
+                CustomPaint(
+                  size: Size(svgBgRoot!.viewport.width * clothesScale,
+                      svgBgRoot!.viewport.height * clothesScale),
+                  painter: SvgLinePainter(
+                      svgLineRoot!,
+                      clothesScale,
+                      2,
+                      clothesColor == Color(0xFF282828)
+                          ? SystemColors.gray900
+                          : SystemColors.black),
+                ),
+              if (svgBgRoot != null)
+                GestureDetector(
+                  onPanStart: _startDrawing,
+                  onPanUpdate: _updateDrawing,
+                  onPanEnd: _endDrawing,
+                  child: CustomPaint(
+                    size: Size(svgBgRoot!.viewport.width * (clothesScale),
+                        svgBgRoot!.viewport.height * (clothesScale)),
+                    painter: DrawingPainter(lines, svgBgRoot, clothesScale),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   void _startDrawing(DragStartDetails details) {
-    Offset localPosition = details.localPosition;
+    Offset localPosition = details.localPosition * 3 / clothesScale;
     setState(() {
       currentLine = DrawnLine([localPosition], brushWidth,
           _isErasing ? Colors.transparent : brushColor);
@@ -447,7 +449,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   }
 
   void _updateDrawing(DragUpdateDetails details) {
-    Offset localPosition = details.localPosition;
+    Offset localPosition = details.localPosition * 3 / clothesScale;
     setState(() {
       if (currentLine != null &&
           (currentLine!.points.isEmpty ||

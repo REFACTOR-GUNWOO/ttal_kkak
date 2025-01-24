@@ -7,12 +7,13 @@ abstract class BottomSheetStep extends StatefulWidget {
   final bool isUpdate;
   final ClothesDraftProvider draftProvider;
   final ClothesUpdateProvider updateProvider;
-  
+
   BottomSheetStep({
     required this.onNextStep,
     Key? key,
     required this.isUpdate,
-    required this.draftProvider, required this.updateProvider,
+    required this.draftProvider,
+    required this.updateProvider,
   }) : super(key: key);
 
   String getTitle();

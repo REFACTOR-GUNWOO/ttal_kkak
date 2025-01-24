@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "604512580588",
+    "project_id": "ttal-kkak",
+    "storage_bucket": "ttal-kkak.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604512580588:android:fbcaa633e1c260308706c9",
+        "android_client_info": {
+          "package_name": "com.example.ttal_kkak"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxJKacPNniesDzbuI1cr0y5cYajhVQSq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
