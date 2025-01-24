@@ -479,42 +479,105 @@ class ColorContainer {
 }
 
 List<ColorContainer> colorContainers = [
-  // 검정색
   ColorContainer([Color(0xFF282828), Color(0xFF161616)], Color(0xFF282828)),
-  // 흰색
-  ColorContainer([Color(0xFFFFFFFF), Color(0xFFE7E7E7), Color(0xFFEBE3D2)],
+  ColorContainer([Color(0xFFFFFFFF), Color(0xFFF2EFEB), Color(0xFFEBE3D2)],
       Color(0xFFFFFFFF)),
-  // 회색
-  ColorContainer([Color(0xFFC4C4C4), Color(0xFF8D8D8D), Color(0xFF606060)],
-      Color(0xFF8D8D8D)),
-  // 빨간색
-  ColorContainer([Color(0xFFDE9494), Color(0xFFC46060), Color(0xFFA84A4A)],
-      Color(0xFFC46060)),
-  // 주황색
-  ColorContainer([Color(0xFFE4B198), Color(0xFFD48E6A), Color(0xFFA76443)],
-      Color(0xFFD48E6A)),
-  // 주황색#2
-  ColorContainer([Color(0xFFF0E3A3), Color(0xFFE4D58B), Color(0xFFC4A151)],
-      Color(0xFFE4D58B)),
-  // 초록색
-  ColorContainer([Color(0xFFB6D9A1), Color(0xFF68A168), Color(0xFF467346)],
-      Color(0xFF68A168)),
-  // 초록색#2
-  ColorContainer([Color(0xFF9FB294), Color(0xFF627762), Color(0xFF3D513D)],
-      Color(0xFF627762)),
-  // 파란색
-  ColorContainer([Color(0xFFADCAD8), Color(0xFF5C8DBD), Color(0xFF304F85)],
-      Color(0xFF5C8DBD)),
-  // 파란색#2
-  ColorContainer([Color(0xFF8095A9), Color(0xFF43617F), Color(0xFF32485D)],
-      Color(0xFF43617F)),
-  // 보라색
-  ColorContainer([Color(0xFFB9A8DB), Color(0xFF957CC8), Color(0xFF5C4588)],
-      Color(0xFF957CC8)),
-  // 쿨핑크
-  ColorContainer([Color(0xFFD8B9D8), Color(0xFFAC6BAC), Color(0xFFA04D89)],
-      Color(0xFFAC6BAC)),
-  // 웜핑크
-  ColorContainer([Color(0xFFE1B5C2), Color(0xFFBE7187), Color(0xFFA04D65)],
-      Color(0xFFBE7187)),
+  ColorContainer([
+    Color(0xFFE2E2E2),
+    Color(0xFFC4C4C4),
+    Color(0xFF8D8D8D),
+    Color(0xFF606060),
+    Color(0xFF4D4C4C)
+  ], Color(0xFF8D8D8D)),
+  ColorContainer([
+    Color(0xFFEAD4D4),
+    Color(0xFFDE9494),
+    Color(0xFFC46060),
+    Color(0xFFA84A4A),
+    Color(0xFF8A3A3A)
+  ], Color(0xFFC46060)),
+  ColorContainer([
+    Color(0xFFEDD6CA),
+    Color(0xFFE4B198),
+    Color(0xFFD48E6A),
+    Color(0xFFA76443),
+    Color(0xFF9C4B22)
+  ], Color(0xFFD48E6A)),
+  ColorContainer([
+    Color(0xFFF1ECD6),
+    Color(0xFFF0E3A3),
+    Color(0xFFE4D58B),
+    Color(0xFFC4A151),
+    Color(0xFFAA770E)
+  ], Color(0xFFE4D58B)),
+  ColorContainer([
+    Color(0xFFE3ECDD),
+    Color(0xFFCFDEC7),
+    Color(0xFFB6D9A1),
+    Color(0xFF68A168),
+    Color(0xFF467346)
+  ], Color(0xFFB6D9A1)),
+  ColorContainer([
+    Color(0xFFD3DFCB),
+    Color(0xFF9FB294),
+    Color(0xFF627762),
+    Color(0xFF3D513D),
+    Color(0xFF323632)
+  ], Color(0xFF627762)),
+  ColorContainer([
+    Color(0xFFDBE7ED),
+    Color(0xFFADCAD8),
+    Color(0xFF5C8DBD),
+    Color(0xFF304F85),
+    Color(0xFF193462)
+  ], Color(0xFF5C8DBD)),
+  ColorContainer([
+    Color(0xFFC5CFDA),
+    Color(0xFF8095A9),
+    Color(0xFF43617F),
+    Color(0xFF32485D),
+    Color(0xFF293744)
+  ], Color(0xFF43617F)),
+  ColorContainer([
+    Color(0xFFE7E1F1),
+    Color(0xFFC9BDE1),
+    Color(0xFF9987BD),
+    Color(0xFF5C4588),
+    Color(0xFF504588)
+  ], Color(0xFF9987BD)),
+  ColorContainer([
+    Color(0xFFE8D8E8),
+    Color(0xFFD8B9D8),
+    Color(0xFFAC6BAC),
+    Color(0xFF854473),
+    Color(0xFF5B2D4E)
+  ], Color(0xFFAC6BAC)),
+  ColorContainer([
+    Color(0xFFE6CBD3),
+    Color(0xFFE1B5C2),
+    Color(0xFFBE7187),
+    Color(0xFFA04D65),
+    Color(0xFF722B3F)
+  ], Color(0xFFBE7187)),
+  ColorContainer([
+    Color(0xFFE8DDD7),
+    Color(0xFFD2B8A9),
+    Color(0xFFA17257),
+    Color(0xFF79513A),
+    Color(0xFF593416)
+  ], Color(0xFFA17257)),
+  ColorContainer([
+    Color(0xFFDDD4D0),
+    Color(0xFFC5B9B2),
+    Color(0xFF89766B),
+    Color(0xFF5B483D),
+    Color(0xFF3C2F28)
+  ], Color(0xFF89766B)),
+  ColorContainer([
+    Color(0xFFEFEBE3),
+    Color(0xFFDBD0BF),
+    Color(0xFFD8C6A9),
+    Color(0xFFB29A75),
+    Color(0xFF847151)
+  ], Color(0xFFD8C6A9)),
 ];
