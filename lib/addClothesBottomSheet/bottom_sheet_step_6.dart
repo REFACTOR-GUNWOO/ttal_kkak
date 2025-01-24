@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
+import 'package:ttal_kkak/styles/colors_styles.dart';
+import 'package:ttal_kkak/styles/text_styles.dart';
 
 class BottomSheetBody6 extends StatefulWidget implements BottomSheetStep {
   final VoidCallback onNextStep;
@@ -35,19 +38,22 @@ class DetailInfoCards extends State<BottomSheetBody6> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => DetailDrawingInfoPage(
+                  builder: (context) => DetailDrawingPage(
                         isUpdate: widget.isUpdate,
-                        updateProvider: widget.updateProvider,
                         draftProvider: widget.draftProvider,
+                        updateProvider: widget.updateProvider,
                       )),
             );
           },
-          child: _buildDetailCard(
-            context,
-            title: '디테일 드로잉',
-            description: '드로잉으로 옷의 디테일을 표현해주세요!',
-            icon: Icons.info_outline,
-          ),
+          child: _buildDetailCard(context,
+              title: '디테일 드로잉',
+              description: '드로잉으로 옷의 디테일을\n표현해주세요!',
+              icon: SvgPicture.asset(
+                "assets/icons/drawing_guide_icon.svg",
+                alignment: Alignment.center,
+                height: 56,
+                width: 56,
+              )),
         ),
       ],
     );
@@ -56,7 +62,7 @@ class DetailInfoCards extends State<BottomSheetBody6> {
   Widget _buildDetailCard(BuildContext context,
       {required String title,
       required String description,
-      required IconData icon}) {
+      required SvgPicture icon}) {
     return Container(
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -65,48 +71,54 @@ class DetailInfoCards extends State<BottomSheetBody6> {
         border: Border.all(color: Colors.grey[300]!),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: OneLineTextStyles.SemiBold16.copyWith(
+                          color: SystemColors.black),
                     ),
-                    SizedBox(width: 4.0),
-                    Icon(
-                      icon,
-                      color: Colors.orange,
-                      size: 18,
-                    ),
+                    Stack(children: [
+                      IconButton(
+                          padding: EdgeInsets.all(0), // 패딩 설정
+                          constraints: BoxConstraints(), // constraints
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DetailDrawingInfoPage(
+                                        isUpdate: widget.isUpdate,
+                                        updateProvider: widget.updateProvider,
+                                        draftProvider: widget.draftProvider,
+                                      )),
+                            );
+                          },
+                          icon: SvgPicture.asset("assets/icons/coach_mark.svg"))
+                    ])
                   ],
                 ),
-                SizedBox(height: 8.0),
+                SizedBox(
+                  height: 8,
+                ),
                 Text(
                   description,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
+                  style: BodyTextStyles.Regular14.copyWith(
+                      color: SystemColors.gray700),
                 ),
               ],
             ),
           ),
-          SizedBox(width: 16.0),
-          Container(
-            width: 50.0,
-            height: 50.0,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
+          Center(
+              // 화면 중앙에 배치
+              child: icon),
         ],
       ),
     );
@@ -130,40 +142,50 @@ class DetailDrawingInfoPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('디테일 드로잉'),
+        title: Text(
+          '디테일 드로잉',
+          style: OneLineTextStyles.Bold18.copyWith(color: SystemColors.black),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
+        toolbarHeight: 48,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildDrawingSection(
+              image: Image.asset(
+                "assets/images/drawing_guide_image_1.png",
+                width: 350,
+                height: 152,
+              ),
               title: '옷의 프린팅을 그려보세요',
-              description: '구체적이기보다는 구분할 수 있을 정도의 프린팅을 그려 넣어주세요',
+              description: '구체적이기보다는 구분할 수 있을 정도의\n프린팅을 그려 넣어주세요',
             ),
             SizedBox(height: 24.0),
             _buildDrawingSection(
+              image: Image.asset(
+                "assets/images/drawing_guide_image_2.png",
+                width: 350,
+                height: 152,
+              ),
               title: '옷의 패턴을 그려보세요',
-              description: '줄무늬나 체크무늬, 땡땡이 같은 옷의 패턴을 그려보세요',
+              description: '줄무늬나 체크무늬, 땡땡이 같은 옷의\n패턴을 그려보세요',
             ),
             Spacer(),
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DetailDrawingPage(
-                              isUpdate: isUpdate,
-                              draftProvider: draftProvider,
-                              updateProvider: updateProvider,
-                            )),
-                  );
+                  Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  minimumSize: Size(MediaQuery.of(context).size.width - 40, 56),
                   backgroundColor: Colors.black,
                   padding:
                       EdgeInsets.symmetric(horizontal: 64.0, vertical: 16.0),
@@ -171,6 +193,7 @@ class DetailDrawingInfoPage extends StatelessWidget {
                 child: Text('확인', style: TextStyle(color: Colors.white)),
               ),
             ),
+            SizedBox(height: 17.0),
           ],
         ),
       ),
@@ -178,30 +201,23 @@ class DetailDrawingInfoPage extends StatelessWidget {
   }
 
   Widget _buildDrawingSection(
-      {required String title, required String description}) {
+      {required String title,
+      required String description,
+      required Image image}) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          width: double.infinity,
-          height: 100.0,
-          color: Colors.grey[200],
-        ),
+        ClipRRect(borderRadius: BorderRadius.circular(6.0), child: image),
         SizedBox(height: 16.0),
         Text(
           title,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          style: BodyTextStyles.Bold24,
         ),
         SizedBox(height: 8.0),
         Text(
           description,
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[600],
-          ),
+          textAlign: TextAlign.center,
+          style: BodyTextStyles.Regular16,
         ),
       ],
     );
