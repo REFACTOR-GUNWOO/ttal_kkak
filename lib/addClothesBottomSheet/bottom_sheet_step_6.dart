@@ -147,9 +147,9 @@ class DetailDrawingInfoPage extends StatelessWidget {
           style: OneLineTextStyles.Bold18.copyWith(color: SystemColors.black),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 48,
+        backgroundColor: Colors.transparent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -187,10 +187,9 @@ class DetailDrawingInfoPage extends StatelessWidget {
                   ),
                   minimumSize: Size(MediaQuery.of(context).size.width - 40, 56),
                   backgroundColor: Colors.black,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 64.0, vertical: 16.0),
+                  padding: EdgeInsets.symmetric(vertical: 20.0),
                 ),
-                child: Text('확인', style: TextStyle(color: Colors.white)),
+                child: Text('확인', style: OneLineTextStyles.SemiBold16),
               ),
             ),
             SizedBox(height: 17.0),
