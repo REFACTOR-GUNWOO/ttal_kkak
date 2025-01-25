@@ -66,10 +66,21 @@ class Clothes implements ClothesFamily {
 
   void updatePrimaryCategoryId(int primaryCategoryId) {
     this.primaryCategoryId = primaryCategoryId;
+    int secondCategoryId = secondCategories
+        .where((element) => element.firstCategoryId == primaryCategoryId)
+        .first
+        .id;
+    this.updateSecondaryCategoryId(secondCategoryId);
   }
 
   void updateSecondaryCategoryId(int secondaryCategoryId) {
     this.secondaryCategoryId = secondaryCategoryId;
+    this.details = ClothesDetails(
+        details: secondCategories
+            .firstWhere((element) => element.id == secondaryCategoryId)
+            .details
+            .map((e) => e.defaultDetail)
+            .toList());
   }
 
   void updateDetails(ClothesDetails clothesDetails) {
@@ -573,67 +584,106 @@ class ClothesColor {
 
 final List<ColorContainer> colorContainers = [
   ColorContainer(
-    [ClothesColor.LightBlack, ClothesColor.Black],
-    ClothesColor.LightBlack
-  ),
+      [ClothesColor.LightBlack, ClothesColor.Black], ClothesColor.LightBlack),
   ColorContainer(
-    [ClothesColor.White, ClothesColor.WarmWhite, ClothesColor.CoolWhite],
-    ClothesColor.White
-  ),
-  ColorContainer(
-    [ClothesColor.Gray50, ClothesColor.Gray100, ClothesColor.Gray500, ClothesColor.Gray600, ClothesColor.Gray800],
-    ClothesColor.Gray500
-  ),
-  ColorContainer(
-    [ClothesColor.Red50, ClothesColor.Red100, ClothesColor.Red500, ClothesColor.Red600, ClothesColor.Red800],
-    ClothesColor.Red500
-  ),
-  ColorContainer(
-    [ClothesColor.Orange50, ClothesColor.Orange100, ClothesColor.Orange500, ClothesColor.Orange600, ClothesColor.Orange800],
-    ClothesColor.Orange500
-  ),
-  ColorContainer(
-    [ClothesColor.Yellow50, ClothesColor.Yellow100, ClothesColor.Yellow500, ClothesColor.Yellow600, ClothesColor.Yellow800],
-    ClothesColor.Yellow500
-  ),
-  ColorContainer(
-    [ClothesColor.LightGreen50, ClothesColor.LightGreen100, ClothesColor.LightGreen500, ClothesColor.LightGreen600, ClothesColor.LightGreen800],
-    ClothesColor.LightGreen500
-  ),
-  ColorContainer(
-    [ClothesColor.Green50, ClothesColor.Green100, ClothesColor.Green500, ClothesColor.Green600, ClothesColor.Green800],
-    ClothesColor.Green500
-  ),
-  ColorContainer(
-    [ClothesColor.LightBlue50, ClothesColor.LightBlue100, ClothesColor.LightBlue500, ClothesColor.LightBlue600, ClothesColor.LightBlue800],
-    ClothesColor.LightBlue500
-  ),
-  ColorContainer(
-    [ClothesColor.Blue50, ClothesColor.Blue100, ClothesColor.Blue500, ClothesColor.Blue600, ClothesColor.Blue800],
-    ClothesColor.Blue500
-  ),
-  ColorContainer(
-    [ClothesColor.Purple50, ClothesColor.Purple100, ClothesColor.Purple500, ClothesColor.Purple600, ClothesColor.Purple800],
-    ClothesColor.Purple500
-  ),
-  ColorContainer(
-    [ClothesColor.CoolPink50, ClothesColor.CoolPink100, ClothesColor.CoolPink500, ClothesColor.CoolPink600, ClothesColor.CoolPink800],
-    ClothesColor.CoolPink500
-  ),
-  ColorContainer(
-    [ClothesColor.WarmPink50, ClothesColor.WarmPink100, ClothesColor.WarmPink500, ClothesColor.WarmPink600, ClothesColor.WarmPink800],
-    ClothesColor.WarmPink500
-  ),
-  ColorContainer(
-    [ClothesColor.WarmBrown50, ClothesColor.WarmBrown100, ClothesColor.WarmBrown500, ClothesColor.WarmBrown600, ClothesColor.WarmBrown800],
-    ClothesColor.WarmBrown500
-  ),
-  ColorContainer(
-    [ClothesColor.DarkBrown50, ClothesColor.DarkBrown100, ClothesColor.DarkBrown500, ClothesColor.DarkBrown600, ClothesColor.DarkBrown800],
-    ClothesColor.DarkBrown500
-  ),
-  ColorContainer(
-    [ClothesColor.Beige50, ClothesColor.Beige100, ClothesColor.Beige500, ClothesColor.Beige600, ClothesColor.Beige800],
-    ClothesColor.Beige500
-  ),
+      [ClothesColor.White, ClothesColor.WarmWhite, ClothesColor.CoolWhite],
+      ClothesColor.White),
+  ColorContainer([
+    ClothesColor.Gray50,
+    ClothesColor.Gray100,
+    ClothesColor.Gray500,
+    ClothesColor.Gray600,
+    ClothesColor.Gray800
+  ], ClothesColor.Gray500),
+  ColorContainer([
+    ClothesColor.Red50,
+    ClothesColor.Red100,
+    ClothesColor.Red500,
+    ClothesColor.Red600,
+    ClothesColor.Red800
+  ], ClothesColor.Red500),
+  ColorContainer([
+    ClothesColor.Orange50,
+    ClothesColor.Orange100,
+    ClothesColor.Orange500,
+    ClothesColor.Orange600,
+    ClothesColor.Orange800
+  ], ClothesColor.Orange500),
+  ColorContainer([
+    ClothesColor.Yellow50,
+    ClothesColor.Yellow100,
+    ClothesColor.Yellow500,
+    ClothesColor.Yellow600,
+    ClothesColor.Yellow800
+  ], ClothesColor.Yellow500),
+  ColorContainer([
+    ClothesColor.LightGreen50,
+    ClothesColor.LightGreen100,
+    ClothesColor.LightGreen500,
+    ClothesColor.LightGreen600,
+    ClothesColor.LightGreen800
+  ], ClothesColor.LightGreen500),
+  ColorContainer([
+    ClothesColor.Green50,
+    ClothesColor.Green100,
+    ClothesColor.Green500,
+    ClothesColor.Green600,
+    ClothesColor.Green800
+  ], ClothesColor.Green500),
+  ColorContainer([
+    ClothesColor.LightBlue50,
+    ClothesColor.LightBlue100,
+    ClothesColor.LightBlue500,
+    ClothesColor.LightBlue600,
+    ClothesColor.LightBlue800
+  ], ClothesColor.LightBlue500),
+  ColorContainer([
+    ClothesColor.Blue50,
+    ClothesColor.Blue100,
+    ClothesColor.Blue500,
+    ClothesColor.Blue600,
+    ClothesColor.Blue800
+  ], ClothesColor.Blue500),
+  ColorContainer([
+    ClothesColor.Purple50,
+    ClothesColor.Purple100,
+    ClothesColor.Purple500,
+    ClothesColor.Purple600,
+    ClothesColor.Purple800
+  ], ClothesColor.Purple500),
+  ColorContainer([
+    ClothesColor.CoolPink50,
+    ClothesColor.CoolPink100,
+    ClothesColor.CoolPink500,
+    ClothesColor.CoolPink600,
+    ClothesColor.CoolPink800
+  ], ClothesColor.CoolPink500),
+  ColorContainer([
+    ClothesColor.WarmPink50,
+    ClothesColor.WarmPink100,
+    ClothesColor.WarmPink500,
+    ClothesColor.WarmPink600,
+    ClothesColor.WarmPink800
+  ], ClothesColor.WarmPink500),
+  ColorContainer([
+    ClothesColor.WarmBrown50,
+    ClothesColor.WarmBrown100,
+    ClothesColor.WarmBrown500,
+    ClothesColor.WarmBrown600,
+    ClothesColor.WarmBrown800
+  ], ClothesColor.WarmBrown500),
+  ColorContainer([
+    ClothesColor.DarkBrown50,
+    ClothesColor.DarkBrown100,
+    ClothesColor.DarkBrown500,
+    ClothesColor.DarkBrown600,
+    ClothesColor.DarkBrown800
+  ], ClothesColor.DarkBrown500),
+  ColorContainer([
+    ClothesColor.Beige50,
+    ClothesColor.Beige100,
+    ClothesColor.Beige500,
+    ClothesColor.Beige600,
+    ClothesColor.Beige800
+  ], ClothesColor.Beige500),
 ];

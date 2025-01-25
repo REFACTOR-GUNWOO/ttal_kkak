@@ -47,7 +47,11 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
   void initState() {
     print("_AddClothesState");
     super.initState();
+  }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     ClothesDraft? draft = widget.draftProvider.currentDraft;
     Clothes? clothes = widget.updateProvider.currentClothes;
     int? secondaryCategoryId = widget.isUpdate
@@ -73,12 +77,12 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                   orElse: () => e.details.first))
           .toList();
       if (details == null) {
-        save();
+        save(force: true);
       }
     });
   }
 
-  void save() async {
+  void save({bool force = false}) async {
     if (widget.isUpdate) {
       final clothes = widget.updateProvider.currentClothes!;
       clothes.updateDetails(
@@ -87,7 +91,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
       return;
     } else {
       ClothesDraft draft = widget.draftProvider.currentDraft!;
-      if (draft.getLastFilledFieldIndex() > 3) {
+      if (draft.getLastFilledFieldIndex() > 3 && !force) {
         draft.details =
             ClothesDetails(details: selectedDetailMap.values.toList());
 

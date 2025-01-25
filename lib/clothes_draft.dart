@@ -76,7 +76,8 @@ class ClothesDraft implements ClothesFamily {
           details = null;
           break;
         case 'color':
-          color = null;
+          // 색상은 안바꿈
+          // color = null;
           break;
         case 'drawLines':
           drawLines = null;

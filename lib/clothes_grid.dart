@@ -440,7 +440,6 @@ class _ClothesItemState extends State<ClothesItem> {
       ClothesDetails clothesDetails, SecondCategory secondCategory) async {
     List<ClothesDetail> details = clothesDetails.details;
 
-    // 카테고리 우선순위에 따라 정렬
     details.sort((a, b) {
       return b.toString().compareTo(a.toString());
     });

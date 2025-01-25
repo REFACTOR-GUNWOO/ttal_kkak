@@ -57,14 +57,19 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
   }
 
   void save(int categoryId) async {
+    SecondCategory category =
+        secondCategories.firstWhere((element) => element.id == categoryId);
     if (widget.isUpdate) {
       final clothes = widget.updateProvider.currentClothes!;
       clothes.updateSecondaryCategoryId(categoryId);
+      clothes.updateColor(category.defaultColor ?? clothes.color);
+
       await widget.updateProvider.update(clothes);
       widget.onNextStep();
       return;
     } else {
       ClothesDraft? draft = widget.draftProvider.currentDraft!;
+      draft.color = category.defaultColor;
       if (draft.getLastFilledFieldIndex() > 2) {
         draft.secondaryCategoryId = categoryId;
 
