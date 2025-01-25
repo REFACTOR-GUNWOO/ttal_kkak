@@ -478,106 +478,162 @@ class ColorContainer {
   ColorContainer(this.colors, this.representativeColor);
 }
 
-List<ColorContainer> colorContainers = [
-  ColorContainer([Color(0xFF282828), Color(0xFF161616)], Color(0xFF282828)),
-  ColorContainer([Color(0xFFFFFFFF), Color(0xFFF2EFEB), Color(0xFFEBE3D2)],
-      Color(0xFFFFFFFF)),
-  ColorContainer([
-    Color(0xFFE2E2E2),
-    Color(0xFFC4C4C4),
-    Color(0xFF8D8D8D),
-    Color(0xFF606060),
-    Color(0xFF4D4C4C)
-  ], Color(0xFF8D8D8D)),
-  ColorContainer([
-    Color(0xFFEAD4D4),
-    Color(0xFFDE9494),
-    Color(0xFFC46060),
-    Color(0xFFA84A4A),
-    Color(0xFF8A3A3A)
-  ], Color(0xFFC46060)),
-  ColorContainer([
-    Color(0xFFEDD6CA),
-    Color(0xFFE4B198),
-    Color(0xFFD48E6A),
-    Color(0xFFA76443),
-    Color(0xFF9C4B22)
-  ], Color(0xFFD48E6A)),
-  ColorContainer([
-    Color(0xFFF1ECD6),
-    Color(0xFFF0E3A3),
-    Color(0xFFE4D58B),
-    Color(0xFFC4A151),
-    Color(0xFFAA770E)
-  ], Color(0xFFE4D58B)),
-  ColorContainer([
-    Color(0xFFE3ECDD),
-    Color(0xFFCFDEC7),
-    Color(0xFFB6D9A1),
-    Color(0xFF68A168),
-    Color(0xFF467346)
-  ], Color(0xFFB6D9A1)),
-  ColorContainer([
-    Color(0xFFD3DFCB),
-    Color(0xFF9FB294),
-    Color(0xFF627762),
-    Color(0xFF3D513D),
-    Color(0xFF323632)
-  ], Color(0xFF627762)),
-  ColorContainer([
-    Color(0xFFDBE7ED),
-    Color(0xFFADCAD8),
-    Color(0xFF5C8DBD),
-    Color(0xFF304F85),
-    Color(0xFF193462)
-  ], Color(0xFF5C8DBD)),
-  ColorContainer([
-    Color(0xFFC5CFDA),
-    Color(0xFF8095A9),
-    Color(0xFF43617F),
-    Color(0xFF32485D),
-    Color(0xFF293744)
-  ], Color(0xFF43617F)),
-  ColorContainer([
-    Color(0xFFE7E1F1),
-    Color(0xFFC9BDE1),
-    Color(0xFF9987BD),
-    Color(0xFF5C4588),
-    Color(0xFF504588)
-  ], Color(0xFF9987BD)),
-  ColorContainer([
-    Color(0xFFE8D8E8),
-    Color(0xFFD8B9D8),
-    Color(0xFFAC6BAC),
-    Color(0xFF854473),
-    Color(0xFF5B2D4E)
-  ], Color(0xFFAC6BAC)),
-  ColorContainer([
-    Color(0xFFE6CBD3),
-    Color(0xFFE1B5C2),
-    Color(0xFFBE7187),
-    Color(0xFFA04D65),
-    Color(0xFF722B3F)
-  ], Color(0xFFBE7187)),
-  ColorContainer([
-    Color(0xFFE8DDD7),
-    Color(0xFFD2B8A9),
-    Color(0xFFA17257),
-    Color(0xFF79513A),
-    Color(0xFF593416)
-  ], Color(0xFFA17257)),
-  ColorContainer([
-    Color(0xFFDDD4D0),
-    Color(0xFFC5B9B2),
-    Color(0xFF89766B),
-    Color(0xFF5B483D),
-    Color(0xFF3C2F28)
-  ], Color(0xFF89766B)),
-  ColorContainer([
-    Color(0xFFEFEBE3),
-    Color(0xFFDBD0BF),
-    Color(0xFFD8C6A9),
-    Color(0xFFB29A75),
-    Color(0xFF847151)
-  ], Color(0xFFD8C6A9)),
+class ClothesColor {
+  static const LightBlack = Color(0xFF282828);
+  static const Black = Color(0xFF161616);
+
+  static const White = Color(0xFFFFFFFF);
+  static const WarmWhite = Color(0xFFF2EFEB);
+  static const CoolWhite = Color(0xFFEBE3D2);
+
+  static const Gray50 = Color(0xFFE2E2E2);
+  static const Gray100 = Color(0xFFC4C4C4);
+  static const Gray500 = Color(0xFF8D8D8D);
+  static const Gray600 = Color(0xFF606060);
+  static const Gray800 = Color(0xFF4D4C4C);
+
+  static const Red50 = Color(0xFFEAD4D4);
+  static const Red100 = Color(0xFFDE9494);
+  static const Red500 = Color(0xFFC46060);
+  static const Red600 = Color(0xFFA84A4A);
+  static const Red800 = Color(0xFF8A3A3A);
+
+  static const Orange50 = Color(0xFFEDD6CA);
+  static const Orange100 = Color(0xFFE4B198);
+  static const Orange500 = Color(0xFFD48E6A);
+  static const Orange600 = Color(0xFFA76443);
+  static const Orange800 = Color(0xFF9C4B22);
+
+  static const Yellow50 = Color(0xFFF1ECD6);
+  static const Yellow100 = Color(0xFFF0E3A3);
+  static const Yellow500 = Color(0xFFE4D58B);
+  static const Yellow600 = Color(0xFFC4A151);
+  static const Yellow800 = Color(0xFFAA770E);
+
+  static const LightGreen50 = Color(0xFFE3ECDD);
+  static const LightGreen100 = Color(0xFFCFDEC7);
+  static const LightGreen500 = Color(0xFFB6D9A1);
+  static const LightGreen600 = Color(0xFF68A168);
+  static const LightGreen800 = Color(0xFF467346);
+
+  static const Green50 = Color(0xFFD3DFCB);
+  static const Green100 = Color(0xFF9FB294);
+  static const Green500 = Color(0xFF627762);
+  static const Green600 = Color(0xFF3D513D);
+  static const Green800 = Color(0xFF323632);
+
+  static const LightBlue50 = Color(0xFFDBE7ED);
+  static const LightBlue100 = Color(0xFFADCAD8);
+  static const LightBlue500 = Color(0xFF5C8DBD);
+  static const LightBlue600 = Color(0xFF304F85);
+  static const LightBlue800 = Color(0xFF193462);
+
+  static const Blue50 = Color(0xFFC5CFDA);
+  static const Blue100 = Color(0xFF8095A9);
+  static const Blue500 = Color(0xFF43617F);
+  static const Blue600 = Color(0xFF32485D);
+  static const Blue800 = Color(0xFF293744);
+
+  static const Purple50 = Color(0xFFE7E1F1);
+  static const Purple100 = Color(0xFFC9BDE1);
+  static const Purple500 = Color(0xFF9987BD);
+  static const Purple600 = Color(0xFF5C4588);
+  static const Purple800 = Color(0xFF504588);
+
+  static const CoolPink50 = Color(0xFFE8D8E8);
+  static const CoolPink100 = Color(0xFFD8B9D8);
+  static const CoolPink500 = Color(0xFFAC6BAC);
+  static const CoolPink600 = Color(0xFF854473);
+  static const CoolPink800 = Color(0xFF5B2D4E);
+
+  static const WarmPink50 = Color(0xFFE6CBD3);
+  static const WarmPink100 = Color(0xFFE1B5C2);
+  static const WarmPink500 = Color(0xFFBE7187);
+  static const WarmPink600 = Color(0xFFA04D65);
+  static const WarmPink800 = Color(0xFF722B3F);
+
+  static const WarmBrown50 = Color(0xFFE8DDD7);
+  static const WarmBrown100 = Color(0xFFD2B8A9);
+  static const WarmBrown500 = Color(0xFFA17257);
+  static const WarmBrown600 = Color(0xFF79513A);
+  static const WarmBrown800 = Color(0xFF593416);
+
+  static const DarkBrown50 = Color(0xFFDDD4D0);
+  static const DarkBrown100 = Color(0xFFC5B9B2);
+  static const DarkBrown500 = Color(0xFF89766B);
+  static const DarkBrown600 = Color(0xFF5B483D);
+  static const DarkBrown800 = Color(0xFF3C2F28);
+
+  static const Beige50 = Color(0xFFEFEBE3);
+  static const Beige100 = Color(0xFFDBD0BF);
+  static const Beige500 = Color(0xFFD8C6A9);
+  static const Beige600 = Color(0xFFB29A75);
+  static const Beige800 = Color(0xFF847151);
+}
+
+final List<ColorContainer> colorContainers = [
+  ColorContainer(
+    [ClothesColor.LightBlack, ClothesColor.Black],
+    ClothesColor.LightBlack
+  ),
+  ColorContainer(
+    [ClothesColor.White, ClothesColor.WarmWhite, ClothesColor.CoolWhite],
+    ClothesColor.White
+  ),
+  ColorContainer(
+    [ClothesColor.Gray50, ClothesColor.Gray100, ClothesColor.Gray500, ClothesColor.Gray600, ClothesColor.Gray800],
+    ClothesColor.Gray500
+  ),
+  ColorContainer(
+    [ClothesColor.Red50, ClothesColor.Red100, ClothesColor.Red500, ClothesColor.Red600, ClothesColor.Red800],
+    ClothesColor.Red500
+  ),
+  ColorContainer(
+    [ClothesColor.Orange50, ClothesColor.Orange100, ClothesColor.Orange500, ClothesColor.Orange600, ClothesColor.Orange800],
+    ClothesColor.Orange500
+  ),
+  ColorContainer(
+    [ClothesColor.Yellow50, ClothesColor.Yellow100, ClothesColor.Yellow500, ClothesColor.Yellow600, ClothesColor.Yellow800],
+    ClothesColor.Yellow500
+  ),
+  ColorContainer(
+    [ClothesColor.LightGreen50, ClothesColor.LightGreen100, ClothesColor.LightGreen500, ClothesColor.LightGreen600, ClothesColor.LightGreen800],
+    ClothesColor.LightGreen500
+  ),
+  ColorContainer(
+    [ClothesColor.Green50, ClothesColor.Green100, ClothesColor.Green500, ClothesColor.Green600, ClothesColor.Green800],
+    ClothesColor.Green500
+  ),
+  ColorContainer(
+    [ClothesColor.LightBlue50, ClothesColor.LightBlue100, ClothesColor.LightBlue500, ClothesColor.LightBlue600, ClothesColor.LightBlue800],
+    ClothesColor.LightBlue500
+  ),
+  ColorContainer(
+    [ClothesColor.Blue50, ClothesColor.Blue100, ClothesColor.Blue500, ClothesColor.Blue600, ClothesColor.Blue800],
+    ClothesColor.Blue500
+  ),
+  ColorContainer(
+    [ClothesColor.Purple50, ClothesColor.Purple100, ClothesColor.Purple500, ClothesColor.Purple600, ClothesColor.Purple800],
+    ClothesColor.Purple500
+  ),
+  ColorContainer(
+    [ClothesColor.CoolPink50, ClothesColor.CoolPink100, ClothesColor.CoolPink500, ClothesColor.CoolPink600, ClothesColor.CoolPink800],
+    ClothesColor.CoolPink500
+  ),
+  ColorContainer(
+    [ClothesColor.WarmPink50, ClothesColor.WarmPink100, ClothesColor.WarmPink500, ClothesColor.WarmPink600, ClothesColor.WarmPink800],
+    ClothesColor.WarmPink500
+  ),
+  ColorContainer(
+    [ClothesColor.WarmBrown50, ClothesColor.WarmBrown100, ClothesColor.WarmBrown500, ClothesColor.WarmBrown600, ClothesColor.WarmBrown800],
+    ClothesColor.WarmBrown500
+  ),
+  ColorContainer(
+    [ClothesColor.DarkBrown50, ClothesColor.DarkBrown100, ClothesColor.DarkBrown500, ClothesColor.DarkBrown600, ClothesColor.DarkBrown800],
+    ClothesColor.DarkBrown500
+  ),
+  ColorContainer(
+    [ClothesColor.Beige50, ClothesColor.Beige100, ClothesColor.Beige500, ClothesColor.Beige600, ClothesColor.Beige800],
+    ClothesColor.Beige500
+  ),
 ];

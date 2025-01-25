@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:ttal_kkak/clothes.dart';
 
 class FirstCategory {
@@ -7,13 +8,14 @@ class FirstCategory {
   String description;
   String hangerUrl;
   double hangerPosition;
-  FirstCategory(
-      {required this.id,
-      required this.name,
-      required this.hangerPosition,
-      required this.priority,
-      required this.hangerUrl,
-      required this.description});
+  FirstCategory({
+    required this.id,
+    required this.name,
+    required this.hangerPosition,
+    required this.priority,
+    required this.hangerUrl,
+    required this.description,
+  });
 }
 
 List<FirstCategory> firstCategories = [
@@ -77,6 +79,7 @@ class SecondCategory {
   double? clothesBottomPosition;
   List<CategoryDetail> details;
   bool hasDecorationLayer = false;
+  Color? defaultColor = null;
 
   SecondCategory(
       {required this.id,
@@ -86,6 +89,7 @@ class SecondCategory {
       required this.defaultImage,
       required this.code,
       required this.details,
+      this.defaultColor,
       this.clothesTopPosition,
       this.clothesBottomPosition,
       this.hasDecorationLayer = false});
@@ -555,6 +559,7 @@ List<SecondCategory> secondCategories = [
       firstCategoryId: 3,
       clothesTopPosition: 12,
       hasDecorationLayer: true,
+      defaultColor: ClothesColor.DarkBrown600,
       details: [
         CategoryDetail(
             priority: 2,
@@ -575,6 +580,7 @@ List<SecondCategory> secondCategories = [
       priority: 16,
       firstCategoryId: 3,
       clothesTopPosition: 12,
+      defaultColor: ClothesColor.Green500,
       details: [
         CategoryDetail(
             priority: 2,
@@ -596,6 +602,7 @@ List<SecondCategory> secondCategories = [
       firstCategoryId: 3,
       clothesTopPosition: 12,
       hasDecorationLayer: true,
+      defaultColor: ClothesColor.Beige100,
       details: [
         CategoryDetail(
             priority: 2,
@@ -711,6 +718,7 @@ List<SecondCategory> secondCategories = [
       priority: 21,
       firstCategoryId: 2,
       clothesTopPosition: 12,
+      defaultColor: ClothesColor.Blue100,
       details: [
         CategoryDetail(
             priority: 1,
@@ -1014,6 +1022,7 @@ List<SecondCategory> secondCategories = [
       priority: 36,
       clothesBottomPosition: 40,
       firstCategoryId: 5,
+      defaultColor: ClothesColor.WarmBrown500,
       details: [
         CategoryDetail(
             priority: 1,
@@ -1033,6 +1042,7 @@ List<SecondCategory> secondCategories = [
       priority: 37,
       clothesBottomPosition: 40,
       firstCategoryId: 5,
+      defaultColor: ClothesColor.Yellow100,
       details: [
         CategoryDetail(
             priority: 1,
