@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/draft_clear_warning_dialog.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
-import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -17,10 +14,8 @@ class BottomSheetBody4 extends StatefulWidget implements BottomSheetStep {
       {super.key,
       required this.onNextStep,
       required this.isUpdate,
-      required this.draftProvider,
       required this.updateProvider});
   final bool isUpdate;
-  final ClothesDraftProvider draftProvider;
   final ClothesUpdateProvider updateProvider;
 
   @override
@@ -52,11 +47,8 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    ClothesDraft? draft = widget.draftProvider.currentDraft;
     Clothes? clothes = widget.updateProvider.currentClothes;
-    int? secondaryCategoryId = widget.isUpdate
-        ? clothes?.secondaryCategoryId
-        : draft?.secondaryCategoryId;
+    int? secondaryCategoryId = clothes?.secondaryCategoryId;
 
     SecondCategory? secondCategory = secondaryCategoryId == null
         ? null
@@ -67,8 +59,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
         categoryDetails = secondCategory.details;
       }
 
-      ClothesDetails? details =
-          widget.isUpdate ? clothes?.details : draft?.details;
+      ClothesDetails? details = clothes?.details;
       categoryDetails
           .map((e) => selectedDetailMap[e] = details == null
               ? e.defaultDetail
@@ -83,38 +74,12 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
   }
 
   void save({bool force = false}) async {
-    if (widget.isUpdate) {
-      final clothes = widget.updateProvider.currentClothes!;
-      clothes.updateDetails(
-          ClothesDetails(details: selectedDetailMap.values.toList()));
-      await widget.updateProvider.update(clothes);
-      return;
-    } else {
-      ClothesDraft draft = widget.draftProvider.currentDraft!;
-      if (draft.getLastFilledFieldIndex() > 3 && !force) {
-        draft.details =
-            ClothesDetails(details: selectedDetailMap.values.toList());
+    final clothes = widget.updateProvider.currentClothes!;
+    clothes.updateDetails(
+        ClothesDetails(details: selectedDetailMap.values.toList()));
 
-        draft.resetFieldsAfterIndex(3);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return DraftClearWarningDialog(
-                draftFieldName: "상세설정",
-                draft: draft,
-                onNextStep: widget.onNextStep);
-          },
-        );
-        return;
-      }
-
-      draft.details =
-          ClothesDetails(details: selectedDetailMap.values.toList());
-      await widget.draftProvider.updateDraft(draft);
-
-      // widget.onNextStep();
-      return;
-    }
+    await widget.updateProvider.update(clothes);
+    return;
   }
 
   @override

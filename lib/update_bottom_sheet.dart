@@ -35,7 +35,10 @@ class UpdateBottomSheet extends StatelessWidget {
 
                 // 정보 수정 기능
                 updateProvider!.set(clothes);
-                ShowAddClothesBottomSheet(context, true);
+                ShowAddClothesBottomSheet(context, true, () {
+                  updateProvider?.clear();
+                  onReload;
+                });
               },
             ),
             _buildOptionButton(

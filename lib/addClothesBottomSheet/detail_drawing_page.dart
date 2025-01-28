@@ -5,13 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:ttal_kkak/Category.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_5.dart';
 import 'package:ttal_kkak/clothes.dart';
-import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/common_bottom_sheet.dart';
 import 'package:ttal_kkak/common/show_toast.dart';
 import 'package:ttal_kkak/main_layout.dart';
-import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
+import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
@@ -21,13 +19,9 @@ class DetailDrawingPage extends StatefulWidget {
   @override
   _DetailDrawingPageState createState() => _DetailDrawingPageState();
   const DetailDrawingPage(
-      {super.key,
-      required this.isUpdate,
-      required this.draftProvider,
-      required this.updateProvider});
+      {super.key, required this.isUpdate, required this.updateProvider});
 
   final bool isUpdate;
-  final ClothesDraftProvider draftProvider;
   final ClothesUpdateProvider updateProvider;
 }
 
@@ -59,47 +53,23 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ClothesDraft? draft = widget.draftProvider.currentDraft;
       Clothes? clothes = widget.updateProvider.currentClothes;
 
       setState(() {
-        if (widget.isUpdate) {
-          lines = clothes!.drawLines;
-          clothesColor = clothes.color;
-          SecondCategory secondCategory = secondCategories.firstWhere(
-              (element) => element.id == clothes.secondaryCategoryId);
-          ClothesDetails clothesDetails = clothes.details!;
-          _loadDrawableRoot(clothesDetails, secondCategory);
-        } else {
-          lines = draft!.drawLines ?? [];
-          clothesColor = draft.color!;
-          SecondCategory secondCategory = secondCategories
-              .firstWhere((element) => element.id == draft.secondaryCategoryId);
-          ClothesDetails clothesDetails = draft.details!;
-          _loadDrawableRoot(clothesDetails, secondCategory);
-        }
+        lines = clothes!.drawLines;
+        clothesColor = clothes.color;
+        SecondCategory secondCategory = secondCategories
+            .firstWhere((element) => element.id == clothes.secondaryCategoryId);
+        ClothesDetails clothesDetails = clothes.details!;
+        _loadDrawableRoot(clothesDetails, secondCategory);
       });
     });
   }
 
   void save() async {
-    if (widget.isUpdate) {
-      final clothes = widget.updateProvider.currentClothes!;
-      clothes.updateDrawlines(lines);
-      await widget.updateProvider.update(clothes);
-    } else {
-      final provider =
-          Provider.of<ClothesDraftProvider>(context, listen: false);
-
-      ClothesDraft? draft = provider.currentDraft;
-      print("drawing Save: ${draft}");
-      if (draft != null) {
-        print("draft lines${lines}");
-        draft.drawLines = lines;
-        await ClothesRepository().addClothes(draft.toClotehs());
-        provider.clearDraft();
-      }
-    }
+    final clothes = widget.updateProvider.currentClothes!;
+    clothes.updateDrawlines(lines);
+    await widget.updateProvider.update(clothes);
   }
 
   void _showColorPicker(BuildContext context) {
@@ -220,6 +190,10 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                     ),
                     onPressed: () => {
                       save(),
+                      Provider.of<ClothesUpdateProvider>(context, listen: false)
+                          .clear(),
+                      Provider.of<ReloadHomeProvider>(context, listen: false)
+                          .triggerReload(),
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => MainLayout()),
                       )
@@ -417,7 +391,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                       svgLineRoot!,
                       clothesScale,
                       2,
-                      clothesColor == Color(0xFF282828)
+                      clothesColor == ClothesColor.Black
                           ? SystemColors.gray900
                           : SystemColors.black),
                 ),

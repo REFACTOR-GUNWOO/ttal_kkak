@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/Category.dart';
 import 'package:ttal_kkak/closet_repository.dart';
 import 'package:ttal_kkak/clothes.dart';
-import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/clothes_draft_repository.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
-import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -272,15 +268,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    Provider.of<ClothesDraftProvider>(context, listen: false).loadFromLocal();
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       List<Clothes> loadedClothes = await ClothesRepository().loadClothes();
       String? loadedClosetName = await ClosetRepository().loadClosetName();
-      ClothesDraft? clothesDraft = await ClothesDraftRepository().load();
       setState(() {
         clothesList = loadedClothes;
-        clothesDraft = clothesDraft;
         if (loadedClosetName != null) closetName = loadedClosetName;
       });
     });

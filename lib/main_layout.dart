@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
 import 'package:ttal_kkak/daily_outfit_page.dart';
 import 'package:ttal_kkak/main_page.dart';
+import 'package:ttal_kkak/provider/clothes_update_provider.dart';
+import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
-import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/setting_page.dart';
 import 'package:ttal_kkak/statistics_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -223,7 +224,15 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                                   Provider.of<ScrollControllerProvider>(context,
                                           listen: false)
                                       .scrollToTop(); // 드래프트 초기화
-                                  ShowAddClothesBottomSheet(context, false);
+                                  ShowAddClothesBottomSheet(context, false, () {
+                                    // 드래프트 초기화
+                                    Provider.of<ClothesUpdateProvider>(context,
+                                            listen: false)
+                                        .clear();
+                                    Provider.of<ReloadHomeProvider>(context,
+                                            listen: false)
+                                        .triggerReload();
+                                  });
                                 },
                                 child: Container(
                                   width: 36,

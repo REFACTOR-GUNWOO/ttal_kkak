@@ -10,7 +10,7 @@ class ClothesRepository {
   static Database? _database;
 
   static const String _tableName = 'clothes';
-  static const String _dbName = 'clothes_test.db';
+  static const String _dbName = 'clothes_test_v5.db';
 
   Future<List<Clothes>> loadClothes() async {
     final res = await (await database).rawQuery("SELECT * FROM ${_tableName}");
@@ -37,14 +37,14 @@ class ClothesRepository {
       version: 23,
       onCreate: (db, version) async {
         // 'todos' 테이블을 생성하는 SQL 쿼리를 실행합니다.
-        await _createTable(db);
+        await _createTableV2(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < newVersion) {
-          // 기존 테이블을 드롭하고 다시 만듭니다.
-          await _dropTable(db);
-          await _createTable(db);
+        var batch = db.batch();
+        if (oldVersion == 23) {
+          updateTableToV2(batch);
         }
+        await batch.commit();
       },
     );
   }
@@ -65,14 +65,37 @@ class ClothesRepository {
     ''');
   }
 
+  void updateTableToV2(Batch batch) async {
+    batch.execute('ALTER TABLE $_tableName ADD isDraft INTEGER');
+  }
+
+  Future<void> _createTableV2(Database db) async {
+    await db.execute('''
+      CREATE TABLE $_tableName(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        primaryCategoryId INTEGER NOT NULL,
+        secondaryCategoryId INTEGER NOT NULL,
+        colorValue INTEGER NOT NULL,
+        price INTEGER,
+        millisecondsSinceEpoch INTEGER NOT NULL,
+        drawLines TEXT NOT NULL,
+        details TEXT NOT NULL,
+        isDraft INTEGER
+      )
+    ''');
+  }
+
   Future<void> _dropTable(Database db) async {
     await db.execute('DROP TABLE IF EXISTS $_tableName');
   }
 
-  Future<void> addClothes(Clothes clothes) async {
+  Future<Clothes> addClothes(Clothes clothes) async {
     final db = await database;
     clothes.id = null;
     final res = await db.insert(_tableName, clothes.toJson());
+    clothes.id = res;
+    return clothes;
   }
 
   Future<void> updateClothes(Clothes clothes) async {

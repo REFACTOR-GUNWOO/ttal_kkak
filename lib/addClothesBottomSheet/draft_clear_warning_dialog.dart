@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/clothes_draft_repository.dart';
-import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
+import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/clothes_repository.dart';
+import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 
 class DraftClearWarningDialog extends StatelessWidget {
   final String draftFieldName;
   final String? title;
   final String? description;
-  final ClothesDraft? draft;
+  final Clothes? draft;
   final VoidCallback onNextStep;
   DraftClearWarningDialog(
       {required this.draftFieldName,
@@ -18,11 +18,11 @@ class DraftClearWarningDialog extends StatelessWidget {
       this.description});
   void clear(BuildContext context) async {
     if (draft != null) {
-      ClothesDraftProvider provider =
-          Provider.of<ClothesDraftProvider>(context, listen: false);
+      ClothesUpdateProvider provider =
+          Provider.of<ClothesUpdateProvider>(context, listen: false);
 
-      await ClothesDraftRepository().save(draft!);
-      await provider.updateDraft(draft!);
+      await ClothesRepository().addClothes(draft!);
+      await provider.update(draft!);
     }
     onNextStep();
   }

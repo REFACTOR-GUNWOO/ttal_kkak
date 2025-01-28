@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/category.dart';
 
-abstract class ClothesFamily {}
 
-class Clothes implements ClothesFamily {
+class Clothes  {
   int? id;
   String name;
   int primaryCategoryId;
@@ -16,9 +15,10 @@ class Clothes implements ClothesFamily {
   int? price;
   DateTime regTs = DateTime.now();
   List<DrawnLine> drawLines;
+  bool isDraft = false;
 
   Clothes(
-      {required this.id,
+      {this.id,
       required this.name,
       required this.primaryCategoryId,
       required this.secondaryCategoryId,
@@ -26,6 +26,7 @@ class Clothes implements ClothesFamily {
       required this.color,
       required this.price,
       required this.drawLines,
+      this.isDraft = false,
       required this.regTs});
 
   factory Clothes.fromJson(Map<String, dynamic> json) {
@@ -41,6 +42,7 @@ class Clothes implements ClothesFamily {
         price: json["price"],
         regTs: DateTime.fromMillisecondsSinceEpoch(
             json['millisecondsSinceEpoch'] as int),
+        isDraft: json["isDraft"] == 1,
         drawLines: (jsonDecode(json['drawLines']) as List)
             .map((lineJson) => DrawnLine.fromJson(lineJson))
             .toList());
@@ -56,7 +58,8 @@ class Clothes implements ClothesFamily {
       'colorValue': color.value,
       'price': price,
       'millisecondsSinceEpoch': regTs.millisecondsSinceEpoch,
-      'drawLines': jsonEncode(drawLines.map((e) => (e.toJson())).toList())
+      'drawLines': jsonEncode(drawLines.map((e) => (e.toJson())).toList()),
+      'isDraft': isDraft ? 1 : 0
     };
   }
 

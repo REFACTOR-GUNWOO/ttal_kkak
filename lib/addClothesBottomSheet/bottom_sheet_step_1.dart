@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
-import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
+import 'package:ttal_kkak/category.dart';
+import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
+import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/utils/length_limited_text_input.dart';
 
 class BottomSheetBody1 extends StatefulWidget implements BottomSheetStep {
   const BottomSheetBody1(
       {super.key,
       required this.onNextStep,
-      required this.isUpdate,
-      required this.draftProvider,
-      required this.updateProvider});
+      required this.updateProvider,
+      required this.isUpdate});
   final VoidCallback onNextStep;
-  final bool isUpdate;
-  final ClothesDraftProvider draftProvider;
   final ClothesUpdateProvider updateProvider;
-
+  final isUpdate;
   @override
   _BottomSheetBody1State createState() => _BottomSheetBody1State();
 
@@ -35,32 +35,36 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
     print("_AddClothesState");
     super.initState();
     _controller = TextEditingController();
-
-    if (widget.isUpdate) {
-      _controller.text = widget.updateProvider.currentClothes?.name ?? "";
-    } else {
-      _controller.text = widget.draftProvider.currentDraft?.name ?? "";
-    }
+    _controller.text = widget.updateProvider.currentClothes?.name ?? "";
   }
 
   void _handleTextChanged(String newText) {}
 
   void _onSubmit(String text) async {
-    if (widget.isUpdate) {
-      final clothes = widget.updateProvider.currentClothes!;
-      clothes.updateName(text);
-      await widget.updateProvider.update(clothes);
+    Clothes? clothes = widget.updateProvider.currentClothes;
+    if (clothes == null) {
+      SecondCategory secondCategory =
+          secondCategories.firstWhere((e) => e.firstCategoryId == 1);
+      ClothesDetails clothesDetails = ClothesDetails(
+          details: secondCategory.details.map((e) => e.defaultDetail).toList());
+      clothes = Clothes(
+        name: text,
+        primaryCategoryId: 1,
+        secondaryCategoryId: secondCategory.id,
+        color: ClothesColor.Black,
+        details: clothesDetails,
+        price: 0,
+        drawLines: [],
+        regTs: DateTime.now(),
+        isDraft: true,
+      );
+      Clothes saved = await (ClothesRepository().addClothes(clothes));
+      widget.updateProvider.set(saved);
+      Provider.of<ReloadHomeProvider>(context, listen: false).triggerReload();
     } else {
-      print("_onSubmit");
-      ClothesDraft? draft = widget.draftProvider.currentDraft;
-      if (draft == null) {
-        widget.draftProvider.updateDraft(ClothesDraft(name: text));
-        widget.onNextStep();
-        return;
-      }
-      draft.name = text;
-      await widget.draftProvider.updateDraft(ClothesDraft(name: text));
+      clothes.updateName(text);
     }
+    await widget.updateProvider.update(clothes);
     widget.onNextStep();
   }
 

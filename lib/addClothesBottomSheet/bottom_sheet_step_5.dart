@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/clothes.dart';
-import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
-
-import 'package:flutter/material.dart';
 
 // Start of Selection
 class BottomSheetBody5 extends StatefulWidget implements BottomSheetStep {
@@ -14,10 +10,8 @@ class BottomSheetBody5 extends StatefulWidget implements BottomSheetStep {
       {super.key,
       required this.onNextStep,
       required this.isUpdate,
-      required this.draftProvider,
       required this.updateProvider});
   final bool isUpdate;
-  final ClothesDraftProvider draftProvider;
   final ClothesUpdateProvider updateProvider;
 
   @override
@@ -37,10 +31,9 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
   void initState() {
     super.initState();
 
-    ClothesDraft? draft = widget.draftProvider.currentDraft;
     Clothes? clothes = widget.updateProvider.currentClothes;
     setState(() {
-      Color? color = widget.isUpdate ? clothes?.color : draft?.color;
+      Color? color = clothes?.color;
       if (color != null) {
         _selectedColor = color;
         _selectedColorGroup = colorContainers
@@ -51,18 +44,10 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
   }
 
   void save() async {
-    if (widget.isUpdate) {
-      final clothes = widget.updateProvider.currentClothes!;
-      clothes.updateColor(_selectedColor);
-      await widget.updateProvider.update(clothes);
-      return;
-    } else {
-      ClothesDraft draft = widget.draftProvider.currentDraft!;
-      draft.color = _selectedColor;
-      await widget.draftProvider.updateDraft(draft);
-
-      return;
-    }
+    final clothes = widget.updateProvider.currentClothes!;
+    clothes.updateColor(_selectedColor);
+    await widget.updateProvider.update(clothes);
+    return;
   }
 
   @override

@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
-import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/clothes_draft_repository.dart';
-import 'package:ttal_kkak/clothes_repository.dart';
-import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -16,7 +12,6 @@ class BottomSheetAppBar extends StatelessWidget {
   final BottomSheetStep? nextStep;
   final BottomSheetStep? previousStep;
   final BottomSheetStep currentStep;
-  final int currentDraftLevel;
   final int currentStepCount;
   final bool isUpdate;
   const BottomSheetAppBar({
@@ -27,7 +22,6 @@ class BottomSheetAppBar extends StatelessWidget {
     this.previousStep,
     required this.isUpdate,
     required this.currentStep,
-    required this.currentDraftLevel,
     required this.currentStepCount,
   });
 
@@ -78,19 +72,9 @@ class BottomSheetAppBar extends StatelessWidget {
                         ? Container()
                         : TextButton(
                             onPressed: () async {
-                              ClothesDraft? draft =
-                                  await ClothesDraftRepository().load();
-                              if (draft != null) {
-                                Provider.of<ClothesDraftProvider>(context,
-                                        listen: false)
-                                    .clearDraft();
-                                draft.drawLines = [];
-                                await ClothesRepository()
-                                    .addClothes(draft.toClotehs());
-                              }
-                              Provider.of<ReloadHomeProvider>(context,
-                                      listen: false)
-                                  .triggerReload();
+                              // Provider.of<ReloadHomeProvider>(context,
+                              //         listen: false)
+                              //     .triggerReload();
                               Navigator.pop(context);
                             },
                             child: Row(
@@ -108,27 +92,18 @@ class BottomSheetAppBar extends StatelessWidget {
                               ],
                             ))
                     : TextButton(
-                        onPressed: currentStepCount < currentDraftLevel
-                            ? nextStepFun
-                            : null,
+                        onPressed: nextStepFun,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
                               nextStep!.getTitle(),
                               style: OneLineTextStyles.Medium14.copyWith(
-                                  color: currentStepCount < currentDraftLevel
-                                      ? SystemColors.black
-                                      : SystemColors.gray500),
+                                  color: SystemColors.black),
                             ),
                             SizedBox(width: 7),
-                            SvgPicture.asset(
-                              'assets/icons/arrow_right.svg',
-                              height: 12,
-                              color: currentStepCount < currentDraftLevel
-                                  ? SystemColors.black
-                                  : SystemColors.gray500,
-                            ),
+                            SvgPicture.asset('assets/icons/arrow_right.svg',
+                                height: 12, color: SystemColors.black),
                           ],
                         ))),
           ],

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/draft_clear_warning_dialog.dart';
 import 'package:ttal_kkak/category.dart';
-import 'package:ttal_kkak/clothes_draft.dart';
-import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -16,10 +13,8 @@ class BottomSheetBody3 extends StatefulWidget implements BottomSheetStep {
       {super.key,
       required this.onNextStep,
       required this.isUpdate,
-      required this.draftProvider,
       required this.updateProvider});
   final bool isUpdate;
-  final ClothesDraftProvider draftProvider;
   final ClothesUpdateProvider updateProvider;
 
   @override
@@ -40,58 +35,43 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
     print("_AddClothesState");
     super.initState();
 
-    ClothesDraft? draft = widget.draftProvider.currentDraft;
-    int? primaryCategoryId = widget.isUpdate
-        ? widget.updateProvider.currentClothes?.primaryCategoryId
-        : draft?.primaryCategoryId;
+    int? primaryCategoryId =
+        widget.updateProvider.currentClothes?.primaryCategoryId;
 
     setState(() {
       categories = secondCategories
           .where((element) => element.firstCategoryId == primaryCategoryId)
           .toList();
 
-      selectedCategoryId = widget.isUpdate
-          ? widget.updateProvider.currentClothes?.secondaryCategoryId
-          : draft?.secondaryCategoryId;
+      selectedCategoryId =
+          widget.updateProvider.currentClothes?.secondaryCategoryId;
     });
   }
 
   void save(int categoryId) async {
     SecondCategory category =
         secondCategories.firstWhere((element) => element.id == categoryId);
+    final clothes = widget.updateProvider.currentClothes!;
+    clothes.updateSecondaryCategoryId(categoryId);
     if (widget.isUpdate) {
-      final clothes = widget.updateProvider.currentClothes!;
-      clothes.updateSecondaryCategoryId(categoryId);
-      clothes.updateColor(category.defaultColor ?? clothes.color);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return DraftClearWarningDialog(
+              draftFieldName: "하위 카테고리",
+              draft: clothes,
+              onNextStep: widget.onNextStep);
+        },
+      );
 
-      await widget.updateProvider.update(clothes);
-      widget.onNextStep();
-      return;
-    } else {
-      ClothesDraft? draft = widget.draftProvider.currentDraft!;
-      draft.color = category.defaultColor;
-      if (draft.getLastFilledFieldIndex() > 2) {
-        draft.secondaryCategoryId = categoryId;
-
-        draft.resetFieldsAfterIndex(2);
-
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return DraftClearWarningDialog(
-                draftFieldName: "하위 카테고리",
-                draft: draft,
-                onNextStep: widget.onNextStep);
-          },
-        );
-        return;
-      }
-      draft.secondaryCategoryId = categoryId;
-      widget.draftProvider.updateDraft(draft);
-
-      widget.onNextStep();
       return;
     }
+
+    clothes.updateColor(category.defaultColor ?? clothes.color);
+
+    await widget.updateProvider.update(clothes);
+    widget.onNextStep();
+    return;
   }
 
   @override

@@ -6,12 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
-import 'package:ttal_kkak/clothes_draft.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/custom_decoder.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
-import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -35,7 +33,6 @@ class ClothesGrid extends StatefulWidget {
 
 class _ClothesGridState extends State<ClothesGrid>
     with TickerProviderStateMixin {
-  ClothesDraftProvider? draftProvider;
   ClothesUpdateProvider? updateProvider;
   late final AnimationController _controller;
   List<DrawnLine> lines = [];
@@ -87,14 +84,12 @@ class _ClothesGridState extends State<ClothesGrid>
     super.didChangeDependencies();
     // 여기서 Provider에 접근
     setState(() {
-      draftProvider = Provider.of<ClothesDraftProvider>(context);
       updateProvider = Provider.of<ClothesUpdateProvider>(context);
     });
   }
 
   int getClothesListLength() {
-    return (draftProvider?.currentDraft == null ? 0 : 1) +
-        widget.clothesList.length;
+    return widget.clothesList.length;
   }
 
   @override
@@ -122,15 +117,8 @@ class _ClothesGridState extends State<ClothesGrid>
                           ? updateProvider!.currentClothes!
                           : e)
                       .toList();
-                  List<ClothesFamily> rowClothes =
-                      ((draftProvider?.currentDraft != null)
-                          ? (index == 0)
-                              ? [
-                                  draftProvider!.currentDraft!,
-                                  ...clothesList.sublist(start, end - 1)
-                                ]
-                              : clothesList.sublist(start - 1, end - 1)
-                          : widget.clothesList.sublist(start, end));
+                  List<Clothes> rowClothes =
+                      widget.clothesList.sublist(start, end);
 
                   return Padding(
                     child: Container(
@@ -170,9 +158,9 @@ class _ClothesGridState extends State<ClothesGrid>
   }
 
   List<Widget> _buildClothesCardRow(
-      BuildContext context, List<ClothesFamily> rowClothes) {
+      BuildContext context, List<Clothes> rowClothes) {
     List<Widget> list = rowClothes.map((clothes) {
-      if (clothes is Clothes) {
+      if (updateProvider?.currentClothes?.id != clothes.id) {
         return ClothesCard(
             clothes: clothes,
             isSelected: selected[clothes.id] ?? false,
@@ -190,10 +178,8 @@ class _ClothesGridState extends State<ClothesGrid>
                           context, clothes, updateProvider)
                     }
                 });
-      } else if (clothes is ClothesDraft) {
-        return _buildClothesDraftCard(context, clothes);
       } else {
-        throw Error();
+        return _buildClothesDraftCard(context, clothes);
       }
     }).toList();
     int listDiff = columnCount - list.length;
@@ -239,8 +225,9 @@ class _ClothesGridState extends State<ClothesGrid>
 
   Widget _buildClothesDraftCard(
     BuildContext context,
-    ClothesDraft clothes,
+    Clothes _clothes,
   ) {
+    Clothes clothes = updateProvider?.currentClothes ?? _clothes;
     List<Widget> stackList = [];
     stackList.add(SvgPicture.asset("assets/icons/MiddleCloset.svg"));
     if (clothes.primaryCategoryId == null) {
@@ -271,8 +258,7 @@ class _ClothesGridState extends State<ClothesGrid>
         stackList.add(Positioned(
             top: secondCategory.clothesTopPosition,
             bottom: secondCategory.clothesBottomPosition,
-            child: ClothesDraftItem(
-                clothesDraft: clothes, key: ValueKey(Uuid().v4()))));
+            child: ClothesItem(clothes: clothes, key: ValueKey(Uuid().v4()))));
       }
       stackList.add(Positioned(
           top: 32,
@@ -283,18 +269,31 @@ class _ClothesGridState extends State<ClothesGrid>
           )));
     }
     return GestureDetector(
+        onTap: () => {
+              if (widget.isOnboarding)
+                {
+                  setState(() {
+                    selected[clothes.id!] = !selected[clothes.id]!;
+                  })
+                }
+              else
+                {
+                  showClothesOptionsBottomSheet(
+                      context, clothes, updateProvider)
+                }
+            },
         child: Column(children: [
-      Stack(alignment: Alignment.center, children: stackList),
-      SizedBox(
-        height: 8,
-      ),
-      Text(clothes.name ?? "",
-          style: OneLineTextStyles.SemiBold10.copyWith(
-              color: SystemColors.gray800)),
-      SizedBox(
-        height: 8,
-      ),
-    ]));
+          Stack(alignment: Alignment.center, children: stackList),
+          SizedBox(
+            height: 8,
+          ),
+          Text(clothes.name ?? "",
+              style: OneLineTextStyles.SemiBold10.copyWith(
+                  color: SystemColors.gray800)),
+          SizedBox(
+            height: 8,
+          ),
+        ]));
   }
 }
 
@@ -491,110 +490,12 @@ class _ClothesItemState extends State<ClothesItem> {
                     svgLineRoot!,
                     1.0,
                     1.0,
-                    clothesColor == Color(0xFF282828)
+                    clothesColor == ClothesColor.Black
                         ? SystemColors.gray900
                         : SystemColors.black),
               ),
           ],
         ));
-  }
-}
-
-class ClothesDraftItem extends StatefulWidget {
-  final ClothesDraft clothesDraft;
-  const ClothesDraftItem({Key? key, required this.clothesDraft})
-      : super(key: key);
-
-  @override
-  _ClothesDraftItemState createState() => _ClothesDraftItemState();
-}
-
-class _ClothesDraftItemState extends State<ClothesDraftItem> {
-  List<DrawnLine> lines = [];
-  Color clothesColor = Colors.transparent;
-  DrawableRoot? svgBgRoot;
-  DrawableRoot? svgLineRoot;
-  String? svgDecoUrl;
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!mounted) return;
-      setState(() {
-        lines = widget.clothesDraft.drawLines ?? [];
-        clothesColor = widget.clothesDraft.color ?? Colors.white;
-        SecondCategory secondCategory = secondCategories
-                .where((element) =>
-                    element.id == widget.clothesDraft.secondaryCategoryId)
-                .firstOrNull ??
-            secondCategories[0];
-        ClothesDetails clothesDetails = widget.clothesDraft.details ??
-            ClothesDetails(
-                details:
-                    secondCategory.details.map((e) => e.details[0]).toList());
-        _loadDrawableRoot(clothesDetails, secondCategory);
-      });
-    });
-  }
-
-  Future<void> _loadDrawableRoot(
-      ClothesDetails clothesDetails, SecondCategory secondCategory) async {
-    List<ClothesDetail> details = clothesDetails.details;
-
-    // 카테고리 우선순위에 따라 정렬
-    details.sort((a, b) {
-      return b.toString().compareTo(a.toString());
-    });
-    var svgBgUrl =
-        "assets/images/clothes/bg/${secondCategory.code}${details.map((e) => '_${e.name}').join()}.svg";
-    var svgLineUrl =
-        "assets/images/clothes/line/${secondCategory.code}${details.map((e) => '_${e.name}').join()}.svg";
-
-    final String svgBgString = await rootBundle.loadString(svgBgUrl);
-
-    final String svgLineString = await rootBundle.loadString(svgLineUrl);
-    if (secondCategory.hasDecorationLayer) {
-      svgDecoUrl =
-          "assets/images/clothes/deco/${secondCategory.code}${details.map((e) => '_${e.name}').join()}.svg";
-    }
-
-    DrawableRoot bgDrawableRoot =
-        await svg.fromSvgString(svgBgString, svgBgString);
-    DrawableRoot lineDrawableRoot =
-        await svg.fromSvgString(svgLineString, svgLineString);
-    if (!mounted) return; // 위젯이 제거된 경우 작업 중단
-
-    setState(() {
-      svgBgRoot = bgDrawableRoot;
-      svgLineRoot = lineDrawableRoot;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topCenter, // Stack 내에서 모든 위젯을 중앙 정렬
-
-      children: [
-        if (svgBgRoot != null)
-          CustomPaint(
-            size: Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
-            painter: SvgBgPainter(svgBgRoot!, clothesColor, 1.0),
-          ),
-        if (svgDecoUrl != null) SvgPicture.asset(svgDecoUrl!),
-        if (svgBgRoot != null)
-          CustomPaint(
-            size: Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
-            painter: SvgLinePainter(
-                svgLineRoot!,
-                1.0,
-                1.0,
-                clothesColor == Color(0xFF282828)
-                    ? SystemColors.gray900
-                    : SystemColors.black),
-          ),
-      ],
-    );
   }
 }
 

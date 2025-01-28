@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
-import 'package:ttal_kkak/provider/clothes_draft_provider.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -13,10 +12,8 @@ class BottomSheetBody6 extends StatefulWidget implements BottomSheetStep {
       {super.key,
       required this.onNextStep,
       required this.isUpdate,
-      required this.draftProvider,
       required this.updateProvider});
   final bool isUpdate;
-  final ClothesDraftProvider draftProvider;
   final ClothesUpdateProvider updateProvider;
 
   @override
@@ -40,7 +37,6 @@ class DetailInfoCards extends State<BottomSheetBody6> {
               MaterialPageRoute(
                   builder: (context) => DetailDrawingPage(
                         isUpdate: widget.isUpdate,
-                        draftProvider: widget.draftProvider,
                         updateProvider: widget.updateProvider,
                       )),
             );
@@ -97,7 +93,6 @@ class DetailInfoCards extends State<BottomSheetBody6> {
                                   builder: (context) => DetailDrawingInfoPage(
                                         isUpdate: widget.isUpdate,
                                         updateProvider: widget.updateProvider,
-                                        draftProvider: widget.draftProvider,
                                       )),
                             );
                           },
@@ -127,14 +122,12 @@ class DetailInfoCards extends State<BottomSheetBody6> {
 
 class DetailDrawingInfoPage extends StatelessWidget {
   final bool isUpdate;
-  final ClothesDraftProvider draftProvider;
   final ClothesUpdateProvider updateProvider;
 
   // 생성자를 통해 파라미터를 전달받음
   const DetailDrawingInfoPage(
       {Key? key,
       required this.isUpdate,
-      required this.draftProvider,
       required this.updateProvider})
       : super(key: key);
   @override
