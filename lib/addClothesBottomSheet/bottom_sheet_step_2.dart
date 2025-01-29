@@ -43,7 +43,10 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
   }
 
   void save(int categoryId) async {
-    final clothes = widget.updateProvider.currentClothes!;
+    final clothes = widget.updateProvider.currentClothes;
+    if (clothes == null) {
+      return;
+    }
     print("update : ${clothes.name}");
 
     clothes.updatePrimaryCategoryId(categoryId);

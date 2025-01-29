@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/category.dart';
 
-
-class Clothes  {
+class Clothes {
   int? id;
   String name;
   int primaryCategoryId;
@@ -690,3 +689,11 @@ final List<ColorContainer> colorContainers = [
     ClothesColor.Beige800
   ], ClothesColor.Beige500),
 ];
+
+enum ClothesDraftStatus {
+  NAME,
+  PRIMARY_CATEGORY,
+  SECONDARY_CATEGORY,
+  DETAILS,
+  COLOR,
+}

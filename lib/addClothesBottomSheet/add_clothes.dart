@@ -123,6 +123,7 @@ class _StepContainerState extends State<StepContainer> {
                   _currentStep == 0 ? null : _buildSteps()[_currentStep - 1],
               currentStep: _buildSteps()[_currentStep],
               currentStepCount: _currentStep,
+              
               isUpdate: widget.isUpdate),
           Padding(
             child: _buildSteps()[_currentStep] as Widget,

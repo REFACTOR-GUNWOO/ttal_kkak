@@ -159,28 +159,25 @@ class _ClothesGridState extends State<ClothesGrid>
 
   List<Widget> _buildClothesCardRow(
       BuildContext context, List<Clothes> rowClothes) {
-    List<Widget> list = rowClothes.map((clothes) {
-      if (updateProvider?.currentClothes?.id != clothes.id) {
-        return ClothesCard(
-            clothes: clothes,
-            isSelected: selected[clothes.id] ?? false,
-            isOnboarding: widget.isOnboarding,
-            onTap: () => {
-                  if (widget.isOnboarding)
-                    {
-                      setState(() {
-                        selected[clothes.id!] = !selected[clothes.id]!;
-                      })
-                    }
-                  else
-                    {
-                      showClothesOptionsBottomSheet(
-                          context, clothes, updateProvider)
-                    }
-                });
-      } else {
-        return _buildClothesDraftCard(context, clothes);
-      }
+    List<Widget> list = [];
+    rowClothes.map((clothes) {
+      list.add(ClothesCard(
+          clothes: clothes,
+          isSelected: selected[clothes.id] ?? false,
+          isOnboarding: widget.isOnboarding,
+          onTap: () => {
+                if (widget.isOnboarding)
+                  {
+                    setState(() {
+                      selected[clothes.id!] = !selected[clothes.id]!;
+                    })
+                  }
+                else
+                  {
+                    showClothesOptionsBottomSheet(
+                        context, clothes, updateProvider)
+                  }
+              }));
     }).toList();
     int listDiff = columnCount - list.length;
 
@@ -346,7 +343,62 @@ class _ClothesCardState extends State<ClothesCard>
 
   @override
   Widget build(BuildContext context) {
-    Clothes clothes = widget.clothes;
+    Clothes clothes =
+        Provider.of<ClothesUpdateProvider>(context).currentClothes?.id ==
+                widget.clothes.id
+            ? Provider.of<ClothesUpdateProvider>(context).currentClothes!
+            : widget.clothes;
+
+    List<Widget> stackList = [];
+    stackList.add(SvgPicture.asset("assets/icons/MiddleCloset.svg"));
+    if (clothes.isDraft) {
+      stackList.add(Positioned(
+          top: 12, child: SvgPicture.asset("assets/icons/hanger.svg")));
+      stackList.add(Positioned(
+          top: 12, child: SvgPicture.asset("assets/icons/NewClothes.svg")));
+    } else {
+      FirstCategory? firstCategory = firstCategories
+          .where((element) => element.id == clothes.primaryCategoryId)
+          .firstOrNull;
+      SecondCategory? secondCategory = secondCategories
+          .where((element) => element.id == clothes.secondaryCategoryId)
+          .firstOrNull;
+      if (firstCategory != null) {
+        stackList.add(Positioned(
+            top: firstCategory.hangerPosition,
+            child: SvgPicture.asset(firstCategory.hangerUrl)));
+      }
+      if (secondCategory != null) {
+        stackList.add(Positioned(
+            top: secondCategory.clothesTopPosition,
+            bottom: secondCategory.clothesBottomPosition,
+            child: ClothesItem(clothes: clothes, key: ValueKey(Uuid().v4()))));
+      }
+    }
+    if (Provider.of<ClothesUpdateProvider>(context).currentClothes?.id ==
+        clothes.id) {
+      stackList.add(Positioned(
+          top: 32,
+          child: Lottie.asset(
+            'assets/lotties/add_clothes.lottie',
+            decoder: customDecoder,
+            width: 50,
+          )));
+    }
+
+    if (widget.isOnboarding) {
+      stackList.add(Positioned(
+        top: 30,
+        child: Lottie.asset(
+          'assets/lotties/select_motion.lottie',
+          decoder: customDecoder,
+          controller: _controller,
+          onLoaded: (composition) {
+            _controller.duration = composition.duration;
+          },
+        ),
+      ));
+    }
 
     FirstCategory firstCategory = firstCategories
         .firstWhere((element) => element.id == clothes.primaryCategoryId);
@@ -357,27 +409,7 @@ class _ClothesCardState extends State<ClothesCard>
             {widget.onTap(), if (widget.isOnboarding) _toggleAnimation()},
         child: Column(children: [
           Stack(alignment: Alignment.topCenter, children: [
-            SvgPicture.asset("assets/icons/MiddleCloset.svg"),
-            Positioned(
-                top: firstCategory.hangerPosition,
-                child: SvgPicture.asset(firstCategory.hangerUrl)),
-            Positioned(
-                top: secondCategory.clothesTopPosition,
-                bottom: secondCategory.clothesBottomPosition,
-                child: ClothesItem(
-                    clothes: clothes, key: ValueKey(ValueKey(Uuid().v4())))),
-            if (widget.isOnboarding)
-              Positioned(
-                top: 30,
-                child: Lottie.asset(
-                  'assets/lotties/select_motion.lottie',
-                  decoder: customDecoder,
-                  controller: _controller,
-                  onLoaded: (composition) {
-                    _controller.duration = composition.duration;
-                  },
-                ),
-              ),
+            ...stackList,
           ]),
           SizedBox(
             height: 8,

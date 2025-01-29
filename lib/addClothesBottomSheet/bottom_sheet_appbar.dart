@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
+import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -27,6 +29,8 @@ class BottomSheetAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Clothes? clothes =
+        Provider.of<ClothesUpdateProvider>(context).currentClothes;
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         height: 48, // 일반적인 앱바 높이
@@ -92,18 +96,23 @@ class BottomSheetAppBar extends StatelessWidget {
                               ],
                             ))
                     : TextButton(
-                        onPressed: nextStepFun,
+                        onPressed: clothes != null ? nextStepFun : null,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
                               nextStep!.getTitle(),
                               style: OneLineTextStyles.Medium14.copyWith(
-                                  color: SystemColors.black),
+                                  color: clothes != null
+                                      ? SystemColors.black
+                                      : SystemColors.gray500),
                             ),
                             SizedBox(width: 7),
                             SvgPicture.asset('assets/icons/arrow_right.svg',
-                                height: 12, color: SystemColors.black),
+                                height: 12,
+                                color: clothes != null
+                                    ? SystemColors.black
+                                    : SystemColors.gray500),
                           ],
                         ))),
           ],
