@@ -51,7 +51,7 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
         name: text,
         primaryCategoryId: 1,
         secondaryCategoryId: secondCategory.id,
-        color: ClothesColor.Black,
+        color: ClothesColor.White,
         details: clothesDetails,
         price: 0,
         drawLines: [],

@@ -10,7 +10,7 @@ class ClothesRepository {
   static Database? _database;
 
   static const String _tableName = 'clothes';
-  static const String _dbName = 'clothes_test_v5.db';
+  static const String _dbName = 'clothes_test.db';
 
   Future<List<Clothes>> loadClothes() async {
     final res = await (await database).rawQuery("SELECT * FROM ${_tableName}");
@@ -34,14 +34,15 @@ class ClothesRepository {
     // 지정된 버전 및 생성 콜백으로 데이터베이스를 엽니다.
     return await openDatabase(
       path,
-      version: 23,
+      version: 26,
       onCreate: (db, version) async {
         // 'todos' 테이블을 생성하는 SQL 쿼리를 실행합니다.
         await _createTableV2(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
+        print("upgrade $oldVersion to $newVersion");
         var batch = db.batch();
-        if (oldVersion == 23) {
+        if (oldVersion <= 25) {
           updateTableToV2(batch);
         }
         await batch.commit();

@@ -79,7 +79,7 @@ class SecondCategory {
   double? clothesBottomPosition;
   List<CategoryDetail> details;
   bool hasDecorationLayer = false;
-  Color? defaultColor = null;
+  Color? defaultColor = ClothesColor.White;
 
   SecondCategory(
       {required this.id,
