@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ttal_kkak/main.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
-void showToast(String message, BuildContext context) {
+void showToast(String message) {
   var fToast = FToast();
   // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
-  fToast.init(context);
+  fToast.init(navigatorKey.currentContext!);
+  if (fToast.context == null) return;
 
   Widget toast = Container(
     width: 224,
@@ -22,6 +24,7 @@ void showToast(String message, BuildContext context) {
     ),
   );
 
+  fToast.removeQueuedCustomToasts();
   fToast.showToast(
     child: toast,
     gravity: ToastGravity.CENTER,
