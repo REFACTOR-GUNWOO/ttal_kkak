@@ -89,7 +89,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return categories;
   }
 
-  TextButton getTab(int index, bool isAllTab, FirstCategory? category) {
+  Widget getTab(int index, bool isAllTab, FirstCategory? category) {
     int itemCount = isAllTab
         ? clothesList.length
         : getCategorizedClothes()[category]?.length ?? 0;
@@ -100,35 +100,47 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ? category!.name
             : "";
 
-    return tab1Index == index
-        ? TextButton(
-            onPressed: () {
-              setState(() {
-                tab1Index = index;
-              });
-            },
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              Text('$categoryName',
-                  style: OneLineTextStyles.Bold14.copyWith(
-                      color: SystemColors.black)),
-              Text(' $itemCount',
-                  style: OneLineTextStyles.Bold14.copyWith(
-                      color: SignatureColors.orange400))
-            ]))
-        : TextButton(
-            onPressed: () {
-              setState(() {
-                tab1Index = index;
-              });
-            },
-            child: Text('$categoryName $itemCount',
-                style: OneLineTextStyles.Medium14.copyWith(
-                    color: SystemColors.gray700)));
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: tab1Index == index
+            ? TextButton(
+                onPressed: () {
+                  setState(() {
+                    tab1Index = index;
+                  });
+                },
+                style: TextButton.styleFrom(
+                  minimumSize: Size.zero,
+                  padding: EdgeInsets.all(10),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  Text('$categoryName',
+                      style: OneLineTextStyles.Bold14.copyWith(
+                          color: SystemColors.black)),
+                  Text(' $itemCount',
+                      style: OneLineTextStyles.Bold14.copyWith(
+                          color: SignatureColors.orange400))
+                ]))
+            : TextButton(
+                onPressed: () {
+                  setState(() {
+                    tab1Index = index;
+                  });
+                },
+                style: TextButton.styleFrom(
+                  minimumSize: Size.zero,
+                  padding: EdgeInsets.all(10),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text('$categoryName $itemCount',
+                    style: OneLineTextStyles.Medium14.copyWith(
+                        color: SystemColors.gray700))));
   }
 
-  List<TextButton> getTabs() {
-    TextButton allTab = getTab(0, true, null);
-    List<TextButton> tabList = firstCategories.map((category) {
+  List<Widget> getTabs() {
+    Widget allTab = getTab(0, true, null);
+    List<Widget> tabList = firstCategories.map((category) {
       return getTab(firstCategories.indexOf(category) + 1, false, category);
     }).toList();
     tabList.insert(0, allTab);
@@ -243,6 +255,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   TextButton getSecondTab(int index, String tabName) {
     return TextButton(
+        style: TextButton.styleFrom(
+          minimumSize: Size.zero,
+          padding: EdgeInsets.all(10),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
         onPressed: () {
           setState(() {
             tab2Index = index;
@@ -314,21 +331,34 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(90.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min, // 이 줄을 추가합니다
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: getTabs(),
-                        )),
+                        child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max, // 이 줄을 추가합니다
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: getTabs(),
+                            ))),
                     SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min, // 이 줄을 추가합니다
-                          children: getSecondTabs(),
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        )),
+                        child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment:
+                                  MainAxisAlignment.start, // 이 줄을 추가합니다
+                              children: getSecondTabs().map((tab) {
+                                return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: tab);
+                              }).toList(),
+                            ))),
                   ],
                 ),
               ),
