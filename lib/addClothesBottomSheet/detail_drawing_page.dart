@@ -391,7 +391,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                       svgLineRoot!,
                       clothesScale,
                       2,
-                      clothesColor == ClothesColor.Black
+                      (clothesColor == ClothesColor.Black ||
+                              clothesColor == ClothesColor.LightBlack)
                           ? SystemColors.gray900
                           : SystemColors.black),
                 ),

@@ -522,7 +522,8 @@ class _ClothesItemState extends State<ClothesItem> {
                     svgLineRoot!,
                     1.0,
                     1.0,
-                    clothesColor == ClothesColor.Black
+                    (clothesColor == ClothesColor.Black ||
+                            clothesColor == ClothesColor.LightBlack)
                         ? SystemColors.gray900
                         : SystemColors.black),
               ),
