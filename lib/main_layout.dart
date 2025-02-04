@@ -139,7 +139,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                 child: Container(
                     color: SignatureColors.begie500.withOpacity(0.5), // 반투명 배경
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      padding: const EdgeInsets.only(left: 42, right: 30),
                       child: SizedBox(
                         height: 82,
                         child: Row(
@@ -164,7 +164,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                                       width: 24,
                                       color: _selectedIndex == 0
                                           ? SystemColors.black
-                                          : SystemColors.gray700,
+                                          : SystemColors.gray600,
                                     ),
                                     label: '내 옷장',
                                   ),
@@ -174,7 +174,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                                       width: 24,
                                       color: _selectedIndex == 1
                                           ? SystemColors.black
-                                          : SystemColors.gray700,
+                                          : SystemColors.gray600,
                                     ),
                                     label: '통계',
                                   ),
@@ -184,7 +184,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                                       width: 24,
                                       color: _selectedIndex == 2
                                           ? SystemColors.black
-                                          : SystemColors.gray700,
+                                          : SystemColors.gray600,
                                     ),
                                     label: '코디',
                                   ),
@@ -194,7 +194,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                                       width: 24,
                                       color: _selectedIndex == 3
                                           ? SystemColors.black
-                                          : SystemColors.gray700,
+                                          : SystemColors.gray600,
                                     ),
                                     label: '설정',
                                   ),
@@ -218,7 +218,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                               ),
                             )),
                             Padding(
-                              padding: EdgeInsets.only(top: 6),
+                              padding: EdgeInsets.only(top: 6, left: 30),
                               child: GestureDetector(
                                 onTap: () {
                                   Provider.of<ScrollControllerProvider>(context,
@@ -238,16 +238,13 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                                   width: 36,
                                   height: 36,
                                   decoration: BoxDecoration(
-                                    color: Colors.orange, // 배경색
+                                    color: SignatureColors.orange400, // 배경색
                                     borderRadius:
                                         BorderRadius.circular(8), // 둥근 모서리
                                   ),
                                   child: Center(
-                                    child: Icon(
-                                      Icons.add, // 플러스 아이콘
-                                      color: Colors.black, // 아이콘 색상
-                                      size: 20, // 아이콘 크기
-                                    ),
+                                    child: SvgPicture.asset(
+                                        "assets/icons/add_clothes_icon.svg"),
                                   ),
                                 ),
                               ),
