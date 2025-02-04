@@ -16,22 +16,20 @@ import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/update_bottom_sheet.dart';
 import 'package:uuid/uuid.dart';
 
-class ClothesGrid extends StatefulWidget {
+class OnboardingClothesGrid extends StatefulWidget {
   final List<Clothes> clothesList;
-  final bool isOnboarding;
   final VoidCallback onReload;
 
-  ClothesGrid({
+  OnboardingClothesGrid({
     required this.clothesList,
-    required this.isOnboarding,
     required this.onReload,
   });
 
   @override
-  _ClothesGridState createState() => _ClothesGridState();
+  _OnboardingClothesGridState createState() => _OnboardingClothesGridState();
 }
 
-class _ClothesGridState extends State<ClothesGrid>
+class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
     with TickerProviderStateMixin {
   ClothesUpdateProvider? updateProvider;
   late final AnimationController _controller;
@@ -94,17 +92,23 @@ class _ClothesGridState extends State<ClothesGrid>
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: EdgeInsets.all(20.0),
-      sliver: getClothesListLength() != 0
-          ? SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: getClothesListLength() != 0
+            ? ListView.builder(
+                controller: Provider.of<ScrollControllerProvider>(context)
+                    .scrollController,
+                scrollDirection: Axis.vertical,
+                padding: EdgeInsets.all(20.0),
+                itemCount: ((getClothesListLength()) / columnCount).ceil(),
+                itemBuilder: (context, index) {
                   int start = index * columnCount;
                   int end = (start + columnCount) < getClothesListLength()
                       ? start + columnCount
                       : getClothesListLength();
 
+                  print(
+                      "updateProvider?.currentClothes: ${updateProvider?.currentClothes?.id}");
                   final clothesList = widget.clothesList
                       .map((e) => updateProvider?.currentClothes?.id == e.id &&
                               updateProvider?.currentClothes != null
@@ -115,39 +119,39 @@ class _ClothesGridState extends State<ClothesGrid>
                       widget.clothesList.sublist(start, end);
 
                   return Padding(
-                    padding: EdgeInsets.only(bottom: 32),
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: _buildClothesCardRow(context, rowClothes),
-                      ),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: _buildClothesCardRow(context, rowClothes)),
                     ),
+                    padding: EdgeInsets.only(bottom: 32),
                   );
                 },
-                childCount: ((getClothesListLength()) / columnCount).ceil(),
-              ),
-            )
-          : SliverFillRemaining(
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
+              )
+            : ListView.builder(
+                scrollDirection: Axis.vertical,
+                padding: EdgeInsets.all(20.0),
                 itemCount: 1,
                 itemBuilder: (context, index) {
                   return Container(
                     width: double.infinity,
                     alignment: Alignment.center,
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: _buildEmptyRow(),
-                    ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: _buildEmptyRow()),
                   );
                 },
               ),
-            ),
-    );
+        floatingActionButton: AnimatedSwitcher(
+          duration: Duration(milliseconds: 0), // 애니메이션 시간을 0으로 설정
+          child: selected.values.where((isSelected) => isSelected).isNotEmpty
+              ? _buildFloatingActionButton()
+              : null,
+        ));
   }
 
   List<Widget> _buildClothesCardRow(
@@ -157,19 +161,13 @@ class _ClothesGridState extends State<ClothesGrid>
       list.add(ClothesCard(
           clothes: clothes,
           isSelected: selected[clothes.id] ?? false,
-          isOnboarding: widget.isOnboarding,
+          isOnboarding: true,
           onTap: () => {
-                if (widget.isOnboarding)
-                  {
-                    setState(() {
-                      selected[clothes.id!] = !selected[clothes.id]!;
-                    })
-                  }
-                else
-                  {
-                    showClothesOptionsBottomSheet(
-                        context, clothes, updateProvider)
-                  }
+                {
+                  setState(() {
+                    selected[clothes.id!] = !selected[clothes.id]!;
+                  })
+                }
               }));
     }).toList();
     int listDiff = columnCount - list.length;
@@ -260,17 +258,11 @@ class _ClothesGridState extends State<ClothesGrid>
     }
     return GestureDetector(
         onTap: () => {
-              if (widget.isOnboarding)
-                {
-                  setState(() {
-                    selected[clothes.id!] = !selected[clothes.id]!;
-                  })
-                }
-              else
-                {
-                  showClothesOptionsBottomSheet(
-                      context, clothes, updateProvider)
-                }
+              {
+                setState(() {
+                  selected[clothes.id!] = !selected[clothes.id]!;
+                })
+              }
             },
         child: Column(children: [
           Stack(alignment: Alignment.center, children: stackList),

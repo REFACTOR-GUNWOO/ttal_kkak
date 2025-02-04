@@ -170,6 +170,55 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           );
   }
 
+  int compareClothesListByCategory(Clothes a, Clothes b) {
+    FirstCategory firstCategoryA = firstCategories
+        .firstWhere((category) => category.id == a.primaryCategoryId);
+    FirstCategory firstCategoryB = firstCategories
+        .firstWhere((category) => category.id == b.primaryCategoryId);
+
+    int primaryComparison =
+        firstCategoryA.priority.compareTo(firstCategoryB.priority);
+    if (primaryComparison != 0) {
+      return primaryComparison;
+    }
+
+    // 2. secondaryCategory 정렬 (priority 기준)
+    SecondCategory secondCategoryA = secondCategories
+        .firstWhere((category) => category.id == a.secondaryCategoryId);
+    SecondCategory secondCategoryB = secondCategories
+        .firstWhere((category) => category.id == b.secondaryCategoryId);
+
+    int secondaryComparison =
+        secondCategoryA.priority.compareTo(secondCategoryB.priority);
+    if (secondaryComparison != 0) {
+      return secondaryComparison;
+    }
+
+    // 3. categoryDetail 정렬
+    List<ClothesDetail> detailsA = a.details.details;
+    List<ClothesDetail> detailsB = b.details.details;
+
+    // 각 디테일을 priority 순으로 비교
+    for (int i = 0; i < secondCategoryA.details.length; i++) {
+      CategoryDetail detailToCompare = secondCategoryA.details[i];
+      print(detailToCompare);
+      print(detailsA);
+      print(detailsB);
+      ClothesDetail detailA = detailsA
+          .firstWhere((detail) => detailToCompare.details.contains(detail));
+      ClothesDetail detailB = detailsB
+          .firstWhere((detail) => detailToCompare.details.contains(detail));
+      int detailAIndex = detailToCompare.details.indexOf(detailA);
+      int detailBIndex = detailToCompare.details.indexOf(detailB);
+
+      int detailComparison = detailAIndex.compareTo(detailBIndex);
+      if (detailComparison != 0) {
+        return detailComparison;
+      }
+    }
+    return 0;
+  }
+
   List<Clothes> sortClothesList(List<Clothes> clothesList) {
     List<Clothes> copied = clothesList;
 
@@ -184,52 +233,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
     if (secondTabNames[tab2Index] == "카테고리순") {
       copied.sort((a, b) {
-        FirstCategory firstCategoryA = firstCategories
-            .firstWhere((category) => category.id == a.primaryCategoryId);
-        FirstCategory firstCategoryB = firstCategories
-            .firstWhere((category) => category.id == b.primaryCategoryId);
-
-        int primaryComparison =
-            firstCategoryA.priority.compareTo(firstCategoryB.priority);
-        if (primaryComparison != 0) {
-          return primaryComparison;
-        }
-
-        // 2. secondaryCategory 정렬 (priority 기준)
-        SecondCategory secondCategoryA = secondCategories
-            .firstWhere((category) => category.id == a.secondaryCategoryId);
-        SecondCategory secondCategoryB = secondCategories
-            .firstWhere((category) => category.id == b.secondaryCategoryId);
-
-        int secondaryComparison =
-            secondCategoryA.priority.compareTo(secondCategoryB.priority);
-        if (secondaryComparison != 0) {
-          return secondaryComparison;
-        }
-
-        // 3. categoryDetail 정렬
-        List<ClothesDetail> detailsA = a.details.details;
-        List<ClothesDetail> detailsB = b.details.details;
-
-        // 각 디테일을 priority 순으로 비교
-        for (int i = 0; i < secondCategoryA.details.length; i++) {
-          CategoryDetail detailToCompare = secondCategoryA.details[i];
-          print(detailToCompare);
-          print(detailsA);
-          print(detailsB);
-          ClothesDetail detailA = detailsA
-              .firstWhere((detail) => detailToCompare.details.contains(detail));
-          ClothesDetail detailB = detailsB
-              .firstWhere((detail) => detailToCompare.details.contains(detail));
-          int detailAIndex = detailToCompare.details.indexOf(detailA);
-          int detailBIndex = detailToCompare.details.indexOf(detailB);
-
-          int detailComparison = detailAIndex.compareTo(detailBIndex);
-          if (detailComparison != 0) {
-            return detailComparison;
-          }
-        }
-        return 0;
+        return compareClothesListByCategory(a, b);
       });
 
       return copied;
@@ -242,9 +246,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           .expand((element) => element)
           .toList();
       copied.sort((a, b) {
-        return sortedColors
+        int compareResult = sortedColors
             .indexOf(a.color)
             .compareTo(sortedColors.indexOf(b.color));
+        if (compareResult == 0)
+          return compareClothesListByCategory(a, b);
+        else
+          return compareResult;
       });
 
       return copied;
@@ -305,6 +313,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // 카테고리별로 옷 데이터를 그룹화
+    double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return Consumer<ReloadHomeProvider>(
         builder: (context, reloadNotifier, child) {
@@ -318,52 +327,105 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       }
       return Scaffold(
           backgroundColor: SignatureColors.begie200,
-          appBar: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: Colors.transparent,
-              title: Text(
-                closetName,
-                textAlign: TextAlign.center,
-                style: OneLineTextStyles.Bold18.copyWith(
-                    color: SystemColors.black),
+          body: CustomScrollView(
+            slivers: [
+              SliverPersistentHeader(
+                pinned: true, // 스크롤 되어도 고정됨
+                delegate: _FixedHeaderDelegate(
+                    maxHeight: statusBarHeight,
+                    minHeight: statusBarHeight,
+                    child: Container(
+                      color: SignatureColors.begie200,
+                    )),
               ),
-              centerTitle: true,
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(82.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 12.0, right: 12.0, top: 7.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max, // 이 줄을 추가합니다
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: getTabs(),
-                            ))),
-                    SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 12.0, right: 12.0, bottom: 7.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment:
-                                  MainAxisAlignment.start, // 이 줄을 추가합니다
-                              children: getSecondTabs().map((tab) {
-                                return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: tab);
-                              }).toList(),
-                            ))),
-                  ],
-                ),
+              SliverPersistentHeader(
+                pinned: false,
+                delegate: _FixedHeaderDelegate(
+                    maxHeight: 48,
+                    minHeight: 48,
+                    child: Center(
+                        child: Text(
+                      closetName,
+                      textAlign: TextAlign.center,
+                      style: OneLineTextStyles.Bold18.copyWith(
+                          color: SystemColors.black),
+                    ))),
               ),
-              elevation: 0),
-          body: getClothesGrid());
+              SliverPersistentHeader(
+                pinned: true, // 스크롤 되어도 고정됨
+                delegate: _FixedHeaderDelegate(
+                    maxHeight: 90,
+                    minHeight: 90,
+                    child: Container(
+                        color: SignatureColors.begie200,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12.0, right: 12.0, top: 7.0),
+                                    child: Row(
+                                      mainAxisSize:
+                                          MainAxisSize.max, // 이 줄을 추가합니다
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: getTabs(),
+                                    ))),
+                            SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12.0, right: 12.0, bottom: 7.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start, // 이 줄을 추가합니다
+                                      children: getSecondTabs().map((tab) {
+                                        return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: tab);
+                                      }).toList(),
+                                    ))),
+                          ],
+                        ))),
+              ),
+              getClothesGrid(),
+            ],
+          ));
     });
+  }
+}
+
+class _FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
+  _FixedHeaderDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  bool shouldRebuild(covariant _FixedHeaderDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }

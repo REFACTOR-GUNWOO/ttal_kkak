@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
+import 'package:ttal_kkak/onboarding_clothes_grid.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
@@ -143,17 +144,15 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
                       color: SystemColors.gray700)));
     }
 
-    ClothesGrid getClothesGrid() {
+    OnboardingClothesGrid getClothesGrid() {
       return tab1Index == 0
-          ? ClothesGrid(
+          ? OnboardingClothesGrid(
               clothesList: clothesList,
-              isOnboarding: true,
               onReload: () {},
             )
-          : ClothesGrid(
+          : OnboardingClothesGrid(
               clothesList: (getCategorizedClothes()[
                   getSortedCategories()[tab1Index - 1]]!),
-              isOnboarding: true,
               onReload: () {},
             );
     }
