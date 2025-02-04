@@ -329,15 +329,15 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               ),
               centerTitle: true,
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(90.0),
+                preferredSize: Size.fromHeight(82.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 12.0, right: 12.0, top: 7.0),
+                            padding: const EdgeInsets.only(
+                                left: 12.0, right: 12.0, top: 7.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max, // 이 줄을 추가합니다
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -346,8 +346,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                     SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 7.0),
+                            padding: const EdgeInsets.only(
+                                left: 12.0, right: 12.0, bottom: 7.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment:
