@@ -337,7 +337,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                         scrollDirection: Axis.horizontal,
                         child: Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 12.0),
+                                const EdgeInsets.only(left: 12.0, right: 12.0, top: 7.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max, // 이 줄을 추가합니다
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -347,7 +347,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                         scrollDirection: Axis.horizontal,
                         child: Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 12.0),
+                                const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 7.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment:

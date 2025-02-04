@@ -101,7 +101,7 @@ class _ClothesGridState extends State<ClothesGrid>
                 controller: Provider.of<ScrollControllerProvider>(context)
                     .scrollController,
                 scrollDirection: Axis.vertical,
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(20.0),
                 itemCount: ((getClothesListLength()) / columnCount).ceil(),
                 itemBuilder: (context, index) {
                   int start = index * columnCount;
@@ -135,7 +135,7 @@ class _ClothesGridState extends State<ClothesGrid>
               )
             : ListView.builder(
                 scrollDirection: Axis.vertical,
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(20.0),
                 itemCount: 1,
                 itemBuilder: (context, index) {
                   return Container(
