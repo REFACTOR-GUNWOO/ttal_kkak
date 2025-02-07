@@ -464,12 +464,19 @@ class _ClothesItemState extends State<ClothesItem> {
 
   Future<void> _loadDrawableRoot(
       ClothesDetails clothesDetails, SecondCategory secondCategory) async {
+    final stopwatch = Stopwatch()..start();
+
     List<ClothesDetail> details = clothesDetails.details;
 
+    // 세부 정보 정렬 시간 측정
+    stopwatch.reset();
     details.sort((a, b) {
       return b.toString().compareTo(a.toString());
     });
+    print('_loadDrawableRoot 세부 정보 정렬 시간: ${stopwatch.elapsedMilliseconds}ms');
 
+    // SVG URL 생성 시간 측정
+    stopwatch.reset();
     var svgBgUrl =
         "assets/images/clothes/bg/${secondCategory.code}${details.map((e) => '_${e.name}').join()}.svg";
     var svgLineUrl =
@@ -478,16 +485,38 @@ class _ClothesItemState extends State<ClothesItem> {
       svgDecoUrl =
           "assets/images/clothes/deco/${secondCategory.code}${details.map((e) => '_${e.name}').join()}.svg";
     }
+    print(
+        '_loadDrawableRoot SVG URL 생성 시간: ${stopwatch.elapsedMilliseconds}ms');
 
+    // 배경 SVG 로드 시간 측정
     if (svgBgRoot == null) {
+      stopwatch.reset();
       final String svgBgString = await rootBundle.loadString(svgBgUrl);
+      print(
+          '_loadDrawableRoot 배경 SVG 파일 로드 시간: ${stopwatch.elapsedMilliseconds}ms');
+
+      stopwatch.reset();
       svgBgRoot = await svg.fromSvgString(svgBgString, svgBgString);
+      print(
+          '_loadDrawableRoot 배경 SVG 파싱 시간: ${stopwatch.elapsedMilliseconds}ms');
     }
 
+    // 라인 SVG 로드 시간 측정
     if (svgLineRoot == null) {
+      stopwatch.reset();
       final String svgLineString = await rootBundle.loadString(svgLineUrl);
+      print(
+          '_loadDrawableRoot 라인 SVG 파일 로드 시간: ${stopwatch.elapsedMilliseconds}ms');
+
+      stopwatch.reset();
       svgLineRoot = await svg.fromSvgString(svgLineString, svgLineString);
+      print(
+          '_loadDrawableRoot 라인 SVG 파싱 시간: ${stopwatch.elapsedMilliseconds}ms');
     }
+
+    stopwatch.stop();
+    print(
+        '_loadDrawableRoot 전체 _loadDrawableRoot 실행 시간: ${stopwatch.elapsedMilliseconds}ms');
   }
 
   @override

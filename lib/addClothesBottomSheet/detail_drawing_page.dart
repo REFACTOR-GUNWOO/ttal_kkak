@@ -488,24 +488,29 @@ class SvgBgPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final stopwatch = Stopwatch()..start();
+
+    // 페인트 객체 생성 시간 측정
+    stopwatch.reset();
     Paint paint = Paint()
       ..color = color
       ..style = PaintingStyle.fill
       ..strokeWidth = 2.0;
+    print('SvgBgPainter 페인트 객체 생성 시간: ${stopwatch.elapsedMicroseconds}μs');
 
+    // 경로 변환 시간 측정
+    stopwatch.reset();
     final Matrix4 matrix = Matrix4.identity()..scale(scale, scale);
     final Path scaledPath =
         extractPathDataFromDrawableRoot(drawableRoot).transform(matrix.storage);
+    print('SvgBgPainter 경로 변환 시간: ${stopwatch.elapsedMicroseconds}μs');
 
-    // // 중앙에 그리도록 평행 이동 (translate)
-    // final Offset offset = Offset(
-    //   (size.width - bounds.width) / 2 - bounds.left,
-    //   (size.height - bounds.height) / 2 - bounds.top,
-    // );
-
-    // canvas.translate(offset.dx, offset.dy);
-
+    // 실제 드로잉 시간 측정
+    stopwatch.reset();
     canvas.drawPath(scaledPath, paint);
+    print('SvgBgPainter 캔버스 드로잉 시간: ${stopwatch.elapsedMicroseconds}μs');
+
+    stopwatch.stop();
   }
 
   @override
@@ -525,24 +530,29 @@ class SvgLinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final stopwatch = Stopwatch()..start();
+
+    // 페인트 객체 생성 시간 측정
+    stopwatch.reset();
     Paint paint = Paint()
       ..color = strokeColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;
+    print('SvgLinePainter Paint 객체 생성 시간: ${stopwatch.elapsedMicroseconds}μs');
 
+    // 경로 변환 시간 측정
+    stopwatch.reset();
     final Matrix4 matrix = Matrix4.identity()..scale(scale, scale);
     final Path scaledPath =
         extractPathDataFromDrawableRoot(drawableRoot).transform(matrix.storage);
+    print('SvgLinePainter 경로 변환 시간: ${stopwatch.elapsedMicroseconds}μs');
 
-    // 중앙에 그리도록 평행 이동 (translate)
-    // final Offset offset = Offset(
-    //   (size.width - bounds.width) / 2 - bounds.left,
-    //   (size.height - bounds.height) / 2 - bounds.top,
-    // );
-
-    // canvas.translate(offset.dx, offset.dy);
-
+    // 실제 드로잉 시간 측정
+    stopwatch.reset();
     canvas.drawPath(scaledPath, paint);
+    print('SvgLinePainter 캔버스 드로잉 시간: ${stopwatch.elapsedMicroseconds}μs');
+
+    stopwatch.stop();
   }
 
   @override
