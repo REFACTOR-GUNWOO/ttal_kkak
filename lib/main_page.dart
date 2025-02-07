@@ -5,6 +5,7 @@ import 'package:ttal_kkak/closet_repository.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
+import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -17,7 +18,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   late List<Clothes> clothesList = [];
-  List<Clothes> sortedClothesList = [];
   late ClothesGrid clothesGrid;
   late String closetName = "내 옷장";
   late int tab1Index = 0;
@@ -26,13 +26,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   void reload() async {
     // 먼저 비동기 작업을 완료한 후에
+          print("reload1");
     List<Clothes> updatedClothesList = await ClothesRepository().loadClothes();
 
     // 그 다음에 setState를 호출하여 상태를 갱신합니다
     setState(() {
-      print("reload");
+      print("reload2");
       clothesList = updatedClothesList;
-      sortedClothesList = updatedClothesList;
     });
   }
 
@@ -228,16 +228,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         return b.regTs.microsecondsSinceEpoch
             .compareTo(a.regTs.microsecondsSinceEpoch);
       });
-
-      return copied;
     }
 
     if (secondTabNames[tab2Index] == "카테고리순") {
       copied.sort((a, b) {
         return compareClothesListByCategory(a, b);
       });
-
-      return copied;
     }
 
     if (secondTabNames[tab2Index] == "컬러순") {
@@ -255,10 +251,22 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         else
           return compareResult;
       });
-
-      return copied;
     }
 
+    final updateProvider = Provider.of<ClothesUpdateProvider>(context);
+    final updatingClothes = updateProvider.currentClothes;
+    print("updatingCLothes name : ${updatingClothes?.name}");
+    copied = copied
+        .where(
+          (element) => updatingClothes?.id != element.id,
+        )
+        .toList();
+    if (updatingClothes != null) {
+      copied.insert(0, updatingClothes);
+    }
+    print("updatingCLothes lenght : ${clothesList.length}");
+
+    print("sorted clothes first  : ${copied.firstOrNull?.name}");
     return copied;
   }
 

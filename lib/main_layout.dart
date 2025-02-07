@@ -222,9 +222,6 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                               padding: EdgeInsets.only(top: 6, left: 30),
                               child: GestureDetector(
                                 onTap: () {
-                                  Provider.of<ScrollControllerProvider>(context,
-                                          listen: false)
-                                      .scrollToTop(context); // 드래프트 초기화
                                   ShowAddClothesBottomSheet(context, false, () {
                                     // 드래프트 초기화
                                     Provider.of<ClothesUpdateProvider>(context,

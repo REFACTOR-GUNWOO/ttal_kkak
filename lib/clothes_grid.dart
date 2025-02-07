@@ -10,6 +10,8 @@ import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/custom_decoder.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
+import 'package:ttal_kkak/provider/reload_home_provider.dart';
+import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/update_bottom_sheet.dart';
@@ -204,7 +206,6 @@ class _ClothesGridState extends State<ClothesGrid>
       ),
       builder: (BuildContext context) {
         HapticFeedback.lightImpact();
-
         return UpdateBottomSheet(
           onReload: () => widget.onReload(),
           clothes: clothes,

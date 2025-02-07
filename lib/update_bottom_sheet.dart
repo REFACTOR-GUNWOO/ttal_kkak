@@ -9,6 +9,8 @@ import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/common_bottom_sheet.dart';
 import 'package:ttal_kkak/common/show_toast.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
+import 'package:ttal_kkak/provider/reload_home_provider.dart';
+import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
@@ -32,13 +34,25 @@ class UpdateBottomSheet extends StatelessWidget {
               iconPath: "assets/icons/update_icon.svg",
               label: "정보 수정하기",
               onTap: () {
+                final scrollProvider = Provider.of<ScrollControllerProvider>(
+                    context,
+                    listen: false);
                 Navigator.pop(context);
+                scrollProvider
+                    .scrollToTop(
+                  MediaQuery.of(context).viewPadding.top,
+                ); // 드래프트 초기화
 
                 // 정보 수정 기능
                 updateProvider!.set(clothes);
-                ShowAddClothesBottomSheet(context, true, () {
+                Provider.of<ReloadHomeProvider>(context, listen: false)
+                    .triggerReload();
+
+                ShowAddClothesBottomSheet(context, true, () async {
                   updateProvider?.clear();
-                  onReload;
+                  onReload();
+                  scrollProvider
+                      .scrollToBeforeOffset();
                 });
               },
             ),
