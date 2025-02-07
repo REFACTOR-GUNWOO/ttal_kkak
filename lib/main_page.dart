@@ -26,7 +26,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   void reload() async {
     // 먼저 비동기 작업을 완료한 후에
-          print("reload1");
+    print("reload1");
     List<Clothes> updatedClothesList = await ClothesRepository().loadClothes();
 
     // 그 다음에 setState를 호출하여 상태를 갱신합니다
@@ -306,6 +306,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       List<Clothes> loadedClothes = await ClothesRepository().loadClothes();
       String? loadedClosetName = await ClosetRepository().loadClosetName();
       setState(() {
+        print("reload3");
         clothesList = loadedClothes;
         if (loadedClosetName != null) closetName = loadedClosetName;
       });
