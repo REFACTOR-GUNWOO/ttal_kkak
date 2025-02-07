@@ -6,6 +6,7 @@ import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
+import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
@@ -328,6 +329,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       return Scaffold(
           backgroundColor: SignatureColors.begie200,
           body: CustomScrollView(
+            controller:
+                Provider.of<ScrollControllerProvider>(context).scrollController,
             slivers: [
               SliverPersistentHeader(
                 pinned: true, // 스크롤 되어도 고정됨

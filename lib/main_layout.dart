@@ -13,6 +13,7 @@ import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/tool_tip_with_tail.dart';
 import 'dart:ui'; // BackdropFilter를 사용하기 위한 라이브러리 추가
+import 'package:flutter/services.dart';
 
 class MainLayout extends StatefulWidget {
   @override
@@ -223,7 +224,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                                 onTap: () {
                                   Provider.of<ScrollControllerProvider>(context,
                                           listen: false)
-                                      .scrollToTop(); // 드래프트 초기화
+                                      .scrollToTop(context); // 드래프트 초기화
                                   ShowAddClothesBottomSheet(context, false, () {
                                     // 드래프트 초기화
                                     Provider.of<ClothesUpdateProvider>(context,
