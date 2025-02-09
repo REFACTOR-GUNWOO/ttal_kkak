@@ -102,7 +102,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             : "";
 
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: tab1Index == index
             ? TextButton(
                 onPressed: () {
@@ -397,7 +397,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                       children: getSecondTabs().map((tab) {
                                         return Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
+                                                horizontal: 4.0),
                                             child: tab);
                                       }).toList(),
                                     ))),
