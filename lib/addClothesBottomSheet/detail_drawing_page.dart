@@ -228,7 +228,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                                   description: "드로잉 정보가 모두 사라져요\n초기화 하시겠어요?",
                                   draftFieldName: "",
                                   onNextStep: () {
-                                    showToast("초기화 되었습니다.");
+                                    showToast("초기화되었습니다");
                                     clear();
                                   });
                             },
