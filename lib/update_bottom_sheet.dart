@@ -156,33 +156,36 @@ class DeleteConfirmationDialog extends StatelessWidget {
             style: BodyTextStyles.Regular14,
           ),
           const SizedBox(height: 20),
-          TextButton(
-            onPressed: onConfirm,
-            style: TextButton.styleFrom(
-              side: const BorderSide(color: Colors.red),
-              minimumSize: Size.zero,
-              padding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+          Padding(
+            child: TextButton(
+              onPressed: onConfirm,
+              style: TextButton.styleFrom(
+                side: const BorderSide(color: Colors.red),
+                minimumSize: Size.zero,
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
               ),
+              child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        "assets/icons/delete_icon.svg",
+                        height: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        "삭제하기",
+                        style: OneLineTextStyles.SemiBold16.copyWith(
+                            color: SystemColors.caution),
+                      ),
+                    ],
+                  )),
             ),
-            child: Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/icons/delete_icon.svg",
-                      height: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      "삭제하기",
-                      style: OneLineTextStyles.SemiBold16.copyWith(
-                          color: SystemColors.caution),
-                    ),
-                  ],
-                )),
+            padding: EdgeInsets.symmetric(horizontal: 20),
           ),
           const SizedBox(height: 20),
         ],
