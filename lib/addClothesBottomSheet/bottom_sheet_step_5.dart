@@ -37,8 +37,7 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
       if (color != null) {
         _selectedColor = color;
         _selectedColorGroup = colorContainers
-            .firstWhere((element) => element.colors.contains(color))
-            .colors;
+            .where((element) => element.colors.contains(color)).firstOrNull?.colors ?? colorContainers.first.colors;
       }
     });
   }

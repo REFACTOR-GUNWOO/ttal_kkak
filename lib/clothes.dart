@@ -497,7 +497,7 @@ class ClothesColor {
 
   static const White = Color(0xFFFFFFFF);
   static const WarmWhite = Color(0xFFF2EFEB);
-  static const CoolWhite = Color(0xFFEBE3D2);
+  static const CoolWhite = Color(0xFFE7E7E7);
 
   static const Gray50 = Color(0xFFE2E2E2);
   static const Gray100 = Color(0xFFC4C4C4);
@@ -525,7 +525,7 @@ class ClothesColor {
 
   static const LightGreen50 = Color(0xFFE3ECDD);
   static const LightGreen100 = Color(0xFFCFDEC7);
-  static const LightGreen500 = Color(0xFFB6D9A1);
+  static const LightGreen500 = Color(0xFF7FA77F);
   static const LightGreen600 = Color(0xFF68A168);
   static const LightGreen800 = Color(0xFF467346);
 
