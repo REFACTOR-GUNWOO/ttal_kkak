@@ -70,24 +70,22 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () {
-          //FocusManager.instance.primaryFocus?.unfocus();
-          FocusScope.of(context).unfocus();
-        },
-        child: SingleChildScrollView(
-          // physics: ClampingScrollPhysics(),
-          child: Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: LengthLimitedTextInput(
-                8,
-                "옷 이름을 입력해주세요.",
-                "옷을 잘 구분할 수 있는 옷 이름으로 등록해주세요.",
-                _handleTextChanged,
-                _onSubmit,
-                controller: _controller,
-              )),
-        ));
+    return SliverToBoxAdapter(child: GestureDetector(
+      onTap: () {
+        //FocusManager.instance.primaryFocus?.unfocus();
+        FocusScope.of(context).unfocus();
+      },
+      child: Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: LengthLimitedTextInput(
+            8,
+            "옷 이름을 입력해주세요.",
+            "옷을 잘 구분할 수 있는 옷 이름으로 등록해주세요.",
+            _handleTextChanged,
+            _onSubmit,
+            controller: _controller,
+          )),
+    ));
   }
 }

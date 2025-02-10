@@ -84,8 +84,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
+    return SliverToBoxAdapter(child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: categoryDetails
             .map((e) => _buildCategorySection(

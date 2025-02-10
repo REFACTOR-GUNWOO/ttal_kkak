@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -76,10 +77,13 @@ class BottomSheetAppBar extends StatelessWidget {
                         ? Container()
                         : TextButton(
                             onPressed: () async {
-                              // Provider.of<ReloadHomeProvider>(context,
-                              //         listen: false)
-                              //     .triggerReload();
-                              Navigator.pop(context);
+                          Provider.of<ClothesUpdateProvider>(context,
+                                  listen: false)
+                              .clear();
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => MainLayout()),
+                              );
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,

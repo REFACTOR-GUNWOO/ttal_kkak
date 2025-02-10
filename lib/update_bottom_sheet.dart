@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
+import 'package:ttal_kkak/addClothesBottomSheet/add_clothes_page.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/common_bottom_sheet.dart';
@@ -47,11 +48,10 @@ class UpdateBottomSheet extends StatelessWidget {
                 Provider.of<ReloadHomeProvider>(context, listen: false)
                     .triggerReload();
 
-                ShowAddClothesBottomSheet(context, true, () async {
-                  updateProvider?.clear();
-                  onReload();
-                  scrollProvider.scrollToBeforeOffset();
-                });
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                      builder: (context) => AddClothesPage(isUpdate: true)),
+                );
               },
             ),
             _buildOptionButton(

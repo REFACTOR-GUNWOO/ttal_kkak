@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
+import 'package:ttal_kkak/addClothesBottomSheet/add_clothes_page.dart';
 import 'package:ttal_kkak/daily_outfit_page.dart';
 import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
@@ -222,15 +223,11 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                               padding: EdgeInsets.only(top: 6, left: 30),
                               child: GestureDetector(
                                 onTap: () {
-                                  ShowAddClothesBottomSheet(context, false, () {
-                                    // 드래프트 초기화
-                                    Provider.of<ClothesUpdateProvider>(context,
-                                            listen: false)
-                                        .clear();
-                                    Provider.of<ReloadHomeProvider>(context,
-                                            listen: false)
-                                        .triggerReload();
-                                  });
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            AddClothesPage(isUpdate: false)),
+                                  );
                                 },
                                 child: Container(
                                   width: 36,

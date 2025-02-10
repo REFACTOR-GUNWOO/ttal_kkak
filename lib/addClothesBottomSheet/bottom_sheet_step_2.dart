@@ -79,18 +79,15 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: GridView.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 0.0,
-          mainAxisSpacing: 0.0,
-          childAspectRatio: 1.5,
-        ),
-        itemCount: firstCategories.length,
-        itemBuilder: (context, index) {
+    return SliverGrid(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 0.0,
+        mainAxisSpacing: 0.0,
+        childAspectRatio: 1.5,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
           final category = firstCategories[index];
 
           return Padding(
@@ -133,6 +130,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
                 )),
           );
         },
+        childCount: firstCategories.length,
       ),
     );
   }

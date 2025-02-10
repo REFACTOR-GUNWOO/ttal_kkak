@@ -37,7 +37,10 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
       if (color != null) {
         _selectedColor = color;
         _selectedColorGroup = colorContainers
-            .where((element) => element.colors.contains(color)).firstOrNull?.colors ?? colorContainers.first.colors;
+                .where((element) => element.colors.contains(color))
+                .firstOrNull
+                ?.colors ??
+            colorContainers.first.colors;
       }
     });
   }
@@ -51,7 +54,8 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
 
   @override
   Widget build(BuildContext context) {
-    return ColorPalette(
+    return SliverToBoxAdapter(
+        child: ColorPalette(
       colorContainers: colorContainers,
       selectedColorGroup: _selectedColorGroup,
       selectedColor: _selectedColor,
@@ -62,7 +66,7 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
           save();
         });
       },
-    );
+    ));
   }
 }
 

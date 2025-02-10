@@ -28,7 +28,8 @@ class BottomSheetBody6 extends StatefulWidget implements BottomSheetStep {
 class DetailInfoCards extends State<BottomSheetBody6> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return SliverToBoxAdapter(
+        child: Column(
       children: [
         GestureDetector(
           onTap: () {
@@ -52,7 +53,7 @@ class DetailInfoCards extends State<BottomSheetBody6> {
               )),
         ),
       ],
-    );
+    ));
   }
 
   Widget _buildDetailCard(BuildContext context,

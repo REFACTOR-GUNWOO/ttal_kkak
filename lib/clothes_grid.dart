@@ -215,78 +215,6 @@ class _ClothesGridState extends State<ClothesGrid>
     );
   }
 
-  Widget _buildClothesDraftCard(
-    BuildContext context,
-    Clothes _clothes,
-  ) {
-    Clothes clothes = updateProvider?.currentClothes ?? _clothes;
-    List<Widget> stackList = [];
-    stackList.add(SvgPicture.asset("assets/icons/MiddleCloset.svg"));
-    if (clothes.primaryCategoryId == null) {
-      stackList.add(Positioned(
-          top: 12, child: SvgPicture.asset("assets/icons/hanger.svg")));
-      stackList.add(Positioned(
-          top: 12, child: SvgPicture.asset("assets/icons/NewClothes.svg")));
-      stackList.add(Positioned(
-          top: 32,
-          child: Lottie.asset(
-            'assets/lotties/add_clothes.lottie',
-            decoder: customDecoder,
-            width: 50,
-          )));
-    } else {
-      FirstCategory? firstCategory = firstCategories
-          .where((element) => element.id == clothes.primaryCategoryId)
-          .firstOrNull;
-      SecondCategory? secondCategory = secondCategories
-          .where((element) => element.id == clothes.secondaryCategoryId)
-          .firstOrNull;
-      if (firstCategory != null) {
-        stackList.add(Positioned(
-            top: firstCategory.hangerPosition,
-            child: SvgPicture.asset(firstCategory.hangerUrl)));
-      }
-      if (secondCategory != null) {
-        stackList.add(Positioned(
-            top: secondCategory.clothesTopPosition,
-            bottom: secondCategory.clothesBottomPosition,
-            child: ClothesItem(clothes: clothes, key: ValueKey(Uuid().v4()))));
-      }
-      stackList.add(Positioned(
-          top: 32,
-          child: Lottie.asset(
-            'assets/lotties/add_clothes.lottie',
-            decoder: customDecoder,
-            width: 50,
-          )));
-    }
-    return GestureDetector(
-        onTap: () => {
-              if (widget.isOnboarding)
-                {
-                  setState(() {
-                    selected[clothes.id!] = !selected[clothes.id]!;
-                  })
-                }
-              else
-                {
-                  showClothesOptionsBottomSheet(
-                      context, clothes, updateProvider)
-                }
-            },
-        child: Column(children: [
-          Stack(alignment: Alignment.center, children: stackList),
-          SizedBox(
-            height: 8,
-          ),
-          Text(clothes.name ?? "",
-              style: OneLineTextStyles.SemiBold10.copyWith(
-                  color: SystemColors.gray800)),
-          SizedBox(
-            height: 8,
-          ),
-        ]));
-  }
 }
 
 class ClothesCard extends StatefulWidget {
@@ -421,7 +349,12 @@ class _ClothesCardState extends State<ClothesCard>
 
 class ClothesItem extends StatefulWidget {
   final Clothes clothes;
-  const ClothesItem({Key? key, required this.clothes}) : super(key: key);
+  final double scale;
+  const ClothesItem({
+    Key? key,
+    required this.clothes,
+    this.scale = 1.0,
+  }) : super(key: key);
 
   @override
   _ClothesItemState createState() => _ClothesItemState();
@@ -527,25 +460,25 @@ class _ClothesItemState extends State<ClothesItem> {
           children: [
             if (svgBgRoot != null)
               CustomPaint(
-                size:
-                    Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
-                painter: SvgBgPainter(svgBgRoot!, clothesColor, 1.0),
+                size: Size(svgBgRoot!.viewport.width * widget.scale,
+                    svgBgRoot!.viewport.height * widget.scale),
+                painter: SvgBgPainter(svgBgRoot!, clothesColor, widget.scale),
               ),
             if (svgDecoUrl != null) SvgPicture.asset(svgDecoUrl!),
             if (lines.isNotEmpty)
               CustomPaint(
-                size:
-                    Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
-                painter: DrawingPainter(lines, svgBgRoot, 1),
+                size: Size(svgBgRoot!.viewport.width * widget.scale,
+                    svgBgRoot!.viewport.height * widget.scale),
+                painter: DrawingPainter(lines, svgBgRoot, widget.scale),
               ),
             if (svgBgRoot != null)
               CustomPaint(
-                size:
-                    Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
+                size: Size(svgBgRoot!.viewport.width * widget.scale,
+                    svgBgRoot!.viewport.height * widget.scale),
                 painter: SvgLinePainter(
                     svgLineRoot!,
-                    1.0,
-                    1.0,
+                    widget.scale,
+                    widget.scale,
                     (clothesColor == ClothesColor.Black ||
                             clothesColor == ClothesColor.LightBlack)
                         ? SystemColors.gray900

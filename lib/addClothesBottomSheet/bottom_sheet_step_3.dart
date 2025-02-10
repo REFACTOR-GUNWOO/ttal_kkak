@@ -76,17 +76,16 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: GridView.builder(
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // 한 행에 두 개의 아이템
-          // crossAxisSpacing: 6.0, // 수평 간격
-          // mainAxisSpacing: 6.0, // 수직 간격
-          childAspectRatio: 3.5, // 아이템의 가로세로 비율
-        ),
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
+    return SliverGrid(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 0.0,
+        mainAxisSpacing: 0.0,
+        childAspectRatio: 3.5,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        childCount: categories.length,
+        (context, index) {
           return Padding(
             padding: const EdgeInsets.all(3),
             child: Container(
