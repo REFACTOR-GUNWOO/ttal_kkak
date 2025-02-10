@@ -8,7 +8,11 @@ class CommonBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        children: [BottomSheetHandle(), child, SizedBox(height: 34)],
+        children: [
+          BottomSheetHandle(),
+          child,
+          SizedBox(height: MediaQuery.of(context).padding.bottom)
+        ],
       ),
     );
   }

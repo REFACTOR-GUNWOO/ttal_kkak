@@ -38,8 +38,7 @@ class UpdateBottomSheet extends StatelessWidget {
                     context,
                     listen: false);
                 Navigator.pop(context);
-                scrollProvider
-                    .scrollToTop(
+                scrollProvider.scrollToTop(
                   MediaQuery.of(context).viewPadding.top,
                 ); // 드래프트 초기화
 
@@ -51,8 +50,7 @@ class UpdateBottomSheet extends StatelessWidget {
                 ShowAddClothesBottomSheet(context, true, () async {
                   updateProvider?.clear();
                   onReload();
-                  scrollProvider
-                      .scrollToBeforeOffset();
+                  scrollProvider.scrollToBeforeOffset();
                 });
               },
             ),
@@ -142,11 +140,11 @@ class DeleteConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
+    return CommonBottomSheet(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          SizedBox(height: 20),
           Text(
             '$itemName 삭제',
             style: BodyTextStyles.Bold24,
@@ -169,7 +167,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
               ),
             ),
             child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(18.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -186,6 +184,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
                   ],
                 )),
           ),
+          const SizedBox(height: 20),
         ],
       ),
     );
