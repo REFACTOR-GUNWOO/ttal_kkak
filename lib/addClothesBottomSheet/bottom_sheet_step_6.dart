@@ -59,64 +59,61 @@ class DetailInfoCards extends State<BottomSheetBody6> {
       {required String title,
       required String description,
       required SvgPicture icon}) {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: Colors.grey[300]!),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      title,
+    return Stack(children: [
+      Container(
+        padding: EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          border: Border.all(color: Colors.grey[300]!),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(title,
                       style: OneLineTextStyles.SemiBold16.copyWith(
-                          color: SystemColors.black),
-                    ),
-                    Stack(children: [
-                      IconButton(
-                          padding: EdgeInsets.all(0), // 패딩 설정
-                          constraints: BoxConstraints(), // constraints
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DetailDrawingInfoPage(
-                                        isUpdate: widget.isUpdate,
-                                        updateProvider: widget.updateProvider,
-                                      )),
-                            );
-                          },
-                          icon: SvgPicture.asset("assets/icons/coach_mark.svg"))
-                    ])
-                  ],
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  description,
-                  style: BodyTextStyles.Regular14.copyWith(
-                      color: SystemColors.gray700),
-                ),
-              ],
+                          color: SystemColors.black)),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    description,
+                    style: BodyTextStyles.Regular14.copyWith(
+                        color: SystemColors.gray700),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Center(
-              // 화면 중앙에 배치
-              child: icon),
-        ],
+            Center(
+                // 화면 중앙에 배치
+                child: icon),
+          ],
+        ),
       ),
-    );
+      Positioned(
+        left: 88,
+        top: 8,
+        child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DetailDrawingInfoPage(
+                          isUpdate: widget.isUpdate,
+                          updateProvider: widget.updateProvider,
+                        )),
+              );
+            },
+            child: Padding(
+                padding: EdgeInsets.all(10),
+                child: SvgPicture.asset("assets/icons/coach_mark.svg"))),
+      )
+    ]);
   }
 }
 
@@ -126,9 +123,7 @@ class DetailDrawingInfoPage extends StatelessWidget {
 
   // 생성자를 통해 파라미터를 전달받음
   const DetailDrawingInfoPage(
-      {Key? key,
-      required this.isUpdate,
-      required this.updateProvider})
+      {Key? key, required this.isUpdate, required this.updateProvider})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
