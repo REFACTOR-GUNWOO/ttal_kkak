@@ -114,10 +114,12 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
                   )
                 ]),
             hintText: widget.hintText,
+            border: OutlineInputBorder(
+                borderSide: BorderSide(color: SystemColors.gray500)),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: SystemColors.gray500)),
             focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: SystemColors.gray500)),
+                borderSide: BorderSide(color: SystemColors.black)),
             contentPadding:
                 EdgeInsets.symmetric(vertical: 12.0, horizontal: 14.0),
           ),
