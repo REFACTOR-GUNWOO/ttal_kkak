@@ -37,9 +37,10 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
     _controller.addListener(_handleTextChanged);
     _controller.addListener(() {
       setState(() {
-        errorText = _controller.text.length >= widget.maxLength
-            ? '${widget.maxLength}자까지 입력할 수 있어요.'
-            : null;
+        errorText =
+            (_controller.text.length >= widget.maxLength && _focusNode.hasFocus)
+                ? '${widget.maxLength}자까지 입력할 수 있어요.'
+                : null;
       });
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -75,7 +76,7 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _controller.text.isNotEmpty
+                  _focusNode.hasFocus
                       ? GestureDetector(
                           onTap: () {
                             _controller.clear();
@@ -87,26 +88,30 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
                           ), // 패딩 없는 아이콘
                         )
                       : Container(),
-                  AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, _) {
-                      return RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '${_controller.text.length}',
+                  SizedBox(width: 4),
+                  Align(
+                    // 🔥 명확하게 중앙 정렬
+                    alignment: Alignment.center,
+                    child: RichText(
+                      textHeightBehavior: TextHeightBehavior(
+                          applyHeightToFirstAscent: false,
+                          applyHeightToLastDescent: false),
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '${_controller.text.length}',
+                            style: BodyTextStyles.Regular14.copyWith(
+                                color: SignatureColors.orange400),
+                          ),
+                          TextSpan(
+                              text: '/8',
                               style: BodyTextStyles.Regular14.copyWith(
-                                  color: SignatureColors.orange400),
-                            ),
-                            TextSpan(
-                                text: '/8',
-                                style: BodyTextStyles.Regular14.copyWith(
-                                    color: SystemColors.black)),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                                  color: SystemColors.black)),
+                        ],
+                      ),
+                    ),
+                  )
                 ]),
             hintText: widget.hintText,
             enabledBorder: OutlineInputBorder(
