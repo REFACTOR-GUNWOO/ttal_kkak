@@ -13,11 +13,10 @@ class BottomSheetBody2 extends StatefulWidget implements BottomSheetStep {
       {super.key,
       required this.onNextStep,
       required this.isUpdate,
-      required this.updateProvider
-      });
+      required this.updateProvider});
   final bool isUpdate;
   final ClothesUpdateProvider updateProvider;
-  
+
   @override
   _BottomSheetBody2State createState() => _BottomSheetBody2State();
 
@@ -25,7 +24,7 @@ class BottomSheetBody2 extends StatefulWidget implements BottomSheetStep {
   String getTitle() {
     return "상위 카테고리";
   }
-  
+
   @override
   bool Function() get canGoNext => () => true;
 }
@@ -85,11 +84,10 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
   Widget build(BuildContext context) {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10.0,
-        mainAxisSpacing: 10.0,
-        childAspectRatio: 1.5,
-      ),
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          childAspectRatio: 170 / 86),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           final category = firstCategories[index];
@@ -111,7 +109,8 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
                 color: Colors.white,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -121,7 +120,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
                       style: OneLineTextStyles.SemiBold16.copyWith(
                           color: SystemColors.black),
                     ),
-                    SizedBox(height: 8.0),
+                    SizedBox(height: 6.0),
                     Text(category.description,
                         style: BodyTextStyles.Medium12.copyWith(
                             color: SystemColors.gray700)),
