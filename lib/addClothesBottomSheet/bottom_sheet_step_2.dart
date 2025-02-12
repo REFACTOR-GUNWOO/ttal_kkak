@@ -82,56 +82,60 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // 화면 크기에 따라 자동으로 maxCrossAxisExtent 설정
+    double maxCrossAxisExtent = (screenWidth - 50) / 2;
+
     return SliverGrid(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: maxCrossAxisExtent, // 반응형 크기 적용
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0,
-          childAspectRatio: 170 / 86),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final category = firstCategories[index];
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final category = firstCategories[index];
 
-          return TextButton(
-            onPressed: () async => {save(category.id)},
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.zero, // 패딩 제거
-              minimumSize: Size(0, 0), // 버튼의 최소 크기 제거
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                border: selectedCategoryId == category.id
-                    ? Border.all(color: SystemColors.black, width: 1.5)
-                    : Border.all(
-                        color: SystemColors.gray500, width: 1.0), // 테두리 색상
-
-                borderRadius: BorderRadius.circular(6.0), // 모서리 둥글게
-                color: Colors.white,
+            return TextButton(
+              onPressed: () async => {save(category.id)},
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero, // 패딩 제거
+                minimumSize: Size(0, 0), // 버튼 크기 강제 제거
               ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      category.name,
-                      style: OneLineTextStyles.SemiBold16.copyWith(
-                          color: SystemColors.black),
-                    ),
-                    SizedBox(height: 6.0),
-                    Text(category.description,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: selectedCategoryId == category.id
+                      ? Border.all(color: SystemColors.black, width: 1.5)
+                      : Border.all(color: SystemColors.gray500, width: 1.0),
+                  borderRadius: BorderRadius.circular(6.0),
+                  color: Colors.white,
+                ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min, // 내부 요소만큼만 크기 조절
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        category.name,
+                        style: OneLineTextStyles.SemiBold16.copyWith(
+                            color: SystemColors.black),
+                      ),
+                      SizedBox(height: 4.0),
+                      Text(
+                        category.description,
                         style: BodyTextStyles.Medium12.copyWith(
-                            color: SystemColors.gray700)),
-                  ],
+                            color: SystemColors.gray700),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-        childCount: firstCategories.length,
-      ),
-    );
+            );
+          },
+          childCount: firstCategories.length,
+        ));
   }
 }

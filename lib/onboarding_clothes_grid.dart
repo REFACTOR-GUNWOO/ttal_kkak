@@ -39,7 +39,9 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
   DrawableRoot? svgLineRoot;
 
   late Map<int, bool> selected;
-  static const int columnCount = 4;
+  int columnCount(BuildContext context) {
+    return ((MediaQuery.of(context).size.width - 80) / 78).floor();
+  }
 
   Widget _buildFloatingActionButton() {
     int selectedCount =
@@ -92,6 +94,7 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
 
   @override
   Widget build(BuildContext context) {
+    int columnCount = this.columnCount(context);
     return Scaffold(
         backgroundColor: Colors.transparent,
         body: getClothesListLength() != 0
@@ -170,6 +173,7 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
                 }
               }));
     }).toList();
+    int columnCount = this.columnCount(context);
     int listDiff = columnCount - list.length;
 
     for (int i = 0; i < listDiff; i++) {
@@ -182,6 +186,7 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
   }
 
   List<Widget> _buildEmptyRow() {
+    int columnCount = this.columnCount(context);
     List<Widget> list = [];
     for (int i = 0; i < columnCount; i++) {
       list.add(SvgPicture.asset("assets/icons/MiddleCloset.svg"));

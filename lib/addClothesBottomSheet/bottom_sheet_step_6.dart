@@ -15,9 +15,8 @@ class BottomSheetBody6 extends StatefulWidget implements BottomSheetStep {
       required this.updateProvider});
   final bool isUpdate;
   final ClothesUpdateProvider updateProvider;
-    @override
+  @override
   bool Function() get canGoNext => () => true;
-
 
   @override
   DetailInfoCards createState() => DetailInfoCards();
