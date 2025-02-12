@@ -13,10 +13,11 @@ class BottomSheetBody2 extends StatefulWidget implements BottomSheetStep {
       {super.key,
       required this.onNextStep,
       required this.isUpdate,
-      required this.updateProvider});
+      required this.updateProvider
+      });
   final bool isUpdate;
   final ClothesUpdateProvider updateProvider;
-
+  
   @override
   _BottomSheetBody2State createState() => _BottomSheetBody2State();
 
@@ -24,6 +25,9 @@ class BottomSheetBody2 extends StatefulWidget implements BottomSheetStep {
   String getTitle() {
     return "상위 카테고리";
   }
+  
+  @override
+  bool Function() get canGoNext => () => true;
 }
 
 class _BottomSheetBody2State extends State<BottomSheetBody2> {

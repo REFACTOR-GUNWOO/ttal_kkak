@@ -29,7 +29,12 @@ class BottomSheetAppBar extends StatelessWidget {
   });
 
   bool isInactiveStep(Clothes? clothes) {
-    return clothes?.isDraft == true && currentStepCount == 1;
+    print("currentStepCount : $currentStepCount");
+    print("clothesName : ${clothes?.name.isEmpty}}");
+
+    return (clothes?.isDraft ?? true) == true &&
+        ((currentStepCount == 0 && (clothes?.name.isEmpty ?? true) == true) ||
+            currentStepCount == 1);
   }
 
   @override

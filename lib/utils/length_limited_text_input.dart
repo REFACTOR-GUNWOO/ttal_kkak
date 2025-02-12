@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
@@ -49,6 +50,8 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
   @override
   void dispose() {
     _focusNode.dispose(); // FocusNode 메모리 해제
+    _controller.dispose();
+
     super.dispose();
   }
 
@@ -61,31 +64,50 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
+          cursorColor: SignatureColors.orange400,
+          showCursor: true,
           focusNode: _focusNode,
           controller: _controller,
           onSubmitted: (value) => {widget.onSubmit(value)},
           inputFormatters: [LengthLimitingTextInputFormatter(8)],
           decoration: InputDecoration(
-            suffix: AnimatedBuilder(
-              animation: _controller,
-              builder: (context, _) {
-                return RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '${_controller.text.length}',
-                        style: BodyTextStyles.Regular14.copyWith(
-                            color: SignatureColors.orange400),
-                      ),
-                      TextSpan(
-                          text: '/8',
-                          style: BodyTextStyles.Regular14.copyWith(
-                              color: SystemColors.black)),
-                    ],
+            suffix: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _controller.text.isNotEmpty
+                      ? GestureDetector(
+                          onTap: () {
+                            _controller.clear();
+                            setState(() {}); // UI 업데이트
+                          },
+                          child: SvgPicture.asset(
+                            "assets/icons/clear_icon.svg",
+                            width: 20,
+                          ), // 패딩 없는 아이콘
+                        )
+                      : Container(),
+                  AnimatedBuilder(
+                    animation: _controller,
+                    builder: (context, _) {
+                      return RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '${_controller.text.length}',
+                              style: BodyTextStyles.Regular14.copyWith(
+                                  color: SignatureColors.orange400),
+                            ),
+                            TextSpan(
+                                text: '/8',
+                                style: BodyTextStyles.Regular14.copyWith(
+                                    color: SystemColors.black)),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
+                ]),
             hintText: widget.hintText,
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: SystemColors.gray500)),

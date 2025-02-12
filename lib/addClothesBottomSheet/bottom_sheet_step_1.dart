@@ -9,14 +9,23 @@ import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/utils/length_limited_text_input.dart';
 
 class BottomSheetBody1 extends StatefulWidget implements BottomSheetStep {
-  const BottomSheetBody1(
-      {super.key,
-      required this.onNextStep,
-      required this.updateProvider,
-      required this.isUpdate});
+  BottomSheetBody1({
+    super.key,
+    required this.onNextStep,
+    required this.updateProvider,
+    required this.isUpdate,
+  });
   final VoidCallback onNextStep;
   final ClothesUpdateProvider updateProvider;
-  final isUpdate;
+  final bool isUpdate;
+  final GlobalKey<_BottomSheetBody1State> myKey = GlobalKey();
+
+  @override
+  bool Function() get canGoNext => () {
+        return myKey.currentState != null &&
+            myKey.currentState!._controller.text.isNotEmpty;
+      };
+
   @override
   _BottomSheetBody1State createState() => _BottomSheetBody1State();
 
@@ -38,7 +47,32 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
     _controller.text = widget.updateProvider.currentClothes?.name ?? "";
   }
 
-  void _handleTextChanged(String newText) {}
+  void _handleTextChanged(String text) async {
+    Clothes? clothes = widget.updateProvider.currentClothes;
+    if (clothes == null) {
+      SecondCategory secondCategory =
+          secondCategories.firstWhere((e) => e.firstCategoryId == 1);
+      ClothesDetails clothesDetails = ClothesDetails(
+          details: secondCategory.details.map((e) => e.defaultDetail).toList());
+      clothes = Clothes(
+        name: text.isEmpty ? "등록중" : text,
+        primaryCategoryId: 1,
+        secondaryCategoryId: secondCategory.id,
+        color: ClothesColor.White,
+        details: clothesDetails,
+        price: 0,
+        drawLines: [],
+        regTs: DateTime.now(),
+        isDraft: true,
+      );
+      Clothes saved = await (ClothesRepository().addClothes(clothes));
+      widget.updateProvider.set(saved);
+      Provider.of<ReloadHomeProvider>(context, listen: false).triggerReload();
+    } else {
+      clothes.updateName(text);
+    }
+    await widget.updateProvider.update(clothes);
+  }
 
   void _onSubmit(String text) async {
     Clothes? clothes = widget.updateProvider.currentClothes;
