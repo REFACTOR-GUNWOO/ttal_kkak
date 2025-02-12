@@ -70,10 +70,14 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(child: GestureDetector(
+    return SliverToBoxAdapter(
+        child: GestureDetector(
       onTap: () {
-        //FocusManager.instance.primaryFocus?.unfocus();
-        FocusScope.of(context).unfocus();
+        final currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          currentFocus.focusedChild!.unfocus();
+        }
       },
       child: Padding(
           padding:

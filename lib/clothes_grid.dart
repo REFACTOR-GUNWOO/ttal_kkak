@@ -106,12 +106,7 @@ class _ClothesGridState extends State<ClothesGrid>
                       ? start + columnCount
                       : getClothesListLength();
 
-                  final clothesList = widget.clothesList
-                      .map((e) => updateProvider?.currentClothes?.id == e.id &&
-                              updateProvider?.currentClothes != null
-                          ? updateProvider!.currentClothes!
-                          : e)
-                      .toList();
+                  final clothesList = widget.clothesList;
                   List<Clothes> rowClothes =
                       widget.clothesList.sublist(start, end);
 
@@ -214,7 +209,6 @@ class _ClothesGridState extends State<ClothesGrid>
       },
     );
   }
-
 }
 
 class ClothesCard extends StatefulWidget {

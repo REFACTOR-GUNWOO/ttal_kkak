@@ -79,45 +79,42 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 0.0,
-        mainAxisSpacing: 0.0,
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
         childAspectRatio: 3.5,
       ),
       delegate: SliverChildBuilderDelegate(
         childCount: categories.length,
         (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(3),
-            child: Container(
-              decoration: BoxDecoration(
-                border: selectedCategoryId == categories[index].id
-                    ? Border.all(color: SystemColors.black, width: 1.5)
-                    : Border.all(
-                        color: SystemColors.gray500, width: 1.0), // 테두리 색상
+          return Container(
+            decoration: BoxDecoration(
+              border: selectedCategoryId == categories[index].id
+                  ? Border.all(color: SystemColors.black, width: 1.5)
+                  : Border.all(
+                      color: SystemColors.gray500, width: 1.0), // 테두리 색상
 
-                borderRadius: BorderRadius.circular(6.0), // 모서리 둥글게
-                color: Colors.white,
-              ),
-              child: TextButton(
-                // style: TextButton.styleFrom(
-                //   padding: EdgeInsets.zero, // 패딩 제거
-                // ),
-                onPressed: () => save(categories[index].id),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      categories[index].name,
-                      style: OneLineTextStyles.SemiBold16.copyWith(
-                          color: SystemColors.black),
-                    ),
-                    SvgPicture.asset(
-                      "assets/images/clothes/categoryImage/${categories[index].code}.svg",
-                      width: 32,
-                      height: 32,
-                    )
-                  ],
-                ),
+              borderRadius: BorderRadius.circular(6.0), // 모서리 둥글게
+              color: Colors.white,
+            ),
+            child: TextButton(
+              // style: TextButton.styleFrom(
+              //   padding: EdgeInsets.zero, // 패딩 제거
+              // ),
+              onPressed: () => save(categories[index].id),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    categories[index].name,
+                    style: OneLineTextStyles.SemiBold16.copyWith(
+                        color: SystemColors.black),
+                  ),
+                  SvgPicture.asset(
+                    "assets/images/clothes/categoryImage/${categories[index].code}.svg",
+                    width: 32,
+                    height: 32,
+                  )
+                ],
               ),
             ),
           );

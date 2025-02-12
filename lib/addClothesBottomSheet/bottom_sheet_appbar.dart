@@ -28,98 +28,131 @@ class BottomSheetAppBar extends StatelessWidget {
     required this.currentStepCount,
   });
 
+  bool isInactiveStep(Clothes? clothes) {
+    return clothes?.isDraft == true && currentStepCount == 1;
+  }
+
   @override
   Widget build(BuildContext context) {
     Clothes? clothes =
         Provider.of<ClothesUpdateProvider>(context).currentClothes;
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        height: 48, // 일반적인 앱바 높이
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: previousStep == null
-                  ? Container()
-                  : TextButton(
-                      onPressed: previousStepFun,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/icons/arrow_left.svg',
-                            color: SystemColors.black,
-                            height: 12,
-                          ),
-                          SizedBox(width: 7),
-                          Text(
-                            previousStep!.getTitle(),
-                            style: OneLineTextStyles.Medium14.copyWith(
-                                color: SystemColors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-            ),
-            Expanded(
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      Container(
+          color: SignatureColors.begie300,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          height: 48, // 일반적인 앱바 높이
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
                 flex: 2,
-                child: Text(
-                  currentStep.getTitle(),
-                  textAlign: TextAlign.center,
-                  style: OneLineTextStyles.SemiBold16.copyWith(
-                      color: SystemColors.black),
-                )),
-            Expanded(
-                flex: 2,
-                child: nextStep == null
-                    ? isUpdate
-                        ? Container()
-                        : TextButton(
-                            onPressed: () async {
-                          Provider.of<ClothesUpdateProvider>(context,
-                                  listen: false)
-                              .clear();
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => MainLayout()),
-                              );
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text("등록",
-                                    style: OneLineTextStyles.Medium14.copyWith(
-                                        color: SystemColors.black)),
-                                SizedBox(width: 7),
-                                SvgPicture.asset(
-                                  'assets/icons/arrow_right.svg',
-                                  color: SystemColors.black,
-                                  height: 12,
-                                ),
-                              ],
-                            ))
+                child: previousStep == null
+                    ? Container()
                     : TextButton(
-                        onPressed: clothes != null ? nextStepFun : null,
+                        onPressed: previousStepFun,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              nextStep!.getTitle(),
-                              style: OneLineTextStyles.Medium14.copyWith(
-                                  color: clothes != null
-                                      ? SystemColors.black
-                                      : SystemColors.gray500),
+                            SvgPicture.asset(
+                              'assets/icons/arrow_left.svg',
+                              color: SystemColors.black,
+                              height: 12,
                             ),
                             SizedBox(width: 7),
-                            SvgPicture.asset('assets/icons/arrow_right.svg',
-                                height: 12,
-                                color: clothes != null
-                                    ? SystemColors.black
-                                    : SystemColors.gray500),
+                            Text(
+                              previousStep!.getTitle(),
+                              style: OneLineTextStyles.Medium14.copyWith(
+                                  color: SystemColors.black),
+                            ),
                           ],
-                        ))),
-          ],
-        ));
+                        ),
+                      ),
+              ),
+              Expanded(
+                  flex: 2,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '${currentStepCount + 1}',
+                          style: OneLineTextStyles.SemiBold16.copyWith(
+                              color: SignatureColors.orange400),
+                        ),
+                        TextSpan(
+                            text: '/6',
+                            style: OneLineTextStyles.SemiBold16.copyWith(
+                                color: SystemColors.black)),
+                      ],
+                    ),
+                  )
+
+                  //  Text(
+                  //   "${currentStepCount+1}/${}",
+                  //   textAlign: TextAlign.center,
+                  //   style: OneLineTextStyles.SemiBold16.copyWith(
+                  //       color: SystemColors.black),
+                  // )
+
+                  ),
+              Expanded(
+                  flex: 2,
+                  child: nextStep == null
+                      ? isUpdate
+                          ? Container()
+                          : TextButton(
+                              onPressed: () async {
+                                Provider.of<ClothesUpdateProvider>(context,
+                                        listen: false)
+                                    .clear();
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => MainLayout()),
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text("등록",
+                                      style:
+                                          OneLineTextStyles.Medium14.copyWith(
+                                              color: SystemColors.black)),
+                                  SizedBox(width: 7),
+                                  SvgPicture.asset(
+                                    'assets/icons/arrow_right.svg',
+                                    color: SystemColors.black,
+                                    height: 12,
+                                  ),
+                                ],
+                              ))
+                      : TextButton(
+                          onPressed:
+                              !isInactiveStep(clothes) ? nextStepFun : null,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                nextStep!.getTitle(),
+                                style: OneLineTextStyles.Medium14.copyWith(
+                                    color: !isInactiveStep(clothes)
+                                        ? SystemColors.black
+                                        : SystemColors.gray500),
+                              ),
+                              SizedBox(width: 7),
+                              SvgPicture.asset('assets/icons/arrow_right.svg',
+                                  height: 12,
+                                  color: !isInactiveStep(clothes)
+                                      ? SystemColors.black
+                                      : SystemColors.gray500),
+                            ],
+                          ))),
+            ],
+          )),
+      Container(
+        height: MediaQuery.of(context).padding.bottom,
+        color: SignatureColors.begie300,
+      )
+    ]);
   }
 }

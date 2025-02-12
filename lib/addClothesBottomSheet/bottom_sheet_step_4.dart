@@ -28,15 +28,9 @@ class BottomSheetBody4 extends StatefulWidget implements BottomSheetStep {
 }
 
 class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
-  // TopLength _selectedLength = TopLength.long;
-  // SleeveLength _selectedSleeve = SleeveLength.short;
-  // Neckline _selectedNeckline = Neckline.round;
   List<CategoryDetail> categoryDetails = [];
   Map<CategoryDetail, ClothesDetail> selectedDetailMap = {};
   Map<CategoryDetail, bool> dropdownVisibleMap = {};
-  // bool _isLengthDropdownVisible = false;
-  // bool _isSleeveDropdownVisible = false;
-  // bool _isNecklineDropdownVisible = false;
 
   @override
   void initState() {
@@ -84,7 +78,8 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(child: Column(
+    return SliverToBoxAdapter(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: categoryDetails
             .map((e) => _buildCategorySection(
@@ -93,7 +88,8 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                   dropdownVisibleMap[e] ?? false,
                   () {
                     setState(() {
-                      dropdownVisibleMap = {e: true};
+                      final bool visible = dropdownVisibleMap[e] ?? false;
+                      dropdownVisibleMap = {e: !visible};
                     });
                   },
                 ))
@@ -108,6 +104,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
     bool isDropdownVisible,
     VoidCallback toggleDropdown,
   ) {
+    print("_buildCategorySection : ${categoryDetail.details.toString()}");
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,51 +157,53 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
           SizedBox(height: 8),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
+            alignment: Alignment.topCenter,
             height: isDropdownVisible
-                ? (categoryDetail.details.length / 3).ceil() * 50.0
+                ? ((categoryDetail.details.length / 3).ceil() *
+                    (MediaQuery.of(context).size.width - 40) /
+                    9)
+                // 아이템 개수 기반 동적 높이
                 : 0.0,
             curve: Curves.easeInOut,
-            child: Visibility(
-              visible: isDropdownVisible,
-              child: GridView.builder(
-                physics: NeverScrollableScrollPhysics(), // 그리드 뷰 내에서 스크롤 비활성화
-                shrinkWrap: true, // 그리드 뷰가 컨테이너에 맞게 축소되도록 함
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // 한 줄에 3개의 아이템
-                  crossAxisSpacing: 10.0, // 아이템 간의 수평 간격
-                  mainAxisSpacing: 10.0, // 아이템 간의 수직 간격
-                  childAspectRatio: 3 / 1, // 가로 세로 비율
-                ),
-                itemCount: categoryDetail.details.length,
-                itemBuilder: (context, index) {
-                  ClothesDetail option = categoryDetail.details[index];
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedDetailMap[categoryDetail] = option;
-                        save();
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: selectedValue == option
-                              ? Colors.black
-                              : Colors.grey,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        option.label,
-                        style: OneLineTextStyles.SemiBold16.copyWith(
-                            color: Colors.black),
-                      ),
-                    ),
-                  );
-                },
+            child: GridView.builder(
+              physics: NeverScrollableScrollPhysics(), // 그리드 뷰 내에서 스크롤 비활성화
+              shrinkWrap: true, // 그리드 뷰가 컨테이너에 맞게 축소되도록 함
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, // 한 줄에 3개의 아이템
+                crossAxisSpacing: 10.0, // 아이템 간의 수평 간격
+                mainAxisSpacing: 10.0, // 아이템 간의 수직 간격
+                childAspectRatio: 3 / 1, // 가로 세로 비율
               ),
+              itemCount: categoryDetail.details.length,
+              padding: EdgeInsets.zero,
+              itemBuilder: (context, index) {
+                ClothesDetail option = categoryDetail.details[index];
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedDetailMap[categoryDetail] = option;
+                      save();
+                    });
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: selectedValue == option
+                            ? Colors.black
+                            : Colors.grey,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      option.label,
+                      style: OneLineTextStyles.SemiBold16.copyWith(
+                          color: Colors.black),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],

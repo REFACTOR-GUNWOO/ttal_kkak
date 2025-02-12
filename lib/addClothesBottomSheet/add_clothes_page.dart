@@ -148,9 +148,6 @@ class _StepContainerState extends State<StepContainer> {
           SizedBox(
             height: 8,
           ),
-          Text(clothes?.name ?? "등록중",
-              style: OneLineTextStyles.SemiBold10.copyWith(
-                  color: SystemColors.gray800)),
           SizedBox(
             height: 8,
           ),
@@ -171,62 +168,99 @@ class _StepContainerState extends State<StepContainer> {
             currentStep: _buildSteps()[_currentStep],
             currentStepCount: _currentStep,
             isUpdate: widget.isUpdate),
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              pinned: true,
-              title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 2,
-                      child: TextButton(
-                        onPressed: () {
-                          Provider.of<ClothesUpdateProvider>(context,
-                                  listen: false)
-                              .clear();
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => MainLayout()),
-                          );
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/arrow_left.svg',
-                              color: SystemColors.black,
-                              height: 12,
+        body: GestureDetector(
+            onTap: () {
+              final currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus &&
+                  currentFocus.focusedChild != null) {
+                currentFocus.focusedChild!.unfocus();
+              }
+            },
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  automaticallyImplyLeading: false,
+                  pinned: true,
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 2,
+                          child: TextButton(
+                            onPressed: () {
+                              Provider.of<ClothesUpdateProvider>(context,
+                                      listen: false)
+                                  .clear();
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => MainLayout()),
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/arrow_left.svg',
+                                  color: SystemColors.black,
+                                  height: 12,
+                                ),
+                                SizedBox(width: 7),
+                                Text(
+                                  "내 옷장",
+                                  style: OneLineTextStyles.Bold14.copyWith(
+                                      color: SystemColors.black),
+                                ),
+                              ],
                             ),
-                            SizedBox(width: 7),
-                            Text(
-                              "내 옷장",
-                              style: OneLineTextStyles.Medium14.copyWith(
-                                  color: SystemColors.black),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                        flex: 2,
+                        Expanded(
+                            flex: 2,
+                            child: Text(
+                              widget.isUpdate ? "옷수정" : "옷등록",
+                              textAlign: TextAlign.center,
+                              style: OneLineTextStyles.Bold18.copyWith(
+                                  color: SystemColors.black),
+                            )),
+                        Expanded(
+                            flex: 2,
+                            child: TextButton(
+                                style: TextButton.styleFrom(
+                                  alignment: Alignment.centerRight,
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.all(10),
+                                ),
+                                onPressed: () {
+                                  Provider.of<ClothesUpdateProvider>(context,
+                                          listen: false)
+                                      .clear();
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => MainLayout()),
+                                  );
+                                },
+                                child: Text("완료",
+                                    style:
+                                        OneLineTextStyles.SemiBold16.copyWith(
+                                            color:
+                                                SignatureColors.orange400)))),
+                      ]),
+                ),
+                SliverToBoxAdapter(child: clothesWidget()),
+                SliverToBoxAdapter(
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          widget.isUpdate ? "옷수정" : "옷등록",
-                          textAlign: TextAlign.center,
-                          style: OneLineTextStyles.SemiBold16.copyWith(
+                          _buildSteps()[_currentStep].getTitle(),
+                          style: OneLineTextStyles.SemiBold20.copyWith(
                               color: SystemColors.black),
-                        )),
-                    Expanded(flex: 2, child: Container()),
-                  ]),
-            ),
-            SliverToBoxAdapter(
-                child: SizedBox(
-              height: MediaQuery.of(context).padding.top,
-            )),
-            SliverToBoxAdapter(child: clothesWidget()),
-            _buildSteps()[_currentStep],
-          ],
-        ));
+                        ))),
+                SliverPadding(
+                    padding: EdgeInsets.all(20),
+                    sliver: _buildSteps()[_currentStep]),
+              ],
+            )));
   }
 }
