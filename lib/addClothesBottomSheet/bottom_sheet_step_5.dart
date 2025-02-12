@@ -110,31 +110,28 @@ class _ColorPaletteState extends State<ColorPalette> {
   @override
   Widget build(BuildContext context) {
     print("ColorPalette build :${widget.selectedColorGroup}");
-    return SingleChildScrollView(
-      child: Column(
-        children: [
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ColorPaletteItem(
+          colorContainers: widget.colorContainers,
+          selectedColorGroup: _selectedColorGroup ?? widget.selectedColorGroup,
+          selectedColor: _selectedColor ?? widget.selectedColor,
+          onColorSelected: _onSelected,
+        ),
+        const SizedBox(height: 32),
+        if (widget.selectedColorGroup.isNotEmpty)
           ColorPaletteItem(
-            colorContainers: widget.colorContainers,
-            selectedColorGroup:
-                _selectedColorGroup ?? widget.selectedColorGroup,
-            selectedColor: _selectedColor ?? widget.selectedColor,
-            onColorSelected: _onSelected,
-          ),
-          const SizedBox(height: 20),
-          if (widget.selectedColorGroup.isNotEmpty)
-            ColorPaletteItem(
-                colorContainers:
-                    (_selectedColorGroup ?? widget.selectedColorGroup)
-                        .map((color) => ColorContainer(
-                            _selectedColorGroup ?? widget.selectedColorGroup,
-                            color))
-                        .toList(),
-                selectedColorGroup:
-                    _selectedColorGroup ?? widget.selectedColorGroup,
-                selectedColor: _selectedColor ?? widget.selectedColor,
-                onColorSelected: _onSelected),
-        ],
-      ),
+              colorContainers: (_selectedColorGroup ??
+                      widget.selectedColorGroup)
+                  .map((color) => ColorContainer(
+                      _selectedColorGroup ?? widget.selectedColorGroup, color))
+                  .toList(),
+              selectedColorGroup:
+                  _selectedColorGroup ?? widget.selectedColorGroup,
+              selectedColor: _selectedColor ?? widget.selectedColor,
+              onColorSelected: _onSelected),
+      ],
     );
   }
 }
@@ -157,6 +154,7 @@ class ColorPaletteItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
+      padding: const EdgeInsets.all(0),
       scrollDirection: Axis.vertical,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 8, // 한 줄에 8개의 색상
