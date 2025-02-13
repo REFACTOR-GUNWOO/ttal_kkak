@@ -80,24 +80,50 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: categoryDetails
-            .map((e) => _buildCategorySection(
-                  e,
-                  selectedDetailMap[e],
-                  dropdownVisibleMap[e] ?? false,
-                  () {
-                    setState(() {
-                      final bool visible = dropdownVisibleMap[e] ?? false;
-                      dropdownVisibleMap = {e: !visible};
-                    });
-                  },
-                ))
-            .toList(),
-      ),
-    );
+    return categoryDetails.isEmpty
+        ? SliverToBoxAdapter(
+            child: Container(
+            width: double.infinity,
+            height: 48,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6.0),
+              color: SignatureColors.begie300,
+            ),
+            child: Padding(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SvgPicture.asset("assets/icons/coach_mark.svg",
+                      width: 20, height: 20, color: SignatureColors.orange400),
+                  SizedBox(width: 8),
+                  Text(
+                    '변경 가능한 디테일 옵션이 없어요',
+                    style: OneLineTextStyles.SemiBold16.copyWith(
+                        color: SystemColors.black),
+                  )
+                ],
+              ),
+              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+            ),
+          ))
+        : SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: categoryDetails
+                  .map((e) => _buildCategorySection(
+                        e,
+                        selectedDetailMap[e],
+                        dropdownVisibleMap[e] ?? false,
+                        () {
+                          setState(() {
+                            final bool visible = dropdownVisibleMap[e] ?? false;
+                            dropdownVisibleMap = {e: !visible};
+                          });
+                        },
+                      ))
+                  .toList(),
+            ),
+          );
   }
 
   Widget _buildCategorySection(
