@@ -39,6 +39,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
   int _expandedIndex = -1;
+  FirstCategory? firstCategory;
   List<PencilInfo> pencilInfos = [
     PencilInfo(pencilSize: 10, width: 40),
     PencilInfo(pencilSize: 5, width: 26),
@@ -56,6 +57,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
       Clothes? clothes = widget.updateProvider.currentClothes;
 
       setState(() {
+        firstCategory = firstCategories
+            .firstWhere((element) => element.id == clothes!.primaryCategoryId);
         lines = clothes!.drawLines;
         clothesColor = clothes.color;
         SecondCategory secondCategory = secondCategories
@@ -364,51 +367,53 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Stack(
-            alignment: Alignment.topCenter, // Stack 내에서 모든 위젯을 중앙 정렬
-            children: [
-              if (svgBgRoot != null)
-                CustomPaint(
-                  size: Size(svgBgRoot!.viewport.width * clothesScale,
-                      svgBgRoot!.viewport.height * clothesScale),
-                  painter: SvgBgPainter(svgBgRoot!, clothesColor, clothesScale),
-                ),
-              if (_svgDecoUrl != null)
-                SvgPicture.asset(
-                  _svgDecoUrl!,
-                  width: 190 * clothesScale / 3,
-                ),
-              if (svgBgRoot != null)
-                CustomPaint(
-                  size: Size(svgBgRoot!.viewport.width * clothesScale,
-                      svgBgRoot!.viewport.height * clothesScale),
-                  painter: SvgLinePainter(
-                      svgLineRoot!,
-                      clothesScale,
-                      2,
-                      (clothesColor == ClothesColor.Black ||
-                              clothesColor == ClothesColor.LightBlack)
-                          ? SystemColors.gray900
-                          : SystemColors.black),
-                ),
-              if (svgBgRoot != null)
-                GestureDetector(
-                  onPanStart: _startDrawing,
-                  onPanUpdate: _updateDrawing,
-                  onPanEnd: _endDrawing,
-                  child: CustomPaint(
-                    size: Size(svgBgRoot!.viewport.width * (clothesScale),
-                        svgBgRoot!.viewport.height * (clothesScale)),
-                    painter: DrawingPainter(lines, svgBgRoot, clothesScale),
+      body: Padding(
+          padding:
+              EdgeInsets.only(top: firstCategory?.drawingPageTopPosition ?? 0),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Stack(
+              alignment: Alignment.topCenter, // Stack 내에서 모든 위젯을 중앙 정렬
+              children: [
+                if (svgBgRoot != null)
+                  CustomPaint(
+                    size: Size(svgBgRoot!.viewport.width * clothesScale,
+                        svgBgRoot!.viewport.height * clothesScale),
+                    painter:
+                        SvgBgPainter(svgBgRoot!, clothesColor, clothesScale),
                   ),
-                ),
-            ],
-          ),
-        ),
-      ),
+                if (_svgDecoUrl != null)
+                  SvgPicture.asset(
+                    _svgDecoUrl!,
+                    width: 190 * clothesScale / 3,
+                  ),
+                if (svgBgRoot != null)
+                  CustomPaint(
+                    size: Size(svgBgRoot!.viewport.width * clothesScale,
+                        svgBgRoot!.viewport.height * clothesScale),
+                    painter: SvgLinePainter(
+                        svgLineRoot!,
+                        clothesScale,
+                        2,
+                        (clothesColor == ClothesColor.Black ||
+                                clothesColor == ClothesColor.LightBlack)
+                            ? SystemColors.gray900
+                            : SystemColors.black),
+                  ),
+                if (svgBgRoot != null)
+                  GestureDetector(
+                    onPanStart: _startDrawing,
+                    onPanUpdate: _updateDrawing,
+                    onPanEnd: _endDrawing,
+                    child: CustomPaint(
+                      size: Size(svgBgRoot!.viewport.width * (clothesScale),
+                          svgBgRoot!.viewport.height * (clothesScale)),
+                      painter: DrawingPainter(lines, svgBgRoot, clothesScale),
+                    ),
+                  ),
+              ],
+            ),
+          )),
     );
   }
 

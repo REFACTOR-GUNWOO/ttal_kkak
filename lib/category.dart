@@ -8,6 +8,7 @@ class FirstCategory {
   String description;
   String hangerUrl;
   double hangerPosition;
+  double drawingPageTopPosition;
   FirstCategory({
     required this.id,
     required this.name,
@@ -15,6 +16,7 @@ class FirstCategory {
     required this.priority,
     required this.hangerUrl,
     required this.description,
+    required this.drawingPageTopPosition,
   });
 }
 
@@ -25,35 +27,40 @@ List<FirstCategory> firstCategories = [
       priority: 1,
       hangerUrl: "assets/icons/hanger.svg",
       hangerPosition: 10,
-      description: '티셔츠 블라우스, 니트, 조끼 등의 옷이 있어요.'),
+      description: '티셔츠 블라우스, 니트, 조끼 등의 옷이 있어요.',
+      drawingPageTopPosition: 64),
   FirstCategory(
       id: 2,
       name: "하의",
       priority: 2,
       hangerPosition: 10,
       hangerUrl: "assets/icons/pants_hanger.svg",
-      description: "청바지, 슬랙스, 반바지, 레깅스 등의 옷이 있어요."),
+      description: "청바지, 슬랙스, 반바지, 레깅스 등의 옷이 있어요.",
+      drawingPageTopPosition: 64),
   FirstCategory(
       id: 3,
       name: "아우터",
       priority: 3,
       hangerPosition: 10,
       hangerUrl: "assets/icons/hanger.svg",
-      description: "야상, 가디건, 자켓 코트, 패딩 등의 옷이 있어요."),
+      description: "야상, 가디건, 자켓 코트, 패딩 등의 옷이 있어요.",
+      drawingPageTopPosition: 64),
   FirstCategory(
       id: 4,
       name: "원피스",
       priority: 4,
       hangerPosition: 10,
       hangerUrl: "assets/icons/hanger.svg",
-      description: "원피스, 점프슈트 등의 옷이 있어요."),
+      description: "원피스, 점프슈트 등의 옷이 있어요.",
+      drawingPageTopPosition: 40),
   FirstCategory(
       id: 5,
       name: "신발",
       priority: 5,
       hangerPosition: 121,
       hangerUrl: "assets/icons/shoes_hanger.svg",
-      description: "슬리퍼, 운동화, 구두 등의 옷이 있어요."),
+      description: "슬리퍼, 운동화, 구두 등의 옷이 있어요.",
+      drawingPageTopPosition: 148),
 ];
 
 class CategoryDetail {
