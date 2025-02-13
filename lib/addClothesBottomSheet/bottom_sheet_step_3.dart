@@ -108,7 +108,7 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
                 children: [
                   Text(
                     categories[index].name,
-                    style: OneLineTextStyles.SemiBold16.copyWith(
+                    style: OneLineTextStyles.Bold14.copyWith(
                         color: SystemColors.black),
                   ),
                   SvgPicture.asset(

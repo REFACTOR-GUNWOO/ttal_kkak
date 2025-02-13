@@ -25,6 +25,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   List<String> secondTabNames = ["등록일순", "카테고리순", "컬러순"];
 
   void reload() async {
+    try{
     // 먼저 비동기 작업을 완료한 후에
     print("reload1");
     List<Clothes> updatedClothesList = await ClothesRepository().loadClothes();
@@ -33,7 +34,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     setState(() {
       print("reload2");
       clothesList = updatedClothesList;
-    });
+    });}catch(e){
+      print(e);
+    }
   }
 
   void _showSaveClosetNameBottomSheet(BuildContext context) {
