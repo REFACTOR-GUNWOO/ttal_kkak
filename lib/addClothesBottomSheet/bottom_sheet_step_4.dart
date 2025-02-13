@@ -157,7 +157,12 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                   ),
                   Row(
                     children: [
-                      Icon(Icons.check_circle, color: Colors.orange, size: 16),
+                      SvgPicture.asset(
+                        "assets/icons/check.svg",
+                        width: 16,
+                        height: 16,
+                        color: SignatureColors.orange400,
+                      ),
                       SizedBox(width: 2),
                       Text(
                         '${selectedValue == null ? categoryDetail.details.first.label : selectedValue.label} 적용됨',
@@ -207,11 +212,10 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
               physics: NeverScrollableScrollPhysics(), // 그리드 뷰 내에서 스크롤 비활성화
               shrinkWrap: true, // 그리드 뷰가 컨테이너에 맞게 축소되도록 함
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, // 한 줄에 3개의 아이템
-                crossAxisSpacing: 10.0, // 아이템 간의 수평 간격
-                mainAxisSpacing: 10.0, // 아이템 간의 수직 간격
-                childAspectRatio: 3 / 1, // 가로 세로 비율
-              ),
+                  crossAxisCount: 3, // 한 줄에 3개의 아이템
+                  crossAxisSpacing: 10.0, // 아이템 간의 수평 간격
+                  mainAxisSpacing: 10.0, // 아이템 간의 수직 간격
+                  mainAxisExtent: 42),
               itemCount: categoryDetail.details.length,
               padding: EdgeInsets.zero,
               itemBuilder: (context, index) {
@@ -232,11 +236,11 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                             ? Colors.black
                             : Colors.grey,
                       ),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       option.label,
-                      style: OneLineTextStyles.SemiBold16.copyWith(
+                      style: OneLineTextStyles.Bold14.copyWith(
                           color: Colors.black),
                     ),
                   ),
