@@ -383,7 +383,6 @@ class _ClothesItemState extends State<ClothesItem> {
 
     // SVG 데이터를 비동기적으로 불러오고, 완료된 후 상태 업데이트
     await _loadDrawableRoot(clothesDetails, secondCategory);
-
     if (mounted) {
       setState(() {
         svgBgRoot = svgBgRoot;
@@ -431,6 +430,17 @@ class _ClothesItemState extends State<ClothesItem> {
           '_loadDrawableRoot 배경 SVG 파싱 시간: ${stopwatch.elapsedMilliseconds}ms');
     }
 
+    if (svgDecoRoot == null && svgDecoUrl != null) {
+      stopwatch.reset();
+      final String svgDecoString = await rootBundle.loadString(svgDecoUrl!);
+      print(
+          '_loadDrawableRoot 배경 SVG 파일 로드 시간: ${stopwatch.elapsedMilliseconds}ms');
+
+      stopwatch.reset();
+      svgDecoRoot = await svg.fromSvgString(svgDecoString, svgDecoString);
+      print(
+          '_loadDrawableRoot 배경 SVG 파싱 시간: ${stopwatch.elapsedMilliseconds}ms');
+    }
     // 라인 SVG 로드 시간 측정
     if (svgLineRoot == null) {
       stopwatch.reset();
@@ -461,7 +471,13 @@ class _ClothesItemState extends State<ClothesItem> {
                     svgBgRoot!.viewport.height * widget.scale),
                 painter: SvgBgPainter(svgBgRoot!, clothesColor, widget.scale),
               ),
-            if (svgDecoUrl != null) SvgPicture.asset(svgDecoUrl!),
+            if (svgDecoUrl != null)
+              CustomPaint(
+                size: Size(svgBgRoot!.viewport.width * widget.scale,
+                    svgBgRoot!.viewport.height * widget.scale),
+                painter: SvgBgPainter(
+                    svgDecoRoot!, SignatureColors.begie200, widget.scale),
+              ),
             if (lines.isNotEmpty)
               CustomPaint(
                 size: Size(svgBgRoot!.viewport.width * widget.scale,

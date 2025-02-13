@@ -482,7 +482,7 @@ Path extractPathDataFromDrawableRoot(DrawableRoot root) {
 
 class SvgBgPainter extends CustomPainter {
   final DrawableRoot drawableRoot;
-  final color;
+  final Color? color;
   final scale;
   SvgBgPainter(this.drawableRoot, this.color, this.scale);
 
@@ -493,7 +493,7 @@ class SvgBgPainter extends CustomPainter {
     // 페인트 객체 생성 시간 측정
     stopwatch.reset();
     Paint paint = Paint()
-      ..color = color
+      ..color = color ?? drawableRoot.style?.fill?.color ?? SystemColors.white
       ..style = PaintingStyle.fill
       ..strokeWidth = 2.0;
     print('SvgBgPainter 페인트 객체 생성 시간: ${stopwatch.elapsedMicroseconds}μs');

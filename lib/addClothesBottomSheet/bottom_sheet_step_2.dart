@@ -35,8 +35,11 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
   @override
   void initState() {
     super.initState();
+    _itemKeys
+        .addAll(List.generate(firstCategories.length, (index) => GlobalKey()));
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _calculateMaxHeight();
       Clothes? clothes = widget.updateProvider.currentClothes;
       int? primaryCategoryId = clothes?.primaryCategoryId;
       setState(() {
@@ -80,62 +83,93 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
     return;
   }
 
+  double _maxItemHeight = 0;
+  final List<GlobalKey> _itemKeys = [];
+
+  void _calculateMaxHeight() {
+    double maxHeight = 0;
+    for (var key in _itemKeys) {
+      final RenderBox? renderBox =
+          key.currentContext?.findRenderObject() as RenderBox?;
+      print("renderBox width: ${renderBox?.size.width}");
+      print("renderBox height: ${renderBox?.size.height}");
+      if (renderBox != null) {
+        maxHeight = maxHeight > renderBox.size.height
+            ? maxHeight
+            : renderBox.size.height;
+      }
+    }
+
+    print("maxHeight: ${maxHeight}");
+    if (maxHeight > 0 && maxHeight != _maxItemHeight) {
+      setState(() {
+        _maxItemHeight = maxHeight;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    return SliverLayoutBuilder(builder: (context, constraints) {
+      double availableWidth = constraints.crossAxisExtent;
+      int crossAxisCount = 2; // 무조건 2개 유지
+      double maxItemWidth = availableWidth / crossAxisCount;
 
-    // 화면 크기에 따라 자동으로 maxCrossAxisExtent 설정
-    double maxCrossAxisExtent = (screenWidth - 50) / 2;
-
-    return SliverGrid(
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: maxCrossAxisExtent, // 반응형 크기 적용
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 10.0,
+      return SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio:
+              maxItemWidth / (_maxItemHeight > 0 ? _maxItemHeight : 100),
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) {
             final category = firstCategories[index];
 
-            return TextButton(
-              onPressed: () async => {save(category.id)},
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero, // 패딩 제거
-                minimumSize: Size(0, 0), // 버튼 크기 강제 제거
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: selectedCategoryId == category.id
-                      ? Border.all(color: SystemColors.black, width: 1.5)
-                      : Border.all(color: SystemColors.gray500, width: 1.0),
-                  borderRadius: BorderRadius.circular(6.0),
-                  color: Colors.white,
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min, // 내부 요소만큼만 크기 조절
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        category.name,
-                        style: OneLineTextStyles.SemiBold16.copyWith(
-                            color: SystemColors.black),
+            return IntrinsicHeight(
+              key: _itemKeys[index], // 각 아이템별 높이 추적
+              child: GestureDetector(
+                  onTap: () async => save(category.id),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: selectedCategoryId == category.id
+                          ? Border.all(color: Colors.black, width: 1.5)
+                          : Border.all(color: Colors.grey, width: 1.0),
+                      borderRadius: BorderRadius.circular(6.0),
+                      color: Colors.white,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 14),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            category.name,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.black),
+                          ),
+                          SizedBox(height: 6.0),
+                          Flexible(
+                              child: Text(
+                            category.description,
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.grey[700]),
+                          )),
+                        ],
                       ),
-                      SizedBox(height: 4.0),
-                      Text(
-                        category.description,
-                        style: BodyTextStyles.Medium12.copyWith(
-                            color: SystemColors.gray700),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
+                  )),
             );
           },
           childCount: firstCategories.length,
-        ));
+        ),
+      );
+    });
   }
 }
