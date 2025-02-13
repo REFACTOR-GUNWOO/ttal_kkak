@@ -55,18 +55,22 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
     }
     print("update : ${clothes.name}");
 
-    clothes.updatePrimaryCategoryId(categoryId);
     if (widget.isUpdate) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return DraftClearWarningDialog(
-              draftFieldName: "상위 카테고리",
-              draft: clothes,
-              onNextStep: widget.onNextStep);
+            draftFieldName: "상위 카테고리",
+            draft: clothes,
+            onNextStep: () {
+              clothes.updatePrimaryCategoryId(categoryId);
+              widget.onNextStep();
+            },
+          );
         },
       );
     } else {
+      clothes.updatePrimaryCategoryId(categoryId);
       print("update2 : ${clothes.id}");
       print("update2 : ${clothes.name}");
       print("update2 : ${clothes.primaryCategoryId}");
@@ -76,6 +80,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
       widget.onNextStep();
     }
     if (clothes.isDraft) {
+      clothes.updatePrimaryCategoryId(categoryId);
       print("draft");
       clothes.isDraft = false;
       await widget.updateProvider.update(clothes);

@@ -54,7 +54,6 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
     SecondCategory category =
         secondCategories.firstWhere((element) => element.id == categoryId);
     final clothes = widget.updateProvider.currentClothes!;
-    clothes.updateSecondaryCategoryId(categoryId);
     if (widget.isUpdate) {
       showDialog(
         context: context,
@@ -62,12 +61,18 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
           return DraftClearWarningDialog(
               draftFieldName: "하위 카테고리",
               draft: clothes,
-              onNextStep: widget.onNextStep);
+              onNextStep: () {
+                clothes.updateSecondaryCategoryId(categoryId);
+
+                widget.onNextStep();
+              });
         },
       );
 
       return;
     }
+
+    clothes.updateSecondaryCategoryId(categoryId);
 
     clothes.updateColor(category.defaultColor ?? clothes.color);
 
