@@ -110,16 +110,20 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: categoryDetails
-                  .map((e) => _buildCategorySection(
-                        e,
-                        selectedDetailMap[e],
-                        dropdownVisibleMap[e] ?? false,
-                        () {
-                          setState(() {
-                            final bool visible = dropdownVisibleMap[e] ?? false;
-                            dropdownVisibleMap = {e: !visible};
-                          });
-                        },
+                  .map((e) => Padding(
+                        child: _buildCategorySection(
+                          e,
+                          selectedDetailMap[e],
+                          dropdownVisibleMap[e] ?? false,
+                          () {
+                            setState(() {
+                              final bool visible =
+                                  dropdownVisibleMap[e] ?? false;
+                              dropdownVisibleMap = {e: !visible};
+                            });
+                          },
+                        ),
+                        padding: EdgeInsets.only(bottom: 32),
                       ))
                   .toList(),
             ),
@@ -173,23 +177,29 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                   color: SystemColors.black, // 배경색 설정
                 ),
                 child: IconButton(
+                  padding: EdgeInsets.zero,
                   icon: isDropdownVisible
-                      ? SvgPicture.asset("assets/icons/arrow_up.svg")
-                      : SvgPicture.asset("assets/icons/arrow_down.svg"),
+                      ? SvgPicture.asset(
+                          "assets/icons/arrow_up.svg",
+                        )
+                      : SvgPicture.asset(
+                          "assets/icons/arrow_down.svg",
+                        ),
                   iconSize: 14,
                   onPressed: toggleDropdown,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 0),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
-            alignment: Alignment.topCenter,
+            alignment: Alignment.bottomCenter,
             height: isDropdownVisible
                 ? ((categoryDetail.details.length / 3).ceil() *
-                    (MediaQuery.of(context).size.width - 40) /
-                    9)
+                        (MediaQuery.of(context).size.width - 40) /
+                        9) +
+                    12
                 // 아이템 개수 기반 동적 높이
                 : 0.0,
             curve: Curves.easeInOut,
