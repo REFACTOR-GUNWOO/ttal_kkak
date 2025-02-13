@@ -176,9 +176,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => MainLayout()),
-                        );
+                        Navigator.pop(context);
                       },
                       child: SvgPicture.asset('assets/icons/arrow_left.svg',
                           color: SystemColors.black)),
