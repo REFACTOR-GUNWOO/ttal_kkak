@@ -40,21 +40,40 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   DrawableRoot? svgLineRoot;
   int _expandedIndex = -1;
   FirstCategory? firstCategory;
+  double brushContainerHeight = 120;
   List<PencilInfo> pencilInfos = [
     PencilInfo(pencilSize: 10, width: 40),
     PencilInfo(pencilSize: 5, width: 26),
     PencilInfo(pencilSize: 2, width: 18)
   ];
   double clothesScale = 5.0;
+  final ScrollController _scrollController = ScrollController();
 
   bool _isErasing = false;
   final double minDistance = 1.0; // 손떨림 방지를 위한 최소 거리 설정
+  bool _showScrollButtons = false;
+
+  void _checkScrollButtons() {
+    print("checkScrollButtons : ${_scrollController.offset}");
+    print("checkScrollButtons : ${_scrollController.position.maxScrollExtent}");
+    print("checkScrollButtons : ${_scrollController.hasClients}");
+    setState(() {
+      if (!_scrollController.hasClients) return;
+
+      _showScrollButtons = _scrollController.position.maxScrollExtent > 0;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_checkScrollButtons);
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Clothes? clothes = widget.updateProvider.currentClothes;
+      _checkScrollButtons();
+      _scrollController.animateTo(1,
+          duration: Duration(milliseconds: 1), curve: Curves.easeOut);
 
       setState(() {
         firstCategory = firstCategories
@@ -67,6 +86,28 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
         _loadDrawableRoot(clothesDetails, secondCategory);
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollUp() {
+    _scrollController.animateTo(
+      _scrollController.offset - 20.0, // 위로 20px 이동
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _scrollDown() {
+    _scrollController.animateTo(
+      _scrollController.offset + 20.0, // 아래로 20px 이동
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+    );
   }
 
   void save() async {
@@ -209,6 +250,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
               ))),
       bottomNavigationBar: Container(
         height: 180,
+        color: Colors.transparent,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.0), // 양쪽 여백을 설정
           child: Column(
@@ -318,12 +360,12 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                         topRight: Radius.circular(10.0),
                       ),
                     ),
-                    height: 120,
+                    height: brushContainerHeight,
                     width: double.infinity,
                   ),
                   Container(
                     width: 200,
-                    height: 120,
+                    height: brushContainerHeight,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -367,53 +409,106 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
           ),
         ),
       ),
-      body: Padding(
-          padding:
-              EdgeInsets.only(top: firstCategory?.drawingPageTopPosition ?? 0),
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: Stack(
-              alignment: Alignment.topCenter, // Stack 내에서 모든 위젯을 중앙 정렬
-              children: [
-                if (svgBgRoot != null)
-                  CustomPaint(
-                    size: Size(svgBgRoot!.viewport.width * clothesScale,
-                        svgBgRoot!.viewport.height * clothesScale),
-                    painter:
-                        SvgBgPainter(svgBgRoot!, clothesColor, clothesScale),
+      body: Stack(children: [
+        SingleChildScrollView(
+            controller: _scrollController,
+            physics: NeverScrollableScrollPhysics(),
+            child: Padding(
+                padding: EdgeInsets.only(
+                    top: firstCategory?.drawingPageTopPosition ?? 0),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Stack(
+                    alignment: Alignment.topCenter, // Stack 내에서 모든 위젯을 중앙 정렬
+                    children: [
+                      if (svgBgRoot != null)
+                        CustomPaint(
+                          size: Size(svgBgRoot!.viewport.width * clothesScale,
+                              svgBgRoot!.viewport.height * clothesScale),
+                          painter: SvgBgPainter(
+                              svgBgRoot!, clothesColor, clothesScale),
+                        ),
+                      if (_svgDecoUrl != null)
+                        SvgPicture.asset(
+                          _svgDecoUrl!,
+                          width: 190 * clothesScale / 3,
+                        ),
+                      if (svgBgRoot != null)
+                        CustomPaint(
+                          size: Size(svgBgRoot!.viewport.width * clothesScale,
+                              svgBgRoot!.viewport.height * clothesScale),
+                          painter: SvgLinePainter(
+                              svgLineRoot!,
+                              clothesScale,
+                              2,
+                              (clothesColor == ClothesColor.Black ||
+                                      clothesColor == ClothesColor.LightBlack)
+                                  ? SystemColors.gray900
+                                  : SystemColors.black),
+                        ),
+                      if (svgBgRoot != null)
+                        GestureDetector(
+                          onPanStart: _startDrawing,
+                          onPanUpdate: _updateDrawing,
+                          onPanEnd: _endDrawing,
+                          child: CustomPaint(
+                            size: Size(
+                                svgBgRoot!.viewport.width * (clothesScale),
+                                svgBgRoot!.viewport.height * (clothesScale)),
+                            painter:
+                                DrawingPainter(lines, svgBgRoot, clothesScale),
+                          ),
+                        ),
+                    ],
                   ),
-                if (_svgDecoUrl != null)
-                  SvgPicture.asset(
-                    _svgDecoUrl!,
-                    width: 190 * clothesScale / 3,
-                  ),
-                if (svgBgRoot != null)
-                  CustomPaint(
-                    size: Size(svgBgRoot!.viewport.width * clothesScale,
-                        svgBgRoot!.viewport.height * clothesScale),
-                    painter: SvgLinePainter(
-                        svgLineRoot!,
-                        clothesScale,
-                        2,
-                        (clothesColor == ClothesColor.Black ||
-                                clothesColor == ClothesColor.LightBlack)
-                            ? SystemColors.gray900
-                            : SystemColors.black),
-                  ),
-                if (svgBgRoot != null)
-                  GestureDetector(
-                    onPanStart: _startDrawing,
-                    onPanUpdate: _updateDrawing,
-                    onPanEnd: _endDrawing,
-                    child: CustomPaint(
-                      size: Size(svgBgRoot!.viewport.width * (clothesScale),
-                          svgBgRoot!.viewport.height * (clothesScale)),
-                      painter: DrawingPainter(lines, svgBgRoot, clothesScale),
+                ))),
+        _showScrollButtons
+            ? Positioned(
+                right: 20,
+                top: 20,
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      child: Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                              color: SignatureColors.begie500,
+                              borderRadius: BorderRadius.circular(6)),
+                          child: Center(
+                            child: SvgPicture.asset(
+                              "assets/icons/arrow_up.svg",
+                              width: 24,
+                              height: 24,
+                            ),
+                          )),
+                      onTap: () {
+                        _scrollUp();
+                      },
                     ),
-                  ),
-              ],
-            ),
-          )),
+                    SizedBox(height: 8),
+                    GestureDetector(
+                      child: Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                              color: SignatureColors.begie500,
+                              borderRadius: BorderRadius.circular(6)),
+                          child: Center(
+                            child: SvgPicture.asset(
+                              "assets/icons/arrow_down.svg",
+                              width: 24,
+                              height: 24,
+                            ),
+                          )),
+                      onTap: () {
+                        _scrollDown();
+                      },
+                    ),
+                  ],
+                ))
+            : Container()
+      ]),
     );
   }
 
