@@ -55,7 +55,7 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
       ClothesDetails clothesDetails = ClothesDetails(
           details: secondCategory.details.map((e) => e.defaultDetail).toList());
       clothes = Clothes(
-        name: text.isEmpty ? "등록중" : text,
+        name: text,
         primaryCategoryId: 1,
         secondaryCategoryId: secondCategory.id,
         color: ClothesColor.White,

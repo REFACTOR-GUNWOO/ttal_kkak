@@ -72,25 +72,24 @@ class DetailInfoCards extends State<BottomSheetBody6> {
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(title,
-                      style: OneLineTextStyles.SemiBold16.copyWith(
-                          color: SystemColors.black)),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    description,
-                    style: BodyTextStyles.Regular14.copyWith(
-                        color: SystemColors.gray700),
-                  ),
-                ],
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(title,
+                    style: OneLineTextStyles.SemiBold16.copyWith(
+                        color: SystemColors.black)),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  description,
+                  style: BodyTextStyles.Regular14.copyWith(
+                      color: SystemColors.gray700),
+                ),
+              ],
             ),
             Center(
                 // 화면 중앙에 배치
@@ -99,7 +98,7 @@ class DetailInfoCards extends State<BottomSheetBody6> {
         ),
       ),
       Positioned(
-        left: 88,
+        left: 94,
         top: 8,
         child: GestureDetector(
             onTap: () {

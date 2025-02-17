@@ -46,13 +46,6 @@ class _StepContainerState extends State<StepContainer> {
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-    // provider = Provider.of<ClothesDraftProvider>(context, listen: false);
-    // provider?.loadFromLocal();
-  }
-
   int _currentStep = 0;
 
   void _nextStep() {
@@ -67,45 +60,40 @@ class _StepContainerState extends State<StepContainer> {
     });
   }
 
-  List<BottomSheetStep> _buildSteps() {
+  List<BottomSheetStep> _buildSteps(ClothesUpdateProvider provider) {
     return [
       BottomSheetBody1(
         onNextStep: _nextStep,
         isUpdate: widget.isUpdate,
-        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+        updateProvider: provider,
       ),
       BottomSheetBody2(
         onNextStep: _nextStep,
         isUpdate: widget.isUpdate,
-        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+        updateProvider: provider,
       ),
       BottomSheetBody3(
         onNextStep: _nextStep,
         isUpdate: widget.isUpdate,
-        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+        updateProvider: provider,
       ),
       BottomSheetBody4(
         onNextStep: _nextStep,
         isUpdate: widget.isUpdate,
-        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+        updateProvider: provider,
       ),
       BottomSheetBody5(
         onNextStep: _nextStep,
         isUpdate: widget.isUpdate,
-        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+        updateProvider: provider,
       ),
       BottomSheetBody6(
         onNextStep: _nextStep,
         isUpdate: widget.isUpdate,
-        updateProvider: Provider.of<ClothesUpdateProvider>(context),
+        updateProvider: provider,
       )
     ];
   }
-
-  // int getCurrentDraftLevel() {
-  //   print("getCurrentDraftLevel : ${provider?.currentDraft?.countLevel()}");
-  //   return provider?.currentDraft?.countLevel() ?? 0;
-  // }
 
   Widget clothesWidget() {
     Clothes? clothes =
@@ -156,16 +144,18 @@ class _StepContainerState extends State<StepContainer> {
 
   @override
   Widget build(BuildContext context) {
+    ClothesUpdateProvider provider =
+        Provider.of<ClothesUpdateProvider>(context, listen: false);
+    final List<BottomSheetStep> steps = _buildSteps(provider);
     return Scaffold(
         bottomNavigationBar: BottomSheetAppBar(
             nextStepFun: _nextStep,
             previousStepFun: _previousStep,
-            nextStep: _currentStep == _buildSteps().length - 1
+            nextStep: _currentStep == steps.length - 1
                 ? null
-                : _buildSteps()[_currentStep + 1],
-            previousStep:
-                _currentStep == 0 ? null : _buildSteps()[_currentStep - 1],
-            currentStep: _buildSteps()[_currentStep],
+                : steps[_currentStep + 1],
+            previousStep: _currentStep == 0 ? null : steps[_currentStep - 1],
+            currentStep: steps[_currentStep],
             currentStepCount: _currentStep,
             isUpdate: widget.isUpdate),
         body: GestureDetector(
@@ -253,13 +243,12 @@ class _StepContainerState extends State<StepContainer> {
                     child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          _buildSteps()[_currentStep].getTitle(),
+                          steps[_currentStep].getTitle(),
                           style: OneLineTextStyles.SemiBold20.copyWith(
                               color: SystemColors.black),
                         ))),
                 SliverPadding(
-                    padding: EdgeInsets.all(20),
-                    sliver: _buildSteps()[_currentStep]),
+                    padding: EdgeInsets.all(20), sliver: steps[_currentStep]),
               ],
             )));
   }

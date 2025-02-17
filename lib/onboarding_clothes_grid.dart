@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/custom_decoder.dart';
 import 'package:ttal_kkak/main_layout.dart';
-import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
-import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/update_bottom_sheet.dart';
@@ -31,7 +28,6 @@ class OnboardingClothesGrid extends StatefulWidget {
 
 class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
     with TickerProviderStateMixin {
-  ClothesUpdateProvider? updateProvider;
   late final AnimationController _controller;
   List<DrawnLine> lines = [];
   Color clothesColor = Colors.transparent;
@@ -82,10 +78,6 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // 여기서 Provider에 접근
-    setState(() {
-      updateProvider = Provider.of<ClothesUpdateProvider>(context);
-    });
   }
 
   int getClothesListLength() {
@@ -99,8 +91,6 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
         backgroundColor: Colors.transparent,
         body: getClothesListLength() != 0
             ? ListView.builder(
-                controller: Provider.of<ScrollControllerProvider>(context)
-                    .scrollController,
                 scrollDirection: Axis.vertical,
                 padding: EdgeInsets.all(20.0),
                 itemCount: ((getClothesListLength()) / columnCount).ceil(),
@@ -110,18 +100,11 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
                       ? start + columnCount
                       : getClothesListLength();
 
-                  print(
-                      "updateProvider?.currentClothes: ${updateProvider?.currentClothes?.id}");
-                  final clothesList = widget.clothesList
-                      .map((e) => updateProvider?.currentClothes?.id == e.id &&
-                              updateProvider?.currentClothes != null
-                          ? updateProvider!.currentClothes!
-                          : e)
-                      .toList();
                   List<Clothes> rowClothes =
                       widget.clothesList.sublist(start, end);
 
                   return Padding(
+                    padding: const EdgeInsets.only(bottom: 32),
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,
@@ -130,13 +113,12 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: _buildClothesCardRow(context, rowClothes)),
                     ),
-                    padding: EdgeInsets.only(bottom: 32),
                   );
                 },
               )
             : ListView.builder(
                 scrollDirection: Axis.vertical,
-                padding: EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(20.0),
                 itemCount: 1,
                 itemBuilder: (context, index) {
                   return Container(
@@ -150,7 +132,7 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
                 },
               ),
         floatingActionButton: AnimatedSwitcher(
-          duration: Duration(milliseconds: 0), // 애니메이션 시간을 0으로 설정
+          duration: const Duration(milliseconds: 0), // 애니메이션 시간을 0으로 설정
           child: selected.values.where((isSelected) => isSelected).isNotEmpty
               ? _buildFloatingActionButton()
               : null,
@@ -197,90 +179,24 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
     return list;
   }
 
-  void showClothesOptionsBottomSheet(BuildContext context, Clothes clothes,
-      ClothesUpdateProvider? updateProvider) {
+  void showClothesOptionsBottomSheet(
+    BuildContext context,
+    Clothes clothes,
+  ) {
     showModalBottomSheet(
       context: context,
       elevation: 10,
       barrierColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (BuildContext context) {
         return UpdateBottomSheet(
           onReload: () => widget.onReload(),
           clothes: clothes,
-          updateProvider: updateProvider,
         );
       },
     );
-  }
-
-  Widget _buildClothesDraftCard(
-    BuildContext context,
-    Clothes _clothes,
-  ) {
-    Clothes clothes = updateProvider?.currentClothes ?? _clothes;
-    List<Widget> stackList = [];
-    stackList.add(SvgPicture.asset("assets/icons/MiddleCloset.svg"));
-    if (clothes.primaryCategoryId == null) {
-      stackList.add(Positioned(
-          top: 12, child: SvgPicture.asset("assets/icons/hanger.svg")));
-      stackList.add(Positioned(
-          top: 12, child: SvgPicture.asset("assets/icons/NewClothes.svg")));
-      stackList.add(Positioned(
-          top: 32,
-          child: Lottie.asset(
-            'assets/lotties/add_clothes.lottie',
-            decoder: customDecoder,
-            width: 50,
-          )));
-    } else {
-      FirstCategory? firstCategory = firstCategories
-          .where((element) => element.id == clothes.primaryCategoryId)
-          .firstOrNull;
-      SecondCategory? secondCategory = secondCategories
-          .where((element) => element.id == clothes.secondaryCategoryId)
-          .firstOrNull;
-      if (firstCategory != null) {
-        stackList.add(Positioned(
-            top: firstCategory.hangerPosition,
-            child: SvgPicture.asset(firstCategory.hangerUrl)));
-      }
-      if (secondCategory != null) {
-        stackList.add(Positioned(
-            top: secondCategory.clothesTopPosition,
-            bottom: secondCategory.clothesBottomPosition,
-            child: ClothesItem(clothes: clothes, key: ValueKey(Uuid().v4()))));
-      }
-      stackList.add(Positioned(
-          top: 32,
-          child: Lottie.asset(
-            'assets/lotties/add_clothes.lottie',
-            decoder: customDecoder,
-            width: 50,
-          )));
-    }
-    return GestureDetector(
-        onTap: () => {
-              {
-                setState(() {
-                  selected[clothes.id!] = !selected[clothes.id]!;
-                })
-              }
-            },
-        child: Column(children: [
-          Stack(alignment: Alignment.center, children: stackList),
-          SizedBox(
-            height: 8,
-          ),
-          Text(clothes.name ?? "",
-              style: OneLineTextStyles.SemiBold10.copyWith(
-                  color: SystemColors.gray800)),
-          SizedBox(
-            height: 8,
-          ),
-        ]));
   }
 }
 
@@ -333,11 +249,7 @@ class _ClothesCardState extends State<ClothesCard>
 
   @override
   Widget build(BuildContext context) {
-    Clothes clothes =
-        Provider.of<ClothesUpdateProvider>(context).currentClothes?.id ==
-                widget.clothes.id
-            ? Provider.of<ClothesUpdateProvider>(context).currentClothes!
-            : widget.clothes;
+    Clothes clothes = widget.clothes;
 
     List<Widget> stackList = [];
     stackList.add(SvgPicture.asset("assets/icons/MiddleCloset.svg"));
@@ -365,16 +277,6 @@ class _ClothesCardState extends State<ClothesCard>
             child: ClothesItem(clothes: clothes, key: ValueKey(Uuid().v4()))));
       }
     }
-    if (Provider.of<ClothesUpdateProvider>(context).currentClothes?.id ==
-        clothes.id) {
-      stackList.add(Positioned(
-          top: 32,
-          child: Lottie.asset(
-            'assets/lotties/add_clothes.lottie',
-            decoder: customDecoder,
-            width: 50,
-          )));
-    }
 
     if (widget.isOnboarding) {
       stackList.add(Positioned(
@@ -390,10 +292,6 @@ class _ClothesCardState extends State<ClothesCard>
       ));
     }
 
-    FirstCategory firstCategory = firstCategories
-        .firstWhere((element) => element.id == clothes.primaryCategoryId);
-    SecondCategory secondCategory = secondCategories
-        .firstWhere((element) => element.id == clothes.secondaryCategoryId);
     return GestureDetector(
         onTap: () =>
             {widget.onTap(), if (widget.isOnboarding) _toggleAnimation()},
@@ -448,23 +346,23 @@ class _ClothesItemState extends State<ClothesItem> {
 
     // SVG 데이터를 비동기적으로 불러오고, 완료된 후 상태 업데이트
     await _loadDrawableRoot(clothesDetails, secondCategory);
-
-    if (mounted) {
-      setState(() {
-        svgBgRoot = svgBgRoot;
-        svgLineRoot = svgLineRoot;
-      });
-    }
   }
 
   Future<void> _loadDrawableRoot(
       ClothesDetails clothesDetails, SecondCategory secondCategory) async {
+    final stopwatch = Stopwatch()..start();
+
     List<ClothesDetail> details = clothesDetails.details;
 
+    // 세부 정보 정렬 시간 측정
+    stopwatch.reset();
     details.sort((a, b) {
       return b.toString().compareTo(a.toString());
     });
+    print('_loadDrawableRoot 세부 정보 정렬 시간: ${stopwatch.elapsedMilliseconds}ms');
 
+    // SVG URL 생성 시간 측정
+    stopwatch.reset();
     var svgBgUrl =
         "assets/images/clothes/bg/${secondCategory.code}${details.map((e) => '_${e.name}').join()}.svg";
     var svgLineUrl =
@@ -473,16 +371,58 @@ class _ClothesItemState extends State<ClothesItem> {
       svgDecoUrl =
           "assets/images/clothes/deco/${secondCategory.code}${details.map((e) => '_${e.name}').join()}.svg";
     }
+    print(
+        '_loadDrawableRoot SVG URL 생성 시간: ${stopwatch.elapsedMilliseconds}ms');
 
+    // 배경 SVG 로드 시간 측정
     if (svgBgRoot == null) {
+      stopwatch.reset();
       final String svgBgString = await rootBundle.loadString(svgBgUrl);
+      print(
+          '_loadDrawableRoot 배경 SVG 파일 로드 시간: ${stopwatch.elapsedMilliseconds}ms');
+
+      stopwatch.reset();
       svgBgRoot = await svg.fromSvgString(svgBgString, svgBgString);
+      print(
+          '_loadDrawableRoot 배경 SVG 파싱 시간: ${stopwatch.elapsedMilliseconds}ms');
+      setState(() {
+        svgBgRoot = svgBgRoot;
+      });
     }
 
-    if (svgLineRoot == null) {
-      final String svgLineString = await rootBundle.loadString(svgLineUrl);
-      svgLineRoot = await svg.fromSvgString(svgLineString, svgLineString);
+    if (svgDecoRoot == null && svgDecoUrl != null) {
+      stopwatch.reset();
+      final String svgDecoString = await rootBundle.loadString(svgDecoUrl!);
+      print(
+          '_loadDrawableRoot 배경 SVG 파일 로드 시간: ${stopwatch.elapsedMilliseconds}ms');
+
+      stopwatch.reset();
+      svgDecoRoot = await svg.fromSvgString(svgDecoString, svgDecoString);
+      print(
+          '_loadDrawableRoot 배경 SVG 파싱 시간: ${stopwatch.elapsedMilliseconds}ms');
+      setState(() {
+        svgDecoRoot = svgDecoRoot;
+      });
     }
+    // 라인 SVG 로드 시간 측정
+    if (svgLineRoot == null) {
+      stopwatch.reset();
+      final String svgLineString = await rootBundle.loadString(svgLineUrl);
+      print(
+          '_loadDrawableRoot 라인 SVG 파일 로드 시간: ${stopwatch.elapsedMilliseconds}ms');
+
+      stopwatch.reset();
+      svgLineRoot = await svg.fromSvgString(svgLineString, svgLineString);
+      print(
+          '_loadDrawableRoot 라인 SVG 파싱 시간: ${stopwatch.elapsedMilliseconds}ms');
+      setState(() {
+        svgLineRoot = svgLineRoot;
+      });
+    }
+
+    stopwatch.stop();
+    print(
+        '_loadDrawableRoot 전체 _loadDrawableRoot 실행 시간: ${stopwatch.elapsedMilliseconds}ms');
   }
 
   @override

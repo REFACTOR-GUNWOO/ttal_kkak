@@ -25,16 +25,18 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   List<String> secondTabNames = ["등록일순", "카테고리순", "컬러순"];
 
   void reload() async {
-    try{
-    // 먼저 비동기 작업을 완료한 후에
-    print("reload1");
-    List<Clothes> updatedClothesList = await ClothesRepository().loadClothes();
+    try {
+      // 먼저 비동기 작업을 완료한 후에
+      print("reload1");
+      List<Clothes> updatedClothesList =
+          await ClothesRepository().loadClothes();
 
-    // 그 다음에 setState를 호출하여 상태를 갱신합니다
-    setState(() {
-      print("reload2");
-      clothesList = updatedClothesList;
-    });}catch(e){
+      // 그 다음에 setState를 호출하여 상태를 갱신합니다
+      setState(() {
+        print("reload2");
+        clothesList = updatedClothesList;
+      });
+    } catch (e) {
       print(e);
     }
   }
@@ -256,19 +258,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       });
     }
 
-    final updateProvider = Provider.of<ClothesUpdateProvider>(context);
-    final updatingClothes = updateProvider.currentClothes;
-    print("updatingCLothes name : ${updatingClothes?.name}");
-    copied = copied
-        .where(
-          (element) => updatingClothes?.id != element.id,
-        )
-        .toList();
-    if (updatingClothes != null) {
-      copied.insert(0, updatingClothes);
-    }
-    print("updatingCLothes lenght : ${clothesList.length}");
-
     print("sorted clothes first  : ${copied.firstOrNull?.name}");
     return copied;
   }
@@ -342,7 +331,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           backgroundColor: SignatureColors.begie200,
           body: CustomScrollView(
             controller:
-                Provider.of<ScrollControllerProvider>(context).scrollController,
+                Provider.of<ScrollControllerProvider>(context, listen: false)
+                    .scrollController,
             slivers: [
               SliverPersistentHeader(
                 pinned: true, // 스크롤 되어도 고정됨

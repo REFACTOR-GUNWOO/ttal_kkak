@@ -1,29 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:ttal_kkak/addClothesBottomSheet/add_clothes.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/add_clothes_page.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/common_bottom_sheet.dart';
 import 'package:ttal_kkak/common/show_toast.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
-import 'package:ttal_kkak/provider/reload_home_provider.dart';
-import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 class UpdateBottomSheet extends StatelessWidget {
   Clothes clothes;
-  ClothesUpdateProvider? updateProvider;
   final VoidCallback onReload;
 
-  UpdateBottomSheet(
-      {required this.clothes,
-      required this.updateProvider,
-      required this.onReload});
+  UpdateBottomSheet({required this.clothes, required this.onReload});
   @override
   Widget build(BuildContext context) {
     return CommonBottomSheet(
@@ -34,19 +26,13 @@ class UpdateBottomSheet extends StatelessWidget {
             _buildOptionButton(
               iconPath: "assets/icons/update_icon.svg",
               label: "정보 수정하기",
-              onTap: () {
-                final scrollProvider = Provider.of<ScrollControllerProvider>(
-                    context,
-                    listen: false);
+              onTap: () async {
                 Navigator.pop(context);
-                scrollProvider.scrollToTop(
-                  MediaQuery.of(context).viewPadding.top,
-                ); // 드래프트 초기화
 
+                final updateProvider =
+                    Provider.of<ClothesUpdateProvider>(context, listen: false);
                 // 정보 수정 기능
-                updateProvider!.set(clothes);
-                Provider.of<ReloadHomeProvider>(context, listen: false)
-                    .triggerReload();
+                updateProvider.set(clothes);
 
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(

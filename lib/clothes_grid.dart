@@ -34,7 +34,6 @@ class ClothesGrid extends StatefulWidget {
 
 class _ClothesGridState extends State<ClothesGrid>
     with TickerProviderStateMixin {
-  ClothesUpdateProvider? updateProvider;
   late final AnimationController _controller;
   List<DrawnLine> lines = [];
   Color clothesColor = Colors.transparent;
@@ -85,10 +84,6 @@ class _ClothesGridState extends State<ClothesGrid>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // 여기서 Provider에 접근
-    setState(() {
-      updateProvider = Provider.of<ClothesUpdateProvider>(context);
-    });
   }
 
   int getClothesListLength() {
@@ -165,10 +160,7 @@ class _ClothesGridState extends State<ClothesGrid>
                     })
                   }
                 else
-                  {
-                    showClothesOptionsBottomSheet(
-                        context, clothes, updateProvider)
-                  }
+                  {showClothesOptionsBottomSheet(context, clothes)}
               }));
     }).toList();
     int listDiff = columnCount(context) - list.length;
@@ -193,8 +185,10 @@ class _ClothesGridState extends State<ClothesGrid>
     return list;
   }
 
-  void showClothesOptionsBottomSheet(BuildContext context, Clothes clothes,
-      ClothesUpdateProvider? updateProvider) {
+  void showClothesOptionsBottomSheet(
+    BuildContext context,
+    Clothes clothes,
+  ) {
     showModalBottomSheet(
       context: context,
       elevation: 10,
@@ -207,7 +201,6 @@ class _ClothesGridState extends State<ClothesGrid>
         return UpdateBottomSheet(
           onReload: () => widget.onReload(),
           clothes: clothes,
-          updateProvider: updateProvider,
         );
       },
     );
@@ -263,11 +256,7 @@ class _ClothesCardState extends State<ClothesCard>
 
   @override
   Widget build(BuildContext context) {
-    Clothes clothes =
-        Provider.of<ClothesUpdateProvider>(context).currentClothes?.id ==
-                widget.clothes.id
-            ? Provider.of<ClothesUpdateProvider>(context).currentClothes!
-            : widget.clothes;
+    Clothes clothes = widget.clothes;
 
     List<Widget> stackList = [];
     stackList.add(SvgPicture.asset("assets/icons/MiddleCloset.svg"));
@@ -294,16 +283,6 @@ class _ClothesCardState extends State<ClothesCard>
             bottom: secondCategory.clothesBottomPosition,
             child: ClothesItem(clothes: clothes, key: ValueKey(Uuid().v4()))));
       }
-    }
-    if (Provider.of<ClothesUpdateProvider>(context).currentClothes?.id ==
-        clothes.id) {
-      stackList.add(Positioned(
-          top: 32,
-          child: Lottie.asset(
-            'assets/lotties/add_clothes.lottie',
-            decoder: customDecoder,
-            width: 50,
-          )));
     }
 
     if (widget.isOnboarding) {
