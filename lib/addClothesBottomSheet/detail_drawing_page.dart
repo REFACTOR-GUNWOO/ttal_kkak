@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,7 +50,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   ];
   double clothesScale = 5.0;
   final ScrollController _scrollController = ScrollController();
-
+  Timer? _scrollTimer;
   bool _isErasing = false;
   final double minDistance = 1.0; // 손떨림 방지를 위한 최소 거리 설정
   bool _showScrollButtons = false;
@@ -94,7 +96,52 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     super.dispose();
   }
 
-  void _scrollUp() {
+  void startScrollUp() {
+    _scrollTimer = Timer.periodic(Duration(milliseconds: 60), (timer) {
+      _scrollUpByLongPress();
+    });
+  }
+
+  void startScrollDown() {
+    _scrollTimer = Timer.periodic(Duration(milliseconds: 60), (timer) {
+      _scrollDownByLongPress();
+    });
+  }
+
+  void _stopScrollTimer() {
+    _scrollTimer?.cancel();
+  }
+
+  void _scrollUpByLongPress() {
+    if (_scrollController.offset <= 0.0) {
+      return;
+    }
+
+    _scrollController.animateTo(
+      _scrollController.offset - 20, // 위로 20px 이동
+      duration: Duration(milliseconds: 60),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _scrollDownByLongPress() {
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent) {
+      return;
+    }
+
+    _scrollController.animateTo(
+      _scrollController.offset + 20, // 위로 20px 이동
+      duration: Duration(milliseconds: 60),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _scrollUpByTab() {
+    if (_scrollController.offset <= 0.0) {
+      return;
+    }
+
     _scrollController.animateTo(
       _scrollController.offset - 20.0, // 위로 20px 이동
       duration: Duration(milliseconds: 200),
@@ -102,7 +149,12 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     );
   }
 
-  void _scrollDown() {
+  void _scrollDownByTab() {
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent) {
+      return;
+    }
+
     _scrollController.animateTo(
       _scrollController.offset + 20.0, // 아래로 20px 이동
       duration: Duration(milliseconds: 200),
@@ -249,106 +301,13 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                 ],
               ))),
       bottomNavigationBar: Container(
-        height: 180,
+        height: brushContainerHeight,
         color: Colors.transparent,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.0), // 양쪽 여백을 설정
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return DraftClearWarningDialog(
-                                  title: "드로잉 초기화",
-                                  description: "드로잉 정보가 모두 사라져요\n초기화 하시겠어요?",
-                                  draftFieldName: "",
-                                  onNextStep: () {
-                                    showToast("초기화되었습니다");
-                                    clear();
-                                  });
-                            },
-                          );
-                        },
-                        child: Row(children: [
-                          SvgPicture.asset(
-                            "assets/icons/retry.svg",
-                            width: 13,
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                            "초기화",
-                            style: OneLineTextStyles.SemiBold16.copyWith(
-                                color: SystemColors.black),
-                          )
-                        ]),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: SignatureColors.begie500,
-                          elevation: 0,
-                          maximumSize: Size(94, 44),
-                          minimumSize: Size(94, 44),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 96,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                undo();
-                              },
-                              child: SvgPicture.asset(
-                                "assets/icons/left_curve_arrow.svg",
-                                width: 18,
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.all(0),
-                                minimumSize: Size(44, 44),
-                                maximumSize: Size(44, 44),
-                                backgroundColor: SignatureColors.begie500,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                redo();
-                              },
-                              child: SvgPicture.asset(
-                                "assets/icons/right_curve_arrow.svg",
-                                width: 18,
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.all(0),
-                                minimumSize: Size(44, 44),
-                                maximumSize: Size(44, 44),
-                                backgroundColor: SignatureColors.begie500,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ]),
-              ),
               Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
@@ -415,7 +374,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
             physics: NeverScrollableScrollPhysics(),
             child: Padding(
                 padding: EdgeInsets.only(
-                    top: firstCategory?.drawingPageTopPosition ?? 0),
+                    top: firstCategory?.drawingPageTopPosition ?? 0,
+                    bottom: 94),
                 child: Align(
                   alignment: Alignment.topCenter,
                   child: Stack(
@@ -483,7 +443,13 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                             ),
                           )),
                       onTap: () {
-                        _scrollUp();
+                        _scrollUpByTab();
+                      },
+                      onLongPress: () {
+                        startScrollUp();
+                      },
+                      onLongPressEnd: (details) {
+                        _stopScrollTimer();
                       },
                     ),
                     SizedBox(height: 8),
@@ -502,12 +468,115 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                             ),
                           )),
                       onTap: () {
-                        _scrollDown();
+                        _scrollDownByTab();
+                      },
+                      onLongPress: () {
+                        startScrollDown();
+                      },
+                      onLongPressEnd: (details) {
+                        _stopScrollTimer();
                       },
                     ),
                   ],
                 ))
-            : Container()
+            : Container(),
+        Positioned(
+            bottom: 10,
+            left: 20,
+            right: 20,
+            child: Container(
+              width: MediaQuery.of(context).size.width - 40,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return DraftClearWarningDialog(
+                                title: "드로잉 초기화",
+                                description: "드로잉 정보가 모두 사라져요\n초기화 하시겠어요?",
+                                draftFieldName: "",
+                                onNextStep: () {
+                                  showToast("초기화되었습니다");
+                                  clear();
+                                });
+                          },
+                        );
+                      },
+                      child: Row(children: [
+                        SvgPicture.asset(
+                          "assets/icons/retry.svg",
+                          width: 13,
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          "초기화",
+                          style: OneLineTextStyles.SemiBold16.copyWith(
+                              color: SystemColors.black),
+                        )
+                      ]),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: SignatureColors.begie500,
+                        elevation: 0,
+                        maximumSize: Size(94, 44),
+                        minimumSize: Size(94, 44),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 96,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              undo();
+                            },
+                            child: SvgPicture.asset(
+                              "assets/icons/left_curve_arrow.svg",
+                              width: 18,
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.all(0),
+                              minimumSize: Size(44, 44),
+                              maximumSize: Size(44, 44),
+                              backgroundColor: SignatureColors.begie500,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              redo();
+                            },
+                            child: SvgPicture.asset(
+                              "assets/icons/right_curve_arrow.svg",
+                              width: 18,
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.all(0),
+                              minimumSize: Size(44, 44),
+                              maximumSize: Size(44, 44),
+                              backgroundColor: SignatureColors.begie500,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ]),
+            ))
       ]),
     );
   }
