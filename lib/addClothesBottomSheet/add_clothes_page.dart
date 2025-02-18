@@ -14,6 +14,7 @@ import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
 import 'package:ttal_kkak/common/custom_decoder.dart';
+import 'package:ttal_kkak/common/show_toast.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -183,6 +184,9 @@ class _StepContainerState extends State<StepContainer> {
                               Provider.of<ClothesUpdateProvider>(context,
                                       listen: false)
                                   .clear();
+                              showToast(
+                                  widget.isUpdate ? "수정되었습니다" : "등록되었습니다");
+
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) => MainLayout()),
@@ -226,6 +230,8 @@ class _StepContainerState extends State<StepContainer> {
                                   Provider.of<ClothesUpdateProvider>(context,
                                           listen: false)
                                       .clear();
+                                  showToast(
+                                      widget.isUpdate ? "수정되었습니다" : "등록되었습니다");
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (context) => MainLayout()),
