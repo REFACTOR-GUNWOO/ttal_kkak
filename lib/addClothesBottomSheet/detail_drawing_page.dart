@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -54,6 +55,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   bool _isErasing = false;
   final double minDistance = 1.0; // 손떨림 방지를 위한 최소 거리 설정
   bool _showScrollButtons = false;
+  bool _isScaling = false; // 1. 확대 상태 추적 변수 추가
 
   void _checkScrollButtons() {
     print("checkScrollButtons : ${_scrollController.offset}");
@@ -369,59 +371,94 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
         ),
       ),
       body: Stack(children: [
-        SingleChildScrollView(
-            controller: _scrollController,
-            physics: NeverScrollableScrollPhysics(),
-            child: Padding(
-                padding: EdgeInsets.only(
-                    top: firstCategory?.drawingPageTopPosition ?? 0,
-                    bottom: 94),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Stack(
-                    alignment: Alignment.topCenter, // Stack 내에서 모든 위젯을 중앙 정렬
-                    children: [
-                      if (svgBgRoot != null)
-                        CustomPaint(
-                          size: Size(svgBgRoot!.viewport.width * clothesScale,
-                              svgBgRoot!.viewport.height * clothesScale),
-                          painter: SvgBgPainter(
-                              svgBgRoot!, clothesColor, clothesScale),
-                        ),
-                      if (_svgDecoUrl != null)
-                        SvgPicture.asset(
-                          _svgDecoUrl!,
-                          width: 190 * clothesScale / 3,
-                        ),
-                      if (svgBgRoot != null)
-                        CustomPaint(
-                          size: Size(svgBgRoot!.viewport.width * clothesScale,
-                              svgBgRoot!.viewport.height * clothesScale),
-                          painter: SvgLinePainter(
-                              svgLineRoot!,
-                              clothesScale,
-                              2,
-                              (clothesColor == ClothesColor.Black ||
-                                      clothesColor == ClothesColor.LightBlack)
-                                  ? SystemColors.gray900
-                                  : SystemColors.black),
-                        ),
-                      if (svgBgRoot != null)
-                        GestureDetector(
-                          onPanStart: _startDrawing,
-                          onPanUpdate: _updateDrawing,
-                          onPanEnd: _endDrawing,
-                          child: CustomPaint(
-                            size: Size(
-                                svgBgRoot!.viewport.width * (clothesScale),
-                                svgBgRoot!.viewport.height * (clothesScale)),
-                            painter:
-                                DrawingPainter(lines, svgBgRoot, clothesScale),
-                          ),
-                        ),
-                    ],
-                  ),
-                ))),
+        GestureDetector(
+            child: SingleChildScrollView(
+                controller: _scrollController,
+                physics: NeverScrollableScrollPhysics(),
+                child: Padding(
+                    padding: EdgeInsets.only(
+                        top: firstCategory?.drawingPageTopPosition ?? 0,
+                        bottom: 94),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Stack(
+                        alignment:
+                            Alignment.topCenter, // Stack 내에서 모든 위젯을 중앙 정렬
+                        children: [
+                          if (svgBgRoot != null)
+                            CustomPaint(
+                              size: Size(
+                                  svgBgRoot!.viewport.width * clothesScale,
+                                  svgBgRoot!.viewport.height * clothesScale),
+                              painter: SvgBgPainter(
+                                  svgBgRoot!, clothesColor, clothesScale),
+                            ),
+                          if (_svgDecoUrl != null)
+                            SvgPicture.asset(
+                              _svgDecoUrl!,
+                              width: 190 * clothesScale / 3,
+                            ),
+                          if (svgBgRoot != null)
+                            CustomPaint(
+                              size: Size(
+                                  svgBgRoot!.viewport.width * clothesScale,
+                                  svgBgRoot!.viewport.height * clothesScale),
+                              painter: SvgLinePainter(
+                                  svgLineRoot!,
+                                  clothesScale,
+                                  2,
+                                  (clothesColor == ClothesColor.Black ||
+                                          clothesColor ==
+                                              ClothesColor.LightBlack)
+                                      ? SystemColors.gray900
+                                      : SystemColors.black),
+                            ),
+                          if (svgBgRoot != null)
+                            RawGestureDetector(
+                              gestures: {
+                                ScaleGestureRecognizer:
+                                    GestureRecognizerFactoryWithHandlers<
+                                        ScaleGestureRecognizer>(
+                                  () => ScaleGestureRecognizer(),
+                                  (instance) {
+                                    instance
+                                      ..onStart = (_) {
+                                        setState(() {
+                                          _isScaling = true;
+                                          showToast("일러스트 확대 기능은 개발 중입니다");
+                                        });
+                                      }
+                                      ..onEnd = (_) {
+                                        setState(() {
+                                          _isScaling = false;
+                                        });
+                                      };
+                                  },
+                                ),
+                                PanGestureRecognizer:
+                                    GestureRecognizerFactoryWithHandlers<
+                                        PanGestureRecognizer>(
+                                  () => PanGestureRecognizer(),
+                                  (instance) {
+                                    instance
+                                      ..onStart = _startDrawing
+                                      ..onUpdate = _updateDrawing
+                                      ..onEnd = _endDrawing;
+                                  },
+                                ),
+                              },
+                              child: CustomPaint(
+                                size: Size(
+                                    svgBgRoot!.viewport.width * (clothesScale),
+                                    svgBgRoot!.viewport.height *
+                                        (clothesScale)),
+                                painter: DrawingPainter(
+                                    lines, svgBgRoot, clothesScale),
+                              ),
+                            ),
+                        ],
+                      ),
+                    )))),
         _showScrollButtons
             ? Positioned(
                 right: 20,
@@ -582,6 +619,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   }
 
   void _startDrawing(DragStartDetails details) {
+    if (_isScaling) return; // 2. 확대 중이면 드로잉 차단
     Offset localPosition = details.localPosition * 3 / clothesScale;
     setState(() {
       currentLine = DrawnLine([localPosition], brushWidth,
@@ -591,6 +629,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   }
 
   void _updateDrawing(DragUpdateDetails details) {
+    if (_isScaling) return; // 3. 확대 중이면 드로잉 업데이트 차단
     Offset localPosition = details.localPosition * 3 / clothesScale;
     setState(() {
       if (currentLine != null &&
