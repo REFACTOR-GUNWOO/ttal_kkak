@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:ttal_kkak/is_newbie_repository.dart';
 import 'package:ttal_kkak/onboarding_add_clothes_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
+import 'package:ttal_kkak/styles/text_styles.dart';
 
 class OnboardingPage extends StatefulWidget {
   @override
@@ -45,44 +46,71 @@ class BottomSheetContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
-      width: double.infinity, // 화면의 50% 높이를 사용
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: 10.0),
-          Container(
-            height: 4.0,
-            width: 40.0,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10.0),
-            ),
+        width: double.infinity, // 화면의 50% 높이를 사용
+        child: IntrinsicHeight(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 10.0),
+              Container(
+                height: 4.0,
+                width: 40.0,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              SizedBox(height: 32.0),
+              GestureDetector(
+                onTap: () async {
+                  await IsNewbieRepository().save(false);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                        builder: (context) => OnboardingAddClothesPage()),
+                  );
+                },
+                child: Lottie.asset(
+                  'assets/lotties/onboarding_present.json',
+                  width: 240,
+                  height: 240,
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Text(
+                '첫 방문 선물 도착',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                '처음 방문한 기념으로 가지고 있는 기본템을\n터치 한 번으로 쉽게 등록하게 해드릴게요!',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              ),
+              SizedBox(height: 32.0),
+              ElevatedButton(
+                onPressed: () async {
+                  await IsNewbieRepository().save(false);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                        builder: (context) => OnboardingAddClothesPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  minimumSize: Size(MediaQuery.of(context).size.width - 40, 56),
+                  backgroundColor: Colors.black,
+                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                ),
+                child: Text('선물 받기', style: OneLineTextStyles.SemiBold16),
+              ),
+              // Spacer(),
+              SizedBox(
+                height: MediaQuery.of(context).padding.bottom,
+              )
+            ],
           ),
-          IconButton(
-            onPressed: () async {
-              await IsNewbieRepository().save(false);
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                    builder: (context) => OnboardingAddClothesPage()),
-              );
-            },
-            icon: Lottie.asset('assets/lotties/onboarding_present.json'),
-            iconSize: 240,
-          ),
-          Text(
-            '첫 방문 선물 도착',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 10.0),
-          Text(
-            '처음 방문한 기념으로 가지고 있는 기본템을\n터치 한 번으로 쉽게 등록하게 해드릴게요!',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-          ),
-          Spacer(),
-        ],
-      ),
-    );
+        ));
   }
 }
