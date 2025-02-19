@@ -35,9 +35,6 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
   @override
   void initState() {
     super.initState();
-    _itemKeys
-        .addAll(List.generate(firstCategories.length, (index) => GlobalKey()));
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _calculateMaxHeight();
       Clothes? clothes = widget.updateProvider.currentClothes;
@@ -71,17 +68,11 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
       );
     } else {
       clothes.updatePrimaryCategoryId(categoryId);
-      print("update2 : ${clothes.id}");
-      print("update2 : ${clothes.name}");
-      print("update2 : ${clothes.primaryCategoryId}");
-      print("update2 : ${clothes.secondaryCategoryId}");
-      print("update2 : ${clothes.details}");
       await widget.updateProvider.update(clothes);
       widget.onNextStep();
     }
     if (clothes.isDraft) {
       clothes.updatePrimaryCategoryId(categoryId);
-      print("draft");
       clothes.isDraft = false;
       await widget.updateProvider.update(clothes);
     }
@@ -96,8 +87,6 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
     for (var key in _itemKeys) {
       final RenderBox? renderBox =
           key.currentContext?.findRenderObject() as RenderBox?;
-      print("renderBox width: ${renderBox?.size.width}");
-      print("renderBox height: ${renderBox?.size.height}");
       if (renderBox != null) {
         maxHeight = maxHeight > renderBox.size.height
             ? maxHeight
@@ -105,7 +94,6 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
       }
     }
 
-    print("maxHeight: ${maxHeight}");
     if (maxHeight > 0 && maxHeight != _maxItemHeight) {
       setState(() {
         _maxItemHeight = maxHeight;
@@ -115,66 +103,69 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverLayoutBuilder(builder: (context, constraints) {
-      double availableWidth = constraints.crossAxisExtent;
-      int crossAxisCount = 2; // 무조건 2개 유지
-      double maxItemWidth = availableWidth / crossAxisCount;
+    return SliverToBoxAdapter(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          double maxWidth = constraints.maxWidth;
+          print("maxWidth: $maxWidth"); // 부모 패딩이 적용된 최대 너비 확인
 
-      return SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: crossAxisCount,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio:
-              maxItemWidth / (_maxItemHeight > 0 ? _maxItemHeight : 100),
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final category = firstCategories[index];
+          return Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: List.generate(firstCategories.length, (index) {
+              if (_itemKeys.length < firstCategories.length) {
+                _itemKeys.add(GlobalKey());
+              }
 
-            return IntrinsicHeight(
-              key: _itemKeys[index], // 각 아이템별 높이 추적
-              child: GestureDetector(
-                  onTap: () async => save(category.id),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: selectedCategoryId == category.id
-                          ? Border.all(color: Colors.black, width: 1.5)
-                          : Border.all(color: Colors.grey, width: 1.0),
-                      borderRadius: BorderRadius.circular(6.0),
-                      color: Colors.white,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 14),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            category.name,
-                            style: TextStyle(
+              return SizedBox(
+                width: (maxWidth - 10) / 2, // 한 줄에 2개 고정
+                height: _maxItemHeight > 0 ? _maxItemHeight : null,
+                child: IntrinsicHeight(
+                  key: _itemKeys[index],
+                  child: GestureDetector(
+                    onTap: () async => save(firstCategories[index].id),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: selectedCategoryId == firstCategories[index].id
+                            ? Border.all(color: Colors.black, width: 1.5)
+                            : Border.all(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(6.0),
+                        color: Colors.white,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              firstCategories[index].name,
+                              style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
-                                color: Colors.black),
-                          ),
-                          SizedBox(height: 6.0),
-                          Flexible(
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: 6.0),
+                            Flexible(
                               child: Text(
-                            category.description,
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.grey[700]),
-                          )),
-                        ],
+                                firstCategories[index].description,
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey[700]),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  )),
-            );
-          },
-          childCount: firstCategories.length,
-        ),
-      );
-    });
+                  ),
+                ),
+              );
+            }),
+          );
+        },
+      ),
+    );
   }
 }
