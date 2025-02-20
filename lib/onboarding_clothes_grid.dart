@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/custom_decoder.dart';
 import 'package:ttal_kkak/main_layout.dart';
+import 'package:ttal_kkak/provider/onboarding_clothes_select_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/update_bottom_sheet.dart';
@@ -18,9 +20,10 @@ class OnboardingClothesGrid extends StatefulWidget {
   final VoidCallback onReload;
 
   OnboardingClothesGrid({
+    Key? key,
     required this.clothesList,
     required this.onReload,
-  });
+  }) : super(key: key);
 
   @override
   _OnboardingClothesGridState createState() => _OnboardingClothesGridState();
@@ -33,11 +36,11 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
   Color clothesColor = Colors.transparent;
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
-
-  late Map<int, bool> selected;
   int columnCount(BuildContext context) {
     return ((MediaQuery.of(context).size.width - 80) / 78).floor();
   }
+
+  Map<int, bool> selected = {};
 
   Widget _buildFloatingActionButton() {
     int selectedCount =
@@ -45,15 +48,9 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
 
     return FloatingActionButtonWidget(
       selectedCount: selectedCount,
-      onPressed: () async {
-        var selectedIds = selected.entries
-            .where((it) => it.value == true)
-            .map((it) => it.key);
-
-        await ClothesRepository().addClothesList(selectedIds
-            .map((it) => widget.clothesList.firstWhere((e) => e.id == it))
-            .toSet());
-
+      onPressed: () async {        
+        await Provider.of<OnboardingClothesSelectProvider>(context, listen: false)
+            .migrate();
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => MainLayout()),
         );
@@ -64,7 +61,6 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
   @override
   void initState() {
     super.initState();
-    selected = {for (var clothes in widget.clothesList) clothes.id!: false};
     _controller = AnimationController(vsync: this);
   }
 
@@ -86,6 +82,10 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      selected = Provider.of<OnboardingClothesSelectProvider>(context).selected;
+    });
+
     int columnCount = this.columnCount(context);
     return Scaffold(
         backgroundColor: Colors.transparent,
@@ -149,9 +149,10 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
           isOnboarding: true,
           onTap: () => {
                 {
-                  setState(() {
-                    selected[clothes.id!] = !selected[clothes.id]!;
-                  })
+                  print(clothes.id),
+                  Provider.of<OnboardingClothesSelectProvider>(context,
+                          listen: false)
+                      .toggle(clothes),
                 }
               }));
     }).toList();

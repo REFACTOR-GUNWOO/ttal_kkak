@@ -5,6 +5,7 @@ import 'package:ttal_kkak/clothes_grid.dart';
 import 'package:ttal_kkak/onboarding_clothes_grid.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
+import 'package:uuid/uuid.dart';
 
 class OnboardingAddClothesPage extends StatefulWidget {
   @override
@@ -103,7 +104,7 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
 
     OnboardingClothesGrid getClothesGrid() {
       return OnboardingClothesGrid(
-              clothesList: (getCategorizedClothes()[
+key: ValueKey(Uuid().v4()),              clothesList: (getCategorizedClothes()[
                   getSortedCategories()[tab1Index]]!),
               onReload: () {},
             );
