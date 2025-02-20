@@ -56,6 +56,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   final double minDistance = 1.0; // 손떨림 방지를 위한 최소 거리 설정
   bool _showScrollButtons = false;
   bool _isScaling = false; // 1. 확대 상태 추적 변수 추가
+  late GestureArenaTeam _gestureTeam; // Gesture Arena Team 추가
 
   void _checkScrollButtons() {
     print("checkScrollButtons : ${_scrollController.offset}");
@@ -72,6 +73,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   void initState() {
     super.initState();
     _scrollController.addListener(_checkScrollButtons);
+    _gestureTeam = GestureArenaTeam(); // GestureArenaTeam 생성
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Clothes? clothes = widget.updateProvider.currentClothes;
@@ -414,48 +416,39 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                                       : SystemColors.black),
                             ),
                           if (svgBgRoot != null)
-                            RawGestureDetector(
-                              gestures: {
-                                ScaleGestureRecognizer:
-                                    GestureRecognizerFactoryWithHandlers<
-                                        ScaleGestureRecognizer>(
-                                  () => ScaleGestureRecognizer(),
-                                  (instance) {
-                                    instance
-                                      ..onStart = (_) {
-                                        setState(() {
-                                          _isScaling = true;
-                                          showToast("일러스트 확대 기능은 개발 중입니다");
-                                        });
-                                      }
-                                      ..onEnd = (_) {
-                                        setState(() {
-                                          _isScaling = false;
-                                        });
-                                      };
-                                  },
-                                ),
-                                PanGestureRecognizer:
-                                    GestureRecognizerFactoryWithHandlers<
-                                        PanGestureRecognizer>(
-                                  () => PanGestureRecognizer(),
-                                  (instance) {
-                                    instance
-                                      ..onStart = _startDrawing
-                                      ..onUpdate = _updateDrawing
-                                      ..onEnd = _endDrawing;
-                                  },
-                                ),
+                            GestureDetector(
+                              onScaleStart: (details) {
+                                if (details.pointerCount >= 2) {
+                                  setState(() {
+                                    _isScaling = true;
+                                    showToast("일러스트 확대 기능은 개발 중입니다");
+                                  });
+                                  return;
+                                }
+                                _startDrawing(details.localFocalPoint);
+                              },
+                              onScaleUpdate: (details) {
+                                if (details.pointerCount >= 2) {
+                                  // 🔹 핀치 줌 (확대/축소)
+                                } else {
+                                  // 🔹 팬 (이동)
+                                  _updateDrawing(details.localFocalPoint);
+                                }
+                              },
+                              onScaleEnd: (details) {
+                                setState(() {
+                                  _isScaling = false;
+                                });
+                                _endDrawing();
                               },
                               child: CustomPaint(
                                 size: Size(
-                                    svgBgRoot!.viewport.width * (clothesScale),
-                                    svgBgRoot!.viewport.height *
-                                        (clothesScale)),
+                                    svgBgRoot!.viewport.width * clothesScale,
+                                    svgBgRoot!.viewport.height * clothesScale),
                                 painter: DrawingPainter(
                                     lines, svgBgRoot, clothesScale),
                               ),
-                            ),
+                            )
                         ],
                       ),
                     )))),
@@ -618,9 +611,9 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     );
   }
 
-  void _startDrawing(DragStartDetails details) {
+  void _startDrawing(Offset position) {
     if (_isScaling) return; // 2. 확대 중이면 드로잉 차단
-    Offset localPosition = details.localPosition * 3 / clothesScale;
+    Offset localPosition = position * 3 / clothesScale;
     setState(() {
       currentLine = DrawnLine([localPosition], brushWidth,
           _isErasing ? Colors.transparent : brushColor);
@@ -628,9 +621,9 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     });
   }
 
-  void _updateDrawing(DragUpdateDetails details) {
+  void _updateDrawing(Offset position) {
     if (_isScaling) return; // 3. 확대 중이면 드로잉 업데이트 차단
-    Offset localPosition = details.localPosition * 3 / clothesScale;
+    Offset localPosition = position * 3 / clothesScale;
     setState(() {
       if (currentLine != null &&
           (currentLine!.points.isEmpty ||
@@ -641,7 +634,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     });
   }
 
-  void _endDrawing(DragEndDetails details) {
+  void _endDrawing() {
     setState(() {
       if (currentLine != null && currentLine!.points.length == 1) {
         currentLine?.points.add(currentLine!.points.first);
