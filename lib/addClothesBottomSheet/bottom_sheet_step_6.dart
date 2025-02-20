@@ -31,37 +31,44 @@ class DetailInfoCards extends State<BottomSheetBody6> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-        child: Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => DetailDrawingPage(
-                        isUpdate: widget.isUpdate,
-                        updateProvider: widget.updateProvider,
-                      )),
-            );
-          },
-          child: _buildDetailCard(context,
-              title: '디테일 드로잉',
-              description: '드로잉으로 옷의 디테일을\n표현해주세요!',
-              icon: SvgPicture.asset(
-                "assets/icons/drawing_guide_icon.svg",
-                alignment: Alignment.center,
-                height: 56,
-                width: 56,
-              )),
-        ),
-      ],
-    ));
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetailDrawingPage(
+                      isUpdate: widget.isUpdate,
+                      updateProvider: widget.updateProvider,
+                    )),
+          );
+        },
+        child: _buildDetailCard(context,
+            title: '디테일 드로잉',
+            description: '드로잉으로 옷의 디테일을\n표현해주세요!',
+            icon: SvgPicture.asset(
+              "assets/icons/drawing_guide_icon.svg",
+              alignment: Alignment.center,
+              height: 56,
+              width: 56,
+            )),
+      ),
+    );
   }
 
   Widget _buildDetailCard(BuildContext context,
       {required String title,
       required String description,
       required SvgPicture icon}) {
+    TextPainter painter = TextPainter(
+      text: TextSpan(
+          text: title,
+          style:
+              OneLineTextStyles.SemiBold16.copyWith(color: SystemColors.black)),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    double textWidth = painter.width;
+
+    print("Text width: $textWidth");
     return Stack(children: [
       Container(
         padding: EdgeInsets.all(16.0),
@@ -78,9 +85,12 @@ class DetailInfoCards extends State<BottomSheetBody6> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(title,
-                    style: OneLineTextStyles.SemiBold16.copyWith(
-                        color: SystemColors.black)),
+                RichText(
+                  text: TextSpan(
+                      text: title,
+                      style: OneLineTextStyles.SemiBold16.copyWith(
+                          color: SystemColors.black)),
+                ),
                 SizedBox(
                   height: 8,
                 ),
@@ -98,8 +108,8 @@ class DetailInfoCards extends State<BottomSheetBody6> {
         ),
       ),
       Positioned(
-        left: 94,
-        top: 8,
+        left: textWidth + 16 - 10 + 4,
+        top: 9,
         child: GestureDetector(
             onTap: () {
               Navigator.push(
@@ -112,8 +122,9 @@ class DetailInfoCards extends State<BottomSheetBody6> {
               );
             },
             child: Padding(
-                padding: EdgeInsets.all(10),
-                child: SvgPicture.asset("assets/icons/coach_mark.svg"))),
+              padding: EdgeInsets.all(10),
+              child: SvgPicture.asset("assets/icons/coach_mark.svg"),
+            )),
       )
     ]);
   }
