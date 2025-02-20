@@ -269,21 +269,24 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
           automaticallyImplyLeading: false,
           titleSpacing: 0,
           title: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: SvgPicture.asset('assets/icons/arrow_left.svg',
-                          color: SystemColors.black)),
+                      child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: SvgPicture.asset('assets/icons/arrow_left.svg',
+                              color: SystemColors.black))),
                   TextButton(
                     style: TextButton.styleFrom(
                       minimumSize: Size.zero,
-                      padding: EdgeInsets.zero,
+                      padding: EdgeInsets.all(10),
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     onPressed: () => {
