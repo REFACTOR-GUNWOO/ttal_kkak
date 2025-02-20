@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/custom_decoder.dart';
 import 'package:ttal_kkak/main_layout.dart';
-import 'package:ttal_kkak/provider/clothes_update_provider.dart';
-import 'package:ttal_kkak/provider/reload_home_provider.dart';
-import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/update_bottom_sheet.dart';
@@ -43,28 +39,6 @@ class _ClothesGridState extends State<ClothesGrid>
   late Map<int, bool> selected;
   int columnCount(BuildContext context) {
     return ((MediaQuery.of(context).size.width - 80) / 78).floor();
-  }
-
-  Widget _buildFloatingActionButton() {
-    int selectedCount =
-        selected.values.where((isSelected) => isSelected).length;
-
-    return FloatingActionButtonWidget(
-      selectedCount: selectedCount,
-      onPressed: () async {
-        var selectedIds = selected.entries
-            .where((it) => it.value == true)
-            .map((it) => it.key);
-
-        await ClothesRepository().addClothesList(selectedIds
-            .map((it) => widget.clothesList.firstWhere((e) => e.id == it))
-            .toSet());
-
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => MainLayout()),
-        );
-      },
-    );
   }
 
   @override
@@ -476,48 +450,6 @@ class _ClothesItemState extends State<ClothesItem> {
                         ? SystemColors.gray900
                         : SystemColors.black),
               ),
-          ],
-        ));
-  }
-}
-
-class FloatingActionButtonWidget extends StatefulWidget {
-  final int selectedCount;
-  final VoidCallback onPressed;
-
-  FloatingActionButtonWidget({
-    required this.selectedCount,
-    required this.onPressed,
-  });
-
-  @override
-  _FloatingActionButtonWidgetState createState() =>
-      _FloatingActionButtonWidgetState();
-}
-
-class _FloatingActionButtonWidgetState
-    extends State<FloatingActionButtonWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
-        isExtended: true,
-        enableFeedback: false,
-        elevation: 0,
-        onPressed: widget.onPressed,
-        backgroundColor: Colors.black,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8), // 모서리 둥글게
-        ),
-        label: Row(
-          children: [
-            Text(
-              '총 ${widget.selectedCount}개 선택',
-              style: OneLineTextStyles.Medium14.copyWith(
-                  color: SystemColors.white),
-            ),
-            SizedBox(width: 8), // 텍스트와 아이콘 사이 간격
-            SvgPicture.asset('assets/icons/arrow_right.svg',
-                color: SystemColors.white)
           ],
         ));
   }
