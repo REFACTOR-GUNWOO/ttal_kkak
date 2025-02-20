@@ -315,7 +315,7 @@ class _ClothesCardState extends State<ClothesCard>
 
 class ClothesItem extends StatefulWidget {
   final Clothes clothes;
-  const ClothesItem({Key? key, required this.clothes}) : super(key: key);
+  const ClothesItem({Key? key, required this.clothes}) ;
 
   @override
   _ClothesItemState createState() => _ClothesItemState();

@@ -5,9 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
-import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/custom_decoder.dart';
-import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/update_bottom_sheet.dart';
@@ -18,13 +16,15 @@ class ClothesGrid extends StatefulWidget {
   final bool isOnboarding;
   final VoidCallback onReload;
 
-  ClothesGrid({
+  const ClothesGrid({
+    super.key,
     required this.clothesList,
     required this.isOnboarding,
     required this.onReload,
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _ClothesGridState createState() => _ClothesGridState();
 }
 
@@ -36,7 +36,6 @@ class _ClothesGridState extends State<ClothesGrid>
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
 
-  late Map<int, bool> selected;
   int columnCount(BuildContext context) {
     return ((MediaQuery.of(context).size.width - 80) / 78).floor();
   }
@@ -44,7 +43,6 @@ class _ClothesGridState extends State<ClothesGrid>
   @override
   void initState() {
     super.initState();
-    selected = {for (var clothes in widget.clothesList) clothes.id!: false};
     _controller = AnimationController(vsync: this);
   }
 
@@ -78,7 +76,6 @@ class _ClothesGridState extends State<ClothesGrid>
                       ? start + columnCount
                       : getClothesListLength();
 
-                  final clothesList = widget.clothesList;
                   List<Clothes> rowClothes =
                       widget.clothesList.sublist(start, end);
 
@@ -124,18 +121,9 @@ class _ClothesGridState extends State<ClothesGrid>
     rowClothes.map((clothes) {
       list.add(ClothesCard(
           clothes: clothes,
-          isSelected: selected[clothes.id] ?? false,
+          isSelected: false,
           isOnboarding: widget.isOnboarding,
-          onTap: () => {
-                if (widget.isOnboarding)
-                  {
-                    setState(() {
-                      selected[clothes.id!] = !selected[clothes.id]!;
-                    })
-                  }
-                else
-                  {showClothesOptionsBottomSheet(context, clothes)}
-              }));
+          onTap: () => {showClothesOptionsBottomSheet(context, clothes)}));
     }).toList();
     int listDiff = columnCount(context) - list.length;
 
