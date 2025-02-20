@@ -30,14 +30,10 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
     return categorizedClothes;
   }
 
-  TextButton getTab(int index, bool isAllTab, FirstCategory? category) {
-    int itemCount = isAllTab
-        ? clothesList.length
-        : getCategorizedClothes()[category]!.length;
+  TextButton getTab(int index, FirstCategory? category) {
+    int itemCount =  getCategorizedClothes()[category]!.length;
 
-    String categoryName = isAllTab
-        ? "전체"
-        : category?.name != null
+    String categoryName = category?.name != null
             ? category!.name
             : "";
 
@@ -75,12 +71,10 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
   }
 
   List<TextButton> getTabs() {
-    TextButton allTab = getTab(0, true, null);
     List<TextButton> tabList = getSortedCategories().map((category) {
       return getTab(
-          getSortedCategories().indexOf(category) + 1, false, category);
+          getSortedCategories().indexOf(category), category);
     }).toList();
-    tabList.insert(0, allTab);
     return tabList;
   }
 
@@ -107,52 +101,10 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
 
     ;
 
-    TextButton getTab(int index, bool isAllTab, FirstCategory? category) {
-      int itemCount = isAllTab
-          ? clothesList.length
-          : getCategorizedClothes()[category]!.length;
-
-      String categoryName = isAllTab
-          ? "전체"
-          : category?.name != null
-              ? category!.name
-              : "";
-
-      return tab1Index == index
-          ? TextButton(
-              onPressed: () {
-                setState(() {
-                  tab1Index = index;
-                });
-              },
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
-                Text('$categoryName',
-                    style: OneLineTextStyles.Bold14.copyWith(
-                        color: SystemColors.black)),
-                Text(' $itemCount',
-                    style: OneLineTextStyles.Bold14.copyWith(
-                        color: SignatureColors.orange400))
-              ]))
-          : TextButton(
-              onPressed: () {
-                setState(() {
-                  tab1Index = index;
-                });
-              },
-              child: Text('$categoryName $itemCount',
-                  style: OneLineTextStyles.Medium14.copyWith(
-                      color: SystemColors.gray700)));
-    }
-
     OnboardingClothesGrid getClothesGrid() {
-      return tab1Index == 0
-          ? OnboardingClothesGrid(
-              clothesList: clothesList,
-              onReload: () {},
-            )
-          : OnboardingClothesGrid(
+      return OnboardingClothesGrid(
               clothesList: (getCategorizedClothes()[
-                  getSortedCategories()[tab1Index - 1]]!),
+                  getSortedCategories()[tab1Index]]!),
               onReload: () {},
             );
     }
