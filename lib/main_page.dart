@@ -5,6 +5,8 @@ import 'package:ttal_kkak/closet_repository.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
+import 'package:ttal_kkak/common/log_service.dart';
+import 'package:ttal_kkak/models/sort_type.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
@@ -22,7 +24,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   late String closetName = "내 옷장";
   late int tab1Index = 0;
   late int tab2Index = 0;
-  List<String> secondTabNames = ["등록일순", "카테고리순", "컬러순"];
+  List<SortType> secondTabs = [
+    SortType.regTs,
+    SortType.category,
+    SortType.color,
+  ];
 
   void reload() async {
     try {
@@ -106,14 +112,17 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ? category!.name
             : "";
 
+    String categoryEnglishName = isAllTab
+        ? "all"
+        : category?.code != null
+            ? category!.code
+            : "";
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: tab1Index == index
             ? TextButton(
                 onPressed: () {
-                  setState(() {
-                    tab1Index = index;
-                  });
+                  onPressTabButton(index, categoryEnglishName);
                 },
                 style: TextButton.styleFrom(
                   minimumSize: Size.zero,
@@ -130,9 +139,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 ]))
             : TextButton(
                 onPressed: () {
-                  setState(() {
-                    tab1Index = index;
-                  });
+                  onPressTabButton(index, categoryEnglishName);
                 },
                 style: TextButton.styleFrom(
                   minimumSize: Size.zero,
@@ -142,6 +149,14 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 child: Text('$categoryName $itemCount',
                     style: OneLineTextStyles.Medium14.copyWith(
                         color: SystemColors.gray700))));
+  }
+
+  void onPressTabButton(int index, String categoryName) {
+    setState(() {
+      tab1Index = index;
+      LogService().log(LogType.click_button, "main_page",
+          "category_filter_button", {"item_category": categoryName});
+    });
   }
 
   List<Widget> getTabs() {
@@ -228,20 +243,20 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   List<Clothes> sortClothesList(List<Clothes> clothesList) {
     List<Clothes> copied = clothesList;
 
-    if (secondTabNames[tab2Index] == "등록일순") {
+    if (secondTabs[tab2Index] == SortType.regTs) {
       copied.sort((a, b) {
         return b.regTs.microsecondsSinceEpoch
             .compareTo(a.regTs.microsecondsSinceEpoch);
       });
     }
 
-    if (secondTabNames[tab2Index] == "카테고리순") {
+    if (secondTabs[tab2Index] == SortType.category) {
       copied.sort((a, b) {
         return compareClothesListByCategory(a, b);
       });
     }
 
-    if (secondTabNames[tab2Index] == "컬러순") {
+    if (secondTabs[tab2Index] == SortType.color) {
       List<Color> sortedColors = colorContainers
           .map((e) => e.colors)
           .toList()
@@ -262,7 +277,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return copied;
   }
 
-  TextButton getSecondTab(int index, String tabName) {
+  TextButton getSecondTab(int index, SortType tab) {
     return TextButton(
         style: TextButton.styleFrom(
           minimumSize: Size.zero,
@@ -270,29 +285,35 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         onPressed: () {
-          setState(() {
-            tab2Index = index;
-          });
+          onPressSecondTabButton(index, tab);
         },
         child: tab2Index == index
-            ? Text('$tabName',
+            ? Text(tab.label,
                 style: OneLineTextStyles.Bold14.copyWith(
                     color: SystemColors.black))
-            : Text('$tabName',
+            : Text(tab.label,
                 style: OneLineTextStyles.Medium14.copyWith(
                     color: SystemColors.gray700)));
   }
 
+  void onPressSecondTabButton(int index, SortType sortType) {
+    setState(() {
+      tab2Index = index;
+      LogService().log(LogType.click_button, "main_page", "sort_button",
+          {"sort_type": sortType.code});
+    });
+  }
+
   List<TextButton> getSecondTabs() {
-    return secondTabNames
-        .map(
-            (tabName) => getSecondTab(secondTabNames.indexOf(tabName), tabName))
+    return secondTabs
+        .map((tab) => getSecondTab(secondTabs.indexOf(tab), tab))
         .toList();
   }
 
   @override
   void initState() {
     super.initState();
+    LogService().log(LogType.view_screen, "main_page", null, {});
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       List<Clothes> loadedClothes = await ClothesRepository().loadClothes();

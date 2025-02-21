@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/add_clothes_page.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/daily_outfit_page.dart';
 import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/setting_page.dart';
@@ -217,7 +218,12 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                             Padding(
                               padding: EdgeInsets.only(top: 6, left: 30),
                               child: GestureDetector(
-                                onTap: () {
+                                onTap: () async {
+                                  await LogService().log(
+                                      LogType.click_button,
+                                      "main_page",
+                                      "clothing_register_button", {});
+
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (context) =>
