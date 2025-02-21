@@ -1,5 +1,7 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/is_newbie_repository.dart';
 import 'package:ttal_kkak/onboarding_add_clothes_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -45,6 +47,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
 class BottomSheetContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    LogService().log(LogType.view_screen, "onboarding_clothes_page", null, {});
+
     return Container(
         width: double.infinity, // 화면의 50% 높이를 사용
         child: IntrinsicHeight(

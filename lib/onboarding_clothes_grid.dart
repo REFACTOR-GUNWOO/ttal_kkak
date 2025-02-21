@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +9,7 @@ import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/custom_decoder.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/onboarding_clothes_select_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -48,8 +50,14 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
 
     return FloatingActionButtonWidget(
       selectedCount: selectedCount,
-      onPressed: () async {        
-        await Provider.of<OnboardingClothesSelectProvider>(context, listen: false)
+      onPressed: () async {
+        await LogService().log(LogType.click_button, "onboarding_clothes_page",
+            "register_button", {
+          "item_count": selectedCount,
+        });
+
+        await Provider.of<OnboardingClothesSelectProvider>(context,
+                listen: false)
             .migrate();
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => MainLayout()),
@@ -315,7 +323,7 @@ class _ClothesCardState extends State<ClothesCard>
 
 class ClothesItem extends StatefulWidget {
   final Clothes clothes;
-  const ClothesItem({Key? key, required this.clothes}) ;
+  const ClothesItem({Key? key, required this.clothes});
 
   @override
   _ClothesItemState createState() => _ClothesItemState();

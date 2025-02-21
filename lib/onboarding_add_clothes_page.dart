@@ -32,11 +32,9 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
   }
 
   TextButton getTab(int index, FirstCategory? category) {
-    int itemCount =  getCategorizedClothes()[category]!.length;
+    int itemCount = getCategorizedClothes()[category]!.length;
 
-    String categoryName = category?.name != null
-            ? category!.name
-            : "";
+    String categoryName = category?.name != null ? category!.name : "";
 
     return tab1Index == index
         ? TextButton(
@@ -73,8 +71,7 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
 
   List<TextButton> getTabs() {
     List<TextButton> tabList = getSortedCategories().map((category) {
-      return getTab(
-          getSortedCategories().indexOf(category), category);
+      return getTab(getSortedCategories().indexOf(category), category);
     }).toList();
     return tabList;
   }
@@ -104,10 +101,11 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
 
     OnboardingClothesGrid getClothesGrid() {
       return OnboardingClothesGrid(
-key: ValueKey(Uuid().v4()),              clothesList: (getCategorizedClothes()[
-                  getSortedCategories()[tab1Index]]!),
-              onReload: () {},
-            );
+        key: ValueKey(Uuid().v4()),
+        clothesList:
+            (getCategorizedClothes()[getSortedCategories()[tab1Index]]!),
+        onReload: () {},
+      );
     }
 
     return Scaffold(
