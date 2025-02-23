@@ -6,6 +6,7 @@ import 'package:ttal_kkak/addClothesBottomSheet/add_clothes_page.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/common_bottom_sheet.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/common/show_toast.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -18,6 +19,11 @@ class UpdateBottomSheet extends StatelessWidget {
   UpdateBottomSheet({required this.clothes, required this.onReload});
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      LogService()
+          .log(LogType.view_screen, "clothing_edit_bottom_sheet", null, {});
+    });
+
     return CommonBottomSheet(
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -27,8 +33,10 @@ class UpdateBottomSheet extends StatelessWidget {
               iconPath: "assets/icons/update_icon.svg",
               label: "정보 수정하기",
               onTap: () async {
-                Navigator.pop(context);
+                LogService().log(LogType.click_button,
+                    "clothing_edit_bottom_sheet", "clothing_edit_button", {});
 
+                Navigator.pop(context);
                 final updateProvider =
                     Provider.of<ClothesUpdateProvider>(context, listen: false);
                 // 정보 수정 기능
@@ -44,6 +52,11 @@ class UpdateBottomSheet extends StatelessWidget {
               iconPath: "assets/icons/clone_clothes.svg",
               label: "복제하기",
               onTap: () async {
+                LogService().log(
+                    LogType.click_button,
+                    "clothing_edit_bottom_sheet",
+                    "clothing_duplicate_button", {});
+
                 showToast("옷이 복제 되었습니다");
                 await ClothesRepository().addClothes(clothes);
                 onReload();
@@ -54,6 +67,9 @@ class UpdateBottomSheet extends StatelessWidget {
               iconPath: "assets/icons/delete_icon.svg",
               label: "삭제하기",
               onTap: () {
+                LogService().log(LogType.click_button,
+                    "clothing_edit_bottom_sheet", "clothing_delete_button", {});
+
                 Navigator.pop(context);
                 showModalBottomSheet(
                   context: context,

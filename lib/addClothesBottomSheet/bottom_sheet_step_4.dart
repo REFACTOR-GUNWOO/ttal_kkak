@@ -4,6 +4,7 @@ import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/draft_clear_warning_dialog.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -38,6 +39,16 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
   void initState() {
     print("_AddClothesState");
     super.initState();
+    Clothes? clothes = widget.updateProvider.currentClothes;
+    int? secondaryCategoryId = clothes?.secondaryCategoryId;
+    ClothesDetails? details = clothes?.details;
+
+    SecondCategory? secondCategory = secondaryCategoryId == null
+        ? null
+        : secondCategories.firstWhere((e) => e.id == secondaryCategoryId);
+
+    LogService().log(LogType.view_screen, "detail_registration_page", null,
+        {"isUpdate": widget.isUpdate});
   }
 
   @override

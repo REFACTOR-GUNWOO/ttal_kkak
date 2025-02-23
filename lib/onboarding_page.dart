@@ -47,8 +47,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
 class BottomSheetContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    LogService().log(LogType.view_screen, "onboarding_clothes_page", null, {});
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      LogService()
+          .log(LogType.view_screen, "onboarding_clothes_page", null, {});
+    });
     return Container(
         width: double.infinity, // 화면의 50% 높이를 사용
         child: IntrinsicHeight(

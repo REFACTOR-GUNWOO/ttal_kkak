@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info/package_info.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'styles/text_styles.dart';
 import 'styles/colors_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,6 +15,10 @@ class SettingPage extends StatelessWidget {
   //원본위젯
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      LogService().log(LogType.view_screen, "setting_page", null, {});
+    });
+
     return Scaffold(
       backgroundColor: SignatureColors.begie200,
       appBar: AppBar(
@@ -111,6 +116,11 @@ class CommunicationList extends StatelessWidget {
         children: [
           GestureDetector(
               onTap: () async {
+                WidgetsBinding.instance.addPostFrameCallback((_) async {
+                  LogService().log(LogType.click_button, "setting_page",
+                      "send_cheerup_message_button", {});
+                });
+
                 if (Platform.isAndroid) {
                   inAppReview.openStoreListing();
                 }
@@ -255,6 +265,11 @@ class CommunicationList extends StatelessWidget {
               ]),
             ),
             onTap: () async {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                LogService().log(LogType.click_button, "setting_page",
+                    "send_feedback_button", {});
+              });
+
               if (Platform.isAndroid) {
                 inAppReview.openStoreListing();
               }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 
@@ -12,6 +13,20 @@ class OnboardingClothesSelectProvider extends ChangeNotifier {
 
   bool isSelected(Clothes clothes) {
     return selected[clothes.id] == true;
+  }
+
+  Set<String> getSelectedClothesCategories() {
+    final clothesList = generateDummyClothes();
+
+    return selected.entries.where((entry) => entry.value).map((entry) {
+      final clothes = clothesList.firstWhere(
+        (element) => element.id == entry.key,
+      );
+      final category = firstCategories.firstWhere(
+        (element) => element.id == clothes.primaryCategoryId,
+      );
+      return category.code; // null 체크 추가
+    }).toSet();
   }
 
   int selectedCount() {

@@ -9,6 +9,7 @@ import 'package:ttal_kkak/Category.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step_5.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/common/common_bottom_sheet.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/common/show_toast.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
@@ -45,9 +46,9 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   FirstCategory? firstCategory;
   double brushContainerHeight = 120;
   List<PencilInfo> pencilInfos = [
-    PencilInfo(pencilSize: 10, width: 40),
-    PencilInfo(pencilSize: 5, width: 26),
-    PencilInfo(pencilSize: 2, width: 18)
+    PencilInfo(pencilSize: 10, type: "thick", width: 40),
+    PencilInfo(pencilSize: 5, type: "medium", width: 26),
+    PencilInfo(pencilSize: 2, type: "thin", width: 18)
   ];
   double clothesScale = 5.0;
   final ScrollController _scrollController = ScrollController();
@@ -92,6 +93,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
         _loadDrawableRoot(clothesDetails, secondCategory);
       });
     });
+    LogService()
+        .log(LogType.view_screen, "detail_drawing_registration_page", null, {});
   }
 
   @override
@@ -104,12 +107,22 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     _scrollTimer = Timer.periodic(Duration(milliseconds: 60), (timer) {
       _scrollUpByLongPress();
     });
+    LogService().log(
+        LogType.click_button,
+        "detail_drawing_page",
+        "drawing_edit_button",
+        {"isUpdate": widget.isUpdate, "type": "scroll_up"});
   }
 
   void startScrollDown() {
     _scrollTimer = Timer.periodic(Duration(milliseconds: 60), (timer) {
       _scrollDownByLongPress();
     });
+    LogService().log(
+        LogType.click_button,
+        "detail_drawing_page",
+        "drawing_edit_button",
+        {"isUpdate": widget.isUpdate, "type": "scroll_down"});
   }
 
   void _stopScrollTimer() {
@@ -193,6 +206,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                   colorContainers: colorContainers,
                   selectedColorGroup: brushColorColorGroup,
                   selectedColor: brushColor,
+                  isDrawingPage: true,
                   onColorSelected: (selectedColorGroup, selectedColor) {
                     setState(() {
                       print("setState");
@@ -212,9 +226,21 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     setState(() {
       if (_expandedIndex == index) {
         _expandedIndex = -1; // 클릭한 게 이미 확장된 상태면 축소
+        LogService().log(LogType.click_button, "detail_drawing_page",
+            "drawing_tool_button", {
+          "isUpdate": widget.isUpdate,
+          "isSelect": false,
+          "pen_type": pencilInfos[index].type
+        });
       } else {
         brushWidth = pencilInfos[index].pencilSize;
-        _expandedIndex = index; // 클릭한 인덱스를 확장된 상태로 설정
+        _expandedIndex = index; // 클
+        LogService().log(LogType.click_button, "detail_drawing_page",
+            "drawing_tool_button", {
+          "isUpdate": widget.isUpdate,
+          "isSelect": true,
+          "pen_type": pencilInfos[index].type
+        });
       }
     });
   }
@@ -228,6 +254,13 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
       } else {
         _isErasing = false;
       }
+
+      LogService().log(
+          LogType.click_button, "detail_drawing_page", "drawing_tool_button", {
+        "isUpdate": widget.isUpdate,
+        "isSelect": _isErasing,
+        "pen_type": "eraser"
+      });
     });
   }
 
@@ -277,6 +310,11 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                   GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
+                        LogService().log(LogType.click_button,
+                            "detail_drawing_page", "drawing_back_button", {
+                          "isUpdate": widget.isUpdate,
+                        });
+
                         Navigator.pop(context);
                       },
                       child: Padding(
@@ -290,6 +328,11 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     onPressed: () => {
+                      LogService().log(
+                          LogType.click_button,
+                          "detail_drawing_page",
+                          "save_button",
+                          {"isUpdate": widget.isUpdate}),
                       save(),
                       Provider.of<ClothesUpdateProvider>(context, listen: false)
                           .clear(),
@@ -355,7 +398,15 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                       top: 14,
                       right: 14,
                       child: GestureDetector(
-                        onTap: () => _showColorPicker(context),
+                        onTap: () {
+                          LogService().log(
+                              LogType.click_button,
+                              "detail_drawing_page",
+                              "drawing_color_setting_button", {
+                            "isUpdate": widget.isUpdate,
+                          });
+                          _showColorPicker(context);
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                               border: Border.all(
@@ -524,6 +575,12 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                        LogService().log(
+                            LogType.click_button,
+                            "detail_drawing_page",
+                            "drawing_edit_button",
+                            {"isUpdate": widget.isUpdate, "type": "reset"});
+
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -570,6 +627,13 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                           ElevatedButton(
                             onPressed: () {
                               undo();
+                              LogService().log(
+                                  LogType.click_button,
+                                  "detail_drawing_page",
+                                  "drawing_edit_button", {
+                                "isUpdate": widget.isUpdate,
+                                "type": "back"
+                              });
                             },
                             child: SvgPicture.asset(
                               "assets/icons/left_curve_arrow.svg",
@@ -589,6 +653,13 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                           ElevatedButton(
                             onPressed: () {
                               redo();
+                              LogService().log(
+                                  LogType.click_button,
+                                  "detail_drawing_page",
+                                  "drawing_edit_button", {
+                                "isUpdate": widget.isUpdate,
+                                "type": "forward"
+                              });
                             },
                             child: SvgPicture.asset(
                               "assets/icons/right_curve_arrow.svg",
@@ -843,8 +914,9 @@ class DrawnLine {
 class PencilInfo {
   final double width;
   final double pencilSize;
-
-  PencilInfo({required this.width, required this.pencilSize});
+  final String type;
+  PencilInfo(
+      {required this.width, required this.pencilSize, required this.type});
 }
 
 class Pencil extends StatelessWidget {

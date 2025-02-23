@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 class StatisticsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      LogService().log(LogType.view_screen, "statistics_page", null, {});
+    });
+
     return Scaffold(
       backgroundColor: SignatureColors.begie200,
       appBar: AppBar(

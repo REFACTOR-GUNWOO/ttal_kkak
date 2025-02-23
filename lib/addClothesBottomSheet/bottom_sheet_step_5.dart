@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 
 // Start of Selection
@@ -45,6 +46,16 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
             colorContainers.first.colors;
       }
     });
+
+    LogService().log(LogType.view_screen, "color_registration_page", null, {
+      "main_color": colorContainers
+              .where((element) => element.colors.contains(clothes?.color))
+              .firstOrNull
+              ?.representativeColor ??
+          "색상 없음",
+      "sub_color": clothes?.color ?? "색상 없음",
+      "isUpdate": widget.isUpdate
+    });
   }
 
   void save() async {
@@ -61,6 +72,7 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
       colorContainers: colorContainers,
       selectedColorGroup: _selectedColorGroup,
       selectedColor: _selectedColor,
+      isDrawingPage: false,
       onColorSelected: (selectedColorGroup, selectedColor) {
         setState(() {
           _selectedColorGroup = selectedColorGroup;
@@ -76,6 +88,7 @@ class ColorPalette extends StatefulWidget {
   final List<ColorContainer> colorContainers;
   final List<Color> selectedColorGroup;
   final Color selectedColor;
+  final bool isDrawingPage;
   final Function(List<Color>, Color) onColorSelected;
 
   const ColorPalette({
@@ -84,6 +97,7 @@ class ColorPalette extends StatefulWidget {
     required this.selectedColorGroup,
     required this.selectedColor,
     required this.onColorSelected,
+    required this.isDrawingPage,
   }) : super(key: key);
 
   @override
@@ -102,6 +116,7 @@ class _ColorPaletteState extends State<ColorPalette> {
   }
 
   _onSelected(List<Color> selectedColorGroup, Color selectedColor) {
+    
     setState(() {
       _selectedColorGroup = selectedColorGroup;
       _selectedColor = selectedColor;

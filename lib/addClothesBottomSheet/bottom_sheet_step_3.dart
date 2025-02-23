@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/draft_clear_warning_dialog.dart';
 import 'package:ttal_kkak/category.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -48,6 +49,10 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
       selectedCategoryId =
           widget.updateProvider.currentClothes?.secondaryCategoryId;
     });
+    SecondCategory category = secondCategories
+        .firstWhere((element) => element.id == selectedCategoryId);
+    LogService().log(LogType.view_screen, "sub_category_registration_page",
+        null, {"type": category.code, "isUpdate": widget.isUpdate});
   }
 
   void save(int categoryId) async {

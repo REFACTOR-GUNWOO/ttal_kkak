@@ -51,9 +51,17 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
     return FloatingActionButtonWidget(
       selectedCount: selectedCount,
       onPressed: () async {
+        print(
+            "log2 : ${Provider.of<OnboardingClothesSelectProvider>(context, listen: false).getSelectedClothesCategories().toList()} ");
         await LogService().log(LogType.click_button, "onboarding_clothes_page",
             "register_button", {
           "item_count": selectedCount,
+          "item_categories": Provider.of<OnboardingClothesSelectProvider>(
+                  context,
+                  listen: false)
+              .getSelectedClothesCategories()
+              .toList()
+              .toString()
         });
 
         await Provider.of<OnboardingClothesSelectProvider>(context,

@@ -3,6 +3,7 @@ import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/draft_clear_warning_dialog.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -42,6 +43,10 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
       setState(() {
         selectedCategoryId = primaryCategoryId;
       });
+      FirstCategory category = firstCategories
+          .firstWhere((element) => element.id == primaryCategoryId);
+      LogService().log(LogType.view_screen, "main_category_registration_page",
+          null, {"type": category.code, "isUpdate": widget.isUpdate});
     });
   }
 

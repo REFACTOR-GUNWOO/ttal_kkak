@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/clothes.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
@@ -104,33 +105,36 @@ class BottomSheetAppBar extends StatelessWidget {
               Expanded(
                   flex: 2,
                   child: nextStep == null
-                      ? isUpdate
-                          ? Container()
-                          : TextButton(
-                              onPressed: () async {
-                                Provider.of<ClothesUpdateProvider>(context,
-                                        listen: false)
-                                    .clear();
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => MainLayout()),
-                                );
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text("등록",
-                                      style:
-                                          OneLineTextStyles.Medium14.copyWith(
-                                              color: SystemColors.black)),
-                                  SizedBox(width: 7),
-                                  SvgPicture.asset(
-                                    'assets/icons/arrow_right.svg',
-                                    color: SystemColors.black,
-                                    height: 12,
-                                  ),
-                                ],
-                              ))
+                      ? TextButton(
+                          onPressed: () async {
+                            Provider.of<ClothesUpdateProvider>(context,
+                                    listen: false)
+                                .clear();
+                            LogService().log(LogType.click_button,
+                                "clothes_registration_page", "save_button", {
+                              "isUpdate": isUpdate,
+                              "button_position": "bottom"
+                            });
+
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => MainLayout()),
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text("완료",
+                                  style: OneLineTextStyles.Medium14.copyWith(
+                                      color: SystemColors.black)),
+                              SizedBox(width: 7),
+                              SvgPicture.asset(
+                                'assets/icons/arrow_right.svg',
+                                color: SystemColors.black,
+                                height: 12,
+                              ),
+                            ],
+                          ))
                       : TextButton(
                           onPressed:
                               !isInactiveStep(clothes) ? nextStepFun : null,

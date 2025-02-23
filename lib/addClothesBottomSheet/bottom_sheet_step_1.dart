@@ -4,6 +4,7 @@ import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/utils/length_limited_text_input.dart';
@@ -45,6 +46,7 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
     super.initState();
     _controller = TextEditingController();
     _controller.text = widget.updateProvider.currentClothes?.name ?? "";
+    LogService().log(LogType.view_screen, "name_registration_page", null, {"isUpdate": widget.isUpdate});
   }
 
   void _handleTextChanged(String text) async {

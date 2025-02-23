@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -28,6 +29,14 @@ class BottomSheetBody6 extends StatefulWidget implements BottomSheetStep {
 }
 
 class DetailInfoCards extends State<BottomSheetBody6> {
+  @override
+  void initState() {
+    LogService().log(LogType.view_screen, "detail_drawing_registration_page", null, {
+      "isUpdate": widget.isUpdate,
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -140,6 +149,12 @@ class DetailDrawingInfoPage extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      LogService().log(LogType.view_screen, "detail_drawing_guide_page", null, {
+        "isUpdate": isUpdate,
+      });
+    });
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
