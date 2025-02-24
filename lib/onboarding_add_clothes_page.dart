@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
+import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/onboarding_clothes_grid.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -16,6 +17,12 @@ class OnboardingAddClothesPage extends StatefulWidget {
 class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
   final List<Clothes> clothesList = generateDummyClothes();
   late int tab1Index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    LogService().log(LogType.view_screen, "onboarding_clothes_page", null, {});
+  }
 
   Map<FirstCategory, List<Clothes>> getCategorizedClothes() {
     Map<FirstCategory, List<Clothes>> categorizedClothes = {};

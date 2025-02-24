@@ -42,11 +42,12 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
 
   @override
   void initState() {
-    print("_AddClothesState");
     super.initState();
+    LogService().log(LogType.view_screen, "name_registration_page", null,
+        {"isUpdate": widget.isUpdate.toString()});
+
     _controller = TextEditingController();
     _controller.text = widget.updateProvider.currentClothes?.name ?? "";
-    LogService().log(LogType.view_screen, "name_registration_page", null, {"isUpdate": widget.isUpdate});
   }
 
   void _handleTextChanged(String text) async {
@@ -60,7 +61,7 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
         name: text,
         primaryCategoryId: 1,
         secondaryCategoryId: secondCategory.id,
-        color: ClothesColor.White,
+        color: ClothesColor.white,
         details: clothesDetails,
         price: 0,
         drawLines: [],
@@ -87,7 +88,7 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
         name: text,
         primaryCategoryId: 1,
         secondaryCategoryId: secondCategory.id,
-        color: ClothesColor.White,
+        color: ClothesColor.white,
         details: clothesDetails,
         price: 0,
         drawLines: [],

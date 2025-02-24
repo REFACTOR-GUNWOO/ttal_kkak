@@ -339,7 +339,7 @@ class ClothesItem extends StatefulWidget {
 
 class _ClothesItemState extends State<ClothesItem> {
   List<DrawnLine> lines = [];
-  Color clothesColor = Colors.transparent;
+  ClothesColor clothesColor = ClothesColor.white;
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
   DrawableRoot? svgDecoRoot;
@@ -452,7 +452,7 @@ class _ClothesItemState extends State<ClothesItem> {
               CustomPaint(
                 size:
                     Size(svgBgRoot!.viewport.width, svgBgRoot!.viewport.height),
-                painter: SvgBgPainter(svgBgRoot!, clothesColor, 1.0),
+                painter: SvgBgPainter(svgBgRoot!, clothesColor.color, 1.0),
               ),
             if (svgDecoUrl != null) SvgPicture.asset(svgDecoUrl!),
             if (lines.isNotEmpty)
@@ -469,8 +469,8 @@ class _ClothesItemState extends State<ClothesItem> {
                     svgLineRoot!,
                     1.0,
                     1.0,
-                    (clothesColor == ClothesColor.Black ||
-                            clothesColor == ClothesColor.LightBlack)
+                    (clothesColor == ClothesColor.black ||
+                            clothesColor == ClothesColor.lightBlack)
                         ? SystemColors.gray900
                         : SystemColors.black),
               ),

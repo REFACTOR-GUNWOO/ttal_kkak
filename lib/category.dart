@@ -93,7 +93,7 @@ class SecondCategory {
   double? clothesBottomPosition;
   List<CategoryDetail> details;
   bool hasDecorationLayer = false;
-  Color? defaultColor = ClothesColor.White;
+  ClothesColor? defaultColor = ClothesColor.white;
 
   SecondCategory(
       {required this.id,
@@ -573,7 +573,7 @@ List<SecondCategory> secondCategories = [
       firstCategoryId: 3,
       clothesTopPosition: 12,
       hasDecorationLayer: true,
-      defaultColor: ClothesColor.DarkBrown600,
+      defaultColor: ClothesColor.darkBrown600,
       details: [
         CategoryDetail(
             priority: 2,
@@ -594,7 +594,7 @@ List<SecondCategory> secondCategories = [
       priority: 16,
       firstCategoryId: 3,
       clothesTopPosition: 12,
-      defaultColor: ClothesColor.Green500,
+      defaultColor: ClothesColor.green500,
       details: [
         CategoryDetail(
             priority: 2,
@@ -616,7 +616,7 @@ List<SecondCategory> secondCategories = [
       firstCategoryId: 3,
       clothesTopPosition: 12,
       hasDecorationLayer: true,
-      defaultColor: ClothesColor.Beige100,
+      defaultColor: ClothesColor.beige100,
       details: [
         CategoryDetail(
             priority: 2,
@@ -732,7 +732,7 @@ List<SecondCategory> secondCategories = [
       priority: 21,
       firstCategoryId: 2,
       clothesTopPosition: 12,
-      defaultColor: ClothesColor.Blue100,
+      defaultColor: ClothesColor.blue100,
       details: [
         CategoryDetail(
             priority: 1,
@@ -1036,7 +1036,7 @@ List<SecondCategory> secondCategories = [
       priority: 36,
       clothesBottomPosition: 40,
       firstCategoryId: 5,
-      defaultColor: ClothesColor.WarmBrown500,
+      defaultColor: ClothesColor.warmBrown500,
       details: [
         CategoryDetail(
             priority: 1,
@@ -1056,7 +1056,7 @@ List<SecondCategory> secondCategories = [
       priority: 37,
       clothesBottomPosition: 40,
       firstCategoryId: 5,
-      defaultColor: ClothesColor.Yellow100,
+      defaultColor: ClothesColor.yellow100,
       details: [
         CategoryDetail(
             priority: 1,

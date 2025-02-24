@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/common/log_service.dart';
@@ -27,8 +28,8 @@ class BottomSheetBody5 extends StatefulWidget implements BottomSheetStep {
 }
 
 class _ColorSelectionGridState extends State<BottomSheetBody5> {
-  Color _selectedColor = Colors.transparent;
-  List<Color> _selectedColorGroup = [];
+  ClothesColor _selectedColor = ClothesColor.white;
+  List<ClothesColor> _selectedColorGroup = [];
 
   @override
   void initState() {
@@ -36,7 +37,7 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
 
     Clothes? clothes = widget.updateProvider.currentClothes;
     setState(() {
-      Color? color = clothes?.color;
+      ClothesColor? color = clothes?.color;
       if (color != null) {
         _selectedColor = color;
         _selectedColorGroup = colorContainers
@@ -51,10 +52,11 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
       "main_color": colorContainers
               .where((element) => element.colors.contains(clothes?.color))
               .firstOrNull
-              ?.representativeColor ??
+              ?.representativeColor
+              .name ??
           "색상 없음",
-      "sub_color": clothes?.color ?? "색상 없음",
-      "isUpdate": widget.isUpdate
+      "sub_color": clothes?.color.name ?? "색상 없음",
+      "isUpdate": widget.isUpdate.toString()
     });
   }
 
@@ -86,10 +88,10 @@ class _ColorSelectionGridState extends State<BottomSheetBody5> {
 
 class ColorPalette extends StatefulWidget {
   final List<ColorContainer> colorContainers;
-  final List<Color> selectedColorGroup;
-  final Color selectedColor;
+  final List<ClothesColor> selectedColorGroup;
+  final ClothesColor selectedColor;
   final bool isDrawingPage;
-  final Function(List<Color>, Color) onColorSelected;
+  final Function(List<ClothesColor>, ClothesColor) onColorSelected;
 
   const ColorPalette({
     Key? key,
@@ -105,8 +107,8 @@ class ColorPalette extends StatefulWidget {
 }
 
 class _ColorPaletteState extends State<ColorPalette> {
-  late Color? _selectedColor;
-  late List<Color>? _selectedColorGroup;
+  late ClothesColor? _selectedColor;
+  late List<ClothesColor>? _selectedColorGroup;
 
   @override
   void initState() {
@@ -115,8 +117,8 @@ class _ColorPaletteState extends State<ColorPalette> {
     _selectedColorGroup = widget.selectedColorGroup;
   }
 
-  _onSelected(List<Color> selectedColorGroup, Color selectedColor) {
-    
+  _onSelected(
+      List<ClothesColor> selectedColorGroup, ClothesColor selectedColor) {
     setState(() {
       _selectedColorGroup = selectedColorGroup;
       _selectedColor = selectedColor;
@@ -155,9 +157,9 @@ class _ColorPaletteState extends State<ColorPalette> {
 
 class ColorPaletteItem extends StatelessWidget {
   final List<ColorContainer> colorContainers;
-  final List<Color> selectedColorGroup;
-  final Color selectedColor;
-  final Function(List<Color>, Color) onColorSelected;
+  final List<ClothesColor> selectedColorGroup;
+  final ClothesColor selectedColor;
+  final Function(List<ClothesColor>, ClothesColor) onColorSelected;
 
   const ColorPaletteItem({
     Key? key,
@@ -181,7 +183,7 @@ class ColorPaletteItem extends StatelessWidget {
       ),
       itemCount: colorContainers.length,
       itemBuilder: (context, index) {
-        Color color = colorContainers[index].representativeColor;
+        ClothesColor color = colorContainers[index].representativeColor;
         bool isSelected = color == selectedColor;
         return GestureDetector(
           onTap: () {
@@ -189,7 +191,7 @@ class ColorPaletteItem extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: color,
+              color: color.color,
               border: Border.all(
                 color: isSelected ? Colors.black : Colors.transparent,
                 width: 2.0,

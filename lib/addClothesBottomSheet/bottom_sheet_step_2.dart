@@ -46,7 +46,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
       FirstCategory category = firstCategories
           .firstWhere((element) => element.id == primaryCategoryId);
       LogService().log(LogType.view_screen, "main_category_registration_page",
-          null, {"type": category.code, "isUpdate": widget.isUpdate});
+          null, {"type": category.code, "isUpdate": widget.isUpdate.toString()});
     });
   }
 

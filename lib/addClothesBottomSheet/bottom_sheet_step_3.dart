@@ -35,7 +35,6 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
 
   @override
   void initState() {
-    print("_AddClothesState");
     super.initState();
 
     int? primaryCategoryId =
@@ -52,7 +51,7 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
     SecondCategory category = secondCategories
         .firstWhere((element) => element.id == selectedCategoryId);
     LogService().log(LogType.view_screen, "sub_category_registration_page",
-        null, {"type": category.code, "isUpdate": widget.isUpdate});
+        null, {"type": category.code, "isUpdate": widget.isUpdate.toString()});
   }
 
   void save(int categoryId) async {

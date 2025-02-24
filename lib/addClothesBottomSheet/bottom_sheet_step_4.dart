@@ -48,7 +48,7 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
         : secondCategories.firstWhere((e) => e.id == secondaryCategoryId);
 
     LogService().log(LogType.view_screen, "detail_registration_page", null,
-        {"isUpdate": widget.isUpdate});
+        {"isUpdate": widget.isUpdate.toString()});
   }
 
   @override
@@ -233,6 +233,11 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                 ClothesDetail option = categoryDetail.details[index];
                 return GestureDetector(
                   onTap: () {
+                    LogService().log(
+                        LogType.click_button,
+                        "detail_registration_page",
+                        "select_button",
+                        {"option": option.code});
                     setState(() {
                       selectedDetailMap[categoryDetail] = option;
                       save();

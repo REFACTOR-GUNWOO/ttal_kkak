@@ -34,12 +34,12 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   List<DrawnLine> undoneLines = [];
   DrawnLine? currentLine;
   double brushWidth = 5.0;
-  Color brushColor = colorContainers.first.colors.first;
-  List<Color> brushColorColorGroup = colorContainers.first.colors;
+  ClothesColor brushColor = colorContainers.first.colors.first;
+  List<ClothesColor> brushColorColorGroup = colorContainers.first.colors;
   String _svgBgUrl = "";
   String _svgLineUrl = "";
   String? _svgDecoUrl = "";
-  Color clothesColor = Colors.transparent;
+  ClothesColor clothesColor = ClothesColor.white;
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
   int _expandedIndex = -1;
@@ -122,7 +122,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
         LogType.click_button,
         "detail_drawing_page",
         "drawing_edit_button",
-        {"isUpdate": widget.isUpdate, "type": "scroll_down"});
+        {"isUpdate": widget.isUpdate.toString(), "type": "scroll_down"});
   }
 
   void _stopScrollTimer() {
@@ -413,7 +413,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                                 color: Colors.white, // 테두리 색상
                                 width: 3.0, // 테두리 두께
                               ),
-                              color: brushColor,
+                              color: brushColor.color,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5.0))),
                           width: 32,
@@ -447,7 +447,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                                   svgBgRoot!.viewport.width * clothesScale,
                                   svgBgRoot!.viewport.height * clothesScale),
                               painter: SvgBgPainter(
-                                  svgBgRoot!, clothesColor, clothesScale),
+                                  svgBgRoot!, clothesColor.color, clothesScale),
                             ),
                           if (_svgDecoUrl != null)
                             SvgPicture.asset(
@@ -463,9 +463,9 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                                   svgLineRoot!,
                                   clothesScale,
                                   2,
-                                  (clothesColor == ClothesColor.Black ||
+                                  (clothesColor == ClothesColor.black ||
                                           clothesColor ==
-                                              ClothesColor.LightBlack)
+                                              ClothesColor.lightBlack)
                                       ? SystemColors.gray900
                                       : SystemColors.black),
                             ),
@@ -690,7 +690,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     Offset localPosition = position * 3 / clothesScale;
     setState(() {
       currentLine = DrawnLine([localPosition], brushWidth,
-          _isErasing ? Colors.transparent : brushColor);
+          _isErasing ? Colors.transparent : brushColor.color);
       lines.add(currentLine!);
     });
   }
@@ -920,7 +920,7 @@ class PencilInfo {
 }
 
 class Pencil extends StatelessWidget {
-  final Color color;
+  final ClothesColor color;
   final double width;
   final bool isExpanded;
   final VoidCallback onTap;
@@ -953,7 +953,7 @@ class Pencil extends StatelessWidget {
               child: Center(
                 child: SvgPicture.asset(
                   "assets/icons/pencil_top.svg",
-                  color: color,
+                  color: color.color,
                   width: width - 5,
                 ),
               ),

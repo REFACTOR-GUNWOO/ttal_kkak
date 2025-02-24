@@ -9,7 +9,7 @@ class LogService {
     // 로그를 기록하는 코드
     await FirebaseAnalytics.instance.logEvent(
       name: type.name, // ✅ 이벤트 이름
-      parameters: parameters,
+      parameters: {...parameters, 'screen_name': screenName, if(buttonName != null) 'button_name': buttonName},
     );
   }
 }

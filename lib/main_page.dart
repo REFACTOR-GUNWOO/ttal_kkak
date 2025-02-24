@@ -257,7 +257,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     }
 
     if (secondTabs[tab2Index] == SortType.color) {
-      List<Color> sortedColors = colorContainers
+      List<ClothesColor> sortedColors = colorContainers
           .map((e) => e.colors)
           .toList()
           .expand((element) => element)

@@ -32,7 +32,7 @@ class DetailInfoCards extends State<BottomSheetBody6> {
   @override
   void initState() {
     LogService().log(LogType.view_screen, "detail_drawing_registration_page", null, {
-      "isUpdate": widget.isUpdate,
+      "isUpdate": widget.isUpdate.toString(),
     });
     super.initState();
   }

@@ -31,6 +31,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showBottomSheet(context);
+      LogService().log(LogType.view_screen, "first_gift_page", null, {});
     });
   }
 
@@ -47,10 +48,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
 class BottomSheetContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      LogService()
-          .log(LogType.view_screen, "onboarding_clothes_page", null, {});
-    });
     return Container(
         width: double.infinity, // 화면의 50% 높이를 사용
         child: IntrinsicHeight(
