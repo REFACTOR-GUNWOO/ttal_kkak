@@ -4,13 +4,22 @@ import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
-class DailyOutfitPage extends StatelessWidget {
+class DailyOutfitPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+  _DailyOutfitPageState createState() => _DailyOutfitPageState();
+}
+
+class _DailyOutfitPageState extends State<DailyOutfitPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       LogService().log(LogType.view_screen, "daily_outfit_page", null, {});
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: SignatureColors.begie200,
       appBar: AppBar(

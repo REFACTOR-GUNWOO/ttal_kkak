@@ -112,7 +112,7 @@ class BottomSheetAppBar extends StatelessWidget {
                                 .clear();
                             LogService().log(LogType.click_button,
                                 "clothes_registration_page", "save_button", {
-                              "isUpdate": isUpdate,
+                              "isUpdate": isUpdate.toString(),
                               "button_position": "bottom"
                             });
 

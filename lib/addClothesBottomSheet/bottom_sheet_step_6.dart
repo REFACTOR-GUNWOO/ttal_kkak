@@ -31,7 +31,8 @@ class BottomSheetBody6 extends StatefulWidget implements BottomSheetStep {
 class DetailInfoCards extends State<BottomSheetBody6> {
   @override
   void initState() {
-    LogService().log(LogType.view_screen, "detail_drawing_registration_page", null, {
+    LogService()
+        .log(LogType.view_screen, "detail_drawing_registration_page", null, {
       "isUpdate": widget.isUpdate.toString(),
     });
     super.initState();
@@ -151,7 +152,7 @@ class DetailDrawingInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       LogService().log(LogType.view_screen, "detail_drawing_guide_page", null, {
-        "isUpdate": isUpdate,
+        "isUpdate": isUpdate.toString(),
       });
     });
 

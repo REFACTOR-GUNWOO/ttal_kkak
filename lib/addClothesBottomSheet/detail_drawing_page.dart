@@ -111,7 +111,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
         LogType.click_button,
         "detail_drawing_page",
         "drawing_edit_button",
-        {"isUpdate": widget.isUpdate, "type": "scroll_up"});
+        {"isUpdate": widget.isUpdate.toString(), "type": "scroll_up"});
   }
 
   void startScrollDown() {
@@ -155,6 +155,12 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   }
 
   void _scrollUpByTab() {
+    LogService().log(
+        LogType.click_button,
+        "detail_drawing_page",
+        "drawing_edit_button",
+        {"isUpdate": widget.isUpdate.toString(), "type": "scroll_up"});
+
     if (_scrollController.offset <= 0.0) {
       return;
     }
@@ -167,6 +173,12 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
   }
 
   void _scrollDownByTab() {
+    LogService().log(
+        LogType.click_button,
+        "detail_drawing_page",
+        "drawing_edit_button",
+        {"isUpdate": widget.isUpdate.toString(), "type": "scroll_down"});
+
     if (_scrollController.offset >=
         _scrollController.position.maxScrollExtent) {
       return;
@@ -228,8 +240,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
         _expandedIndex = -1; // 클릭한 게 이미 확장된 상태면 축소
         LogService().log(LogType.click_button, "detail_drawing_page",
             "drawing_tool_button", {
-          "isUpdate": widget.isUpdate,
-          "isSelect": false,
+          "isUpdate": widget.isUpdate.toString(),
+          "isSelect": "false",
           "pen_type": pencilInfos[index].type
         });
       } else {
@@ -237,8 +249,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
         _expandedIndex = index; // 클
         LogService().log(LogType.click_button, "detail_drawing_page",
             "drawing_tool_button", {
-          "isUpdate": widget.isUpdate,
-          "isSelect": true,
+          "isUpdate": widget.isUpdate.toString(),
+          "isSelect": "true",
           "pen_type": pencilInfos[index].type
         });
       }
@@ -257,8 +269,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
 
       LogService().log(
           LogType.click_button, "detail_drawing_page", "drawing_tool_button", {
-        "isUpdate": widget.isUpdate,
-        "isSelect": _isErasing,
+        "isUpdate": widget.isUpdate.toString(),
+        "isSelect": _isErasing.toString(),
         "pen_type": "eraser"
       });
     });
@@ -312,7 +324,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                       onTap: () {
                         LogService().log(LogType.click_button,
                             "detail_drawing_page", "drawing_back_button", {
-                          "isUpdate": widget.isUpdate,
+                          "isUpdate": widget.isUpdate.toString(),
                         });
 
                         Navigator.pop(context);
@@ -332,7 +344,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                           LogType.click_button,
                           "detail_drawing_page",
                           "save_button",
-                          {"isUpdate": widget.isUpdate}),
+                          {"isUpdate": widget.isUpdate.toString()}),
                       save(),
                       Provider.of<ClothesUpdateProvider>(context, listen: false)
                           .clear(),
@@ -403,7 +415,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                               LogType.click_button,
                               "detail_drawing_page",
                               "drawing_color_setting_button", {
-                            "isUpdate": widget.isUpdate,
+                            "isUpdate": widget.isUpdate.toString(),
                           });
                           _showColorPicker(context);
                         },
@@ -575,11 +587,11 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        LogService().log(
-                            LogType.click_button,
-                            "detail_drawing_page",
-                            "drawing_edit_button",
-                            {"isUpdate": widget.isUpdate, "type": "reset"});
+                        LogService().log(LogType.click_button,
+                            "detail_drawing_page", "drawing_edit_button", {
+                          "isUpdate": widget.isUpdate.toString(),
+                          "type": "reset"
+                        });
 
                         showDialog(
                           context: context,
@@ -631,7 +643,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                                   LogType.click_button,
                                   "detail_drawing_page",
                                   "drawing_edit_button", {
-                                "isUpdate": widget.isUpdate,
+                                "isUpdate": widget.isUpdate.toString(),
                                 "type": "back"
                               });
                             },
@@ -657,7 +669,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                                   LogType.click_button,
                                   "detail_drawing_page",
                                   "drawing_edit_button", {
-                                "isUpdate": widget.isUpdate,
+                                "isUpdate": widget.isUpdate.toString(),
                                 "type": "forward"
                               });
                             },

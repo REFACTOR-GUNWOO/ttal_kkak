@@ -11,14 +11,22 @@ import 'package:in_app_review/in_app_review.dart';
 
 final InAppReview inAppReview = InAppReview.instance;
 
-class SettingPage extends StatelessWidget {
-  //원본위젯
+class SettingPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+  _SettingPageState createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       LogService().log(LogType.view_screen, "setting_page", null, {});
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: SignatureColors.begie200,
       appBar: AppBar(

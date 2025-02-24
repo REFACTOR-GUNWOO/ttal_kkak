@@ -237,7 +237,7 @@ class _StepContainerState extends State<StepContainer> {
                                       LogType.click_button,
                                       "clothes_registration_page",
                                       "save_button", {
-                                    "isUpdate": widget.isUpdate,
+                                    "isUpdate": widget.isUpdate.toString(),
                                     "button_position": "top"
                                   });
 
