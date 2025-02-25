@@ -200,7 +200,7 @@ class _StepContainerState extends State<StepContainer> {
                                 SvgPicture.asset(
                                   'assets/icons/arrow_left.svg',
                                   color: SystemColors.black,
-                                  height: 12,
+                                  height: 20,
                                 ),
                                 SizedBox(width: 7),
                                 Text(
@@ -215,7 +215,7 @@ class _StepContainerState extends State<StepContainer> {
                         Expanded(
                             flex: 2,
                             child: Text(
-                              widget.isUpdate ? "옷수정" : "옷등록",
+                              widget.isUpdate ? "옷 수정" : "옷 등록",
                               textAlign: TextAlign.center,
                               style: OneLineTextStyles.Bold18.copyWith(
                                   color: SystemColors.black),
