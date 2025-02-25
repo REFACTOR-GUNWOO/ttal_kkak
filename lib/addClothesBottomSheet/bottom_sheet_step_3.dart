@@ -105,7 +105,7 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
                       color: SystemColors.gray500, width: 1.0), // 테두리 색상
 
               borderRadius: BorderRadius.circular(6.0), // 모서리 둥글게
-              color: Colors.white,
+              color: Colors.transparent,
             ),
             child: TextButton(
               // style: TextButton.styleFrom(

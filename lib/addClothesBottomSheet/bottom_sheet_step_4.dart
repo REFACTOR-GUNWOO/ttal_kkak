@@ -246,12 +246,13 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
                   child: Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: selectedValue == option
-                            ? Colors.black
-                            : Colors.grey,
-                      ),
+                      color: Colors.transparent,
+                      border: selectedValue == option
+                          ? Border.all(color: SystemColors.black, width: 1.5)
+                          : Border.all(
+                              color: SystemColors.gray500,
+                              width: 1.0), // 테두리 색상
+
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(

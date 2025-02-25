@@ -45,8 +45,11 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
       });
       FirstCategory category = firstCategories
           .firstWhere((element) => element.id == primaryCategoryId);
-      LogService().log(LogType.view_screen, "main_category_registration_page",
-          null, {"type": category.code, "isUpdate": widget.isUpdate.toString()});
+      LogService().log(
+          LogType.view_screen,
+          "main_category_registration_page",
+          null,
+          {"type": category.code, "isUpdate": widget.isUpdate.toString()});
     });
   }
 
@@ -132,10 +135,11 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
                     child: Container(
                       decoration: BoxDecoration(
                         border: selectedCategoryId == firstCategories[index].id
-                            ? Border.all(color: Colors.black, width: 1.5)
-                            : Border.all(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(6.0),
-                        color: Colors.white,
+                            ? Border.all(color: SystemColors.black, width: 1.5)
+                            : Border.all(
+                                color: SystemColors.gray500, width: 1.0),
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.transparent,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(

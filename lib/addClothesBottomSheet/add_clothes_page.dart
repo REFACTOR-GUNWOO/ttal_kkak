@@ -150,6 +150,7 @@ class _StepContainerState extends State<StepContainer> {
         Provider.of<ClothesUpdateProvider>(context, listen: false);
     final List<BottomSheetStep> steps = _buildSteps(provider);
     return Scaffold(
+        backgroundColor: SignatureColors.begie200,
         bottomNavigationBar: BottomSheetAppBar(
             nextStepFun: _nextStep,
             previousStepFun: _previousStep,
@@ -171,8 +172,8 @@ class _StepContainerState extends State<StepContainer> {
             child: CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
+                  backgroundColor: SignatureColors.begie200,
+                  shadowColor: SignatureColors.begie200,
                   automaticallyImplyLeading: false,
                   pinned: true,
                   title: Row(

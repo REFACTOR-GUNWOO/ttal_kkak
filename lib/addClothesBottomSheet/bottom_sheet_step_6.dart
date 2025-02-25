@@ -83,7 +83,7 @@ class DetailInfoCards extends State<BottomSheetBody6> {
       Container(
         padding: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(8.0),
           border: Border.all(color: Colors.grey[300]!),
         ),
@@ -157,6 +157,7 @@ class DetailDrawingInfoPage extends StatelessWidget {
     });
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
