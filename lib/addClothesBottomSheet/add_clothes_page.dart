@@ -119,13 +119,7 @@ class _StepContainerState extends State<StepContainer> {
                 scale: 1.5, clothes: clothes, key: ValueKey(Uuid().v4()))));
       }
     }
-    stackList.add(Align(
-        alignment: Alignment.center,
-        child: Lottie.asset(
-          'assets/lotties/add_clothes.lottie',
-          decoder: customDecoder,
-          width: 75,
-        )));
+
 
     return Container(
         width: double.infinity,
