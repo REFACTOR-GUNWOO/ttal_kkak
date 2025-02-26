@@ -595,6 +595,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
 
                         showDialog(
                           context: context,
+                          barrierColor: Colors.transparent,
                           builder: (BuildContext context) {
                             return DraftClearWarningDialog(
                                 title: "드로잉 초기화",

@@ -34,8 +34,15 @@ class DraftClearWarningDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
         insetPadding: EdgeInsets.all(20),
+        backgroundColor: SystemColors.white,
+        shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
+          side: BorderSide(
+            // 테두리 선 스타일 추가
+            color: SystemColors.gray300,
+            width: 1.0,
+          ),
         ),
         child: Stack(children: [
           Column(
@@ -50,7 +57,7 @@ class DraftClearWarningDialog extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                description ?? '하위 정보가 사라져요.\n${draftFieldName}를 변경하시겠어요?',
+                description ?? '컬러, 드로잉 정보가 사려져요.\n변경하시겠어요?',
                 textAlign: TextAlign.center,
                 style: BodyTextStyles.Regular14.copyWith(
                     color: SystemColors.black),
@@ -67,6 +74,7 @@ class DraftClearWarningDialog extends StatelessWidget {
                           Navigator.of(context).pop(); // 모달 닫기
                         },
                         style: ElevatedButton.styleFrom(
+                          elevation: 0,
                           backgroundColor: Colors.black, // 버튼 색상
                           padding: EdgeInsets.symmetric(
                               horizontal: 40, vertical: 15),

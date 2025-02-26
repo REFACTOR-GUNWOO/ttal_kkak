@@ -62,6 +62,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
 
     if (widget.isUpdate) {
       showDialog(
+        barrierColor: Colors.transparent,
         context: context,
         builder: (BuildContext context) {
           return DraftClearWarningDialog(

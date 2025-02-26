@@ -60,6 +60,7 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
     final clothes = widget.updateProvider.currentClothes!;
     if (widget.isUpdate) {
       showDialog(
+        barrierColor: Colors.transparent,
         context: context,
         builder: (BuildContext context) {
           return DraftClearWarningDialog(
