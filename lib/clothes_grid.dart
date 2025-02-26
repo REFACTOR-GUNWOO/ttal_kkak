@@ -410,14 +410,14 @@ class _ClothesItemState extends State<ClothesItem> {
               CustomPaint(
                 size: Size(svgBgRoot!.viewport.width * widget.scale,
                     svgBgRoot!.viewport.height * widget.scale),
-                painter: SvgBgPainter(svgBgRoot!, clothesColor.color, widget.scale),
+                painter:
+                    SvgBgPainter(svgBgRoot!, clothesColor.color, widget.scale),
               ),
             if (svgDecoUrl != null)
               CustomPaint(
                 size: Size(svgBgRoot!.viewport.width * widget.scale,
                     svgBgRoot!.viewport.height * widget.scale),
-                painter: SvgBgPainter(
-                    svgDecoRoot!, SignatureColors.begie200, widget.scale),
+                painter: SvgBgPainter(svgDecoRoot!, null, widget.scale),
               ),
             if (lines.isNotEmpty)
               CustomPaint(

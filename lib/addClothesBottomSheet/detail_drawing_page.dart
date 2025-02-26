@@ -779,7 +779,7 @@ class SvgBgPainter extends CustomPainter {
     // 페인트 객체 생성 시간 측정
     stopwatch.reset();
     Paint paint = Paint()
-      ..color = color ?? drawableRoot.style?.fill?.color ?? SystemColors.white
+      ..color = color ?? drawableRoot.style?.fill?.color ?? SystemColors.black
       ..style = PaintingStyle.fill
       ..strokeWidth = 2.0;
     print('SvgBgPainter 페인트 객체 생성 시간: ${stopwatch.elapsedMicroseconds}μs');
