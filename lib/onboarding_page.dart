@@ -70,15 +70,12 @@ class BottomSheetContent extends StatelessWidget {
                   fit: BoxFit.fill,
                 ),
               ),
-              Text(
-                '첫 방문 선물 도착',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
+              Text('첫 방문 선물 도착', style: BodyTextStyles.Bold24),
               SizedBox(height: 10.0),
               Text(
                 '처음 방문한 기념으로 가지고 있는 기본템을\n터치 한 번으로 쉽게 등록하게 해드릴게요!',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                style: BodyTextStyles.Regular14,
               ),
               SizedBox(height: 32.0),
               ElevatedButton(
