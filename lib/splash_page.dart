@@ -6,6 +6,7 @@ import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/is_newbie_repository.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/onboarding_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -56,7 +57,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   void _navigateToOnboardingPage() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => OnboardingPage()),
+      MaterialPageRoute(builder: (context) => MainPage(isOnboarding: true,)),
     );
   }
 

@@ -7,6 +7,7 @@ import 'package:ttal_kkak/clothes_grid.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/models/sort_type.dart';
+import 'package:ttal_kkak/onboarding_page.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
@@ -14,6 +15,9 @@ import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 
 class MainPage extends StatefulWidget {
+  final bool isOnboarding;
+
+  const MainPage({super.key, required this.isOnboarding});
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -310,19 +314,41 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         .toList();
   }
 
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: SystemColors.white,
+      isDismissible: false,
+      enableDrag: false,
+      barrierColor: Colors.black.withOpacity(0.2),
+      context: context,
+      builder: (BuildContext context) {
+        return BottomSheetContent();
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
+      // isScrollControlled: true, // 바텀시트가 전체 화면을 사용하게 함
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    LogService().log(LogType.view_screen, "main_page", null, {});
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      List<Clothes> loadedClothes = await ClothesRepository().loadClothes();
-      String? loadedClosetName = await ClosetRepository().loadClosetName();
-      setState(() {
-        print("reload3");
-        clothesList = loadedClothes;
-        if (loadedClosetName != null) closetName = loadedClosetName;
-      });
+      if (widget.isOnboarding) {
+        _showBottomSheet(context);
+        LogService().log(LogType.view_screen, "first_gift_page", null, {});
+      } else {
+        LogService().log(LogType.view_screen, "main_page", null, {});
+        List<Clothes> loadedClothes = await ClothesRepository().loadClothes();
+        String? loadedClosetName = await ClosetRepository().loadClosetName();
+        setState(() {
+          print("reload3");
+          clothesList = loadedClothes;
+          if (loadedClosetName != null) closetName = loadedClosetName;
+        });
+      }
     });
   }
 

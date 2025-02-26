@@ -54,15 +54,6 @@ class BottomSheetContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 10.0),
-              Container(
-                height: 4.0,
-                width: 40.0,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
               SizedBox(height: 32.0),
               GestureDetector(
                 onTap: () async {

@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
           ))),
       home: SplashPage(),
       routes: {
-        '/addClothes': (context) => MainPage(),
+        '/addClothes': (context) => MainPage(isOnboarding: true,),
       },
     );
   }

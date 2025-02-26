@@ -125,7 +125,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
           controller: _pageController,
           onPageChanged: _onPageChanged,
           children: [
-            MainPage(), // 내 옷장 페이지
+            MainPage(isOnboarding: false,), // 내 옷장 페이지
             StatisticsPage(), // 통계 페이지
             DailyOutfitPage(), // 코디 페이지
             SettingPage(), // 설정 페이지
