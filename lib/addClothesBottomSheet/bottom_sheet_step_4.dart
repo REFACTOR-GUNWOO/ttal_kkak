@@ -212,10 +212,9 @@ class _ClothesDetailSettingsState extends State<BottomSheetBody4> {
             duration: Duration(milliseconds: 300),
             alignment: Alignment.bottomCenter,
             height: isDropdownVisible
-                ? ((categoryDetail.details.length / 3).ceil() *
-                        (MediaQuery.of(context).size.width - 40) /
-                        9) +
-                    12
+                ? ((categoryDetail.details.length / 3).ceil() * 42) +
+                    12 +
+                    ((categoryDetail.details.length / 3).floor() * 10)
                 // 아이템 개수 기반 동적 높이
                 : 0.0,
             curve: Curves.easeInOut,
