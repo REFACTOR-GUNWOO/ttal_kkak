@@ -93,7 +93,7 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
         crossAxisCount: 2,
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
-        mainAxisExtent: 52,
+        mainAxisExtent: 46,
       ),
       delegate: SliverChildBuilderDelegate(
         childCount: categories.length,
@@ -109,9 +109,9 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
               color: Colors.transparent,
             ),
             child: TextButton(
-              // style: TextButton.styleFrom(
-              //   padding: EdgeInsets.zero, // 패딩 제거
-              // ),
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.all(6), // 패딩 제거
+              ),
               onPressed: () => save(categories[index].id),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
