@@ -92,7 +92,7 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
         crossAxisCount: 2,
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
-        childAspectRatio: 3.5,
+        mainAxisExtent: 52,
       ),
       delegate: SliverChildBuilderDelegate(
         childCount: categories.length,
@@ -120,11 +120,13 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
                     style: OneLineTextStyles.Bold14.copyWith(
                         color: SystemColors.black),
                   ),
-                  SvgPicture.asset(
-                    "assets/images/clothes/categoryImage/${categories[index].code}.svg",
-                    width: 32,
-                    height: 32,
-                  )
+                  SizedBox(
+                      height: 32,
+                      width: 32,
+                      child: SvgPicture.asset(
+                        "assets/images/clothes/categoryImage/${categories[index].code}.svg",
+                        fit: BoxFit.fill,
+                      ))
                 ],
               ),
             ),
