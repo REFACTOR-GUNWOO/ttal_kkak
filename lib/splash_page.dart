@@ -24,7 +24,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     // ClothesRepository().deleteAllClothes();
     _navigateToHome();
     _controller = AnimationController(vsync: this);
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
 
   @override
@@ -63,7 +63,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: SignatureColors.begie200,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
