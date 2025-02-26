@@ -10,6 +10,7 @@ import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/custom_decoder.dart';
 import 'package:ttal_kkak/common/log_service.dart';
+import 'package:ttal_kkak/common/show_toast.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/onboarding_clothes_select_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -67,6 +68,7 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
         await Provider.of<OnboardingClothesSelectProvider>(context,
                 listen: false)
             .migrate();
+        showToast("기본템이 등록되었어요");
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => MainLayout()),
         );
