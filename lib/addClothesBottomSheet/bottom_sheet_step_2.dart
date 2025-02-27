@@ -162,7 +162,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
                               child: Text(
                                 firstCategories[index].description,
                                 style: TextStyle(
-                                    height: 1.5,
+                                    height: 18 / 12,
                                     fontSize: 12,
                                     color: Colors.grey[700]),
                               ),
