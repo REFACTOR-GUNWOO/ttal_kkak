@@ -60,7 +60,18 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
     }
     print("update : ${clothes.name}");
 
-    if (widget.isUpdate) {
+    if (clothes.isDraft) {
+      clothes.updatePrimaryCategoryId(categoryId);
+      clothes.drawLines = [];
+      final SecondCategory secondCategory = secondCategories
+          .firstWhere((element) => element.firstCategoryId == categoryId);
+      clothes.color = secondCategory.defaultColor ?? ClothesColor.white;
+
+      clothes.isDraft = false;
+      await widget.updateProvider.update(clothes);
+      widget.onNextStep();
+      return;
+    } else {
       showDialog(
         barrierColor: Colors.transparent,
         context: context,
@@ -79,17 +90,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
           );
         },
       );
-    } else {
-      clothes.updatePrimaryCategoryId(categoryId);
-      await widget.updateProvider.update(clothes);
-      widget.onNextStep();
     }
-    if (clothes.isDraft) {
-      clothes.updatePrimaryCategoryId(categoryId);
-      clothes.isDraft = false;
-      await widget.updateProvider.update(clothes);
-    }
-    return;
   }
 
   double _maxItemHeight = 0;

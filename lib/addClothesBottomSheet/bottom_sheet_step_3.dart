@@ -59,38 +59,27 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
     SecondCategory category =
         secondCategories.firstWhere((element) => element.id == categoryId);
     final clothes = widget.updateProvider.currentClothes!;
-    if (widget.isUpdate) {
-      showDialog(
-        barrierColor: Colors.transparent,
-        context: context,
-        builder: (BuildContext context) {
-          return DraftClearWarningDialog(
-              draftFieldName: "하위 카테고리",
-              draft: clothes,
-              onNextStep: () {
-                print("start");
-                clothes.updateSecondaryCategoryId(categoryId);
-                clothes.drawLines = [];
-                final SecondCategory secondCategory = secondCategories
-                    .firstWhere((element) => element.id == categoryId);
-                clothes.color =
-                    secondCategory.defaultColor ?? ClothesColor.white;
+    showDialog(
+      barrierColor: Colors.transparent,
+      context: context,
+      builder: (BuildContext context) {
+        return DraftClearWarningDialog(
+            draftFieldName: "하위 카테고리",
+            draft: clothes,
+            onNextStep: () {
+              print("start");
+              clothes.updateSecondaryCategoryId(categoryId);
+              clothes.drawLines = [];
+              final SecondCategory secondCategory = secondCategories
+                  .firstWhere((element) => element.id == categoryId);
+              clothes.color = secondCategory.defaultColor ?? ClothesColor.white;
 
-                widget.onNextStep();
-                print("end");
-              });
-        },
-      );
+              widget.onNextStep();
+              print("end");
+            });
+      },
+    );
 
-      return;
-    }
-
-    clothes.updateSecondaryCategoryId(categoryId);
-
-    clothes.updateColor(category.defaultColor ?? clothes.color);
-
-    await widget.updateProvider.update(clothes);
-    widget.onNextStep();
     return;
   }
 
