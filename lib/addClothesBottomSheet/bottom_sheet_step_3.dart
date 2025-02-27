@@ -59,28 +59,40 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
     SecondCategory category =
         secondCategories.firstWhere((element) => element.id == categoryId);
     final clothes = widget.updateProvider.currentClothes!;
-    showDialog(
-      barrierColor: Colors.transparent,
-      context: context,
-      builder: (BuildContext context) {
-        return DraftClearWarningDialog(
-            draftFieldName: "하위 카테고리",
-            draft: clothes,
-            onNextStep: () {
-              print("start");
-              clothes.updateSecondaryCategoryId(categoryId);
-              clothes.drawLines = [];
-              final SecondCategory secondCategory = secondCategories
-                  .firstWhere((element) => element.id == categoryId);
-              clothes.color = secondCategory.defaultColor ?? ClothesColor.white;
+    if (widget.updateProvider.primaryCategoryUpdated) {
+      clothes.updateSecondaryCategoryId(categoryId);
+      clothes.drawLines = [];
+      final SecondCategory secondCategory =
+          secondCategories.firstWhere((element) => element.id == categoryId);
+      clothes.color = secondCategory.defaultColor ?? ClothesColor.white;
+      widget.updateProvider.update(clothes);
+      widget.updateProvider.setPrimaryCategoryUpdated(false);
+      widget.onNextStep();
+    } else {
+      showDialog(
+        barrierColor: Colors.transparent,
+        context: context,
+        builder: (BuildContext context) {
+          return DraftClearWarningDialog(
+              draftFieldName: "하위 카테고리",
+              draft: clothes,
+              onNextStep: () {
+                print("start");
+                clothes.updateSecondaryCategoryId(categoryId);
+                clothes.drawLines = [];
+                final SecondCategory secondCategory = secondCategories
+                    .firstWhere((element) => element.id == categoryId);
+                clothes.color =
+                    secondCategory.defaultColor ?? ClothesColor.white;
 
-              widget.onNextStep();
-              print("end");
-            });
-      },
-    );
+                widget.onNextStep();
+                print("end");
+              });
+        },
+      );
 
-    return;
+      return;
+    }
   }
 
   @override

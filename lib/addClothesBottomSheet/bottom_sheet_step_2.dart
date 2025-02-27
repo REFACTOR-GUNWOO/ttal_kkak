@@ -69,6 +69,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
 
       clothes.isDraft = false;
       await widget.updateProvider.update(clothes);
+      await widget.updateProvider.setPrimaryCategoryUpdated(true);
       widget.onNextStep();
       return;
     } else {
@@ -85,6 +86,7 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
               final SecondCategory secondCategory = secondCategories.firstWhere(
                   (element) => element.firstCategoryId == categoryId);
               clothes.color = secondCategory.defaultColor ?? ClothesColor.white;
+              widget.updateProvider.setPrimaryCategoryUpdated(true);
               widget.onNextStep();
             },
           );

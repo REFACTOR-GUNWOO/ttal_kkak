@@ -46,12 +46,12 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_focusNode);
+      widget.onStart();
     });
   }
 
   @override
   void didChangeDependencies() {
-    widget.onStart();
     super.didChangeDependencies();
   }
 
