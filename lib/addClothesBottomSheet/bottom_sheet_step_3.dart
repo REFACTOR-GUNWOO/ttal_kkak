@@ -107,7 +107,7 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
             ),
             child: TextButton(
               style: TextButton.styleFrom(
-                padding: EdgeInsets.all(6), // 패딩 제거
+                padding: EdgeInsets.only(left: 12, right: 12), // 패딩 제거
               ),
               onPressed: () => save(categories[index].id),
               child: Row(
