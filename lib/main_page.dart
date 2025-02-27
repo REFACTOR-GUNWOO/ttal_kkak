@@ -293,7 +293,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
-      // isScrollControlled: true, // 바텀시트가 전체 화면을 사용하게 함
+      isScrollControlled: true, // 바텀시트가 전체 화면을 사용하게 함
     );
   }
 
