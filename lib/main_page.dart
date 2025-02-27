@@ -8,7 +8,6 @@ import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/models/sort_type.dart';
 import 'package:ttal_kkak/onboarding_page.dart';
-import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/provider/scroll_controller_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -49,39 +48,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     } catch (e) {
       print(e);
     }
-  }
-
-  void _showSaveClosetNameBottomSheet(BuildContext context) {
-    final TextEditingController _controller =
-        TextEditingController(text: closetName);
-
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                keyboardType: TextInputType.text,
-                controller: _controller,
-                decoration: const InputDecoration(
-                  labelText: 'Enter some text',
-                  border: OutlineInputBorder(),
-                ),
-                onSubmitted: (value) {
-                  setState(() {
-                    closetName = value; // 입력된 텍스트를 저장합니다.
-                    ClosetRepository().saveClosetName(value);
-                  });
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 
   Map<FirstCategory, List<Clothes>> getCategorizedClothes() {
@@ -342,21 +308,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       } else {
         LogService().log(LogType.view_screen, "main_page", null, {});
         List<Clothes> loadedClothes = await ClothesRepository().loadClothes();
-        String? loadedClosetName = await ClosetRepository().loadClosetName();
         setState(() {
           print("reload3");
           clothesList = loadedClothes;
-          if (loadedClosetName != null) closetName = loadedClosetName;
         });
       }
     });
-  }
-
-  @override
-  void dispose() {
-    // _outerTabController.dispose();
-    // _innerTabController.dispose();
-    super.dispose();
   }
 
   @override
@@ -368,6 +325,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         builder: (context, reloadNotifier, child) {
       if (reloadNotifier.shouldReload) {
         // ReloadHomeProvider에 boolean 필드 추가 필요
+        print("reload4");
         WidgetsBinding.instance.addPostFrameCallback((_) {
           reload();
           // 리로드 후 상태 리셋

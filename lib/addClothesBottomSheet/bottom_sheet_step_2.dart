@@ -70,6 +70,10 @@ class _BottomSheetBody2State extends State<BottomSheetBody2> {
             draft: clothes,
             onNextStep: () {
               clothes.updatePrimaryCategoryId(categoryId);
+              clothes.drawLines = [];
+              final SecondCategory secondCategory = secondCategories.firstWhere(
+                  (element) => element.firstCategoryId == categoryId);
+              clothes.color = secondCategory.defaultColor ?? ClothesColor.white;
               widget.onNextStep();
             },
           );

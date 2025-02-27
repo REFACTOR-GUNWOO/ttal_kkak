@@ -10,7 +10,6 @@ import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/tool_tip_with_tail.dart';
 import 'dart:ui'; // BackdropFilter를 사용하기 위한 라이브러리 추가
-import 'package:flutter/services.dart';
 
 class MainLayout extends StatefulWidget {
   @override

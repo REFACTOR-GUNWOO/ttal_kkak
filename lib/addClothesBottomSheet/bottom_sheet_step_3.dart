@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/draft_clear_warning_dialog.dart';
 import 'package:ttal_kkak/category.dart';
+import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -67,9 +68,16 @@ class _BottomSheetBody3State extends State<BottomSheetBody3> {
               draftFieldName: "하위 카테고리",
               draft: clothes,
               onNextStep: () {
+                print("start");
                 clothes.updateSecondaryCategoryId(categoryId);
+                clothes.drawLines = [];
+                final SecondCategory secondCategory = secondCategories
+                    .firstWhere((element) => element.id == categoryId);
+                clothes.color =
+                    secondCategory.defaultColor ?? ClothesColor.white;
 
                 widget.onNextStep();
+                print("end");
               });
         },
       );

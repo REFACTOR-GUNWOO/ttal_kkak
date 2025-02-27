@@ -243,7 +243,11 @@ class _ClothesCardState extends State<ClothesCard>
         stackList.add(Positioned(
             top: secondCategory.clothesTopPosition,
             bottom: secondCategory.clothesBottomPosition,
-            child: ClothesItem(clothes: clothes, key: ValueKey(Uuid().v4()))));
+            child: ClothesItem(
+                clothes: clothes,
+                key: clothes.id == null
+                    ? Key(Uuid().v4())
+                    : Key(clothes.id.toString()))));
       }
     }
 
@@ -309,6 +313,7 @@ class _ClothesItemState extends State<ClothesItem> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      print('ClothesItem initState');
       await _initializeClothesData();
     });
   }
