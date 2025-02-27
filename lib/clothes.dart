@@ -140,9 +140,9 @@ mixin ClothesDetail {
 // 상의 길이
 enum TopLength with ClothesDetail {
   crop("크롭", 4, "TopLength_crop", "crop"),
-  short("짧은길이", 3, "TopLength_short", "short"),
-  medium("중간길이", 2, "TopLength_medium", "medium"),
-  long("긴길이", 1, "TopLength_long", "long");
+  short("짧은 길이", 3, "TopLength_short", "short"),
+  medium("중간 길이", 2, "TopLength_medium", "medium"),
+  long("긴 길이", 1, "TopLength_long", "long");
 
   final String label;
   final int priority;
@@ -204,9 +204,9 @@ enum BottomFit with ClothesDetail {
 }
 
 enum BottomLength with ClothesDetail {
-  short("짧은길이", "bottom_length_short", "short"),
-  medium("중간길이", "bottom_length_medium", "medium"),
-  long("긴길이", "bottom_length_long", "long"),
+  short("짧은 길이", "bottom_length_short", "short"),
+  medium("중간 길이", "bottom_length_medium", "medium"),
+  long("긴 길이", "bottom_length_long", "long"),
   mini("미니", "bottom_length_mini", "mini");
 
   final String label;
@@ -254,9 +254,9 @@ enum ShoesStrap with ClothesDetail {
 }
 
 enum ShoesHill with ClothesDetail {
-  high("높은", "shoes_hill_high", "high"),
-  middle("미들", "shoes_hill_middle", "middle"),
-  low("낮은", "shoes_hill_low", "low");
+  high("높은 굽", "shoes_hill_high", "high"),
+  middle("중간 굽", "shoes_hill_middle", "middle"),
+  low("낮은 굽", "shoes_hill_low", "low");
 
   final String label;
   final String code;
