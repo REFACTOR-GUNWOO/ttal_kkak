@@ -10,17 +10,17 @@ import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/utils/length_limited_text_input.dart';
 
 class BottomSheetBody1 extends StatefulWidget implements BottomSheetStep {
-  BottomSheetBody1({
-    super.key,
-    required this.onNextStep,
-    required this.updateProvider,
-    required this.isUpdate,
-  });
+  BottomSheetBody1(
+      {super.key,
+      required this.onNextStep,
+      required this.updateProvider,
+      required this.isUpdate,
+      required this.scrollController});
   final VoidCallback onNextStep;
   final ClothesUpdateProvider updateProvider;
   final bool isUpdate;
   final GlobalKey<_BottomSheetBody1State> myKey = GlobalKey();
-
+  final ScrollController scrollController;
   @override
   bool Function() get canGoNext => () {
         return myKey.currentState != null &&
@@ -105,6 +105,18 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
     widget.onNextStep();
   }
 
+  void scrollAnimate(BuildContext context) {
+    print("탭 클릭됨");
+    final offset = MediaQuery.of(context).viewInsets.bottom;
+    // 6초 후에 실행
+    Future.delayed(Duration(milliseconds: 100), () {
+      // MediaQuery.of(context).viewInsets.bottom 하단 inset(사용못하는영역)크기 리턴
+      // 사용못하는 영역만큼 1초 동안 easeIn으로 이동
+      widget.scrollController.animateTo(30,
+          duration: Duration(milliseconds: 100), curve: Curves.easeIn);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -126,6 +138,9 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
             _handleTextChanged,
             _onSubmit,
             controller: _controller,
+            onStart: () {
+              scrollAnimate(context);
+            },
           )),
     ));
   }

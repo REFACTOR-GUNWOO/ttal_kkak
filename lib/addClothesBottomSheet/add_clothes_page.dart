@@ -46,10 +46,11 @@ class _StepContainerState extends State<StepContainer> {
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
   }
 
   int _currentStep = 0;
-
+  late ScrollController _scrollController;
   void _nextStep() {
     setState(() {
       _currentStep++;
@@ -68,6 +69,7 @@ class _StepContainerState extends State<StepContainer> {
         onNextStep: _nextStep,
         isUpdate: widget.isUpdate,
         updateProvider: provider,
+        scrollController: _scrollController,
       ),
       BottomSheetBody2(
         onNextStep: _nextStep,
@@ -120,7 +122,6 @@ class _StepContainerState extends State<StepContainer> {
       }
     }
 
-
     return Container(
         width: double.infinity,
         height: 294,
@@ -164,6 +165,7 @@ class _StepContainerState extends State<StepContainer> {
               }
             },
             child: CustomScrollView(
+              controller: _scrollController,
               slivers: [
                 SliverAppBar(
                   backgroundColor: SignatureColors.begie200,

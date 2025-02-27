@@ -11,10 +11,11 @@ class LengthLimitedTextInput extends StatefulWidget {
   final ValueChanged<String> onTextChanged;
   final ValueChanged<String> onSubmit;
   final TextEditingController controller;
+  final VoidCallback onStart;
 
   const LengthLimitedTextInput(this.maxLength, this.hintText, this.description,
       this.onTextChanged, this.onSubmit,
-      {super.key, required this.controller});
+      {super.key, required this.controller, required this.onStart});
 
   @override
   _LengthLimitedTextInputStatue createState() =>
@@ -46,6 +47,12 @@ class _LengthLimitedTextInputStatue extends State<LengthLimitedTextInput> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_focusNode);
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    widget.onStart();
+    super.didChangeDependencies();
   }
 
   @override
