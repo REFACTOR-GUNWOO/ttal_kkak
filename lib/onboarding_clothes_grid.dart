@@ -40,6 +40,10 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
   DrawableRoot? svgBgRoot;
   DrawableRoot? svgLineRoot;
   int columnCount(BuildContext context) {
+    if (MediaQuery.of(context).size.width >= 360) {
+      return 4;
+    }
+
     return ((MediaQuery.of(context).size.width - 80) / 78).floor();
   }
 
@@ -110,7 +114,7 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
         body: getClothesListLength() != 0
             ? ListView.builder(
                 scrollDirection: Axis.vertical,
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(0),
                 itemCount: ((getClothesListLength()) / columnCount).ceil(),
                 itemBuilder: (context, index) {
                   int start = index * columnCount;
@@ -136,7 +140,7 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
               )
             : ListView.builder(
                 scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(0),
                 itemCount: 1,
                 itemBuilder: (context, index) {
                   return Container(

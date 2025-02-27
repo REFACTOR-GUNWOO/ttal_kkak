@@ -37,6 +37,9 @@ class _ClothesGridState extends State<ClothesGrid>
   DrawableRoot? svgLineRoot;
 
   int columnCount(BuildContext context) {
+    if (MediaQuery.of(context).size.width >= 360) {
+      return 4;
+    }
     return ((MediaQuery.of(context).size.width - 80) / 78).floor();
   }
 
@@ -66,7 +69,7 @@ class _ClothesGridState extends State<ClothesGrid>
   Widget build(BuildContext context) {
     int columnCount = this.columnCount(context);
     return SliverPadding(
-      padding: EdgeInsets.all(20.0),
+      padding: EdgeInsets.all(0),
       sliver: getClothesListLength() != 0
           ? SliverList(
               delegate: SliverChildBuilderDelegate(
