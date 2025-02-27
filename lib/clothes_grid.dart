@@ -159,7 +159,7 @@ class _ClothesGridState extends State<ClothesGrid>
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (BuildContext context) {
-        HapticFeedback.lightImpact();
+        HapticFeedback.heavyImpact();
         return UpdateBottomSheet(
           onReload: () => widget.onReload(),
           clothes: clothes,
