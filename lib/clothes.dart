@@ -229,11 +229,11 @@ enum SkirtFit with ClothesDetail {
 }
 
 enum ShoesLength with ClothesDetail {
-  high("하이", "shoes_length_high", "high"),
-  long("롱", "shoes_length_long", "long"),
-  middle("미들", "shoes_length_middle", "middle"),
-  short("숏", "shoes_length_short", "short"),
-  low("로우", "shoes_length_low", "low");
+  high("긴 길이", "shoes_length_high", "high"),
+  long("긴 길이", "shoes_length_long", "long"),
+  middle("중간 길이", "shoes_length_middle", "middle"),
+  short("짧은 길이", "shoes_length_short", "short"),
+  low("짧은 길이", "shoes_length_low", "low");
 
   final String label;
   final String code;

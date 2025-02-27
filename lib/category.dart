@@ -225,7 +225,7 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 3,
             label: "넥 라인",
-            defaultDetail: Neckline.polo,
+            defaultDetail: Neckline.uNeck,
             details: [
               Neckline.polo,
               Neckline.uNeck,
@@ -528,7 +528,7 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 3,
             label: "넥 라인",
-            defaultDetail: Neckline.round,
+            defaultDetail: Neckline.polo,
             details: [
               Neckline.polo,
               Neckline.deepCollar,
@@ -621,7 +621,7 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 2,
             label: "상의 길이",
-            defaultDetail: TopLength.medium,
+            defaultDetail: TopLength.long,
             details: [
               TopLength.long,
               TopLength.medium,
@@ -642,7 +642,7 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 2,
             label: "상의 길이",
-            defaultDetail: TopLength.medium,
+            defaultDetail: TopLength.long,
             details: [
               TopLength.long,
               TopLength.medium,
@@ -932,7 +932,7 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 1,
             label: "길이",
-            defaultDetail: ShoesLength.high,
+            defaultDetail: ShoesLength.low,
             details: [
               ShoesLength.high,
               ShoesLength.low,
@@ -959,10 +959,10 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 1,
             label: "굽",
-            defaultDetail: ShoesHill.high,
+            defaultDetail: ShoesHill.low,
             details: [
-              ShoesLength.high,
-              ShoesLength.low,
+              ShoesHill.high,
+              ShoesHill.low,
             ]),
       ],
       defaultImage: "assets/images/clothes/bg/shoes.svg"),
@@ -977,7 +977,7 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 1,
             label: "굽",
-            defaultDetail: ShoesHill.high,
+            defaultDetail: ShoesHill.low,
             details: [
               ShoesHill.high,
               ShoesHill.low,
@@ -1013,7 +1013,7 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 1,
             label: "길이",
-            defaultDetail: ShoesLength.long,
+            defaultDetail: ShoesLength.middle,
             details: [
               ShoesLength.long,
               ShoesLength.middle,
@@ -1022,7 +1022,7 @@ List<SecondCategory> secondCategories = [
         CategoryDetail(
             priority: 2,
             label: "굽",
-            defaultDetail: ShoesHill.high,
+            defaultDetail: ShoesHill.low,
             details: [
               ShoesHill.high,
               ShoesHill.low,
