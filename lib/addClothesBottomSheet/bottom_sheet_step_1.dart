@@ -109,11 +109,13 @@ class _BottomSheetBody1State extends State<BottomSheetBody1> {
     print("탭 클릭됨");
     final offset = MediaQuery.of(context).viewInsets.bottom;
     // 6초 후에 실행
-    Future.delayed(Duration(milliseconds: 100), () {
+    Future.delayed(Duration(milliseconds: 300), () {
       // MediaQuery.of(context).viewInsets.bottom 하단 inset(사용못하는영역)크기 리턴
+      print(
+          "MediaQuery.of(context).viewInsets.bottom : ${MediaQuery.of(context).viewInsets.bottom}");
       // 사용못하는 영역만큼 1초 동안 easeIn으로 이동
       widget.scrollController.animateTo(30,
-          duration: Duration(milliseconds: 100), curve: Curves.easeIn);
+          duration: Duration(milliseconds: 200), curve: Curves.easeIn);
     });
   }
 
