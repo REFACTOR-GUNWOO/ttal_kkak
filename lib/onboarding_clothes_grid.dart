@@ -11,6 +11,7 @@ import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/custom_decoder.dart';
 import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/common/show_toast.dart';
+import 'package:ttal_kkak/is_newbie_repository.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/onboarding_clothes_select_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
@@ -507,7 +508,10 @@ class _FloatingActionButtonWidgetState
         isExtended: true,
         enableFeedback: false,
         elevation: 0,
-        onPressed: widget.onPressed,
+        onPressed: () async {
+          await IsNewbieRepository().save(false);
+          widget.onPressed();
+        },
         backgroundColor: Colors.black,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8), // 모서리 둥글게

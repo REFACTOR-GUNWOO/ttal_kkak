@@ -57,7 +57,6 @@ class BottomSheetContent extends StatelessWidget {
               SizedBox(height: 32.0),
               GestureDetector(
                 onTap: () async {
-                  await IsNewbieRepository().save(false);
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                         builder: (context) => OnboardingAddClothesPage()),
@@ -80,7 +79,6 @@ class BottomSheetContent extends StatelessWidget {
               SizedBox(height: 32.0),
               ElevatedButton(
                 onPressed: () async {
-                  await IsNewbieRepository().save(false);
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                         builder: (context) => OnboardingAddClothesPage()),
