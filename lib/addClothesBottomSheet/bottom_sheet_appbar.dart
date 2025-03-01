@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/bottom_sheet_step.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/common/log_service.dart';
+import 'package:ttal_kkak/common/show_toast.dart';
 import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
@@ -115,6 +116,7 @@ class BottomSheetAppBar extends StatelessWidget {
                               "isUpdate": isUpdate.toString(),
                               "button_position": "bottom"
                             });
+                            showToast(isUpdate ? "수정되었습니다" : "등록되었습니다");
 
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
@@ -126,11 +128,11 @@ class BottomSheetAppBar extends StatelessWidget {
                             children: [
                               Text("완료",
                                   style: OneLineTextStyles.Medium14.copyWith(
-                                      color: SystemColors.black)),
+                                      color: SignatureColors.orange400)),
                               SizedBox(width: 7),
                               SvgPicture.asset(
                                 'assets/icons/arrow_right.svg',
-                                color: SystemColors.black,
+                                color: SignatureColors.orange400,
                                 height: 12,
                               ),
                             ],

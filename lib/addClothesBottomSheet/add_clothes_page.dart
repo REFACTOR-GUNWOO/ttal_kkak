@@ -177,36 +177,7 @@ class _StepContainerState extends State<StepContainer> {
                       children: <Widget>[
                         Expanded(
                           flex: 2,
-                          child: TextButton(
-                            onPressed: () {
-                              Provider.of<ClothesUpdateProvider>(context,
-                                      listen: false)
-                                  .clear();
-                              showToast(
-                                  widget.isUpdate ? "수정되었습니다" : "등록되었습니다");
-
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => MainLayout()),
-                              );
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/icons/arrow_left.svg',
-                                  color: SystemColors.black,
-                                  height: 20,
-                                ),
-                                SizedBox(width: 7),
-                                Text(
-                                  "내 옷장",
-                                  style: OneLineTextStyles.Bold14.copyWith(
-                                      color: SystemColors.black),
-                                ),
-                              ],
-                            ),
-                          ),
+                          child: Container()
                         ),
                         Expanded(
                             flex: 2,
@@ -243,7 +214,7 @@ class _StepContainerState extends State<StepContainer> {
                                         builder: (context) => MainLayout()),
                                   );
                                 },
-                                child: Text("완료",
+                                child: Text("닫기",
                                     style:
                                         OneLineTextStyles.SemiBold16.copyWith(
                                             color:
