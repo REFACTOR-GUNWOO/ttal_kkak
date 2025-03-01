@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:ttal_kkak/common/log_service.dart';
 import 'styles/text_styles.dart';
 import 'styles/colors_styles.dart';
