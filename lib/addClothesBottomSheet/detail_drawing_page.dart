@@ -350,6 +350,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                           .clear(),
                       Provider.of<ReloadHomeProvider>(context, listen: false)
                           .triggerReload(),
+                      showToast(widget.isUpdate ? "수정되었습니다" : "등록되었습니다"),
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => MainLayout()),
                       )
