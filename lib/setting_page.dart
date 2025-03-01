@@ -48,8 +48,75 @@ class _SettingPageState extends State<SettingPage> {
             children: [
               PageGuidanceIllust(), // 페이지 가이드 일러스트 영역
               SizedBox(height: 40),
-              CommunicationList(), // 커뮤니케이션 리스트 영역
-              SizedBox(height: 16),
+
+              CommunicationList(),
+              // 커뮤니케이션 리스트 영역
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0),
+                decoration: BoxDecoration(
+                  color: SignatureColors.begie300, // 배경색 설정
+                  border: Border.all(
+                    color: SignatureColors.begie500, // 아웃라인 색상 설정
+                    width: 1, // 아웃라인 두께 설정
+                  ),
+                  borderRadius:
+                      BorderRadius.circular(10), // 테두리 모서리를 둥글게 설정 (선택 사항)
+                ),
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    child: Column(//텍스트뭉치
+                        children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                                //리스트#1
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    //타이틀
+                                    children: [
+                                      SvgPicture.asset(
+                                        color: SignatureColors.orange400,
+                                        'assets/icons/coach_mark.svg', // 아이콘 파일 경로
+                                        width: 20, // 아이콘 너비
+                                        height: 20, // 아이콘 높이
+                                      ),
+                                      SizedBox(width: 8), // 아이콘과 텍스트 사이 간격
+                                      Text('데이터 백업',
+                                          style: OneLineTextStyles.SemiBold16
+                                              .copyWith(
+                                                  color: SystemColors.black)),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 6,
+                                  ),
+                                  Row(
+                                    children: [
+                                      // 본문
+                                      SizedBox(
+                                        width: 28,
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          '백업 기능은 현재 개발 중입니다. 앱을 삭제하면 옷 데이터가 사라질 수 있으니 주의해 주세요',
+                                          style:
+                                              BodyTextStyles.Regular14.copyWith(
+                                                  color: SystemColors.gray800),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ]),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                        ],
+                      )
+                    ])),
+              ),
               SettingList(), // 설정 리스트 영역
             ],
           ),
