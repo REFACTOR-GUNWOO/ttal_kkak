@@ -78,7 +78,7 @@ class PageGuidanceIllust extends StatelessWidget {
             // style: TextStyle(fontFamily: 'Pretendard', fontSize: 16),
             children: <TextSpan>[
               TextSpan(
-                text: '아경 디자이너',
+                text: '디자이너',
                 style:
                     BodyTextStyles.Bold16.copyWith(color: SystemColors.black),
               ),
@@ -88,7 +88,7 @@ class PageGuidanceIllust extends StatelessWidget {
                     color: SystemColors.black),
               ),
               TextSpan(
-                text: '건우 개발자',
+                text: '개발자',
                 style:
                     BodyTextStyles.Bold16.copyWith(color: SystemColors.black),
               ),
@@ -136,7 +136,7 @@ class CommunicationList extends StatelessWidget {
                   if (!await launchUrl(Uri(
                       scheme: 'https',
                       host: 'itunes.apple.com',
-                      path: "/app/id6471259154",
+                      path: "/app/id6739421950",
                       queryParameters: {'action': 'write-review'}))) {
                     throw Exception('Could not launch');
                   }

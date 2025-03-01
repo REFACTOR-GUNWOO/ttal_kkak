@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttal_kkak/clothes.dart';
 
 class IsNewbieRepository {
-  static const String _key = 'is-new-bie:v7';
+  static const String _key = 'is-new-bie:v8';
 
   Future<bool?> load() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

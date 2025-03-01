@@ -127,8 +127,8 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
             MainPage(
               isOnboarding: false,
             ), // 내 옷장 페이지
-            StatisticsPage(), // 통계 페이지
-            DailyOutfitPage(), // 코디 페이지
+            // StatisticsPage(), // 통계 페이지
+            // DailyOutfitPage(), // 코디 페이지
             SettingPage(), // 설정 페이지
           ],
         ),
@@ -167,26 +167,26 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                                     ),
                                     label: '내 옷장',
                                   ),
-                                  BottomNavigationBarItem(
-                                    icon: SvgPicture.asset(
-                                      "assets/icons/tab_2_icon.svg",
-                                      width: 24,
-                                      color: _selectedIndex == 1
-                                          ? SystemColors.black
-                                          : SystemColors.gray600,
-                                    ),
-                                    label: '통계',
-                                  ),
-                                  BottomNavigationBarItem(
-                                    icon: SvgPicture.asset(
-                                      "assets/icons/tab_3_icon.svg",
-                                      width: 24,
-                                      color: _selectedIndex == 2
-                                          ? SystemColors.black
-                                          : SystemColors.gray600,
-                                    ),
-                                    label: '코디',
-                                  ),
+                                  // BottomNavigationBarItem(
+                                  //   icon: SvgPicture.asset(
+                                  //     "assets/icons/tab_2_icon.svg",
+                                  //     width: 24,
+                                  //     color: _selectedIndex == 1
+                                  //         ? SystemColors.black
+                                  //         : SystemColors.gray600,
+                                  //   ),
+                                  //   label: '통계',
+                                  // ),
+                                  // BottomNavigationBarItem(
+                                  //   icon: SvgPicture.asset(
+                                  //     "assets/icons/tab_3_icon.svg",
+                                  //     width: 24,
+                                  //     color: _selectedIndex == 2
+                                  //         ? SystemColors.black
+                                  //         : SystemColors.gray600,
+                                  //   ),
+                                  //   label: '코디',
+                                  // ),
                                   BottomNavigationBarItem(
                                     icon: SvgPicture.asset(
                                       "assets/icons/tab_4_icon.svg",
