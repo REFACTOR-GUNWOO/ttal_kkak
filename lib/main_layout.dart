@@ -191,7 +191,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                                     icon: SvgPicture.asset(
                                       "assets/icons/tab_4_icon.svg",
                                       width: 24,
-                                      color: _selectedIndex == 3
+                                      color: _selectedIndex == 1
                                           ? SystemColors.black
                                           : SystemColors.gray600,
                                     ),
