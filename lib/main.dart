@@ -46,20 +46,22 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       builder: FToastBuilder(),
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Splash Screen',
       theme: ThemeData(
-          fontFamily: 'Pretendard',
-          useMaterial3: false,
-
-          // primarySwatch: SignatureColors.begie200,
-          textButtonTheme: TextButtonThemeData(
-              style: ButtonStyle(
+        fontFamily: 'Pretendard',
+        useMaterial3: false,
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
             overlayColor: MaterialStateProperty.all(Colors.transparent),
-          ))),
-      home: SplashPage(),
+          ),
+        ),
+      ),
+      initialRoute: '/', // 앱 시작 시 첫 화면 설정
       routes: {
-        '/addClothes': (context) => MainPage(isOnboarding: true,),
+        '/': (context) => SplashPage(), // 스플래시 페이지를 첫 화면으로 설정
+        '/main': (context) => MainPage(isOnboarding: false), // 메인 페이지
+        '/addClothes': (context) => MainPage(isOnboarding: true), // 옷 등록 화면
       },
     );
   }

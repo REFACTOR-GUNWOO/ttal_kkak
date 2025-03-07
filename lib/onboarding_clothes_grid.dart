@@ -107,6 +107,8 @@ class _OnboardingClothesGridState extends State<OnboardingClothesGrid>
   Widget build(BuildContext context) {
     setState(() {
       selected = Provider.of<OnboardingClothesSelectProvider>(context).selected;
+      print("selected : ${selected}");
+      print("clothes: ${widget.clothesList.first.id}");
     });
 
     int columnCount = this.columnCount(context);
@@ -311,6 +313,11 @@ class _ClothesCardState extends State<ClothesCard>
           controller: _controller,
           onLoaded: (composition) {
             _controller.duration = composition.duration;
+
+            if (widget.isSelected) {
+              _controller.value = 1.0;
+              _clickCount = 1;
+            }
           },
         ),
       ));

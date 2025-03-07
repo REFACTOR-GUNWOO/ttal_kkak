@@ -225,7 +225,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                                       "main_page",
                                       "clothing_register_button", {});
 
-                                  Navigator.of(context).pushReplacement(
+                                  Navigator.of(context).push(
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             AddClothesPage(isUpdate: false)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_grid.dart';
@@ -46,6 +47,7 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
     return tab1Index == index
         ? TextButton(
             onPressed: () {
+              HapticFeedback.mediumImpact();
               setState(() {
                 tab1Index = index;
               });
@@ -60,6 +62,7 @@ class _OnboardingAddClothesPagetate extends State<OnboardingAddClothesPage> {
             ]))
         : TextButton(
             onPressed: () {
+              HapticFeedback.mediumImpact();
               setState(() {
                 tab1Index = index;
               });

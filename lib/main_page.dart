@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ttal_kkak/Category.dart';
 import 'package:ttal_kkak/closet_repository.dart';
@@ -122,6 +123,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   void onPressTabButton(int index, String categoryName) {
+    HapticFeedback.mediumImpact();
     setState(() {
       tab1Index = index;
       LogService().log(LogType.click_button, "main_page",
@@ -267,6 +269,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   void onPressSecondTabButton(int index, SortType sortType) {
+    HapticFeedback.mediumImpact();
     setState(() {
       tab2Index = index;
       LogService().log(LogType.click_button, "main_page", "sort_button",
