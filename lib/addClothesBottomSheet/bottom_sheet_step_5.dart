@@ -144,7 +144,7 @@ class _ColorPaletteState extends State<ColorPalette> {
               colorContainers: (_selectedColorGroup ??
                       widget.selectedColorGroup)
                   .map((color) => ColorContainer(
-                      _selectedColorGroup ?? widget.selectedColorGroup, color))
+                      _selectedColorGroup ?? widget.selectedColorGroup, color, ""))
                   .toList(),
               selectedColorGroup:
                   _selectedColorGroup ?? widget.selectedColorGroup,

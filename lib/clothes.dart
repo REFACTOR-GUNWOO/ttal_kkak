@@ -380,6 +380,9 @@ enum ClothesColor {
 
   static ClothesColor fromValue(int value) =>
       all.firstWhere((c) => c.color.value == value, orElse: () => white);
+
+  static ClothesColor fromName(String name) =>
+      all.firstWhere((c) => c.name == name, orElse: () => white);
 }
 
 List<Clothes> generateDummyClothes() {
@@ -2039,114 +2042,117 @@ List<Clothes> generateDummyClothes() {
 class ColorContainer {
   final List<ClothesColor> colors;
   final ClothesColor representativeColor;
+  final String representativeColorName;
 
-  ColorContainer(this.colors, this.representativeColor);
+  ColorContainer(
+      this.colors, this.representativeColor, this.representativeColorName);
 }
 
 final List<ColorContainer> colorContainers = [
   ColorContainer(
-      [ClothesColor.lightBlack, ClothesColor.black], ClothesColor.lightBlack),
+      [ClothesColor.lightBlack, ClothesColor.black], ClothesColor.lightBlack
+      ,"검정색"),
   ColorContainer(
       [ClothesColor.white, ClothesColor.warmWhite, ClothesColor.coolWhite],
-      ClothesColor.white),
+      ClothesColor.white,"흰색"),
   ColorContainer([
     ClothesColor.gray50,
     ClothesColor.gray100,
     ClothesColor.gray500,
     ClothesColor.gray600,
     ClothesColor.gray800
-  ], ClothesColor.gray500),
+  ], ClothesColor.gray500,"회색"),
   ColorContainer([
     ClothesColor.red50,
     ClothesColor.red100,
     ClothesColor.red500,
     ClothesColor.red600,
     ClothesColor.red800
-  ], ClothesColor.red500),
+  ], ClothesColor.red500,"빨간색"),
   ColorContainer([
     ClothesColor.orange50,
     ClothesColor.orange100,
     ClothesColor.orange500,
     ClothesColor.orange600,
     ClothesColor.orange800
-  ], ClothesColor.orange500),
+  ], ClothesColor.orange500,"주황색"),
   ColorContainer([
     ClothesColor.yellow50,
     ClothesColor.yellow100,
     ClothesColor.yellow500,
     ClothesColor.yellow600,
     ClothesColor.yellow800
-  ], ClothesColor.yellow500),
+  ], ClothesColor.yellow500,"노란색"),
   ColorContainer([
     ClothesColor.lightGreen50,
     ClothesColor.lightGreen100,
     ClothesColor.lightGreen500,
     ClothesColor.lightGreen600,
     ClothesColor.lightGreen800
-  ], ClothesColor.lightGreen500),
+  ], ClothesColor.lightGreen500, "초록색"),
   ColorContainer([
     ClothesColor.green50,
     ClothesColor.green100,
     ClothesColor.green500,
     ClothesColor.green600,
     ClothesColor.green800
-  ], ClothesColor.green500),
+  ], ClothesColor.green500, "초록색"),
   ColorContainer([
     ClothesColor.lightBlue50,
     ClothesColor.lightBlue100,
     ClothesColor.lightBlue500,
     ClothesColor.lightBlue600,
     ClothesColor.lightBlue800
-  ], ClothesColor.lightBlue500),
+  ], ClothesColor.lightBlue500, "파란색"),
   ColorContainer([
     ClothesColor.blue50,
     ClothesColor.blue100,
     ClothesColor.blue500,
     ClothesColor.blue600,
     ClothesColor.blue800
-  ], ClothesColor.blue500),
+  ], ClothesColor.blue500,"파란색"),
   ColorContainer([
     ClothesColor.purple50,
     ClothesColor.purple100,
     ClothesColor.purple500,
     ClothesColor.purple600,
     ClothesColor.purple800
-  ], ClothesColor.purple500),
+  ], ClothesColor.purple500,"보라색"),
   ColorContainer([
     ClothesColor.coolPink50,
     ClothesColor.coolPink100,
     ClothesColor.coolPink500,
     ClothesColor.coolPink600,
     ClothesColor.coolPink800
-  ], ClothesColor.coolPink500),
+  ], ClothesColor.coolPink500,"자주색"),
   ColorContainer([
     ClothesColor.warmPink50,
     ClothesColor.warmPink100,
     ClothesColor.warmPink500,
     ClothesColor.warmPink600,
     ClothesColor.warmPink800
-  ], ClothesColor.warmPink500),
+  ], ClothesColor.warmPink500,"핑크색"),
   ColorContainer([
     ClothesColor.warmBrown50,
     ClothesColor.warmBrown100,
     ClothesColor.warmBrown500,
     ClothesColor.warmBrown600,
     ClothesColor.warmBrown800
-  ], ClothesColor.warmBrown500),
+  ], ClothesColor.warmBrown500,"갈색"),
   ColorContainer([
     ClothesColor.darkBrown50,
     ClothesColor.darkBrown100,
     ClothesColor.darkBrown500,
     ClothesColor.darkBrown600,
     ClothesColor.darkBrown800
-  ], ClothesColor.darkBrown500),
+  ], ClothesColor.darkBrown500,"갈색"),
   ColorContainer([
     ClothesColor.beige50,
     ClothesColor.beige100,
     ClothesColor.beige500,
     ClothesColor.beige600,
     ClothesColor.beige800
-  ], ClothesColor.beige500),
+  ], ClothesColor.beige500,"베이지색"),
 ];
 
 enum ClothesDraftStatus {
