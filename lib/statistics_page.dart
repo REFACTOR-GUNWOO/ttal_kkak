@@ -68,7 +68,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   style: BodyTextStyles.Regular16.copyWith(
                       color: SystemColors.black)),
               SizedBox(
-                  child: Text('민소매남 이군요!',
+                  child: Text('파랑 중독자 이군요!',
                       textAlign: TextAlign.center,
                       style: BodyTextStyles.Bold24.copyWith(
                           color: SystemColors.black)))
@@ -193,7 +193,9 @@ class _CategoryStatisticsContainerWidgetState
 
           // 카테고리 통계 위젯
           categoryData.isNotEmpty
-              ? CategoryStatisticsWidget(categoryData: categoryData)
+              ? CategoryStatisticsWidget(
+                  categoryData: categoryData,
+                  categoryName: selectedCategory.name)
               : Text("데이터 없음", style: TextStyle(color: Colors.white)),
         ],
       ),
@@ -203,8 +205,9 @@ class _CategoryStatisticsContainerWidgetState
 
 class CategoryStatisticsWidget extends StatefulWidget {
   final List<Map<String, dynamic>> categoryData;
-
-  CategoryStatisticsWidget({required this.categoryData});
+  final String categoryName;
+  CategoryStatisticsWidget(
+      {required this.categoryData, required this.categoryName});
 
   @override
   _CategoryStatisticsWidgetState createState() =>
@@ -285,7 +288,7 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            "상의 중 ${mostFrequent['name']}가 ${mostFrequent['count']}개로 가장 많아요",
+            "${widget.categoryName} 중 ${mostFrequent['name']}가 ${mostFrequent['count']}개로 가장 많아요",
             style: TextStyle(color: Colors.white, fontSize: 14),
           ),
         ),
@@ -294,58 +297,48 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
   }
 }
 
-class ColorDistributionWidget extends StatelessWidget {
+class ColorDistributionWidget extends StatefulWidget {
   final List<Clothes> clothesData;
 
   ColorDistributionWidget({required this.clothesData});
 
   @override
-  Widget build(BuildContext context) {
-    // 컬러별 개수 집계
-    Map<String, int> colorData = {};
-    for (var item in clothesData) {
-      String color = colorContainers
-          .where(
-            (element) {
-              return element.colors.any((element) => element == item.color);
-            },
-          )
-          .first
-          .representativeColorName;
-      colorData[color] = (colorData[color] ?? 0) + 1;
-    }
+  _ColorDistributionWidgetState createState() =>
+      _ColorDistributionWidgetState();
+}
 
-    // 총 개수 계산
-    int totalItems = colorData.values.fold(0, (sum, item) => sum + item);
-    if (totalItems == 0) {
+class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
+  double startDegreeOffset = 0;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(Duration(milliseconds: 100), () {
+        setState(() {
+          startDegreeOffset = 90;
+        });
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorData = _getColorData();
+    if (colorData.isEmpty) {
       return Center(
         child: Text("옷을 더 등록하고 정확한 통계를 확인하세요",
             style: TextStyle(color: Colors.white)),
       );
     }
 
-    // 컬러별 개수를 기준으로 정렬
-    List<MapEntry<String, int>> sortedColors = colorData.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-
-    // 상위 3개 컬러 + 나머지는 '기타'로 묶기
-    List<Map<String, dynamic>> topColors = [];
-    int otherCount = 0;
-    for (int i = 0; i < sortedColors.length; i++) {
-      if (i < 3) {
-        topColors
-            .add({'name': sortedColors[i].key, 'count': sortedColors[i].value});
-      } else {
-        otherCount += sortedColors[i].value;
-      }
-    }
-    if (otherCount > 0) {
-      topColors.add({'name': '기타', 'count': otherCount});
-    }
-
-    // 가장 많은 컬러 찾기
+    final totalItems = colorData.values.fold(0, (sum, item) => sum + item);
+    final topColors = _getTopColors(colorData);
     final mostFrequent = topColors.first;
-    double mostFrequentPercentage = (mostFrequent['count'] / totalItems) * 100;
+    final mostFrequentPercentage = (mostFrequent['count'] / totalItems) * 100;
+    final mostFrequentCategoryData =
+        _getMostFrequentCategory(mostFrequent['name']);
+    final mostFrequentCategory = mostFrequentCategoryData["category"];
+    final mostFrequentCategoryCount = mostFrequentCategoryData["count"];
 
     return Container(
       width: 320,
@@ -358,64 +351,38 @@ class ColorDistributionWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 제목
-          Text(
-            "컬러 분포",
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-          SizedBox(height: 10),
-
-          // 원형 차트 (애니메이션 없음)
-          SizedBox(
-            height: 150,
-            child: PieChart(
-              curve: Curves.easeOut,
-              duration: Duration(milliseconds: 2000),
-              PieChartData(
-                sections: _generatePieChartSections(topColors, totalItems),
-                borderData: FlBorderData(show: false),
-                sectionsSpace: 2,
-                centerSpaceRadius: 40,
+          Text("컬러 분포",
+              style: OneLineTextStyles.Bold18.copyWith(color: Colors.white)),
+          SizedBox(height: 20),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 160,
+                height: 150,
+                child: PieChart(
+                  curve: Curves.easeOut,
+                  duration: Duration(milliseconds: 2000),
+                  PieChartData(
+                    sections: _generatePieChartSections(topColors, totalItems),
+                    borderData: FlBorderData(show: false),
+                    sectionsSpace: 2,
+                    startDegreeOffset: startDegreeOffset,
+                    centerSpaceRadius: 40,
+                  ),
+                ),
               ),
-            ),
+              SizedBox(width: 30),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: topColors.map(_buildColorRow).toList(),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 10),
-
-          // 컬러별 개수 리스트
-          Column(
-            children: topColors.map((entry) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: (entry['name'] == "기타")
-                          ? Colors.white
-                          : ClothesColor.fromName(colorContainers
-                                  .firstWhere((element) =>
-                                      element.representativeColorName ==
-                                      entry['name'])
-                                  .representativeColor
-                                  .name)
-                              .color,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    "${entry['name']} ${entry['count']}",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              );
-            }).toList(),
-          ),
-
-          SizedBox(height: 10),
-
-          // 설명 텍스트
+          SizedBox(height: 30),
           Container(
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
             decoration: BoxDecoration(
@@ -429,7 +396,7 @@ class ColorDistributionWidget extends StatelessWidget {
                   style: TextStyle(color: Colors.white, fontSize: 14),
                 ),
                 Text(
-                  "${mostFrequent['name']} 옷 중 상의의 NN%로 가장 많아요",
+                  "${mostFrequent['name']} 옷 중 ${mostFrequentCategory}가 ${mostFrequentCategoryCount}개로 가장 많아요",
                   style: TextStyle(color: Colors.white, fontSize: 14),
                 ),
               ],
@@ -440,11 +407,65 @@ class ColorDistributionWidget extends StatelessWidget {
     );
   }
 
-  /// 원형 차트 데이터 생성 (애니메이션 제거)
+  Map<String, int> _getColorData() {
+    Map<String, int> colorData = {};
+    for (var item in widget.clothesData) {
+      String color = colorContainers
+          .firstWhere((element) => element.colors.contains(item.color))
+          .representativeColorName;
+      colorData[color] = (colorData[color] ?? 0) + 1;
+    }
+    return colorData;
+  }
+
+  List<Map<String, dynamic>> _getTopColors(Map<String, int> colorData) {
+    List<MapEntry<String, int>> sortedColors = colorData.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    List<Map<String, dynamic>> topColors = [];
+    int otherCount = 0;
+    for (int i = 0; i < sortedColors.length; i++) {
+      if (i < 3) {
+        topColors
+            .add({'name': sortedColors[i].key, 'count': sortedColors[i].value});
+      } else {
+        otherCount += sortedColors[i].value;
+      }
+    }
+    if (otherCount > 0) {
+      topColors.add({'name': '기타', 'count': otherCount});
+    }
+    return topColors;
+  }
+
+  Map<String, dynamic> _getMostFrequentCategory(String color) {
+    List<String> categories = widget.clothesData
+        .where((item) =>
+            colorContainers
+                .firstWhere((element) => element.colors.contains(item.color))
+                .representativeColorName ==
+            color)
+        .map((item) => firstCategories
+            .firstWhere((element) => element.id == (item.primaryCategoryId))
+            .name)
+        .toList();
+
+    Map<String, int> categoryCount = {};
+    for (var category in categories) {
+      categoryCount[category] = (categoryCount[category] ?? 0) + 1;
+    }
+    final mostFrequentEntry =
+        categoryCount.entries.reduce((a, b) => a.value > b.value ? a : b);
+    return {
+      "category": mostFrequentEntry.key,
+      "count": mostFrequentEntry.value
+    };
+  }
+
   List<PieChartSectionData> _generatePieChartSections(
       List<Map<String, dynamic>> colorData, int totalItems) {
     return colorData.map((entry) {
-      double percentage = (entry['count'] / totalItems) * 100; // 애니메이션 없이 바로 표시
+      double percentage = (entry['count'] / totalItems) * 100;
       return PieChartSectionData(
         value: percentage,
         color: (entry['name'] == "기타")
@@ -459,5 +480,31 @@ class ColorDistributionWidget extends StatelessWidget {
         title: "",
       );
     }).toList();
+  }
+
+  Widget _buildColorRow(Map<String, dynamic> entry) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: (entry['name'] == "기타")
+                ? Colors.white
+                : ClothesColor.fromName(colorContainers
+                        .firstWhere((element) =>
+                            element.representativeColorName == entry['name'])
+                        .representativeColor
+                        .name)
+                    .color,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        SizedBox(width: 8),
+        Text("${entry['name']} ${entry['count']}",
+            style: OneLineTextStyles.Medium14.copyWith(color: Colors.white)),
+      ],
+    );
   }
 }
