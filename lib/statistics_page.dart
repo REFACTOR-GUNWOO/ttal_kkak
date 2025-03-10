@@ -57,22 +57,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
           child: Column(children: [
         SizedBox(height: 20),
         Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-              SvgPicture.asset(
-                "assets/icons/statistics_page_icon.svg",
-              ),
-              Text('옷장 분석 결과 당신은...',
-                  style: BodyTextStyles.Regular16.copyWith(
-                      color: SystemColors.black)),
-              SizedBox(
-                  child: Text('파랑 중독자 이군요!',
-                      textAlign: TextAlign.center,
-                      style: BodyTextStyles.Bold24.copyWith(
-                          color: SystemColors.black)))
-            ])),
+            child: StatisticsTitleWidget(
+          clothes: clothesData,
+        )),
         // Container(
         //     margin: EdgeInsets.symmetric(horizontal: 20),
         //     height: 50,
@@ -101,7 +88,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
         ColorDistributionWidget(
           clothesData: clothesData,
-        )
+        ),
+        DarknessDistributionWidget(clothesData: clothesData), // Add new widget
       ])),
     );
   }
@@ -217,10 +205,32 @@ class CategoryStatisticsWidget extends StatefulWidget {
 class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
   @override
   Widget build(BuildContext context) {
-    // 가장 많은 개수를 가진 항목 찾기
+    // Sort the data by count in descending order
     List<Map<String, dynamic>> sortedData = List.from(widget.categoryData);
     sortedData.sort((a, b) => b['count'].compareTo(a['count']));
-    final mostFrequent = sortedData.first;
+
+    // Limit to top 5 categories, group the rest into "기타"
+    List<Map<String, dynamic>> displayData = [];
+    int otherCount = 0;
+
+    for (int i = 0; i < sortedData.length; i++) {
+      if (i < 5) {
+        // Add the top 5 categories to displayData
+        displayData.add(sortedData[i]);
+      } else {
+        // Sum the counts of the remaining categories into "기타"
+        otherCount += sortedData[i]['count'] as int;
+      }
+    }
+
+    // Add "기타" category if there are more than 5 categories
+    if (otherCount > 0 || displayData.length < 6) {
+      // Include "기타" even if otherCount is 0 to ensure 5 bars if less than 5 categories
+      displayData.add({'name': '기타', 'count': otherCount > 0 ? otherCount : 0});
+    }
+
+    // Find the most frequent item among the displayed categories
+    final mostFrequent = displayData.first;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -236,15 +246,25 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
               child: BarChart(
                 BarChartData(
                   alignment: BarChartAlignment.spaceAround,
-                  maxY: mostFrequent['count'] + 2.0, // 최대값보다 약간 여유 추가
-                  barGroups: sortedData.map((data) {
+                  maxY: mostFrequent['count']
+                      .toDouble(), // Set maxY to the highest count
+                  barGroups: displayData.map((data) {
+                    final count = data['count'] as int;
+                    // Ensure a minimum height of 1.0 for visibility
+                    final effectiveHeight = count > 0 ? count.toDouble() : 1.0;
+                    // Determine if this bar is the most frequent (1st place)
+                    final isMostFrequent = displayData.indexOf(data) == 0;
                     return BarChartGroupData(
-                      x: sortedData.indexOf(data),
+                      x: displayData.indexOf(data),
                       barRods: [
                         BarChartRodData(
-                          toY: data['count'].toDouble() *
-                              animationValue, // 애니메이션 값 적용
-                          color: Colors.grey[400],
+                          toY: effectiveHeight * animationValue, // 애니메이션 값 적용
+                          color: isMostFrequent
+                              ? Colors
+                                  .blue // Blue for the most frequent category
+                              : data['name'].startsWith('기타')
+                                  ? Colors.grey[600] // Darker grey for "기타"
+                                  : Colors.grey[400], // Default grey for others
                           width: 15,
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -256,18 +276,45 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
                         AxisTitles(sideTitles: SideTitles(showTitles: false)),
                     rightTitles:
                         AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    topTitles:
-                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          final counts =
+                              displayData.map((data) => data['count']).toList();
+                          return value.toInt() < counts.length
+                              ? Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Text(
+                                    counts[value.toInt()].toString(),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                )
+                              : const SizedBox.shrink();
+                        },
+                      ),
+                    ),
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
                         getTitlesWidget: (value, meta) {
                           return Text(
-                            sortedData[value.toInt()]['name'],
+                            displayData[value.toInt()]['name'],
                             style: TextStyle(color: Colors.white, fontSize: 12),
                           );
                         },
                       ),
+                    ),
+                  ),
+                  barTouchData: BarTouchData(
+                    touchTooltipData: BarTouchTooltipData(
+                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                        return BarTooltipItem(
+                          rod.toY.round().toString(),
+                          TextStyle(color: Colors.white, fontSize: 12),
+                        );
+                      },
                     ),
                   ),
                   borderData: FlBorderData(show: false),
@@ -505,6 +552,238 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
         Text("${entry['name']} ${entry['count']}",
             style: OneLineTextStyles.Medium14.copyWith(color: Colors.white)),
       ],
+    );
+  }
+}
+
+class DarknessDistributionWidget extends StatefulWidget {
+  final List<Clothes> clothesData;
+
+  DarknessDistributionWidget({required this.clothesData});
+
+  @override
+  _DarknessDistributionWidgetState createState() =>
+      _DarknessDistributionWidgetState();
+}
+
+class _DarknessDistributionWidgetState
+    extends State<DarknessDistributionWidget> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  // Calculate the count of dark and light colors
+  Map<String, int> _getDarknessDistribution() {
+    int darkCount = 0;
+    int lightCount = 0;
+
+    for (var item in widget.clothesData) {
+      ClothesColor color = item.color;
+      if (color.darkness >= 500) {
+        darkCount++;
+      } else {
+        lightCount++;
+      }
+    }
+
+    return {
+      '진한톤': darkCount,
+      '밝은톤': lightCount,
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final darknessDistribution = _getDarknessDistribution();
+    if (darknessDistribution.values.every((count) => count == 0)) {
+      return Center(
+        child: Text("옷을 더 등록하고 정확한 통계를 확인하세요",
+            style: TextStyle(color: Colors.white)),
+      );
+    }
+
+    // Find the maximum count for scaling the chart
+    final maxCount =
+        darknessDistribution.values.reduce((a, b) => a > b ? a : b) + 2.0;
+
+    return Container(
+      width: 320,
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white, width: 1),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text("진하기 분포",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
+          SizedBox(height: 20),
+          SizedBox(
+            height: 150,
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.spaceAround,
+                maxY: maxCount, // Set max Y based on the highest count
+                barGroups: darknessDistribution.entries.map((entry) {
+                  return BarChartGroupData(
+                    x: darknessDistribution.keys.toList().indexOf(entry.key),
+                    barRods: [
+                      BarChartRodData(
+                        toY: entry.value.toDouble(),
+                        color: entry.key == '진한톤'
+                            ? Colors.grey[700]
+                            : Colors.grey[300],
+                        width: 70,
+                        borderRadius: BorderRadius.circular(4),
+                        backDrawRodData: BackgroundBarChartRodData(
+                          show: true,
+                          toY: maxCount,
+                          color: Colors.grey[800]!.withOpacity(0.3),
+                        ),
+                      ),
+                    ],
+                    // showingTooltipIndicators: [0],
+                  );
+                }).toList(),
+                titlesData: FlTitlesData(
+                  leftTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                    showTitles: true,
+                    getTitlesWidget: (value, meta) {
+                      final labels = darknessDistribution.values.toList();
+                      return value.toInt() < labels.length
+                          ? Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Text(
+                                labels[value.toInt()].toString(),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ),
+                            )
+                          : const SizedBox.shrink();
+                    },
+                  )),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        final labels = darknessDistribution.keys.toList();
+                        return value.toInt() < labels.length
+                            ? Text(
+                                labels[value.toInt()],
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              )
+                            : const SizedBox.shrink();
+                      },
+                    ),
+                  ),
+                ),
+                borderData: FlBorderData(show: false),
+                gridData: FlGridData(show: false),
+              ),
+            ),
+          ),
+          SizedBox(height: 30),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.grey[800],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              children: [
+                Text(
+                  "진한 컬러의 옷이 ${darknessDistribution['진한톤']}개로 가장 많아요.",
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StatisticsTitleWidget extends StatelessWidget {
+  final List<Clothes> clothes;
+  final String? displayMessage;
+
+  StatisticsTitleWidget({required this.clothes, this.displayMessage});
+
+  // Count the number of clothes per category
+
+  // Determine the display message based on the table logic
+  String _getDisplayMessage() {
+    return "파랑중독자";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final message = displayMessage ?? _getDisplayMessage();
+
+    return Container(
+      padding: EdgeInsets.all(16),
+      color: Colors.grey[900],
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Bear Icon
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.blue,
+                ),
+                child: Icon(
+                  Icons.pets, // Placeholder for bear icon
+                  color: Colors.brown,
+                  size: 24,
+                ),
+              ),
+              SizedBox(width: 16),
+              // Placeholder Image (X shape)
+            ],
+          ),
+          SizedBox(height: 16),
+          // Title Text
+          Text(
+            "옷장 분석 결과 당신은",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 8),
+          // Hashtag Result Text
+          SizedBox(height: 16),
+          // Display Message
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            color: Colors.grey[800],
+            child: Text(
+              message,
+              style: TextStyle(color: Colors.white, fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -267,114 +267,115 @@ enum ShoesHill with ClothesDetail {
 
 enum ClothesColor {
   // 흑백 계열
-  lightBlack(Color(0xFF282828), 'Light Black'),
-  black(Color(0xFF161616), 'Black'),
-  white(Color(0xFFFFFFFF), 'White'),
-  warmWhite(Color(0xFFF2EFEB), 'Warm White'),
-  coolWhite(Color(0xFFE7E7E7), 'Cool White'),
+  lightBlack(Color(0xFF282828), 'Light Black', 600),
+  black(Color(0xFF161616), 'Black', 800),
+  white(Color(0xFFFFFFFF), 'White', 0),
+  warmWhite(Color(0xFFF2EFEB), 'Warm White', 50),
+  coolWhite(Color(0xFFE7E7E7), 'Cool White', 50),
 
   // 회색 계열
-  gray50(Color(0xFFE2E2E2), 'Gray 50'),
-  gray100(Color(0xFFC4C4C4), 'Gray 100'),
-  gray500(Color(0xFF8D8D8D), 'Gray 500'),
-  gray600(Color(0xFF606060), 'Gray 600'),
-  gray800(Color(0xFF4D4C4C), 'Gray 800'),
+  gray50(Color(0xFFE2E2E2), 'Gray 50', 50),
+  gray100(Color(0xFFC4C4C4), 'Gray 100', 100),
+  gray500(Color(0xFF8D8D8D), 'Gray 500', 500),
+  gray600(Color(0xFF606060), 'Gray 600', 600),
+  gray800(Color(0xFF4D4C4C), 'Gray 800', 800),
 
   // 빨강 계열
-  red50(Color(0xFFE8C9C9), 'Red 50'),
-  red100(Color(0xFFDBA5A5), 'Red 100'),
-  red500(Color(0xFFB37171), 'Red 500'),
-  red600(Color(0xFF8C3737), 'Red 600'),
-  red800(Color(0xFF6B1E1E), 'Red 800'),
+  red50(Color(0xFFE8C9C9), 'Red 50', 50),
+  red100(Color(0xFFDBA5A5), 'Red 100', 100),
+  red500(Color(0xFFB37171), 'Red 500', 500),
+  red600(Color(0xFF8C3737), 'Red 600', 600),
+  red800(Color(0xFF6B1E1E), 'Red 800', 800),
 
   // 주황 계열
-  orange50(Color(0xFFEDD6CA), 'Orange 50'),
-  orange100(Color(0xFFE4B198), 'Orange 100'),
-  orange500(Color(0xFFD48E6A), 'Orange 500'),
-  orange600(Color(0xFFA76443), 'Orange 600'),
-  orange800(Color(0xFF9C4B22), 'Orange 800'),
+  orange50(Color(0xFFEDD6CA), 'Orange 50', 50),
+  orange100(Color(0xFFE4B198), 'Orange 100', 100),
+  orange500(Color(0xFFD48E6A), 'Orange 500', 500),
+  orange600(Color(0xFFA76443), 'Orange 600', 600),
+  orange800(Color(0xFF9C4B22), 'Orange 800', 800),
 
   // 노랑 계열
-  yellow50(Color(0xFFF1ECD6), 'Yellow 50'),
-  yellow100(Color(0xFFF0E3A3), 'Yellow 100'),
-  yellow500(Color(0xFFE4D58B), 'Yellow 500'),
-  yellow600(Color(0xFFC4A151), 'Yellow 600'),
-  yellow800(Color(0xFFAA770E), 'Yellow 800'),
+  yellow50(Color(0xFFF1ECD6), 'Yellow 50', 50),
+  yellow100(Color(0xFFF0E3A3), 'Yellow 100', 100),
+  yellow500(Color(0xFFE4D58B), 'Yellow 500', 500),
+  yellow600(Color(0xFFC4A151), 'Yellow 600', 600),
+  yellow800(Color(0xFFAA770E), 'Yellow 800', 800),
 
   // 베이지 계열
-  beige50(Color(0xFFEFEBE3), 'Beige 50'),
-  beige100(Color(0xFFDBD0BF), 'Beige 100'),
-  beige500(Color(0xFFD8C6A9), 'Beige 500'),
-  beige600(Color(0xFFB29A75), 'Beige 600'),
-  beige800(Color(0xFF847151), 'Beige 800'),
+  beige50(Color(0xFFEFEBE3), 'Beige 50', 50),
+  beige100(Color(0xFFDBD0BF), 'Beige 100', 100),
+  beige500(Color(0xFFD8C6A9), 'Beige 500', 500),
+  beige600(Color(0xFFB29A75), 'Beige 600', 600),
+  beige800(Color(0xFF847151), 'Beige 800', 800),
 
   // 라이트 그린 계열
-  lightGreen50(Color(0xFFE3ECDD), 'Light Green 50'),
-  lightGreen100(Color(0xFFCFDEC7), 'Light Green 100'),
-  lightGreen500(Color(0xFF7FA77F), 'Light Green 500'),
-  lightGreen600(Color(0xFF68A168), 'Light Green 600'),
-  lightGreen800(Color(0xFF467346), 'Light Green 800'),
+  lightGreen50(Color(0xFFE3ECDD), 'Light Green 50', 50),
+  lightGreen100(Color(0xFFCFDEC7), 'Light Green 100', 100),
+  lightGreen500(Color(0xFF7FA77F), 'Light Green 500', 500),
+  lightGreen600(Color(0xFF68A168), 'Light Green 600', 600),
+  lightGreen800(Color(0xFF467346), 'Light Green 800', 800),
 
   // 그린 계열
-  green50(Color(0xFFD3DFCB), 'Green 50'),
-  green100(Color(0xFF9FB294), 'Green 100'),
-  green500(Color(0xFF627762), 'Green 500'),
-  green600(Color(0xFF3D513D), 'Green 600'),
-  green800(Color(0xFF323632), 'Green 800'),
+  green50(Color(0xFFD3DFCB), 'Green 50', 50),
+  green100(Color(0xFF9FB294), 'Green 100', 100),
+  green500(Color(0xFF627762), 'Green 500', 500),
+  green600(Color(0xFF3D513D), 'Green 600', 600),
+  green800(Color(0xFF323632), 'Green 800', 800),
 
   // 라이트 블루 계열
-  lightBlue50(Color(0xFFDBE7ED), 'Light Blue 50'),
-  lightBlue100(Color(0xFFADCAD8), 'Light Blue 100'),
-  lightBlue500(Color(0xFF5C8DBD), 'Light Blue 500'),
-  lightBlue600(Color(0xFF304F85), 'Light Blue 600'),
-  lightBlue800(Color(0xFF193462), 'Light Blue 800'),
+  lightBlue50(Color(0xFFDBE7ED), 'Light Blue 50', 50),
+  lightBlue100(Color(0xFFADCAD8), 'Light Blue 100', 100),
+  lightBlue500(Color(0xFF5C8DBD), 'Light Blue 500', 500),
+  lightBlue600(Color(0xFF304F85), 'Light Blue 600', 600),
+  lightBlue800(Color(0xFF193462), 'Light Blue 800', 800),
 
   // 블루 계열
-  blue50(Color(0xFFC5CFDA), 'Blue 50'),
-  blue100(Color(0xFF8095A9), 'Blue 100'),
-  blue500(Color(0xFF43617F), 'Blue 500'),
-  blue600(Color(0xFF32485D), 'Blue 600'),
-  blue800(Color(0xFF293744), 'Blue 800'),
+  blue50(Color(0xFFC5CFDA), 'Blue 50', 50),
+  blue100(Color(0xFF8095A9), 'Blue 100', 100),
+  blue500(Color(0xFF43617F), 'Blue 500', 500),
+  blue600(Color(0xFF32485D), 'Blue 600', 600),
+  blue800(Color(0xFF293744), 'Blue 800', 800),
 
   // 퍼플 계열
-  purple50(Color(0xFFE7E1F1), 'Purple 50'),
-  purple100(Color(0xFFC9BDE1), 'Purple 100'),
-  purple500(Color(0xFF9987BD), 'Purple 500'),
-  purple600(Color(0xFF5C4588), 'Purple 600'),
-  purple800(Color(0xFF504588), 'Purple 800'),
+  purple50(Color(0xFFE7E1F1), 'Purple 50', 50),
+  purple100(Color(0xFFC9BDE1), 'Purple 100', 100),
+  purple500(Color(0xFF9987BD), 'Purple 500', 500),
+  purple600(Color(0xFF5C4588), 'Purple 600', 600),
+  purple800(Color(0xFF504588), 'Purple 800', 800),
 
   // 쿨 핑크 계열
-  coolPink50(Color(0xFFE8D8E8), 'Cool Pink 50'),
-  coolPink100(Color(0xFFD8B9D8), 'Cool Pink 100'),
-  coolPink500(Color(0xFFAC6BAC), 'Cool Pink 500'),
-  coolPink600(Color(0xFF854473), 'Cool Pink 600'),
-  coolPink800(Color(0xFF5B2D4E), 'Cool Pink 800'),
+  coolPink50(Color(0xFFE8D8E8), 'Cool Pink 50', 50),
+  coolPink100(Color(0xFFD8B9D8), 'Cool Pink 100', 100),
+  coolPink500(Color(0xFFAC6BAC), 'Cool Pink 500', 500),
+  coolPink600(Color(0xFF854473), 'Cool Pink 600', 600),
+  coolPink800(Color(0xFF5B2D4E), 'Cool Pink 800', 800),
 
   // 웜 핑크 계열
-  warmPink50(Color(0xFFE6CBD3), 'Warm Pink 50'),
-  warmPink100(Color(0xFFE1B5C2), 'Warm Pink 100'),
-  warmPink500(Color(0xFFBE7187), 'Warm Pink 500'),
-  warmPink600(Color(0xFFA04D65), 'Warm Pink 600'),
-  warmPink800(Color(0xFF722B3F), 'Warm Pink 800'),
+  warmPink50(Color(0xFFE6CBD3), 'Warm Pink 50', 50),
+  warmPink100(Color(0xFFE1B5C2), 'Warm Pink 100', 100),
+  warmPink500(Color(0xFFBE7187), 'Warm Pink 500', 500),
+  warmPink600(Color(0xFFA04D65), 'Warm Pink 600', 600),
+  warmPink800(Color(0xFF722B3F), 'Warm Pink 800', 800),
 
   // 웜 브라운 계열
-  warmBrown50(Color(0xFFE8DDD7), 'Warm Brown 50'),
-  warmBrown100(Color(0xFFD2B8A9), 'Warm Brown 100'),
-  warmBrown500(Color(0xFFA17257), 'Warm Brown 500'),
-  warmBrown600(Color(0xFF79513A), 'Warm Brown 600'),
-  warmBrown800(Color(0xFF593416), 'Warm Brown 800'),
+  warmBrown50(Color(0xFFE8DDD7), 'Warm Brown 50', 50),
+  warmBrown100(Color(0xFFD2B8A9), 'Warm Brown 100', 100),
+  warmBrown500(Color(0xFFA17257), 'Warm Brown 500', 500),
+  warmBrown600(Color(0xFF79513A), 'Warm Brown 600', 600),
+  warmBrown800(Color(0xFF593416), 'Warm Brown 800', 800),
 
   // 다크 브라운 계열
-  darkBrown50(Color(0xFFDDD4D0), 'Dark Brown 50'),
-  darkBrown100(Color(0xFFC5B9B2), 'Dark Brown 100'),
-  darkBrown500(Color(0xFF89766B), 'Dark Brown 500'),
-  darkBrown600(Color(0xFF5B483D), 'Dark Brown 600'),
-  darkBrown800(Color(0xFF3C2F28), 'Dark Brown 800');
+  darkBrown50(Color(0xFFDDD4D0), 'Dark Brown 50', 50),
+  darkBrown100(Color(0xFFC5B9B2), 'Dark Brown 100', 100),
+  darkBrown500(Color(0xFF89766B), 'Dark Brown 500', 500),
+  darkBrown600(Color(0xFF5B483D), 'Dark Brown 600', 600),
+  darkBrown800(Color(0xFF3C2F28), 'Dark Brown 800', 800);
 
   final Color color;
   final String name;
+  final int darkness; // Added darkness field
 
-  const ClothesColor(this.color, this.name);
+  const ClothesColor(this.color, this.name, this.darkness);
 
   static List<ClothesColor> get all => values.toList();
 
@@ -383,6 +384,10 @@ enum ClothesColor {
 
   static ClothesColor fromName(String name) =>
       all.firstWhere((c) => c.name == name, orElse: () => white);
+
+  // Optional: Method to get colors by darkness level
+  static List<ClothesColor> getByDarkness(int darknessLevel) =>
+      all.where((c) => c.darkness == darknessLevel).toList();
 }
 
 List<Clothes> generateDummyClothes() {
@@ -2049,40 +2054,40 @@ class ColorContainer {
 }
 
 final List<ColorContainer> colorContainers = [
-  ColorContainer(
-      [ClothesColor.lightBlack, ClothesColor.black], ClothesColor.lightBlack
-      ,"검정색"),
+  ColorContainer([ClothesColor.lightBlack, ClothesColor.black],
+      ClothesColor.lightBlack, "검정색"),
   ColorContainer(
       [ClothesColor.white, ClothesColor.warmWhite, ClothesColor.coolWhite],
-      ClothesColor.white,"흰색"),
+      ClothesColor.white,
+      "흰색"),
   ColorContainer([
     ClothesColor.gray50,
     ClothesColor.gray100,
     ClothesColor.gray500,
     ClothesColor.gray600,
     ClothesColor.gray800
-  ], ClothesColor.gray500,"회색"),
+  ], ClothesColor.gray500, "회색"),
   ColorContainer([
     ClothesColor.red50,
     ClothesColor.red100,
     ClothesColor.red500,
     ClothesColor.red600,
     ClothesColor.red800
-  ], ClothesColor.red500,"빨간색"),
+  ], ClothesColor.red500, "빨간색"),
   ColorContainer([
     ClothesColor.orange50,
     ClothesColor.orange100,
     ClothesColor.orange500,
     ClothesColor.orange600,
     ClothesColor.orange800
-  ], ClothesColor.orange500,"주황색"),
+  ], ClothesColor.orange500, "주황색"),
   ColorContainer([
     ClothesColor.yellow50,
     ClothesColor.yellow100,
     ClothesColor.yellow500,
     ClothesColor.yellow600,
     ClothesColor.yellow800
-  ], ClothesColor.yellow500,"노란색"),
+  ], ClothesColor.yellow500, "노란색"),
   ColorContainer([
     ClothesColor.lightGreen50,
     ClothesColor.lightGreen100,
@@ -2110,49 +2115,49 @@ final List<ColorContainer> colorContainers = [
     ClothesColor.blue500,
     ClothesColor.blue600,
     ClothesColor.blue800
-  ], ClothesColor.blue500,"파란색"),
+  ], ClothesColor.blue500, "파란색"),
   ColorContainer([
     ClothesColor.purple50,
     ClothesColor.purple100,
     ClothesColor.purple500,
     ClothesColor.purple600,
     ClothesColor.purple800
-  ], ClothesColor.purple500,"보라색"),
+  ], ClothesColor.purple500, "보라색"),
   ColorContainer([
     ClothesColor.coolPink50,
     ClothesColor.coolPink100,
     ClothesColor.coolPink500,
     ClothesColor.coolPink600,
     ClothesColor.coolPink800
-  ], ClothesColor.coolPink500,"자주색"),
+  ], ClothesColor.coolPink500, "자주색"),
   ColorContainer([
     ClothesColor.warmPink50,
     ClothesColor.warmPink100,
     ClothesColor.warmPink500,
     ClothesColor.warmPink600,
     ClothesColor.warmPink800
-  ], ClothesColor.warmPink500,"핑크색"),
+  ], ClothesColor.warmPink500, "핑크색"),
   ColorContainer([
     ClothesColor.warmBrown50,
     ClothesColor.warmBrown100,
     ClothesColor.warmBrown500,
     ClothesColor.warmBrown600,
     ClothesColor.warmBrown800
-  ], ClothesColor.warmBrown500,"갈색"),
+  ], ClothesColor.warmBrown500, "갈색"),
   ColorContainer([
     ClothesColor.darkBrown50,
     ClothesColor.darkBrown100,
     ClothesColor.darkBrown500,
     ClothesColor.darkBrown600,
     ClothesColor.darkBrown800
-  ], ClothesColor.darkBrown500,"갈색"),
+  ], ClothesColor.darkBrown500, "갈색"),
   ColorContainer([
     ClothesColor.beige50,
     ClothesColor.beige100,
     ClothesColor.beige500,
     ClothesColor.beige600,
     ClothesColor.beige800
-  ], ClothesColor.beige500,"베이지색"),
+  ], ClothesColor.beige500, "베이지색"),
 ];
 
 enum ClothesDraftStatus {
