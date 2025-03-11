@@ -141,11 +141,13 @@ class _ColorPaletteState extends State<ColorPalette> {
         const SizedBox(height: 32),
         if (widget.selectedColorGroup.isNotEmpty)
           ColorPaletteItem(
-              colorContainers: (_selectedColorGroup ??
-                      widget.selectedColorGroup)
-                  .map((color) => ColorContainer(
-                      _selectedColorGroup ?? widget.selectedColorGroup, color, ""))
-                  .toList(),
+              colorContainers:
+                  (_selectedColorGroup ?? widget.selectedColorGroup)
+                      .map((color) => ColorContainer(
+                          _selectedColorGroup ?? widget.selectedColorGroup,
+                          color,
+                          ColorName.BEIGE))
+                      .toList(),
               selectedColorGroup:
                   _selectedColorGroup ?? widget.selectedColorGroup,
               selectedColor: _selectedColor ?? widget.selectedColor,

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +9,7 @@ import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
+import 'package:ttal_kkak/utils/text_formatter.dart';
 
 class StatisticsPage extends StatefulWidget {
   @override
@@ -84,11 +87,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
         CategoryStatisticsContainerWidget(clothesData: clothesData
             // clothesData: clothesData,
             ),
-        SizedBox(height: 10),
+        SizedBox(height: 20),
 
         ColorDistributionWidget(
           clothesData: clothesData,
         ),
+        SizedBox(height: 20),
+
         DarknessDistributionWidget(clothesData: clothesData), // Add new widget
       ])),
     );
@@ -139,7 +144,8 @@ class _CategoryStatisticsContainerWidgetState
     categoryData.sort((a, b) => b['count'].compareTo(a['count']));
 
     return Container(
-      width: 320,
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 20),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[900],
@@ -388,7 +394,8 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
     final mostFrequentCategoryCount = mostFrequentCategoryData["count"];
 
     return Container(
-      width: 320,
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 20),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[900],
@@ -454,10 +461,10 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
     );
   }
 
-  Map<String, int> _getColorData() {
-    Map<String, int> colorData = {};
+  Map<ColorName, int> _getColorData() {
+    Map<ColorName, int> colorData = {};
     for (var item in widget.clothesData) {
-      String color = colorContainers
+      ColorName color = colorContainers
           .firstWhere((element) => element.colors.contains(item.color))
           .representativeColorName;
       colorData[color] = (colorData[color] ?? 0) + 1;
@@ -465,16 +472,18 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
     return colorData;
   }
 
-  List<Map<String, dynamic>> _getTopColors(Map<String, int> colorData) {
-    List<MapEntry<String, int>> sortedColors = colorData.entries.toList()
+  List<Map<String, dynamic>> _getTopColors(Map<ColorName, int> colorData) {
+    List<MapEntry<ColorName, int>> sortedColors = colorData.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
     List<Map<String, dynamic>> topColors = [];
     int otherCount = 0;
     for (int i = 0; i < sortedColors.length; i++) {
       if (i < 3) {
-        topColors
-            .add({'name': sortedColors[i].key, 'count': sortedColors[i].value});
+        topColors.add({
+          'name': sortedColors[i].key.koreanName,
+          'count': sortedColors[i].value
+        });
       } else {
         otherCount += sortedColors[i].value;
       }
@@ -490,7 +499,8 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
         .where((item) =>
             colorContainers
                 .firstWhere((element) => element.colors.contains(item.color))
-                .representativeColorName ==
+                .representativeColorName
+                .koreanName ==
             color)
         .map((item) => firstCategories
             .firstWhere((element) => element.id == (item.primaryCategoryId))
@@ -511,6 +521,7 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
 
   List<PieChartSectionData> _generatePieChartSections(
       List<Map<String, dynamic>> colorData, int totalItems) {
+    print("colorData: $colorData");
     return colorData.map((entry) {
       double percentage = (entry['count'] / totalItems) * 100;
       return PieChartSectionData(
@@ -519,7 +530,8 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
             ? Colors.white
             : ClothesColor.fromName(colorContainers
                     .firstWhere((element) =>
-                        element.representativeColorName == entry['name'])
+                        element.representativeColorName.koreanName ==
+                        entry['name'])
                     .representativeColor
                     .name)
                 .color,
@@ -541,7 +553,8 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
                 ? Colors.white
                 : ClothesColor.fromName(colorContainers
                         .firstWhere((element) =>
-                            element.representativeColorName == entry['name'])
+                            element.representativeColorName.koreanName ==
+                            entry['name'])
                         .representativeColor
                         .name)
                     .color,
@@ -573,29 +586,9 @@ class _DarknessDistributionWidgetState
     super.initState();
   }
 
-  // Calculate the count of dark and light colors
-  Map<String, int> _getDarknessDistribution() {
-    int darkCount = 0;
-    int lightCount = 0;
-
-    for (var item in widget.clothesData) {
-      ClothesColor color = item.color;
-      if (color.darkness >= 500) {
-        darkCount++;
-      } else {
-        lightCount++;
-      }
-    }
-
-    return {
-      '진한톤': darkCount,
-      '밝은톤': lightCount,
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
-    final darknessDistribution = _getDarknessDistribution();
+    final darknessDistribution = _getDarknessDistribution(widget.clothesData);
     if (darknessDistribution.values.every((count) => count == 0)) {
       return Center(
         child: Text("옷을 더 등록하고 정확한 통계를 확인하세요",
@@ -608,7 +601,8 @@ class _DarknessDistributionWidgetState
         darknessDistribution.values.reduce((a, b) => a > b ? a : b) + 2.0;
 
     return Container(
-      width: 320,
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 20),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[900],
@@ -716,6 +710,12 @@ class _DarknessDistributionWidgetState
   }
 }
 
+class DisplayMessage {
+  final String title;
+  final String description;
+  DisplayMessage({required this.title, required this.description});
+}
+
 class StatisticsTitleWidget extends StatelessWidget {
   final List<Clothes> clothes;
   final String? displayMessage;
@@ -725,8 +725,123 @@ class StatisticsTitleWidget extends StatelessWidget {
   // Count the number of clothes per category
 
   // Determine the display message based on the table logic
-  String _getDisplayMessage() {
-    return "파랑중독자";
+  DisplayMessage _getDisplayMessage() {
+    final primaryCategoryCount = <FirstCategory, int>{};
+    final secondCategoryCount = <SecondCategory, int>{};
+    final representativeClothesColorCount = <ColorName, int>{};
+
+    for (var cloth in clothes) {
+      // Count by category
+      final FirstCategory category = firstCategories
+          .firstWhere((element) => element.id == cloth.primaryCategoryId);
+      primaryCategoryCount[category] =
+          (primaryCategoryCount[category] ?? 0) + 1;
+
+      final SecondCategory secondCategory = secondCategories
+          .firstWhere((element) => element.id == cloth.secondaryCategoryId);
+      secondCategoryCount[secondCategory] =
+          (secondCategoryCount[secondCategory] ?? 0) + 1;
+      // Count by color
+      final repreentativeColor = colorContainers
+          .firstWhere((element) => element.colors.contains(cloth.color))
+          .representativeColorName;
+      representativeClothesColorCount[repreentativeColor] =
+          (representativeClothesColorCount[repreentativeColor] ?? 0) + 1;
+    }
+
+    final minimumPrimaryCategory = primaryCategoryCount.entries
+        .where((element) => element.key.code != "outer" && element.value < 3)
+        .fold<MapEntry<FirstCategory, int>?>(
+            null,
+            (prev, element) =>
+                prev == null || element.value < prev.value ? element : prev);
+
+    // if (minimumPrimaryCategory != null) {
+    //   return DisplayMessage(
+    //       title: "${minimumPrimaryCategory.key.name} 미니멀리스트!",
+    //       description:
+    //           "${getPostposition(minimumPrimaryCategory.key.name)} 부족해요. 계절에 맞는 ${getObjectMarker(minimumPrimaryCategory.key.name)} 추가해보세요.");
+    // }
+
+    final topColor = representativeClothesColorCount.entries
+        .fold<MapEntry<ColorName, int>?>(
+            null,
+            (prev, element) =>
+                prev == null || element.value > prev.value ? element : prev);
+
+    // if (topColor != null && topColor.value >= clothes.length * 4 / 10) {
+    //   return DisplayMessage(
+    //       title: "${topColor.key.koreanName}러버",
+    //       description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?");
+    // }
+
+    // if (((representativeClothesColorCount[ColorName.BLACK] ?? 0) +
+    //         (representativeClothesColorCount[ColorName.WHITE] ?? 0) +
+    //         (representativeClothesColorCount[ColorName.GRAY] ?? 0)) >=
+    //     clothes.length * 5 / 10) {
+    //   return DisplayMessage(
+    //       title: "모노톤 러버", description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?");
+    // }
+
+    // final MapEntry<String, int> topDarknessDistribution =
+    //     _getDarknessDistribution(clothes).entries.reduce(
+    //         (prev, element) => element.value > prev.value ? element : prev);
+
+    // if (topDarknessDistribution.value >= clothes.length * 7 / 10) {
+    //   if (topDarknessDistribution.key == "진한톤") {
+    //     return DisplayMessage(
+    //         title: "딥톤 러버", description: "진한 컬러가 많아요. 밝은 컬러를 추가해보는 건 어떨까요?");
+    //   }
+    //   if (topDarknessDistribution.key == "밝은톤") {
+    //     return DisplayMessage(
+    //         title: "파스텔톤 마니아", description: "밝은 컬러가 많아요. 진한 컬러를 추가해보는 건 어떨까요?");
+    //   }
+    // }
+
+    // if (representativeClothesColorCount.entries.length <= 3) {
+    //   return DisplayMessage(
+    //       title: "컬러 미니멀리스트", description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?");
+    // }
+
+    // if (representativeClothesColorCount.entries.length >= 7) {
+    //   return DisplayMessage(
+    //       title: "패션 카멜레온", description: "다양한 컬러가 골고루 있어요! 완벽한 스타일링 가능!");
+    // }
+
+    final topSecondCategoryCount = secondCategoryCount.entries
+        .map((e) => e.value)
+        .toList()
+        .reduce((a, b) => a > b ? a : b);
+
+    final List<MapEntry<SecondCategory, int>> topSecondCategories =
+        secondCategoryCount.entries
+            .where((element) => element.value == topSecondCategoryCount)
+            .toList();
+
+    if (topSecondCategoryCount >= 10) {
+      if (topSecondCategories.length == 1) {
+        return DisplayMessage(
+            title: "${topSecondCategories.first.key.name} 부자!",
+            description:
+                "${topSecondCategories.first.key.name} 부자시네요! 다른 아이템과 매치해서 입어보세요!");
+      }
+
+      if (topSecondCategories.length >= 2) {
+        return DisplayMessage(
+            title: "${topSecondCategories.sublist(0, 2).map(
+              (e) {
+                e.key.name;
+              },
+            ).join(",")} 부자!",
+            description: "${topSecondCategories.sublist(0, 2).map(
+              (e) {
+                e.key.name;
+              },
+            ).join(",")} 부자시네요! 다른 아이템과 매치해서 입어보세요!");
+      }
+    }
+    return DisplayMessage(
+        title: "아직 스타일을 알 수 없어요", description: "옷을 더 등록하고\n스타일 분석 값을 받아보세요");
   }
 
   @override
@@ -734,8 +849,7 @@ class StatisticsTitleWidget extends StatelessWidget {
     final message = displayMessage ?? _getDisplayMessage();
 
     return Container(
-      padding: EdgeInsets.all(16),
-      color: Colors.grey[900],
+      // padding: EdgeInsets.all(16),
       child: Column(
         children: [
           Row(
@@ -750,7 +864,6 @@ class StatisticsTitleWidget extends StatelessWidget {
                 ),
                 child: Icon(
                   Icons.pets, // Placeholder for bear icon
-                  color: Colors.brown,
                   size: 24,
                 ),
               ),
@@ -763,7 +876,7 @@ class StatisticsTitleWidget extends StatelessWidget {
           Text(
             "옷장 분석 결과 당신은",
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -775,15 +888,46 @@ class StatisticsTitleWidget extends StatelessWidget {
           // Display Message
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            color: Colors.grey[800],
             child: Text(
-              message,
-              style: TextStyle(color: Colors.white, fontSize: 12),
+              _getDisplayMessage().title,
+              style: OneLineTextStyles.Bold18,
               textAlign: TextAlign.center,
             ),
           ),
+          Container(
+              child: Text(_getDisplayMessage().description,
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  textAlign: TextAlign.center),
+              width: double.infinity,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.white, width: 1),
+              ))
         ],
       ),
     );
   }
+}
+
+// Calculate the count of dark and light colors
+Map<String, int> _getDarknessDistribution(List<Clothes> clothes) {
+  int darkCount = 0;
+  int lightCount = 0;
+
+  for (var item in clothes) {
+    ClothesColor color = item.color;
+    if (color.darkness >= 500) {
+      darkCount++;
+    } else {
+      lightCount++;
+    }
+  }
+
+  return {
+    '진한톤': darkCount,
+    '밝은톤': lightCount,
+  };
 }
