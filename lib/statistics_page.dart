@@ -726,119 +726,128 @@ class StatisticsTitleWidget extends StatelessWidget {
 
   // Determine the display message based on the table logic
   DisplayMessage _getDisplayMessage() {
-    final primaryCategoryCount = <FirstCategory, int>{};
-    final secondCategoryCount = <SecondCategory, int>{};
-    final representativeClothesColorCount = <ColorName, int>{};
+    try {
+      final primaryCategoryCount = <FirstCategory, int>{};
+      final secondCategoryCount = <SecondCategory, int>{};
+      final representativeClothesColorCount = <ColorName, int>{};
 
-    for (var cloth in clothes) {
-      // Count by category
-      final FirstCategory category = firstCategories
-          .firstWhere((element) => element.id == cloth.primaryCategoryId);
-      primaryCategoryCount[category] =
-          (primaryCategoryCount[category] ?? 0) + 1;
+      for (var cloth in clothes) {
+        // Count by category
+        final FirstCategory category = firstCategories
+            .firstWhere((element) => element.id == cloth.primaryCategoryId);
+        primaryCategoryCount[category] =
+            (primaryCategoryCount[category] ?? 0) + 1;
 
-      final SecondCategory secondCategory = secondCategories
-          .firstWhere((element) => element.id == cloth.secondaryCategoryId);
-      secondCategoryCount[secondCategory] =
-          (secondCategoryCount[secondCategory] ?? 0) + 1;
-      // Count by color
-      final repreentativeColor = colorContainers
-          .firstWhere((element) => element.colors.contains(cloth.color))
-          .representativeColorName;
-      representativeClothesColorCount[repreentativeColor] =
-          (representativeClothesColorCount[repreentativeColor] ?? 0) + 1;
-    }
+        final SecondCategory secondCategory = secondCategories
+            .firstWhere((element) => element.id == cloth.secondaryCategoryId);
+        secondCategoryCount[secondCategory] =
+            (secondCategoryCount[secondCategory] ?? 0) + 1;
+        // Count by color
+        final repreentativeColor = colorContainers
+            .firstWhere((element) => element.colors.contains(cloth.color))
+            .representativeColorName;
+        representativeClothesColorCount[repreentativeColor] =
+            (representativeClothesColorCount[repreentativeColor] ?? 0) + 1;
+      }
 
-    final minimumPrimaryCategory = primaryCategoryCount.entries
-        .where((element) => element.key.code != "outer" && element.value < 3)
-        .fold<MapEntry<FirstCategory, int>?>(
-            null,
-            (prev, element) =>
-                prev == null || element.value < prev.value ? element : prev);
+      final minimumPrimaryCategory = primaryCategoryCount.entries
+          .where((element) => element.key.code != "outer" && element.value < 3)
+          .fold<MapEntry<FirstCategory, int>?>(
+              null,
+              (prev, element) =>
+                  prev == null || element.value < prev.value ? element : prev);
 
-    // if (minimumPrimaryCategory != null) {
-    //   return DisplayMessage(
-    //       title: "${minimumPrimaryCategory.key.name} 미니멀리스트!",
-    //       description:
-    //           "${getPostposition(minimumPrimaryCategory.key.name)} 부족해요. 계절에 맞는 ${getObjectMarker(minimumPrimaryCategory.key.name)} 추가해보세요.");
-    // }
-
-    final topColor = representativeClothesColorCount.entries
-        .fold<MapEntry<ColorName, int>?>(
-            null,
-            (prev, element) =>
-                prev == null || element.value > prev.value ? element : prev);
-
-    // if (topColor != null && topColor.value >= clothes.length * 4 / 10) {
-    //   return DisplayMessage(
-    //       title: "${topColor.key.koreanName}러버",
-    //       description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?");
-    // }
-
-    // if (((representativeClothesColorCount[ColorName.BLACK] ?? 0) +
-    //         (representativeClothesColorCount[ColorName.WHITE] ?? 0) +
-    //         (representativeClothesColorCount[ColorName.GRAY] ?? 0)) >=
-    //     clothes.length * 5 / 10) {
-    //   return DisplayMessage(
-    //       title: "모노톤 러버", description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?");
-    // }
-
-    // final MapEntry<String, int> topDarknessDistribution =
-    //     _getDarknessDistribution(clothes).entries.reduce(
-    //         (prev, element) => element.value > prev.value ? element : prev);
-
-    // if (topDarknessDistribution.value >= clothes.length * 7 / 10) {
-    //   if (topDarknessDistribution.key == "진한톤") {
-    //     return DisplayMessage(
-    //         title: "딥톤 러버", description: "진한 컬러가 많아요. 밝은 컬러를 추가해보는 건 어떨까요?");
-    //   }
-    //   if (topDarknessDistribution.key == "밝은톤") {
-    //     return DisplayMessage(
-    //         title: "파스텔톤 마니아", description: "밝은 컬러가 많아요. 진한 컬러를 추가해보는 건 어떨까요?");
-    //   }
-    // }
-
-    // if (representativeClothesColorCount.entries.length <= 3) {
-    //   return DisplayMessage(
-    //       title: "컬러 미니멀리스트", description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?");
-    // }
-
-    // if (representativeClothesColorCount.entries.length >= 7) {
-    //   return DisplayMessage(
-    //       title: "패션 카멜레온", description: "다양한 컬러가 골고루 있어요! 완벽한 스타일링 가능!");
-    // }
-
-    final topSecondCategoryCount = secondCategoryCount.entries
-        .map((e) => e.value)
-        .toList()
-        .reduce((a, b) => a > b ? a : b);
-
-    final List<MapEntry<SecondCategory, int>> topSecondCategories =
-        secondCategoryCount.entries
-            .where((element) => element.value == topSecondCategoryCount)
-            .toList();
-
-    if (topSecondCategoryCount >= 10) {
-      if (topSecondCategories.length == 1) {
+      if (minimumPrimaryCategory != null) {
         return DisplayMessage(
-            title: "${topSecondCategories.first.key.name} 부자!",
+            title: "${minimumPrimaryCategory.key.name} 미니멀리스트!",
             description:
-                "${topSecondCategories.first.key.name} 부자시네요! 다른 아이템과 매치해서 입어보세요!");
+                "${getPostposition(minimumPrimaryCategory.key.name)} 부족해요. 계절에 맞는 ${getObjectMarker(minimumPrimaryCategory.key.name)} 추가해보세요.");
       }
 
-      if (topSecondCategories.length >= 2) {
+      final topColor = representativeClothesColorCount.entries
+          .fold<MapEntry<ColorName, int>?>(
+              null,
+              (prev, element) =>
+                  prev == null || element.value > prev.value ? element : prev);
+
+      if (topColor != null && topColor.value >= clothes.length * 4 / 10) {
         return DisplayMessage(
-            title: "${topSecondCategories.sublist(0, 2).map(
-              (e) {
-                e.key.name;
-              },
-            ).join(",")} 부자!",
-            description: "${topSecondCategories.sublist(0, 2).map(
-              (e) {
-                e.key.name;
-              },
-            ).join(",")} 부자시네요! 다른 아이템과 매치해서 입어보세요!");
+            title: "${topColor.key.koreanName}러버",
+            description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?");
       }
+
+      if (((representativeClothesColorCount[ColorName.BLACK] ?? 0) +
+              (representativeClothesColorCount[ColorName.WHITE] ?? 0) +
+              (representativeClothesColorCount[ColorName.GRAY] ?? 0)) >=
+          clothes.length * 5 / 10) {
+        return DisplayMessage(
+            title: "모노톤 러버", description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?");
+      }
+
+      final MapEntry<String, int> topDarknessDistribution =
+          _getDarknessDistribution(clothes).entries.reduce(
+              (prev, element) => element.value > prev.value ? element : prev);
+
+      if (topDarknessDistribution.value >= clothes.length * 7 / 10) {
+        if (topDarknessDistribution.key == "진한톤") {
+          return DisplayMessage(
+              title: "딥톤 러버", description: "진한 컬러가 많아요. 밝은 컬러를 추가해보는 건 어떨까요?");
+        }
+        if (topDarknessDistribution.key == "밝은톤") {
+          return DisplayMessage(
+              title: "파스텔톤 마니아",
+              description: "밝은 컬러가 많아요. 진한 컬러를 추가해보는 건 어떨까요?");
+        }
+      }
+
+      if (representativeClothesColorCount.entries.length <= 3) {
+        return DisplayMessage(
+            title: "컬러 미니멀리스트",
+            description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?");
+      }
+
+      if (representativeClothesColorCount.entries.length >= 7) {
+        return DisplayMessage(
+            title: "패션 카멜레온", description: "다양한 컬러가 골고루 있어요! 완벽한 스타일링 가능!");
+      }
+
+      int topSecondCategoryCount = 0;
+      if (secondCategoryCount.isNotEmpty) {
+        topSecondCategoryCount = secondCategoryCount.entries
+            .map((e) => e.value)
+            .toList()
+            .reduce((a, b) => a >= b ? a : b);
+      }
+
+      final List<MapEntry<SecondCategory, int>> topSecondCategories =
+          secondCategoryCount.entries
+              .where((element) => element.value == topSecondCategoryCount)
+              .toList();
+
+      if (topSecondCategoryCount >= 2) {
+        if (topSecondCategories.length == 1) {
+          return DisplayMessage(
+              title: "${topSecondCategories.first.key.name} 부자!",
+              description:
+                  "${topSecondCategories.first.key.name} 부자시네요! 다른 아이템과 매치해서 입어보세요!");
+        }
+
+        if (topSecondCategories.length >= 2) {
+          return DisplayMessage(
+              title: "${topSecondCategories.sublist(0, 2).map(
+                (e) {
+                  return e.key.name;
+                },
+              ).join(",")} 부자!",
+              description: "${topSecondCategories.sublist(0, 2).map(
+                (e) {
+                  return e.key.name;
+                },
+              ).join(",")} 부자시네요! 다른 아이템과 매치해서 입어보세요!");
+        }
+      }
+    } catch (e) {
+      print("error : ${e.toString()}");
     }
     return DisplayMessage(
         title: "아직 스타일을 알 수 없어요", description: "옷을 더 등록하고\n스타일 분석 값을 받아보세요");
