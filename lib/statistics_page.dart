@@ -128,6 +128,14 @@ class _CategoryStatisticsContainerWidgetState
 
     // 카테고리별 개수 집계
     Map<String, int> itemCount = {};
+
+    for (var secondCategory in secondCategories.where(
+      (element) {
+        return element.firstCategoryId == selectedCategory.id;
+      },
+    )) {
+      itemCount[secondCategory.name] = 0;
+    }
     for (var item in filteredData) {
       String categoryName = secondCategories
           .firstWhere((element) => element.id == item.secondaryCategoryId)
@@ -146,11 +154,11 @@ class _CategoryStatisticsContainerWidgetState
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: 20),
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white, width: 1),
+        color: SystemColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: SignatureColors.begie500, width: 1),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -158,28 +166,61 @@ class _CategoryStatisticsContainerWidgetState
           // 카테고리 선택 (좌우 화살표 포함)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                icon: Icon(Icons.chevron_left, color: Colors.white),
-                onPressed: () {
-                  setState(() {
-                    selectedIndex = (selectedIndex - 1 + categories.length) %
-                        categories.length;
-                  });
-                },
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = (selectedIndex - 1 + categories.length) %
+                          categories.length;
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: SystemColors.white,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: SystemColors.gray500, width: 1),
+                    ),
+                    child: Container(
+                        width: 16,
+                        height: 16,
+                        child: SvgPicture.asset(
+                          color: SystemColors.black,
+                          'assets/icons/arrow_left.svg',
+                        )),
+                  )),
+              SizedBox(
+                width: 12,
               ),
               Text(
-                selectedCategory.name,
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                selectedCategory.name + " 카테고리",
+                style: OneLineTextStyles.Bold18,
               ),
-              IconButton(
-                icon: Icon(Icons.chevron_right, color: Colors.white),
-                onPressed: () {
-                  setState(() {
-                    selectedIndex = (selectedIndex + 1) % categories.length;
-                  });
-                },
+              SizedBox(
+                width: 12,
               ),
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = (selectedIndex + 1) % categories.length;
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: SystemColors.white,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: SystemColors.gray500, width: 1),
+                    ),
+                    child: Container(
+                        width: 16,
+                        height: 16,
+                        child: SvgPicture.asset(
+                          color: SystemColors.black,
+                          'assets/icons/arrow_right.svg',
+                        )),
+                  )),
             ],
           ),
 
@@ -241,6 +282,9 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        SizedBox(
+          height: 20,
+        ),
         // 막대 차트 애니메이션 적용
         TweenAnimationBuilder<double>(
           duration: Duration(milliseconds: 500),
@@ -248,7 +292,8 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
           tween: Tween(begin: 0, end: 1), // 0부터 1까지 변화
           builder: (context, animationValue, child) {
             return Container(
-              height: 150,
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              height: 160,
               child: BarChart(
                 BarChartData(
                   alignment: BarChartAlignment.spaceAround,
@@ -257,21 +302,27 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
                   barGroups: displayData.map((data) {
                     final count = data['count'] as int;
                     // Ensure a minimum height of 1.0 for visibility
-                    final effectiveHeight = count > 0 ? count.toDouble() : 1.0;
+                    final effectiveHeight = count > 0 ? count.toDouble() : 0.1;
                     // Determine if this bar is the most frequent (1st place)
                     final isMostFrequent = displayData.indexOf(data) == 0;
+                    print("animationValue: $animationValue");
                     return BarChartGroupData(
+                      showingTooltipIndicators: [0],
                       x: displayData.indexOf(data),
                       barRods: [
                         BarChartRodData(
-                          toY: effectiveHeight * animationValue, // 애니메이션 값 적용
+                          toY: effectiveHeight *
+                              animationValue *
+                              100 /
+                              124, // 애니메이션 값 적용
                           color: isMostFrequent
-                              ? Colors
-                                  .blue // Blue for the most frequent category
+                              ? SignatureColors
+                                  .orange200 // Blue for the most frequent category
                               : data['name'].startsWith('기타')
-                                  ? Colors.grey[600] // Darker grey for "기타"
-                                  : Colors.grey[400], // Default grey for others
-                          width: 15,
+                                  ? SystemColors.gray600 // Darker grey for "기타"
+                                  : SignatureColors
+                                      .begie500, // Default grey for others
+                          width: 24,
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ],
@@ -282,43 +333,42 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
                         AxisTitles(sideTitles: SideTitles(showTitles: false)),
                     rightTitles:
                         AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    topTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          final counts =
-                              displayData.map((data) => data['count']).toList();
-                          return value.toInt() < counts.length
-                              ? Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Text(
-                                    counts[value.toInt()].toString(),
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 12),
-                                  ),
-                                )
-                              : const SizedBox.shrink();
-                        },
-                      ),
-                    ),
+                    topTitles:
+                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
+                        reservedSize: 36,
                         showTitles: true,
                         getTitlesWidget: (value, meta) {
-                          return Text(
-                            displayData[value.toInt()]['name'],
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          );
+                          return Container(
+                              width: 44,
+                              child: Column(children: [
+                                SizedBox(height: 12),
+                                Flexible(
+                                    child: Text(
+                                  displayData[value.toInt()]['name'],
+                                  style: OneLineTextStyles.Medium12,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
+                                  textAlign: TextAlign.center,
+                                ))
+                              ]));
                         },
                       ),
                     ),
                   ),
                   barTouchData: BarTouchData(
                     touchTooltipData: BarTouchTooltipData(
+                      tooltipPadding: EdgeInsets.zero,
+                      fitInsideVertically: true,
+                      tooltipMargin: 4,
+                      getTooltipColor: (group) => Colors.transparent,
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
                         return BarTooltipItem(
                           rod.toY.round().toString(),
-                          TextStyle(color: Colors.white, fontSize: 12),
+                          OneLineTextStyles.Bold14.copyWith(
+                              color: SystemColors.gray900),
                         );
                       },
                     ),
@@ -331,18 +381,22 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
           },
         ),
 
-        SizedBox(height: 10),
+        SizedBox(height: 24),
 
         // 하단 설명 텍스트
         Container(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          width: double.infinity - 40,
+          padding: EdgeInsets.symmetric(
+            vertical: 12,
+          ),
           decoration: BoxDecoration(
-            color: Colors.grey[800],
-            borderRadius: BorderRadius.circular(8),
+            color: SignatureColors.begie200,
+            borderRadius: BorderRadius.circular(6),
           ),
           child: Text(
             "${widget.categoryName} 중 ${mostFrequent['name']}가 ${mostFrequent['count']}개로 가장 많아요",
-            style: TextStyle(color: Colors.white, fontSize: 14),
+            style: BodyTextStyles.Medium12,
+            textAlign: TextAlign.center,
           ),
         ),
       ],
@@ -849,6 +903,7 @@ class StatisticsTitleWidget extends StatelessWidget {
     } catch (e) {
       print("error : ${e.toString()}");
     }
+
     return DisplayMessage(
         title: "아직 스타일을 알 수 없어요", description: "옷을 더 등록하고\n스타일 분석 값을 받아보세요");
   }
@@ -866,17 +921,16 @@ class StatisticsTitleWidget extends StatelessWidget {
             children: [
               // Bear Icon
               Container(
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.blue,
+                  color: SystemColors.white,
                 ),
                 child: Icon(
                   Icons.pets, // Placeholder for bear icon
                   size: 24,
                 ),
               ),
-              SizedBox(width: 16),
               // Placeholder Image (X shape)
             ],
           ),
@@ -884,36 +938,28 @@ class StatisticsTitleWidget extends StatelessWidget {
           // Title Text
           Text(
             "옷장 분석 결과 당신은",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: BodyTextStyles.Regular16,
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 8),
-          // Hashtag Result Text
-          SizedBox(height: 16),
           // Display Message
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Text(
               _getDisplayMessage().title,
-              style: OneLineTextStyles.Bold18,
+              style: BodyTextStyles.Bold24,
               textAlign: TextAlign.center,
             ),
           ),
+          SizedBox(height: 24),
           Container(
               child: Text(_getDisplayMessage().description,
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                  textAlign: TextAlign.center),
+                  style: BodyTextStyles.Medium14, textAlign: TextAlign.center),
               width: double.infinity,
               margin: EdgeInsets.symmetric(horizontal: 20),
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.grey[900],
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white, width: 1),
+                color: SystemColors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: SignatureColors.begie500, width: 1),
               ))
         ],
       ),
