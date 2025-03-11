@@ -175,10 +175,7 @@ class _StepContainerState extends State<StepContainer> {
                   title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Expanded(
-                          flex: 2,
-                          child: Container()
-                        ),
+                        Expanded(flex: 2, child: Container()),
                         Expanded(
                             flex: 2,
                             child: Text(
@@ -209,10 +206,7 @@ class _StepContainerState extends State<StepContainer> {
                                     "button_position": "top"
                                   });
 
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) => MainLayout()),
-                                  );
+                                  Navigator.of(context).pop();
                                 },
                                 child: Text("닫기",
                                     style:
