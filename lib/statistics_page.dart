@@ -85,9 +85,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
         //     ])),
         SizedBox(height: 12),
 
-        CategoryStatisticsContainerWidget(clothesData: clothesData
-            // clothesData: clothesData,
-            ),
+        CategoryStatisticsContainerWidget(clothesData: clothesData),
         SizedBox(height: 12),
 
         ColorDistributionWidget(
@@ -317,8 +315,9 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
               child: BarChart(
                 BarChartData(
                   alignment: BarChartAlignment.spaceAround,
-                  maxY: mostFrequent['count']
-                      .toDouble(), // Set maxY to the highest count
+                  maxY: mostFrequent['count'].toDouble() *
+                      124 /
+                      100, // Set maxY to the highest count
                   barGroups: displayData.map((data) {
                     final count = data['count'] as int;
                     // Ensure a minimum height of 1.0 for visibility
@@ -331,10 +330,7 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
                       x: displayData.indexOf(data),
                       barRods: [
                         BarChartRodData(
-                          toY: effectiveHeight *
-                              animationValue *
-                              100 /
-                              124, // 애니메이션 값 적용
+                          toY: effectiveHeight * animationValue, // 애니메이션 값 적용
                           color: isMostFrequent
                               ? SignatureColors
                                   .orange200 // Blue for the most frequent category
@@ -357,7 +353,7 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
                         AxisTitles(sideTitles: SideTitles(showTitles: false)),
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
-                        reservedSize: 36,
+                        reservedSize: 40,
                         showTitles: true,
                         getTitlesWidget: (value, meta) {
                           return SideTitleWidget(
@@ -365,15 +361,20 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
                               space: 12,
                               child: Container(
                                   width: 44,
-                                  child: Flexible(
-                                      child: Text(
-                                    displayData[value.toInt()]['name'],
-                                    style: OneLineTextStyles.Medium12,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    softWrap: true,
-                                    textAlign: TextAlign.center,
-                                  ))));
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                            child: Text(
+                                          displayData[value.toInt()]['name'],
+                                          style: OneLineTextStyles.Medium12,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: true,
+                                          textAlign: TextAlign.center,
+                                        ))
+                                      ])));
                         },
                       ),
                     ),
@@ -385,6 +386,7 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
                       tooltipMargin: 4,
                       getTooltipColor: (group) => Colors.transparent,
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                        print("rod.toY: ${rod.toY}");
                         return BarTooltipItem(
                           rod.toY.round().toString(),
                           OneLineTextStyles.Bold14.copyWith(
@@ -751,7 +753,7 @@ class _DarknessDistributionWidgetState
                 child: BarChart(
                   BarChartData(
                     alignment: BarChartAlignment.spaceAround,
-                    maxY: maxCount.toDouble(),
+                    maxY: maxCount.toDouble() / 94 * 116,
                     barGroups: darknessDistribution.entries.map((entry) {
                       return BarChartGroupData(
                         x: darknessDistribution.keys
@@ -761,9 +763,7 @@ class _DarknessDistributionWidgetState
                         barRods: [
                           BarChartRodData(
                             toY: entry.value.toDouble() *
-                                animationValue *
-                                94 /
-                                116, // ✅ 애니메이션 반영
+                                animationValue, // ✅ 애니메이션 반영
                             color: entry.key == '진한톤'
                                 ? SignatureColors.begie800
                                 : SignatureColors.begie300,
@@ -857,14 +857,17 @@ class DisplayMessage {
       this.showAddClothesButton = false});
 }
 
-class StatisticsTitleWidget extends StatelessWidget {
+class StatisticsTitleWidget extends StatefulWidget {
   final List<Clothes> clothes;
   final String? displayMessage;
 
   StatisticsTitleWidget({required this.clothes, this.displayMessage});
 
-  // Count the number of clothes per category
+  @override
+  _StatisticsTitleWidgetState createState() => _StatisticsTitleWidgetState();
+}
 
+class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
   // Determine the display message based on the table logic
   DisplayMessage _getDisplayMessage() {
     try {
@@ -872,7 +875,7 @@ class StatisticsTitleWidget extends StatelessWidget {
       final secondCategoryCount = <SecondCategory, int>{};
       final representativeClothesColorCount = <ColorName, int>{};
 
-      for (var cloth in clothes) {
+      for (var cloth in widget.clothes) {
         // Count by category
         final FirstCategory category = firstCategories
             .firstWhere((element) => element.id == cloth.primaryCategoryId);
@@ -912,7 +915,8 @@ class StatisticsTitleWidget extends StatelessWidget {
               (prev, element) =>
                   prev == null || element.value > prev.value ? element : prev);
 
-      if (topColor != null && topColor.value >= clothes.length * 4 / 10) {
+      if (topColor != null &&
+          topColor.value >= widget.clothes.length * 4 / 10) {
         return DisplayMessage(
             title: "${topColor.key.koreanName}러버",
             description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?",
@@ -922,7 +926,7 @@ class StatisticsTitleWidget extends StatelessWidget {
       if (((representativeClothesColorCount[ColorName.BLACK] ?? 0) +
               (representativeClothesColorCount[ColorName.WHITE] ?? 0) +
               (representativeClothesColorCount[ColorName.GRAY] ?? 0)) >=
-          clothes.length * 5 / 10) {
+          widget.clothes.length * 5 / 10) {
         return DisplayMessage(
             title: "모노톤 러버",
             description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?",
@@ -930,10 +934,10 @@ class StatisticsTitleWidget extends StatelessWidget {
       }
 
       final MapEntry<String, int> topDarknessDistribution =
-          _getDarknessDistribution(clothes).entries.reduce(
+          _getDarknessDistribution(widget.clothes).entries.reduce(
               (prev, element) => element.value > prev.value ? element : prev);
 
-      if (topDarknessDistribution.value >= clothes.length * 7 / 10) {
+      if (topDarknessDistribution.value >= widget.clothes.length * 7 / 10) {
         if (topDarknessDistribution.key == "진한톤") {
           return DisplayMessage(
               title: "딥톤 러버",
@@ -1061,12 +1065,18 @@ class StatisticsTitleWidget extends StatelessWidget {
                     ),
                     message.showAddClothesButton
                         ? GestureDetector(
-                            onTap: () {
-                              final res = Navigator.of(context).push(
+                            onTap: () async {
+                              final res = await Navigator.push(
+                                context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        AddClothesPage(isUpdate: false)),
+                                    builder: (context) => AddClothesPage(
+                                          isUpdate: false,
+                                        )), // 이동할 페이지
                               );
+                              print("res: $res");
+                              if (res == 'refresh') {
+                                setState(() {}); // 기존 페이지 리프레시
+                              }
                             },
                             child: Container(
                               padding: EdgeInsets.all(10),

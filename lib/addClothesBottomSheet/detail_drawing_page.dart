@@ -327,7 +327,9 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                           "isUpdate": widget.isUpdate.toString(),
                         });
 
-                        Navigator.pop(context);
+                        Navigator.pop(
+                          context,
+                        );
                       },
                       child: Padding(
                           padding: EdgeInsets.all(10),
@@ -351,8 +353,9 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                       Provider.of<ReloadHomeProvider>(context, listen: false)
                           .triggerReload(),
                       showToast(widget.isUpdate ? "수정되었습니다" : "등록되었습니다"),
-                      Navigator.of(context).pop(),
-                      Navigator.of(context).pop(),
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => MainLayout()),
+                      )
                     },
                     child: Text(
                       '저장',

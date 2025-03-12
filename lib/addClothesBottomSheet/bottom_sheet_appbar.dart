@@ -117,7 +117,10 @@ class BottomSheetAppBar extends StatelessWidget {
                               "button_position": "bottom"
                             });
                             showToast(isUpdate ? "수정되었습니다" : "등록되었습니다");
-                            Navigator.of(context).pop();
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => MainLayout()),
+                            );
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,

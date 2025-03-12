@@ -206,7 +206,10 @@ class _StepContainerState extends State<StepContainer> {
                                     "button_position": "top"
                                   });
 
-                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => MainLayout()),
+                                  );
                                 },
                                 child: Text("닫기",
                                     style:
