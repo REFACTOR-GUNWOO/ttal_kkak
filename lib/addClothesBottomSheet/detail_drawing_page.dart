@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/provider/reload_home_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
+import 'package:ttal_kkak/utils/ui_utils.dart';
 
 import 'draft_clear_warning_dialog.dart';
 
@@ -304,6 +306,8 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
     });
   }
 
+  // 바텀 패딩을 가져오는 유틸리티 함수
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -363,82 +367,85 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                   ),
                 ],
               ))),
-      bottomNavigationBar: Container(
-        height: brushContainerHeight,
-        color: Colors.transparent,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0), // 양쪽 여백을 설정
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10.0),
-                        topRight: Radius.circular(10.0),
+      bottomNavigationBar: Column(mainAxisSize: MainAxisSize.min, children: [
+        Container(
+          height: brushContainerHeight,
+          color: Colors.transparent,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0), // 양쪽 여백을 설정
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          topRight: Radius.circular(10.0),
+                        ),
+                      ),
+                      height: brushContainerHeight,
+                      width: double.infinity,
+                    ),
+                    Container(
+                      width: 200,
+                      height: brushContainerHeight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ...pencilInfos.asMap().entries.map((e) {
+                            return Pencil(
+                              color: brushColor,
+                              width: e.value.width,
+                              isExpanded: _expandedIndex == e.key,
+                              onTap: () => _selectPencil(e.key),
+                            );
+                          }),
+                          Eraser(
+                            onTap: () => _selectErase(),
+                            isExpanded: _isErasing,
+                          )
+                        ],
                       ),
                     ),
-                    height: brushContainerHeight,
-                    width: double.infinity,
-                  ),
-                  Container(
-                    width: 200,
-                    height: brushContainerHeight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        ...pencilInfos.asMap().entries.map((e) {
-                          return Pencil(
-                            color: brushColor,
-                            width: e.value.width,
-                            isExpanded: _expandedIndex == e.key,
-                            onTap: () => _selectPencil(e.key),
-                          );
-                        }),
-                        Eraser(
-                          onTap: () => _selectErase(),
-                          isExpanded: _isErasing,
-                        )
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                      top: 14,
-                      right: 14,
-                      child: GestureDetector(
-                        onTap: () {
-                          LogService().log(
-                              LogType.click_button,
-                              "detail_drawing_page",
-                              "drawing_color_setting_button", {
-                            "isUpdate": widget.isUpdate.toString(),
-                          });
-                          _showColorPicker(context);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.white, // 테두리 색상
-                                width: 3.0, // 테두리 두께
-                              ),
-                              color: brushColor.color,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0))),
-                          width: 32,
-                          height: 32,
-                        ),
-                      ))
-                ],
-              ),
-            ],
+                    Positioned(
+                        top: 14,
+                        right: 14,
+                        child: GestureDetector(
+                          onTap: () {
+                            LogService().log(
+                                LogType.click_button,
+                                "detail_drawing_page",
+                                "drawing_color_setting_button", {
+                              "isUpdate": widget.isUpdate.toString(),
+                            });
+                            _showColorPicker(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.white, // 테두리 색상
+                                  width: 3.0, // 테두리 두께
+                                ),
+                                color: brushColor.color,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0))),
+                            width: 32,
+                            height: 32,
+                          ),
+                        ))
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-      ),
+        SizedBox(height: getBottomPadding(context)),
+      ]),
       body: Stack(children: [
         GestureDetector(
             child: SingleChildScrollView(
@@ -696,6 +703,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                   ]),
             ))
       ]),
+      resizeToAvoidBottomInset: false,
     );
   }
 
@@ -976,7 +984,7 @@ class Pencil extends StatelessWidget {
           AnimatedContainer(
               duration: Duration(milliseconds: 300),
               curve: Curves.easeInOut,
-              height: isExpanded ? 80 : 62,
+              height: (isExpanded ? 80 : 62),
               color: Colors.blue,
               child: Container(
                 height: 62,

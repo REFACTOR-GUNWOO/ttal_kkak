@@ -132,15 +132,11 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
             SettingPage(), // 설정 페이지
           ],
         ),
-        bottomNavigationBar: ClipRRect(
-            child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40), // 블러 효과 설정
-                child: Container(
+        bottomNavigationBar:  SafeArea(child:Container(
                     color: SignatureColors.begie500.withOpacity(0.5), // 반투명 배경
                     child: Padding(
                       padding: const EdgeInsets.only(left: 42, right: 30),
                       child: SizedBox(
-                        height: 82,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -249,7 +245,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-                    )))));
+                    ))));
   }
 
   @override

@@ -155,6 +155,7 @@ class _ClothesGridState extends State<ClothesGrid>
     Clothes clothes,
   ) {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       elevation: 10,
       barrierColor: Colors.transparent,
