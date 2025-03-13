@@ -1,8 +1,13 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 
 class LogService {
   Future<void> log(LogType type, String screenName, String? buttonName,
       Map<String, Object> parameters) async {
+    if (kDebugMode) {
+      print('kDebugMode $type, $screenName, $buttonName, $parameters');
+      return;
+    }
     if (type == LogType.click_button && buttonName == null) {
       throw ArgumentError('buttonName must not be null');
     }

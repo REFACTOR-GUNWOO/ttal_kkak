@@ -26,7 +26,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
       List<Clothes> loadedClothes = await ClothesRepository().loadClothes();
 
       setState(() {
-        clothesData = loadedClothes;
+        clothesData =
+            loadedClothes.where((element) => !element.isDraft).toList();
       });
     });
   }
@@ -297,6 +298,47 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
     // Find the most frequent item among the displayed categories
     final mostFrequent = displayData.first;
 
+    String _getMostFrequentItemsText() {
+      // 가장 많은 개수 찾기
+
+      final maxCount = displayData.first['count'];
+
+      // 카테고리 내 전체 옷 수 계산
+      final totalCount =
+          displayData.fold(0, (sum, item) => sum + (item['count'] as int));
+
+      if (totalCount == 0) {
+        return "${getObjectMarker(widget.categoryName)} 더 등록하고 정확한 통계를 확인하세요";
+      }
+
+      print("totalCount: ${totalCount}");
+      // 백분율 계산 (소수점 제거)
+      final percentValue =
+          totalCount > 0 ? ((maxCount as int) * 100 / totalCount).round() : 0;
+
+      // 동일한 최대 개수를 가진 항목들 모두 찾기
+      final mostFrequentItems = displayData
+          .where((item) => item['count'] == maxCount && item['name'] != '기타')
+          .map((item) => item['name'])
+          .toList();
+
+      String itemsText;
+      if (mostFrequentItems.length == 1) {
+        // 가장 많은 항목이 하나만 있는 경우
+        itemsText = "${getPostposition(mostFrequentItems[0])}";
+      } else if (mostFrequentItems.length == 2) {
+        // 가장 많은 항목이 두 개인 경우
+        itemsText =
+            "${getPostposition("${mostFrequentItems[0]}, ${mostFrequentItems[1]}")}";
+      } else {
+        // 가장 많은 항목이 세 개 이상인 경우
+        itemsText =
+            "${mostFrequentItems[0]}, ${mostFrequentItems[1]} 외 ${mostFrequentItems.length - 2}이";
+      }
+
+      return "${widget.categoryName} 중 ${itemsText} 각 ${percentValue}%로 가장 많아요";
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -323,7 +365,8 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
                     // Ensure a minimum height of 1.0 for visibility
                     final effectiveHeight = count > 0 ? count.toDouble() : 0.1;
                     // Determine if this bar is the most frequent (1st place)
-                    final isMostFrequent = displayData.indexOf(data) == 0;
+                    final isMostFrequent =
+                        count == mostFrequent['count'] && count != 0;
                     print("animationValue: $animationValue");
                     return BarChartGroupData(
                       showingTooltipIndicators: [0],
@@ -416,7 +459,7 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
             borderRadius: BorderRadius.circular(6),
           ),
           child: Text(
-            "${widget.categoryName} 중 ${mostFrequent['name']}가 ${mostFrequent['count']}개로 가장 많아요",
+            _getMostFrequentItemsText(),
             style: BodyTextStyles.Medium12,
             textAlign: TextAlign.center,
           ),
@@ -424,6 +467,8 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
       ],
     );
   }
+
+  // 가장 많은 항목들을 표시하는 텍스트 생성
 }
 
 class ColorDistributionWidget extends StatefulWidget {
@@ -464,10 +509,13 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
     final topColors = _getTopColors(colorData);
     final mostFrequent = topColors.first;
     final mostFrequentPercentage = (mostFrequent['count'] / totalItems) * 100;
+
+    // 카테고리 정보를 백분율과 함께 가져오도록 수정
     final mostFrequentCategoryData =
         _getMostFrequentCategory(mostFrequent['name']);
     final mostFrequentCategory = mostFrequentCategoryData["category"];
     final mostFrequentCategoryCount = mostFrequentCategoryData["count"];
+    final mostFrequentCategoryPercent = mostFrequentCategoryData["percent"];
 
     return Container(
       width: double.infinity,
@@ -508,10 +556,10 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
                   ),
                   SizedBox(width: 32),
                   Container(
-                    height: 116,
+                    height: 140,
                     width: 108,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: topColors.map(_buildColorRow).toList(),
                     ),
@@ -529,13 +577,13 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
             child: Column(
               children: [
                 Text(
-                  "${mostFrequent['name']} 옷이 ${mostFrequentPercentage.toStringAsFixed(1)}%로 가장 많아요",
+                  "${mostFrequent['name']} 옷이 ${mostFrequentPercentage.toStringAsFixed(0)}%로 가장 많아요",
                   style: BodyTextStyles.Medium12,
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 4),
                 Text(
-                  "${mostFrequent['name']} 옷 중 ${mostFrequentCategory}가 ${mostFrequentCategoryCount}개로 가장 많아요",
+                  "${mostFrequent['name']} 옷 중 ${mostFrequentCategory}가 ${mostFrequentCategoryPercent}%로 가장 많아요",
                   style: BodyTextStyles.Medium12,
                   textAlign: TextAlign.center,
                 ),
@@ -581,27 +629,39 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
   }
 
   Map<String, dynamic> _getMostFrequentCategory(String color) {
-    List<String> categories = widget.clothesData
+    // 해당 색상의 옷만 필터링
+    List<Clothes> colorClothes = widget.clothesData
         .where((item) =>
             colorContainers
                 .firstWhere((element) => element.colors.contains(item.color))
                 .representativeColorName
                 .koreanName ==
             color)
-        .map((item) => firstCategories
-            .firstWhere((element) => element.id == (item.primaryCategoryId))
-            .name)
         .toList();
 
+    // 카테고리별로 분류
     Map<String, int> categoryCount = {};
-    for (var category in categories) {
-      categoryCount[category] = (categoryCount[category] ?? 0) + 1;
+    for (var item in colorClothes) {
+      String categoryName = firstCategories
+          .firstWhere((element) => element.id == (item.primaryCategoryId))
+          .name;
+      categoryCount[categoryName] = (categoryCount[categoryName] ?? 0) + 1;
     }
+
+    // 가장 많은 카테고리 찾기
     final mostFrequentEntry =
         categoryCount.entries.reduce((a, b) => a.value > b.value ? a : b);
+
+    // 전체 개수에 대한 백분율 계산
+    final totalCount = colorClothes.length;
+    final percent = totalCount > 0
+        ? ((mostFrequentEntry.value / totalCount) * 100).round()
+        : 0;
+
     return {
       "category": mostFrequentEntry.key,
-      "count": mostFrequentEntry.value
+      "count": mostFrequentEntry.value,
+      "percent": percent
     };
   }
 
@@ -663,34 +723,36 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
   }
 
   Widget _buildColorRow(Map<String, dynamic> entry) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Container(
-          width: 17,
-          height: 17,
-          decoration: BoxDecoration(
-            color: (entry['name'] == "기타")
-                ? SystemColors.gray700
-                : ClothesColor.fromName(colorContainers
-                        .firstWhere((element) =>
-                            element.representativeColorName.koreanName ==
-                            entry['name'])
-                        .representativeColor
-                        .name)
-                    .color,
-            borderRadius: BorderRadius.circular(4),
-            border: (entry['name'] == "흰색")
-                ? Border.all(color: SystemColors.gray700, width: 1)
-                : null,
-          ),
-        ),
-        SizedBox(width: 8),
-        Text("${entry['name']} ${entry['count']}",
-            style:
-                OneLineTextStyles.Bold14.copyWith(color: SystemColors.black)),
-      ],
-    );
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: 17,
+              height: 17,
+              decoration: BoxDecoration(
+                color: (entry['name'] == "기타")
+                    ? SystemColors.gray700
+                    : ClothesColor.fromName(colorContainers
+                            .firstWhere((element) =>
+                                element.representativeColorName.koreanName ==
+                                entry['name'])
+                            .representativeColor
+                            .name)
+                        .color,
+                borderRadius: BorderRadius.circular(4),
+                border: (entry['name'] == "흰색")
+                    ? Border.all(color: SystemColors.gray700, width: 1)
+                    : null,
+              ),
+            ),
+            SizedBox(width: 8),
+            Text("${entry['name']} ${entry['count']}",
+                style: OneLineTextStyles.Bold14.copyWith(
+                    color: SystemColors.black)),
+          ],
+        ));
   }
 }
 
@@ -724,6 +786,29 @@ class _DarknessDistributionWidgetState
     // Find the maximum count for scaling the chart
     final maxCount =
         darknessDistribution.values.reduce((a, b) => a > b ? a : b);
+
+    // 전체 옷 개수 계산
+    final totalCount =
+        darknessDistribution.values.fold(0, (sum, count) => sum + count);
+
+    // 가장 많은 톤 찾기
+    final mostFrequentTone = darknessDistribution.entries
+        .reduce((a, b) => a.value > b.value ? a : b);
+
+    // 백분율 계산 (반올림)
+    final percentValue = totalCount > 0
+        ? ((mostFrequentTone.value / totalCount) * 100).round()
+        : 0;
+
+    // 표시할 메시지 생성
+    String message;
+    if (darknessDistribution['진한톤']! > darknessDistribution['밝은톤']!) {
+      message = "진한톤의 옷이 ${percentValue}%로 가장 많아요";
+    } else if (darknessDistribution['밝은톤']! > darknessDistribution['진한톤']!) {
+      message = "밝은톤의 옷이 ${percentValue}%로 가장 많아요";
+    } else {
+      message = "진한톤과 밝은톤의 옷이 각 50%로 균형있게 있어요";
+    }
 
     return Container(
       width: double.infinity,
@@ -834,7 +919,7 @@ class _DarknessDistributionWidgetState
             child: Column(
               children: [
                 Text(
-                  "진한 컬러의 옷이 ${darknessDistribution['진한톤']}개로 가장 많아요.",
+                  message,
                   style: BodyTextStyles.Medium12,
                   textAlign: TextAlign.center,
                 ),
