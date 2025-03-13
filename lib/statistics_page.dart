@@ -8,6 +8,7 @@ import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/log_service.dart';
+import 'package:ttal_kkak/repositories/display_message_repository.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/utils/text_formatter.dart';
@@ -62,9 +63,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
           child: Column(children: [
         SizedBox(height: 12),
         Center(
-            child: StatisticsTitleWidget(
-          clothes: clothesData,
-        )),
+            child: clothesData.length == 0
+                ? Container()
+                : StatisticsTitleWidget(
+                    clothes: clothesData,
+                  )),
         // Container(
         //     margin: EdgeInsets.symmetric(horizontal: 20),
         //     height: 50,
@@ -615,7 +618,7 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
     for (int i = 0; i < sortedColors.length; i++) {
       if (i < 3) {
         topColors.add({
-          'name': sortedColors[i].key.koreanName,
+          'name': sortedColors[i].key.fullKoreanName,
           'count': sortedColors[i].value
         });
       } else {
@@ -635,7 +638,7 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
             colorContainers
                 .firstWhere((element) => element.colors.contains(item.color))
                 .representativeColorName
-                .koreanName ==
+                .fullKoreanName ==
             color)
         .toList();
 
@@ -705,7 +708,7 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
               ? SystemColors.gray700
               : ClothesColor.fromName(colorContainers
                       .firstWhere((element) =>
-                          element.representativeColorName.koreanName ==
+                          element.representativeColorName.fullKoreanName ==
                           entry['name'])
                       .representativeColor
                       .name)
@@ -736,7 +739,8 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
                     ? SystemColors.gray700
                     : ClothesColor.fromName(colorContainers
                             .firstWhere((element) =>
-                                element.representativeColorName.koreanName ==
+                                element
+                                    .representativeColorName.fullKoreanName ==
                                 entry['name'])
                             .representativeColor
                             .name)
@@ -932,16 +936,6 @@ class _DarknessDistributionWidgetState
   }
 }
 
-class DisplayMessage {
-  final String title;
-  final String description;
-  final bool showAddClothesButton;
-  DisplayMessage(
-      {required this.title,
-      required this.description,
-      this.showAddClothesButton = false});
-}
-
 class StatisticsTitleWidget extends StatefulWidget {
   final List<Clothes> clothes;
   final String? displayMessage;
@@ -953,8 +947,33 @@ class StatisticsTitleWidget extends StatefulWidget {
 }
 
 class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
+  DisplayMessage message = DisplayMessage.unknown();
+
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      print('ClothesItem initState');
+      DisplayMessage _message = await _getDisplayMessage();
+      DisplayMessage? savedMessage =
+          await DisplayMessageRepository().getLatestMessage();
+      if (savedMessage == null ||
+          (_message.analysisType != savedMessage.analysisType)) {
+        int a = await DisplayMessageRepository().insertMessage(_message);
+        print("inserted message id: $a");
+        setState(() {
+          message = _message;
+        });
+      } else {
+        setState(() {
+          message = savedMessage;
+        });
+      }
+    });
+  }
+
   // Determine the display message based on the table logic
-  DisplayMessage _getDisplayMessage() {
+  Future<DisplayMessage> _getDisplayMessage() async {
     try {
       final primaryCategoryCount = <FirstCategory, int>{};
       final secondCategoryCount = <SecondCategory, int>{};
@@ -986,12 +1005,43 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
               (prev, element) =>
                   prev == null || element.value < prev.value ? element : prev);
 
+      if (widget.clothes.length <= 15) {
+        final List<String> titles = [
+          "미니멀리스트",
+          "맨몸 패셔니스타",
+          "돌려입기 마스터",
+          "미니멀 끝판왕"
+        ];
+
+        final List<String> descriptions = ["가지고 있는 옷이 매우 적은 편인 것 같아요!"];
+        final List<String> addClothesDescriptions = [
+          "옷을 더 등록하면 정확한 결과를 확인할 수 있어요",
+          "아직 옷을 등록 중이시겠죠?\n더 등록하고 정확한 유형을 확인하세요",
+          "이렇게 옷이 적으실리 없어요!\n옷을 더 등록해 주세요🥲"
+        ];
+        return DisplayMessage.of(titles, descriptions, addClothesDescriptions,
+            ClosetAnalysisType.clothingCountLow);
+      }
+
       if (minimumPrimaryCategory != null) {
-        return DisplayMessage(
-            title: "${minimumPrimaryCategory.key.name} 미니멀리스트!",
-            description:
-                "${getPostposition(minimumPrimaryCategory.key.name)} 부족해요. 계절에 맞는 ${getObjectMarker(minimumPrimaryCategory.key.name)} 추가해보세요.",
-            showAddClothesButton: true);
+        final List<String> titles = [
+          "${minimumPrimaryCategory.key.name} 미니멀리스트",
+          "${minimumPrimaryCategory.key.name} 무소유",
+          "작고 귀여운 ${minimumPrimaryCategory.key.name}",
+          "${minimumPrimaryCategory.key.name} 자리 고비"
+        ];
+
+        final List<String> descriptions = [
+          "가지고 있는 ${getPostposition(minimumPrimaryCategory.key.name)} 매우 적으신 편인 것 같아요!"
+        ];
+
+        final List<String> addClothesDescriptions = [
+          "혹시 가지고 있는 ${getObjectMarker(minimumPrimaryCategory.key.name)} 덜 등록하신 건 아닐까요?👀",
+          "서둘러 ${getObjectMarker(minimumPrimaryCategory.key.name)} 더 등록해보세요🥲"
+        ];
+
+        return DisplayMessage.of(titles, descriptions, addClothesDescriptions,
+            ClosetAnalysisType.primaryCategoryClothesCountLow);
       }
 
       final topColor = representativeClothesColorCount.entries
@@ -1002,20 +1052,44 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
 
       if (topColor != null &&
           topColor.value >= widget.clothes.length * 4 / 10) {
-        return DisplayMessage(
-            title: "${topColor.key.koreanName}러버",
-            description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?",
-            showAddClothesButton: true);
+        final List<String> titles = [
+          "${topColor.key.englishName} 러버",
+          "${topColor.key.englishName} 중독자",
+          "${topColor.key.englishName} 매니아",
+          "${topColor.key.englishName} 사랑꾼",
+          "${topColor.key.englishName} 수집가"
+        ];
+
+        final List<String> descriptions = [
+          "${topColor.key.shortKoreanName} 옷을 엄청 많이 가지고 계시군요?"
+        ];
+
+        final List<String> addClothesDescriptions = [
+          "혹시 다른 색깔 옷은 더 없으신 건가요...?",
+          "분명 다른 색깔 옷을 덜 등록하신 걸 거예요!\n아닌가요...?🥲"
+        ];
+
+        return DisplayMessage.of(titles, descriptions, addClothesDescriptions,
+            ClosetAnalysisType.colorDominant);
       }
 
       if (((representativeClothesColorCount[ColorName.BLACK] ?? 0) +
               (representativeClothesColorCount[ColorName.WHITE] ?? 0) +
               (representativeClothesColorCount[ColorName.GRAY] ?? 0)) >=
           widget.clothes.length * 5 / 10) {
-        return DisplayMessage(
-            title: "모노톤 러버",
-            description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?",
-            showAddClothesButton: true);
+        final List<String> titles = ["흑백 사진관", "수묵담채화"];
+
+        final List<String> descriptions = [
+          "모노톤을 좋아하시군요? 대부분 흰색, 검정색, 회색 옷이에요!"
+        ];
+
+        final List<String> addClothesDescriptions = [
+          "혹시 다른 색깔 옷은 더 없으신 건가요...?",
+          "컬러감 있는 옷 분명 더 있으실 거예요🥲"
+        ];
+
+        return DisplayMessage.of(titles, descriptions, addClothesDescriptions,
+            ClosetAnalysisType.monochromeDominant);
       }
 
       final MapEntry<String, int> topDarknessDistribution =
@@ -1024,29 +1098,75 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
 
       if (topDarknessDistribution.value >= widget.clothes.length * 7 / 10) {
         if (topDarknessDistribution.key == "진한톤") {
-          return DisplayMessage(
-              title: "딥톤 러버",
-              description: "진한 컬러가 많아요. 밝은 컬러를 추가해보는 건 어떨까요?",
-              showAddClothesButton: true);
+          final List<String> darkToneTitles = ["다크나이트", "어두컴컴 애호가"];
+
+          final List<String> darkToneDescriptions = [
+            "어두운 톤의 옷을 70% 이상 가지고 계시군요?"
+          ];
+
+          final List<String> darkToneAddClothesDescriptions = [
+            "혹시 밝은 옷은\n정말 없으신 건가요...?👀",
+            "잊고 있었던 밝은 옷을\n더 등록해 주세요!"
+          ];
+
+          return DisplayMessage.of(
+              darkToneTitles,
+              darkToneDescriptions,
+              darkToneAddClothesDescriptions,
+              ClosetAnalysisType.darkToneDominant);
         }
         if (topDarknessDistribution.key == "밝은톤") {
-          return DisplayMessage(
-              title: "파스텔톤 마니아",
-              description: "밝은 컬러가 많아요. 진한 컬러를 추가해보는 건 어떨까요?",
-              showAddClothesButton: true);
+          final List<String> brightToneTitles = ["파스텔톤 마니아", "봄날의 햇살"];
+
+          final List<String> brightToneDescriptions = [
+            "밝은 톤의 옷을 70% 이상 가지고 계시군요?"
+          ];
+
+          final List<String> brightToneAddClothesDescriptions = [
+            "혹시 등록하지 못한 어두운 톤의 옷 없나요?👀",
+            "잊고 있었던 어두운 옷을 더 등록해 주세요!"
+          ];
+          return DisplayMessage.of(
+              brightToneTitles,
+              brightToneDescriptions,
+              brightToneAddClothesDescriptions,
+              ClosetAnalysisType.lightToneDominant);
         }
       }
 
       if (representativeClothesColorCount.entries.length <= 3) {
-        return DisplayMessage(
-            title: "컬러 미니멀리스트",
-            description: "색상이 단조로워요. 새로운 컬러를 추가해보는 건 어떨까요?",
-            showAddClothesButton: true);
+        final List<String> minimalColorTitles = ["컬러 미니멀리스트", "단색주의자"];
+
+        final List<String> minimalColorDescriptions = ["가지고 있는 컬러가 많이 적으시네요!"];
+
+        final List<String> minimalColorAddClothesDescriptions = [
+          "정말 다른 색깔 옷은 더 없으신 건가요...?👀",
+          "분명 생각하지 못한 다른 색 옷이 있을 거예요!"
+        ];
+
+        return DisplayMessage.of(
+            minimalColorTitles,
+            minimalColorDescriptions,
+            minimalColorAddClothesDescriptions,
+            ClosetAnalysisType.colorLimited);
       }
 
       if (representativeClothesColorCount.entries.length >= 7) {
-        return DisplayMessage(
-            title: "패션 카멜레온", description: "다양한 컬러가 골고루 있어요! 완벽한 스타일링 가능!");
+        final List<String> minimalColorTitles = ["카멜레온", "보기 힘든 무지개"];
+
+        final List<String> minimalColorDescriptions = [
+          "가지고 있는 옷 컬러가\n정말 다양하시군요!!"
+        ];
+
+        final List<String> minimalColorAddClothesDescriptions = [
+          "옷을 더 등록하고\n옷 부자 결과를 받아보세요💪🏻"
+        ];
+
+        return DisplayMessage.of(
+            minimalColorTitles,
+            minimalColorDescriptions,
+            minimalColorAddClothesDescriptions,
+            ClosetAnalysisType.colorDominant);
       }
 
       int topSecondCategoryCount = 0;
@@ -1064,40 +1184,74 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
 
       if (topSecondCategoryCount >= 2) {
         if (topSecondCategories.length == 1) {
-          return DisplayMessage(
-              title: "${topSecondCategories.first.key.name} 부자!",
-              description:
-                  "${topSecondCategories.first.key.name} 부자시네요! 다른 아이템과 매치해서 입어보세요!");
+          final List<String> categoryCollectorTitles = [
+            "${topSecondCategories.first.key.name} 만수르",
+            "${topSecondCategories.first.key.name} 콜렉터",
+            "${topSecondCategories.first.key.name} 수집가"
+          ];
+
+          final List<String> categoryCollectorDescriptions = [
+            "${topSecondCategories.first.key.name}가 엄청 많으시군요?"
+          ];
+
+          final List<String> categoryCollectorAddClothesDescriptions = [
+            "혹시 다른 ${topSecondCategories.first.key.name} 종류를\n덜 등록하신 건 아닐까요?👀",
+            "${topSecondCategories.first.key.name} 말고 다른 옷을\n떠올려보세요 👀"
+          ];
+          return DisplayMessage.of(
+              categoryCollectorTitles,
+              categoryCollectorDescriptions,
+              categoryCollectorAddClothesDescriptions,
+              ClosetAnalysisType.secondCategoryClothesCountHigh);
         }
 
         if (topSecondCategories.length >= 2) {
-          return DisplayMessage(
-              title: "${topSecondCategories.sublist(0, 2).map(
-                (e) {
-                  return e.key.name;
-                },
-              ).join(",")} 부자!",
-              description: "${topSecondCategories.sublist(0, 2).map(
-                (e) {
-                  return e.key.name;
-                },
-              ).join(",")} 부자시네요! 다른 아이템과 매치해서 입어보세요!");
+          final topSecnodCategoryText = topSecondCategories.sublist(0, 2).map(
+            (e) {
+              return e.key.name;
+            },
+          ).join(",");
+          final List<String> categoryCollectorTitles = [
+            "${topSecnodCategoryText} 만수르",
+            "${topSecnodCategoryText} 콜렉터",
+            "${topSecnodCategoryText} 수집가"
+          ];
+
+          final List<String> categoryCollectorDescriptions = [
+            "${topSecnodCategoryText}가 엄청 많으시군요?"
+          ];
+
+          final List<String> categoryCollectorAddClothesDescriptions = [
+            "혹시 다른 ${topSecnodCategoryText} 종류를\n덜 등록하신 건 아닐까요?👀",
+            "${topSecnodCategoryText} 말고 다른 옷을\n떠올려보세요 👀"
+          ];
+
+          return DisplayMessage.of(
+              categoryCollectorTitles,
+              categoryCollectorDescriptions,
+              categoryCollectorAddClothesDescriptions,
+              ClosetAnalysisType.secondCategoriesClothesCountHigh);
         }
       }
     } catch (e) {
       print("error : ${e.toString()}");
     }
 
-    return DisplayMessage(
-        title: "아직 스타일을 알 수 없어요",
-        description: "옷을 더 등록하고\n스타일 분석 값을 받아보세요",
-        showAddClothesButton: true);
+    final List<String> unknownStyleTitles = ["아직 스타일을 알 수 없어요"];
+
+    final List<String> unknownStyleDescriptions = ["우리에겐 아직 미스터리한 당신"];
+
+    final List<String> unknownStyleAddClothesDescriptions = [
+      "옷을 조금만 더 등록해\n저희에게 힌트를 주세요🥲",
+      "옷을 더 등록해서 정확한\n분석 결과를 받아보세요💪🏻"
+    ];
+
+    return DisplayMessage.of(unknownStyleTitles, unknownStyleDescriptions,
+        unknownStyleAddClothesDescriptions, ClosetAnalysisType.unknownStyle);
   }
 
   @override
   Widget build(BuildContext context) {
-    final message = _getDisplayMessage();
-
     return Container(
       // padding: EdgeInsets.all(16),
       child: Column(
@@ -1128,20 +1282,28 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
             textAlign: TextAlign.center,
           ),
           // Display Message
-          Container(
-            child: Text(
-              _getDisplayMessage().title,
-              style: BodyTextStyles.Bold24,
-              textAlign: TextAlign.center,
-            ),
+          SizedBox(height: 8),
+
+          Text(
+            message.title,
+            style: BodyTextStyles.Bold24,
+            textAlign: TextAlign.center,
           ),
+          SizedBox(height: 8),
+
+          Text(
+            message.description,
+            style: BodyTextStyles.Medium16,
+            textAlign: TextAlign.center,
+          ),
+
           SizedBox(height: 24),
           Container(
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Text(_getDisplayMessage().description,
+                      child: Text(message.addClothesDescription,
                           style: BodyTextStyles.Medium14,
                           textAlign: TextAlign.left),
                     ),

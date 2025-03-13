@@ -2046,22 +2046,25 @@ List<Clothes> generateDummyClothes() {
 
 // 색상 이름 Enum 추가
 enum ColorName {
-  BLACK('검정색'),
-  WHITE('흰색'),
-  GRAY('회색'),
-  RED('빨간색'),
-  ORANGE('주황색'),
-  YELLOW('노란색'),
-  GREEN('초록색'),
-  BLUE('파란색'),
-  PURPLE('보라색'),
-  MAGENTA('자주색'),
-  PINK('핑크색'),
-  BROWN('갈색'),
-  BEIGE('베이지색');
+  BLACK('검정색', '검정', '블랙'),
+  WHITE('흰색', '흰색', '화이트'),
+  GRAY('회색', '회색', '그레이'),
+  RED('빨간색', '빨강', '레드'),
+  ORANGE('주황색', '주황', '오렌지'),
+  YELLOW('노란색', '노랑', '옐로우'),
+  GREEN('초록색', '초록', '그린'),
+  BLUE('파란색', '파랑', '블루'),
+  PURPLE('보라색', '보라', '퍼플'),
+  MAGENTA('자주색', '자주색', '자주색'),
+  PINK('핑크색', '핑크', '핑크'),
+  BROWN('갈색', '갈색', '브라운'),
+  BEIGE('베이지색', '베이지', '베이지');
 
-  final String koreanName;
-  const ColorName(this.koreanName);
+  final String fullKoreanName; // 긴 한글 이름 (예: 검정색)
+  final String shortKoreanName; // 짧은 한글 이름 (예: 검정)
+  final String englishName; // 영문 이름 (예: 블랙)
+
+  const ColorName(this.fullKoreanName, this.shortKoreanName, this.englishName);
 }
 
 // ColorContainer 클래스 수정

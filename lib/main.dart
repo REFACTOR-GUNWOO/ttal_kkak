@@ -15,7 +15,7 @@ import 'package:firebase_core/firebase_core.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
-  // debugPaintSizeEnabled = true;
+  debugPaintSizeEnabled = true;
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       // options: DefaultFirebaseOptions.currentPlatform,
