@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -62,6 +60,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
       body: SingleChildScrollView(
           child: Column(children: [
         SizedBox(height: 12),
+
+        // 옷이 부족할 경우 미션 UI 표시
+        clothesData.length < 10 ? _buildMissionWidget(context) : Container(),
+
         Center(
             child: clothesData.length == 0
                 ? Container()
@@ -119,6 +121,130 @@ class _StatisticsPageState extends State<StatisticsPage> {
         ) // Add new widget
       ])),
     );
+  }
+
+  // 미션 위젯 구현
+  Widget _buildMissionWidget(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: SystemColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: SignatureColors.begie500, width: 1),
+      ),
+      child: Column(
+        children: [
+          // 오픈 이미지
+          Container(
+            height: 80,
+            width: 80,
+            child: Image.asset('assets/images/open_sign.png'),
+          ),
+          SizedBox(height: 12),
+
+          Text(
+            "아래 조건들을 달성해야\n통계 페이지를 확인할 수 있어요",
+            textAlign: TextAlign.center,
+            style:
+                BodyTextStyles.Regular14.copyWith(color: SystemColors.gray900),
+          ),
+
+          SizedBox(height: 32),
+
+          // 체크박스 목록
+          _buildCheckItem("옷 10개 이상 등록", clothesData.length >= 10),
+          SizedBox(height: 8),
+          _buildCheckItem("상의 옷 1개 이상 등록", _hasCategoryClothes("top")),
+          SizedBox(height: 8),
+          _buildCheckItem("하의 옷 1개 이상 등록", _hasCategoryClothes("bottom")),
+          SizedBox(height: 8),
+          _buildCheckItem("아우터 옷 1개 이상 등록", _hasCategoryClothes("outer")),
+          SizedBox(height: 8),
+          _buildCheckItem("신발 1개 이상 등록", _hasCategoryClothes("shoes")),
+
+          SizedBox(height: 20),
+
+          // 옷 등록하기 버튼
+          ElevatedButton(
+            onPressed: () async {
+              final res = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddClothesPage(
+                          isUpdate: false,
+                        )),
+              );
+              if (res == 'refresh') {
+                setState(() {}); // 기존 페이지 리프레시
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              backgroundColor: SystemColors.black,
+              minimumSize: Size(double.infinity, 48),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text(
+              "옷 등록하기",
+              style: OneLineTextStyles.SemiBold16.copyWith(
+                  color: SystemColors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 체크박스 아이템 위젯
+  Widget _buildCheckItem(String text, bool isCompleted) {
+    return Row(
+      children: [
+        Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            color: isCompleted ? SignatureColors.orange400 : SystemColors.white,
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: isCompleted ? Colors.transparent : SystemColors.gray500,
+              width: 1,
+            ),
+          ),
+          child: isCompleted
+              ? SvgPicture.asset(
+                  'assets/icons/check_icon.svg',
+                  color: SystemColors.white,
+                )
+              : null,
+        ),
+        SizedBox(width: 6),
+        Text(
+          text,
+          style: OneLineTextStyles.Medium14.copyWith(
+            color: isCompleted ? SystemColors.gray700 : SystemColors.black,
+            decoration: isCompleted ? TextDecoration.lineThrough : null,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // 카테고리별 옷 존재 여부 확인 헬퍼 함수
+  bool _hasCategoryClothes(String categoryCode) {
+    final categoryId = firstCategories
+        .firstWhere((category) => category.code == categoryCode,
+            orElse: () => firstCategories.first)
+        .id;
+
+    if (clothesData.any((cloth) => cloth.primaryCategoryId == categoryId)) {
+      return true;
+    }
+
+    return false;
   }
 }
 
