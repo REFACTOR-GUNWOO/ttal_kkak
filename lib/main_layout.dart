@@ -5,7 +5,7 @@ import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/daily_outfit_page.dart';
 import 'package:ttal_kkak/main_page.dart';
 import 'package:ttal_kkak/setting_page.dart';
-import 'package:ttal_kkak/statistics_page.dart';
+import 'package:ttal_kkak/widgets/statistics/statistics_page.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/tool_tip_with_tail.dart';
