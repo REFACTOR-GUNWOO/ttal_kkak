@@ -42,6 +42,32 @@ class _StatisticsPageState extends State<StatisticsPage> {
     );
   }
 
+  bool _isMissionCompleted() {
+    return false;
+
+    if (clothesData.length < 10) {
+      return false;
+    }
+
+    if (!_hasCategoryClothes("top")) {
+      return false;
+    }
+
+    if (!_hasCategoryClothes("bottom")) {
+      return false;
+    }
+
+    if (!_hasCategoryClothes("outer")) {
+      return false;
+    }
+
+    if (!_hasCategoryClothes("shoes")) {
+      return false;
+    }
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,14 +88,18 @@ class _StatisticsPageState extends State<StatisticsPage> {
         SizedBox(height: 12),
 
         // 옷이 부족할 경우 미션 UI 표시
-        clothesData.length < 10 ? _buildMissionWidget(context) : Container(),
+        !_isMissionCompleted() ? _buildMissionWidget(context) : Container(),
 
         Center(
-            child: clothesData.length == 0
-                ? Container()
-                : StatisticsTitleWidget(
-                    clothes: clothesData,
-                  )),
+          child: clothesData.length == 0
+              ? Container()
+              : (_isMissionCompleted())
+                  ? StatisticsTitleWidget(
+                      clothes: clothesData,
+                      isMissionCompleted: _isMissionCompleted(),
+                    )
+                  : Container(),
+        ),
         // Container(
         //     margin: EdgeInsets.symmetric(horizontal: 20),
         //     height: 50,
@@ -91,15 +121,20 @@ class _StatisticsPageState extends State<StatisticsPage> {
         //     ])),
         SizedBox(height: 12),
 
-        CategoryStatisticsContainerWidget(clothesData: clothesData),
+        CategoryStatisticsContainerWidget(
+            clothesData: clothesData,
+            isMissionCompleted: _isMissionCompleted()),
         SizedBox(height: 12),
 
         ColorDistributionWidget(
           clothesData: clothesData,
+          isMissionCompleted: _isMissionCompleted(),
         ),
         SizedBox(height: 12),
 
-        DarknessDistributionWidget(clothesData: clothesData),
+        DarknessDistributionWidget(
+            clothesData: clothesData,
+            isMissionCompleted: _isMissionCompleted()),
         SizedBox(
           height: 12,
         ),
@@ -250,8 +285,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
 class CategoryStatisticsContainerWidget extends StatefulWidget {
   final List<Clothes> clothesData;
-
-  CategoryStatisticsContainerWidget({required this.clothesData});
+  final bool isMissionCompleted;
+  CategoryStatisticsContainerWidget(
+      {required this.clothesData, required this.isMissionCompleted});
 
   @override
   _CategoryStatisticsContainerWidgetState createState() =>
@@ -312,74 +348,94 @@ class _CategoryStatisticsContainerWidgetState
         mainAxisSize: MainAxisSize.min,
         children: [
           // 카테고리 선택 (좌우 화살표 포함)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = (selectedIndex - 1 + categories.length) %
-                          categories.length;
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: SystemColors.white,
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: SystemColors.gray500, width: 1),
-                    ),
-                    child: Container(
-                        width: 16,
-                        height: 16,
-                        child: SvgPicture.asset(
-                          color: SystemColors.black,
-                          'assets/icons/arrow_left.svg',
+          widget.isMissionCompleted
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedIndex =
+                                (selectedIndex - 1 + categories.length) %
+                                    categories.length;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: SystemColors.white,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                                color: SystemColors.gray500, width: 1),
+                          ),
+                          child: Container(
+                              width: 16,
+                              height: 16,
+                              child: SvgPicture.asset(
+                                color: SystemColors.black,
+                                'assets/icons/arrow_left.svg',
+                              )),
                         )),
-                  )),
-              SizedBox(
-                width: 12,
-              ),
-              Text(
-                selectedCategory.name + " 카테고리",
-                style: OneLineTextStyles.Bold18,
-              ),
-              SizedBox(
-                width: 12,
-              ),
-              GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = (selectedIndex + 1) % categories.length;
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: SystemColors.white,
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: SystemColors.gray500, width: 1),
+                    SizedBox(
+                      width: 12,
                     ),
-                    child: Container(
-                        width: 16,
-                        height: 16,
-                        child: SvgPicture.asset(
-                          color: SystemColors.black,
-                          'assets/icons/arrow_right.svg',
+                    Text(
+                      selectedCategory.name + " 카테고리",
+                      style: OneLineTextStyles.Bold18,
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedIndex =
+                                (selectedIndex + 1) % categories.length;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: SystemColors.white,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                                color: SystemColors.gray500, width: 1),
+                          ),
+                          child: Container(
+                              width: 16,
+                              height: 16,
+                              child: SvgPicture.asset(
+                                color: SystemColors.black,
+                                'assets/icons/arrow_right.svg',
+                              )),
                         )),
-                  )),
-            ],
-          ),
+                  ],
+                )
+              : Text(
+                  "상위 카테고리",
+                  style: OneLineTextStyles.Bold18.copyWith(
+                      color: SystemColors.gray700), // 텍스트 스타일 설정
+                ),
 
           SizedBox(height: 10),
 
           // 카테고리 통계 위젯
-          categoryData.isNotEmpty
-              ? CategoryStatisticsWidget(
-                  categoryData: categoryData,
-                  categoryName: selectedCategory.name)
-              : Text("데이터 없음", style: TextStyle(color: Colors.white)),
+          widget.isMissionCompleted
+              ? (categoryData.isNotEmpty
+                  ? CategoryStatisticsWidget(
+                      categoryData: categoryData,
+                      categoryName: selectedCategory.name)
+                  : Text("데이터 없음", style: TextStyle(color: Colors.white)))
+              : Stack(children: [
+                  Image.asset('assets/images/category_statistics_blur.png'),
+                  Positioned.fill(
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: Text("더 정확한 통계를 보기 위해\n미션을 달성해 주세요!",
+                              textAlign: TextAlign.center,
+                              style: BodyTextStyles.Bold16)))
+                ]),
         ],
       ),
     );
@@ -602,8 +658,9 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
 
 class ColorDistributionWidget extends StatefulWidget {
   final List<Clothes> clothesData;
-
-  ColorDistributionWidget({required this.clothesData});
+  final bool isMissionCompleted;
+  ColorDistributionWidget(
+      {required this.clothesData, required this.isMissionCompleted});
 
   @override
   _ColorDistributionWidgetState createState() =>
@@ -659,66 +716,31 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text("컬러 분포",
-              style:
-                  OneLineTextStyles.Bold18.copyWith(color: SystemColors.black)),
+              style: OneLineTextStyles.Bold18.copyWith(
+                  color: widget.isMissionCompleted
+                      ? SystemColors.black
+                      : SystemColors.gray700)),
           SizedBox(height: 20),
-          Container(
-              height: 144,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: PieChart(
-                      curve: Curves.easeOut,
-                      duration: Duration(milliseconds: 2000),
-                      PieChartData(
-                        sections:
-                            _generatePieChartSections(topColors, totalItems),
-                        borderData: FlBorderData(show: false),
-                        sectionsSpace: 0,
-                        startDegreeOffset: startDegreeOffset,
-                        centerSpaceRadius: 30,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 32),
-                  Container(
-                    height: 140,
-                    width: 108,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: topColors.map(_buildColorRow).toList(),
-                    ),
-                  )
-                ],
-              )),
-          SizedBox(height: 24),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: SignatureColors.begie200,
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Column(
-              children: [
-                Text(
-                  "${mostFrequent['name']} 옷이 ${mostFrequentPercentage.toStringAsFixed(0)}%로 가장 많아요",
-                  style: BodyTextStyles.Medium12,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 4),
-                Text(
-                  "${mostFrequent['name']} 옷 중 ${mostFrequentCategory}가 ${mostFrequentCategoryPercent}%로 가장 많아요",
-                  style: BodyTextStyles.Medium12,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
+          widget.isMissionCompleted
+              ? ColorDistributionChartWidget(
+                  topColors: topColors,
+                  totalItems: totalItems,
+                  mostFrequent: mostFrequent,
+                  mostFrequentPercentage: mostFrequentPercentage,
+                  mostFrequentCategory: mostFrequentCategory,
+                  mostFrequentCategoryPercent: mostFrequentCategoryPercent,
+                  startDegreeOffset: startDegreeOffset,
+                )
+              : Stack(children: [
+                  Image.asset(
+                      'assets/images/color_distribution_statistics_blur.png'),
+                  Positioned.fill(
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: Text("더 정확한 통계를 보기 위해\n미션을 달성해 주세요!",
+                              textAlign: TextAlign.center,
+                              style: BodyTextStyles.Bold16)))
+                ]),
         ],
       ),
     );
@@ -793,40 +815,115 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
       "percent": percent
     };
   }
+}
 
-  List<PieChartSectionData> _generatePieChartSections(
-      List<Map<String, dynamic>> colorData, int totalItems) {
-    print("colorData: $colorData");
-    final sortedColorData = colorData.toList()
-      ..sort((a, b) {
-        try {
-          // 비교 항목이 null이 아닌지 확인
-          final aName = a['name'] ?? "알 수 없음";
-          final bName = b['name'] ?? "알 수 없음";
+Map<String, int> _getDarknessDistribution(List<Clothes> clothes) {
+  int darkCount = 0;
+  int lightCount = 0;
 
-          // count 키가 존재하는지 확인
-          final aCount = a['count'] ?? 0;
-          final bCount = b['count'] ?? 0;
+  for (var item in clothes) {
+    ClothesColor color = item.color;
+    if (color.darkness >= 500) {
+      darkCount++;
+    } else {
+      lightCount++;
+    }
+  }
 
-          // "기타" 항목은 항상 맨 뒤로 정렬
-          if (aName == "기타" && bName != "기타") {
-            return 1; // a가 뒤로
-          }
-          if (aName != "기타" && bName == "기타") {
-            return -1; // b가 뒤로
-          }
+  return {
+    '진한톤': darkCount,
+    '밝은톤': lightCount,
+  };
+}
 
-          // 둘 다 "기타"가 아니면 count 기준 내림차순 정렬
-          return bCount.compareTo(aCount);
-        } catch (e) {
-          LogService().log(LogType.error, "statistics_page", "color_sort_error",
-              {"error": e.toString(), "a": a.toString(), "b": b.toString()});
-          return 0; // 오류 발생 시 정렬 변경 없음
-        }
-      });
+class ColorDistributionChartWidget extends StatelessWidget {
+  final List<Map<String, dynamic>> topColors;
+  final int totalItems;
+  final Map<String, dynamic> mostFrequent;
+  final double mostFrequentPercentage;
+  final String mostFrequentCategory;
+  final int mostFrequentCategoryPercent;
+  final double startDegreeOffset;
 
+  const ColorDistributionChartWidget({
+    Key? key,
+    required this.topColors,
+    required this.totalItems,
+    required this.mostFrequent,
+    required this.mostFrequentPercentage,
+    required this.mostFrequentCategory,
+    required this.mostFrequentCategoryPercent,
+    required this.startDegreeOffset,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 144,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 120,
+                height: 120,
+                child: PieChart(
+                  curve: Curves.easeOut,
+                  duration: Duration(milliseconds: 2000),
+                  PieChartData(
+                    sections: _generatePieChartSections(),
+                    borderData: FlBorderData(show: false),
+                    sectionsSpace: 0,
+                    startDegreeOffset: startDegreeOffset,
+                    centerSpaceRadius: 30,
+                  ),
+                ),
+              ),
+              SizedBox(width: 32),
+              Container(
+                height: 140,
+                width: 108,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: topColors.map(_buildColorRow).toList(),
+                ),
+              )
+            ],
+          ),
+        ),
+        SizedBox(height: 24),
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: SignatureColors.begie200,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Column(
+            children: [
+              Text(
+                "${mostFrequent['name']} 옷이 ${mostFrequentPercentage.toStringAsFixed(0)}%로 가장 많아요",
+                style: BodyTextStyles.Medium12,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 4),
+              Text(
+                "${mostFrequent['name']} 옷 중 ${mostFrequentCategory}가 ${mostFrequentCategoryPercent}%로 가장 많아요",
+                style: BodyTextStyles.Medium12,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<PieChartSectionData> _generatePieChartSections() {
     try {
-      return sortedColorData.map((entry) {
+      return topColors.map((entry) {
         double percentage = (entry['count'] / totalItems) * 100;
         return PieChartSectionData(
           value: percentage,
@@ -846,50 +943,53 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
     } catch (e) {
       LogService().log(LogType.error, "statistics_page", "color_map_error",
           {"error": e.toString()});
-      // 오류 발생 시 빈 리스트 반환
       return [];
     }
   }
 
   Widget _buildColorRow(Map<String, dynamic> entry) {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              width: 17,
-              height: 17,
-              decoration: BoxDecoration(
-                color: (entry['name'] == "기타")
-                    ? SystemColors.gray700
-                    : ClothesColor.fromName(colorContainers
-                            .firstWhere((element) =>
-                                element
-                                    .representativeColorName.fullKoreanName ==
-                                entry['name'])
-                            .representativeColor
-                            .name)
-                        .color,
-                borderRadius: BorderRadius.circular(4),
-                border: (entry['name'] == "흰색")
-                    ? Border.all(color: SystemColors.gray700, width: 1)
-                    : null,
-              ),
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            width: 17,
+            height: 17,
+            decoration: BoxDecoration(
+              color: (entry['name'] == "기타")
+                  ? SystemColors.gray700
+                  : ClothesColor.fromName(colorContainers
+                          .firstWhere((element) =>
+                              element.representativeColorName.fullKoreanName ==
+                              entry['name'])
+                          .representativeColor
+                          .name)
+                      .color,
+              borderRadius: BorderRadius.circular(4),
+              border: (entry['name'] == "흰색")
+                  ? Border.all(color: SystemColors.gray700, width: 1)
+                  : null,
             ),
-            SizedBox(width: 8),
-            Text("${entry['name']} ${entry['count']}",
-                style: OneLineTextStyles.Bold14.copyWith(
-                    color: SystemColors.black)),
-          ],
-        ));
+          ),
+          SizedBox(width: 8),
+          Text(
+            "${entry['name']} ${entry['count']}",
+            style: OneLineTextStyles.Bold14.copyWith(color: SystemColors.black),
+          ),
+        ],
+      ),
+    );
   }
 }
 
 class DarknessDistributionWidget extends StatefulWidget {
   final List<Clothes> clothesData;
-
-  DarknessDistributionWidget({required this.clothesData});
+  final bool isMissionCompleted;
+  DarknessDistributionWidget({
+    required this.clothesData,
+    required this.isMissionCompleted,
+  });
 
   @override
   _DarknessDistributionWidgetState createState() =>
@@ -898,11 +998,6 @@ class DarknessDistributionWidget extends StatefulWidget {
 
 class _DarknessDistributionWidgetState
     extends State<DarknessDistributionWidget> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final darknessDistribution = _getDarknessDistribution(widget.clothesData);
@@ -955,109 +1050,144 @@ class _DarknessDistributionWidgetState
           Text("컬러 진하기",
               style:
                   OneLineTextStyles.Bold18.copyWith(color: SystemColors.black)),
-          SizedBox(height: 20),
-
-          // ✅ 애니메이션 추가
-          TweenAnimationBuilder<double>(
-            duration: Duration(milliseconds: 500),
-            curve: Curves.easeOut,
-            tween: Tween(begin: 0, end: 1), // 0부터 1까지 변화
-            builder: (context, animationValue, child) {
-              return SizedBox(
-                height: 140,
-                child: BarChart(
-                  BarChartData(
-                    alignment: BarChartAlignment.spaceAround,
-                    maxY: maxCount.toDouble() / 94 * 116,
-                    barGroups: darknessDistribution.entries.map((entry) {
-                      return BarChartGroupData(
-                        x: darknessDistribution.keys
-                            .toList()
-                            .indexOf(entry.key),
-                        showingTooltipIndicators: [0],
-                        barRods: [
-                          BarChartRodData(
-                            toY: entry.value.toDouble() *
-                                animationValue, // ✅ 애니메이션 반영
-                            color: entry.key == '진한톤'
-                                ? SignatureColors.begie800
-                                : SignatureColors.begie300,
-                            width: 40,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                    titlesData: FlTitlesData(
-                      leftTitles:
-                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      rightTitles:
-                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      topTitles:
-                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          reservedSize: 27,
-                          showTitles: true,
-                          getTitlesWidget: (value, meta) {
-                            final labels = darknessDistribution.keys.toList();
-
-                            return SideTitleWidget(
-                                space: 12,
-                                child: value.toInt() < labels.length
-                                    ? Text(
-                                        labels[value.toInt()],
-                                        style: OneLineTextStyles.Medium12,
-                                      )
-                                    : const SizedBox.shrink(),
-                                meta: meta);
-                          },
-                        ),
-                      ),
-                    ),
-                    barTouchData: BarTouchData(
-                      touchTooltipData: BarTouchTooltipData(
-                        tooltipPadding: EdgeInsets.zero,
-                        tooltipMargin: 0,
-                        getTooltipColor: (group) => Colors.transparent,
-                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          return BarTooltipItem(rod.toY.round().toString(),
-                              OneLineTextStyles.Medium14);
-                        },
-                        fitInsideHorizontally: true,
-                        fitInsideVertically: true,
-                        direction: TooltipDirection.top,
-                      ),
-                      handleBuiltInTouches: true,
-                    ),
-                    borderData: FlBorderData(show: false),
-                    gridData: FlGridData(show: false),
-                  ),
-                ),
-              );
-            },
+          SizedBox(
+            height: 32,
           ),
-
-          SizedBox(height: 32),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: SignatureColors.begie200,
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Column(
-              children: [
-                Text(
-                  message,
-                  style: BodyTextStyles.Medium12,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
+          widget.isMissionCompleted
+              ? DarknessDistributionChartWidget(
+                  darknessDistribution: darknessDistribution,
+                  maxCount: maxCount,
+                  message: message,
+                )
+              : Stack(children: [
+                  Image.asset(
+                      'assets/images/color_darkness_statistics_blur.png'),
+                  Positioned.fill(
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: Text("더 정확한 통계를 보기 위해\n미션을 달성해 주세요!",
+                              textAlign: TextAlign.center,
+                              style: BodyTextStyles.Bold16)))
+                ]),
         ],
       ),
+    );
+  }
+}
+
+class DarknessDistributionChartWidget extends StatelessWidget {
+  final Map<String, int> darknessDistribution;
+  final int maxCount;
+  final String message;
+
+  const DarknessDistributionChartWidget({
+    Key? key,
+    required this.darknessDistribution,
+    required this.maxCount,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TweenAnimationBuilder<double>(
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+          tween: Tween(begin: 0, end: 1),
+          builder: (context, animationValue, child) {
+            return SizedBox(
+              height: 140,
+              child: BarChart(
+                BarChartData(
+                  alignment: BarChartAlignment.spaceAround,
+                  maxY: maxCount.toDouble() / 94 * 116,
+                  barGroups: darknessDistribution.entries.map((entry) {
+                    return BarChartGroupData(
+                      x: darknessDistribution.keys.toList().indexOf(entry.key),
+                      showingTooltipIndicators: [0],
+                      barRods: [
+                        BarChartRodData(
+                          toY: entry.value.toDouble() * animationValue,
+                          color: entry.key == '진한톤'
+                              ? SignatureColors.begie800
+                              : SignatureColors.begie300,
+                          width: 40,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                  titlesData: FlTitlesData(
+                    leftTitles:
+                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    rightTitles:
+                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles:
+                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        reservedSize: 27,
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          final labels = darknessDistribution.keys.toList();
+                          return SideTitleWidget(
+                            space: 12,
+                            child: value.toInt() < labels.length
+                                ? Text(
+                                    labels[value.toInt()],
+                                    style: OneLineTextStyles.Medium12,
+                                  )
+                                : const SizedBox.shrink(),
+                            meta: meta,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  barTouchData: BarTouchData(
+                    touchTooltipData: BarTouchTooltipData(
+                      tooltipPadding: EdgeInsets.zero,
+                      tooltipMargin: 0,
+                      getTooltipColor: (group) => Colors.transparent,
+                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                        return BarTooltipItem(
+                          rod.toY.round().toString(),
+                          OneLineTextStyles.Medium14,
+                        );
+                      },
+                      fitInsideHorizontally: true,
+                      fitInsideVertically: true,
+                      direction: TooltipDirection.top,
+                    ),
+                    handleBuiltInTouches: true,
+                  ),
+                  borderData: FlBorderData(show: false),
+                  gridData: FlGridData(show: false),
+                ),
+              ),
+            );
+          },
+        ),
+        SizedBox(height: 32),
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: SignatureColors.begie200,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Column(
+            children: [
+              Text(
+                message,
+                style: BodyTextStyles.Medium12,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -1065,8 +1195,11 @@ class _DarknessDistributionWidgetState
 class StatisticsTitleWidget extends StatefulWidget {
   final List<Clothes> clothes;
   final String? displayMessage;
-
-  StatisticsTitleWidget({required this.clothes, this.displayMessage});
+  final bool isMissionCompleted;
+  StatisticsTitleWidget(
+      {required this.clothes,
+      this.displayMessage,
+      required this.isMissionCompleted});
 
   @override
   _StatisticsTitleWidgetState createState() => _StatisticsTitleWidgetState();
@@ -1489,24 +1622,4 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
       ),
     );
   }
-}
-
-// Calculate the count of dark and light colors
-Map<String, int> _getDarknessDistribution(List<Clothes> clothes) {
-  int darkCount = 0;
-  int lightCount = 0;
-
-  for (var item in clothes) {
-    ClothesColor color = item.color;
-    if (color.darkness >= 500) {
-      darkCount++;
-    } else {
-      lightCount++;
-    }
-  }
-
-  return {
-    '진한톤': darkCount,
-    '밝은톤': lightCount,
-  };
 }
