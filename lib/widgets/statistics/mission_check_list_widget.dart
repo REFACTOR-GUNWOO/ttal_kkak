@@ -4,6 +4,7 @@ import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
+import 'package:ttal_kkak/widgets/statistics/mission_widget.dart';
 
 class MissionCheckListWidget extends StatelessWidget {
   final List<Clothes> clothesData;
@@ -12,19 +13,6 @@ class MissionCheckListWidget extends StatelessWidget {
     Key? key,
     required this.clothesData,
   }) : super(key: key);
-
-  bool _hasCategoryClothes(String categoryCode) {
-    final categoryId = firstCategories
-        .firstWhere((category) => category.code == categoryCode,
-            orElse: () => firstCategories.first)
-        .id;
-
-    if (clothesData.any((cloth) => cloth.primaryCategoryId == categoryId)) {
-      return true;
-    }
-
-    return false;
-  }
 
   Widget _buildCheckItem(String text, bool isCompleted) {
     return Row(
@@ -64,15 +52,20 @@ class MissionCheckListWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12),
       child: Column(
         children: [
-          _buildCheckItem("옷 10개 이상 등록", clothesData.length >= 10),
+          _buildCheckItem(
+              "옷 10개 이상 등록", MissionHelper.hasEnoughClothes(clothesData)),
           SizedBox(height: 16),
-          _buildCheckItem("상의 옷 1개 이상 등록", _hasCategoryClothes("top")),
+          _buildCheckItem("상의 옷 1개 이상 등록",
+              MissionHelper.hasCategoryClothes(clothesData, "top")),
           SizedBox(height: 16),
-          _buildCheckItem("하의 옷 1개 이상 등록", _hasCategoryClothes("bottom")),
+          _buildCheckItem("하의 옷 1개 이상 등록",
+              MissionHelper.hasCategoryClothes(clothesData, "bottom")),
           SizedBox(height: 16),
-          _buildCheckItem("아우터 옷 1개 이상 등록", _hasCategoryClothes("outer")),
+          _buildCheckItem("아우터 옷 1개 이상 등록",
+              MissionHelper.hasCategoryClothes(clothesData, "outer")),
           SizedBox(height: 16),
-          _buildCheckItem("신발 1개 이상 등록", _hasCategoryClothes("shoes")),
+          _buildCheckItem("신발 1개 이상 등록",
+              MissionHelper.hasCategoryClothes(clothesData, "shoes")),
         ],
       ),
     );

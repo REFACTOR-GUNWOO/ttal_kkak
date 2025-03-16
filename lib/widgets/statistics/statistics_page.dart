@@ -17,6 +17,7 @@ import 'package:ttal_kkak/widgets/statistics/color_distribution_chart_widget.dar
 import 'package:ttal_kkak/widgets/statistics/darkness_distribution_chart_widget.dart';
 import 'package:ttal_kkak/repositories/mission_repository.dart';
 import 'package:ttal_kkak/widgets/statistics/mission_check_list_widget.dart';
+import 'package:ttal_kkak/widgets/statistics/mission_widget.dart';
 
 class StatisticsPage extends StatefulWidget {
   @override
@@ -24,47 +25,47 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
+  List<Clothes>? clothesData; // null로 초기화
+  bool isMissionCompleted = false;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      LogService().log(LogType.view_screen, "statistics_page", null, {});
-      List<Clothes> loadedClothes = await ClothesRepository().loadClothes();
-      bool wasMissionCompleted = await MissionRepository().isMissionCompleted();
+    _loadData();
+  }
 
-      setState(() {
-        clothesData =
-            loadedClothes.where((element) => !element.isDraft).toList();
-      });
+  Future<void> _loadData() async {
+    LogService().log(LogType.view_screen, "statistics_page", null, {});
 
-      // 미션이 새로 완료되었는지 체크
-      bool isNowCompleted = _checkMissionCompleted();
-      if (isNowCompleted && !wasMissionCompleted) {
-        _showMissionCompletedBottomSheet();
-        await MissionRepository().updateMissionStatus(true);
-      }
+    List<Clothes> loadedClothes = await ClothesRepository().loadClothes();
+    bool wasMissionCompleted = await MissionRepository().isMissionCompleted();
+
+    setState(() {
+      clothesData = loadedClothes.where((element) => !element.isDraft).toList();
+    });
+
+    bool isNowCompleted = _checkMissionCompleted();
+    if (isNowCompleted && !wasMissionCompleted) {
+      _showMissionCompletedBottomSheet();
+      await MissionRepository().updateMissionStatus(true);
+    }
+
+    setState(() {
+      isMissionCompleted = isNowCompleted;
     });
   }
 
-  List<Clothes> clothesData = [];
-
-  BarChartGroupData _barGroup(int x, double y) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(toY: y, color: Colors.blue, width: 16),
-      ],
-    );
+  bool _checkMissionCompleted() {
+    if (clothesData == null || clothesData!.length < 10) return false;
+    return ["top", "bottom", "outer", "shoes"].every(_hasCategoryClothes);
   }
 
-  // 실제 미션 완료 여부를 체크하는 함수
-  bool _checkMissionCompleted() {
-    if (clothesData.length < 10) return false;
-    if (!_hasCategoryClothes("top")) return false;
-    if (!_hasCategoryClothes("bottom")) return false;
-    if (!_hasCategoryClothes("outer")) return false;
-    if (!_hasCategoryClothes("shoes")) return false;
-    return true;
+  bool _hasCategoryClothes(String categoryCode) {
+    final categoryId = firstCategories
+        .firstWhere((category) => category.code == categoryCode,
+            orElse: () => firstCategories.first)
+        .id;
+    return clothesData!.any((cloth) => cloth.primaryCategoryId == categoryId);
   }
 
   void _showMissionCompletedBottomSheet() {
@@ -72,15 +73,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
       context: context,
       barrierColor: SystemColors.gray700.withOpacity(0.5),
       isScrollControlled: true,
-      isDismissible: false, // 배경 터치로 닫히는 것 방지
-      enableDrag: false, // 드래그로 닫히는 것 방지
+      isDismissible: false,
+      enableDrag: false,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
-
       builder: (BuildContext context) {
         return WillPopScope(
-          // 뒤로가기 버튼 막기
           onWillPop: () async => false,
           child: CommonBottomSheet(
             child: Column(
@@ -100,19 +99,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 ),
                 SizedBox(height: 20),
                 Padding(
-                  child: MissionCheckListWidget(
-                    clothesData: clothesData,
-                  ),
                   padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: MissionCheckListWidget(clothesData: clothesData!),
                 ),
                 SizedBox(height: 32),
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: ElevatedButton(
-                    onPressed: () async {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: SystemColors.black,
@@ -136,25 +131,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
     );
   }
 
-  // 기존의 _isMissionCompleted 함수는 SharedPreferences에서 저장된 값을 반환하도록 수정
-  Future<bool> _isMissionCompleted() async {
-    bool wasMissionCompleted = await MissionRepository().isMissionCompleted();
-    bool isNowCompleted = _checkMissionCompleted();
-
-    if (isNowCompleted && !wasMissionCompleted) {
-      return false; // 바텀시트에서 확인을 누르기 전까지는 false 반환
-    }
-
-    return wasMissionCompleted;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: SignatureColors.begie200,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        //앱바
         backgroundColor: SignatureColors.begie200,
         title: Text('통계',
             style:
@@ -163,139 +145,60 @@ class _StatisticsPageState extends State<StatisticsPage> {
         elevation: 0,
         toolbarHeight: 48,
       ),
-      body: FutureBuilder<bool>(
-        future: _isMissionCompleted(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          bool isMissionCompleted = snapshot.data ?? false;
-
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 12),
-                // 옷이 부족할 경우 미션 UI 표시
-                !isMissionCompleted
-                    ? _buildMissionWidget(context)
-                    : Container(),
-                Center(
-                  child: (isMissionCompleted)
-                      ? StatisticsTitleWidget(
-                          clothes: clothesData,
-                          isMissionCompleted: isMissionCompleted,
-                        )
+      body: clothesData == null
+          ? Center(child: CircularProgressIndicator()) // 데이터 로딩 중
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: 12),
+                  !isMissionCompleted
+                      ? MissionWidget(clothesData: clothesData!)
                       : Container(),
-                ),
-                SizedBox(height: 12),
-                CategoryStatisticsContainerWidget(
-                  clothesData: clothesData,
-                  isMissionCompleted: isMissionCompleted,
-                ),
-                SizedBox(height: 12),
-                ColorDistributionWidget(
-                  clothesData: clothesData,
-                  isMissionCompleted: isMissionCompleted,
-                ),
-                SizedBox(height: 12),
-                DarknessDistributionWidget(
-                  clothesData: clothesData,
-                  isMissionCompleted: isMissionCompleted,
-                ),
-                SizedBox(height: 12),
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 24),
-                  decoration: BoxDecoration(
-                    color: SystemColors.white,
-                    border:
-                        Border.all(color: SignatureColors.begie500, width: 1),
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  Center(
+                    child: isMissionCompleted
+                        ? StatisticsTitleWidget(
+                            clothes: clothesData!,
+                            isMissionCompleted: isMissionCompleted,
+                          )
+                        : Container(),
                   ),
-                  child: Text(
-                    "앞으로 더 많은 통계가 추가될 예정이에요!",
-                    style: BodyTextStyles.Regular14,
-                    textAlign: TextAlign.center,
+                  SizedBox(height: 12),
+                  CategoryStatisticsContainerWidget(
+                    clothesData: clothesData!,
+                    isMissionCompleted: isMissionCompleted,
                   ),
-                ),
-                SizedBox(height: 40),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  // 미션 위젯 구현
-  Widget _buildMissionWidget(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 32),
-      decoration: BoxDecoration(
-        color: SystemColors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: SignatureColors.begie500, width: 1),
-      ),
-      child: Column(
-        children: [
-          SizedBox(height: 12),
-          Text(
-            "아래 조건들을 달성해야\n통계 페이지를 확인할 수 있어요",
-            textAlign: TextAlign.center,
-            style:
-                BodyTextStyles.Regular14.copyWith(color: SystemColors.gray900),
-          ),
-          SizedBox(height: 32),
-          MissionCheckListWidget(clothesData: clothesData),
-          SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: () async {
-              final res = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AddClothesPage(
-                          isUpdate: false,
-                        )),
-              );
-              if (res == 'refresh') {
-                setState(() {}); // 기존 페이지 리프레시
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              backgroundColor: SystemColors.black,
-              minimumSize: Size(double.infinity, 48),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                  SizedBox(height: 12),
+                  ColorDistributionWidget(
+                    clothesData: clothesData!,
+                    isMissionCompleted: isMissionCompleted,
+                  ),
+                  SizedBox(height: 12),
+                  DarknessDistributionWidget(
+                    clothesData: clothesData!,
+                    isMissionCompleted: isMissionCompleted,
+                  ),
+                  SizedBox(height: 12),
+                  Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    decoration: BoxDecoration(
+                      color: SystemColors.white,
+                      border:
+                          Border.all(color: SignatureColors.begie500, width: 1),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                    child: Text(
+                      "앞으로 더 많은 통계가 추가될 예정이에요!",
+                      style: BodyTextStyles.Regular14,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(height: 40),
+                ],
               ),
             ),
-            child: Text(
-              "옷 등록하기",
-              style: OneLineTextStyles.SemiBold16.copyWith(
-                  color: SystemColors.white),
-            ),
-          ),
-        ],
-      ),
     );
-  }
-
-  // 카테고리별 옷 존재 여부 확인 헬퍼 함수
-  bool _hasCategoryClothes(String categoryCode) {
-    final categoryId = firstCategories
-        .firstWhere((category) => category.code == categoryCode,
-            orElse: () => firstCategories.first)
-        .id;
-
-    if (clothesData.any((cloth) => cloth.primaryCategoryId == categoryId)) {
-      return true;
-    }
-
-    return false;
   }
 }
 

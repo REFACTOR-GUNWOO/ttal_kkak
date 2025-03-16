@@ -6,7 +6,6 @@ class LogService {
       Map<String, Object> parameters) async {
     if (kDebugMode) {
       parameters['debug'] = "true";
-      return;
     }
     if (type == LogType.click_button && buttonName == null) {
       throw ArgumentError('buttonName must not be null');
