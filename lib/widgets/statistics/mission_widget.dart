@@ -67,6 +67,8 @@ class _MissionWidgetState extends State<MissionWidget> {
           SizedBox(height: 32),
           ElevatedButton(
             onPressed: () async {
+              await LogService().log(LogType.click_button,
+                  'statistics_mission_page', 'clothing_register_button', {});
               final res = await Navigator.push(
                 context,
                 MaterialPageRoute(
