@@ -73,69 +73,65 @@ class _CategoryStatisticsContainerWidgetState
         children: [
           // 카테고리 선택 (좌우 화살표 포함)
           widget.isMissionCompleted
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedIndex =
-                                (selectedIndex - 1 + categories.length) %
-                                    categories.length;
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: SystemColors.white,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
-                                color: SystemColors.gray500, width: 1),
-                          ),
+              ? Container(
+                  width: 206,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedIndex =
+                                  (selectedIndex - 1 + categories.length) %
+                                      categories.length;
+                            });
+                          },
                           child: Container(
-                              width: 16,
-                              height: 16,
-                              child: SvgPicture.asset(
-                                color: SystemColors.black,
-                                'assets/icons/arrow_left.svg',
-                              )),
-                        )),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Text(
-                      selectedCategory.name + " 카테고리",
-                      style: OneLineTextStyles.Bold18,
-                    ),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedIndex =
-                                (selectedIndex + 1) % categories.length;
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: SystemColors.white,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
-                                color: SystemColors.gray500, width: 1),
-                          ),
+                            padding: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: SystemColors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                  color: SystemColors.gray500, width: 1),
+                            ),
+                            child: Container(
+                                width: 16,
+                                height: 16,
+                                child: SvgPicture.asset(
+                                  color: SystemColors.black,
+                                  'assets/icons/arrow_left.svg',
+                                )),
+                          )),
+                      Text(
+                        selectedCategory.name + " 카테고리",
+                        style: OneLineTextStyles.Bold18,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedIndex =
+                                  (selectedIndex + 1) % categories.length;
+                            });
+                          },
                           child: Container(
-                              width: 16,
-                              height: 16,
-                              child: SvgPicture.asset(
-                                color: SystemColors.black,
-                                'assets/icons/arrow_right.svg',
-                              )),
-                        )),
-                  ],
-                )
+                            padding: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: SystemColors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                  color: SystemColors.gray500, width: 1),
+                            ),
+                            child: Container(
+                                width: 16,
+                                height: 16,
+                                child: SvgPicture.asset(
+                                  color: SystemColors.black,
+                                  'assets/icons/arrow_right.svg',
+                                )),
+                          )),
+                    ],
+                  ))
               : Text(
                   "상위 카테고리",
                   style: OneLineTextStyles.Bold18.copyWith(
@@ -289,7 +285,7 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
                       : 1.0, // 최소 높이 보장
                   barGroups: displayData.map((data) {
                     final count = data['count'] as int;
-                    final effectiveHeight = count > 0 ? count.toDouble() : 0.1;
+                    final effectiveHeight = count.toDouble();
                     final isMostFrequent =
                         count == mostFrequent['count'] && count != 0;
                     return BarChartGroupData(
@@ -297,6 +293,9 @@ class _CategoryStatisticsWidgetState extends State<CategoryStatisticsWidget> {
                       x: displayData.indexOf(data),
                       barRods: [
                         BarChartRodData(
+                          fromY: (mostFrequent['count'] == 0)
+                              ? -0.1
+                              : (-mostFrequent['count'] / 10),
                           toY: effectiveHeight * animationValue,
                           color: isMostFrequent
                               ? SignatureColors.orange200

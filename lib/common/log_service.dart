@@ -5,7 +5,7 @@ class LogService {
   Future<void> log(LogType type, String screenName, String? buttonName,
       Map<String, Object> parameters) async {
     if (kDebugMode) {
-      print('kDebugMode $type, $screenName, $buttonName, $parameters');
+      parameters['debug'] = "true";
       return;
     }
     if (type == LogType.click_button && buttonName == null) {

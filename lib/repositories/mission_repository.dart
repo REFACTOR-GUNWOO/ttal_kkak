@@ -4,7 +4,7 @@ class MissionRepository {
   static final MissionRepository _instance = MissionRepository._internal();
 
   // 미션 버전 관리 (미션 조건이 변경될 때마다 버전 업)
-  static const int _version = 2;
+  static const int _version = 3;
 
   // SharedPreferences 키 값들
   String get _completedKey => 'completed_v$_version';

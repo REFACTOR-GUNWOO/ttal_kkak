@@ -100,7 +100,9 @@ class ColorDistributionChartWidget extends StatelessWidget {
 
   List<Map<String, dynamic>> _getTopColors(Map<ColorName, int> colorData) {
     if (colorData.isEmpty) {
-      return []; // 빈 데이터일 경우 빈 리스트 반환
+      return [
+        {'name': '기타', 'count': 0}
+      ]; // 빈 데이터일 경우 빈 리스트 반환
     }
 
     List<MapEntry<ColorName, int>> sortedColors = colorData.entries.toList()
@@ -165,14 +167,14 @@ class ColorDistributionChartWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorData = _getColorData();
 
-    if (colorData.isEmpty) {
-      return Center(
-        child: Text(
-          "옷을 더 등록하고 정확한 통계를 확인하세요",
-          style: BodyTextStyles.Medium16.copyWith(color: SystemColors.gray700),
-        ),
-      );
-    }
+    // if (colorData.isEmpty) {
+    //   return Center(
+    //     child: Text(
+    //       "옷을 더 등록하고 정확한 통계를 확인하세요",
+    //       style: BodyTextStyles.Medium16.copyWith(color: SystemColors.gray700),
+    //     ),
+    //   );
+    // }
 
     final totalItems = colorData.values.fold(0, (sum, item) => sum + item);
     final topColors = _getTopColors(colorData);
@@ -230,21 +232,27 @@ class ColorDistributionChartWidget extends StatelessWidget {
             color: SignatureColors.begie200,
             borderRadius: BorderRadius.circular(6),
           ),
-          child: Column(
-            children: [
-              Text(
-                "${mostFrequent['name']} 옷이 ${mostFrequentPercentage.toStringAsFixed(0)}%로 가장 많아요",
-                style: BodyTextStyles.Medium12,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 4),
-              Text(
-                "${mostFrequent['name']} 옷 중 ${getPostposition(mostFrequentCategory)} ${mostFrequentCategoryPercent}%로 가장 많아요",
-                style: BodyTextStyles.Medium12,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+          child: clothesData.isEmpty
+              ? Text(
+                  "옷을 더 등록하고 정확한 통계를 확인하세요",
+                  style: BodyTextStyles.Medium12,
+                  textAlign: TextAlign.center,
+                )
+              : Column(
+                  children: [
+                    Text(
+                      "${mostFrequent['name']} 옷이 ${mostFrequentPercentage.toStringAsFixed(0)}%로 가장 많아요",
+                      style: BodyTextStyles.Medium12,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      "${mostFrequent['name']} 옷 중 ${getPostposition(mostFrequentCategory)} ${mostFrequentCategoryPercent}%로 가장 많아요",
+                      style: BodyTextStyles.Medium12,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
         ),
       ],
     );
@@ -253,27 +261,13 @@ class ColorDistributionChartWidget extends StatelessWidget {
   List<PieChartSectionData> _generatePieChartSections(
       List<Map<String, dynamic>> topColors, int totalItems) {
     try {
-      if (topColors.isEmpty) {
-        return [
-          PieChartSectionData(
-            value: 100,
-            color: SystemColors.gray700,
-            radius: 30,
-            title: "",
-          )
-        ]; // 기본 회색 원으로 표시
-      }
       return topColors.map((entry) {
-        double percentage = (entry['count'] / totalItems) * 100;
+        double percentage =
+            totalItems == 0 ? 100 : (entry['count'] / totalItems) * 100;
         return PieChartSectionData(
-          borderSide: BorderSide(
-              color: entry['name'] == "흰색"
-                  ? SystemColors.gray700
-                  : Colors.transparent,
-              width: 1),
           value: percentage,
           color: (entry['name'] == "기타")
-              ? SystemColors.gray700
+              ? SystemColors.gray600
               : ClothesColor.fromName(colorContainers
                       .firstWhere((element) =>
                           element.representativeColorName.fullKoreanName ==
@@ -291,7 +285,7 @@ class ColorDistributionChartWidget extends StatelessWidget {
       return [
         PieChartSectionData(
           value: 100,
-          color: SystemColors.gray700,
+          color: SystemColors.gray600,
           radius: 30,
           title: "",
         )
@@ -310,7 +304,7 @@ class ColorDistributionChartWidget extends StatelessWidget {
             height: 17,
             decoration: BoxDecoration(
               color: (entry['name'] == "기타")
-                  ? SystemColors.gray700
+                  ? SystemColors.gray600
                   : ClothesColor.fromName(colorContainers
                           .firstWhere((element) =>
                               element.representativeColorName.fullKoreanName ==
@@ -319,9 +313,6 @@ class ColorDistributionChartWidget extends StatelessWidget {
                           .name)
                       .color,
               borderRadius: BorderRadius.circular(4),
-              border: (entry['name'] == "흰색")
-                  ? Border.all(color: SystemColors.gray700, width: 1)
-                  : null,
             ),
           ),
           SizedBox(width: 8),

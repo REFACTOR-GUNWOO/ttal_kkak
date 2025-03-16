@@ -184,14 +184,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     ? _buildMissionWidget(context)
                     : Container(),
                 Center(
-                  child: clothesData.isEmpty
-                      ? Container()
-                      : (isMissionCompleted)
-                          ? StatisticsTitleWidget(
-                              clothes: clothesData,
-                              isMissionCompleted: isMissionCompleted,
-                            )
-                          : Container(),
+                  child: (isMissionCompleted)
+                      ? StatisticsTitleWidget(
+                          clothes: clothesData,
+                          isMissionCompleted: isMissionCompleted,
+                        )
+                      : Container(),
                 ),
                 SizedBox(height: 12),
                 CategoryStatisticsContainerWidget(
@@ -326,20 +324,25 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       print('ClothesItem initState');
       DisplayMessage _message = await _getDisplayMessage();
+      print("message: ${_message.analysisType.name}");
       DisplayMessage? savedMessage =
           await DisplayMessageRepository().getLatestMessage();
-      if (savedMessage == null ||
-          (_message.analysisType != savedMessage.analysisType)) {
-        int a = await DisplayMessageRepository().insertMessage(_message);
-        print("inserted message id: $a");
-        setState(() {
-          message = _message;
-        });
-      } else {
-        setState(() {
-          message = savedMessage;
-        });
-      }
+      print("savedMessage: ${savedMessage?.analysisType.name}");
+      // if (savedMessage == null ||
+      //     (_message.analysisType != savedMessage.analysisType)) {
+      //   int a = await DisplayMessageRepository().insertMessage(_message);
+      //   print("inserted message id: $a");
+      //   setState(() {
+      //     message = _message;
+      //   });
+      // } else {
+      //   setState(() {
+      //     message = savedMessage;
+      //   });
+      // }
+      setState(() {
+        message = _message;
+      });
     });
   }
 
@@ -370,7 +373,7 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
       }
 
       final minimumPrimaryCategory = primaryCategoryCount.entries
-          .where((element) => element.key.code != "outer" && element.value < 3)
+          .where((element) => element.key.code != "dress" && element.value < 3)
           .fold<MapEntry<FirstCategory, int>?>(
               null,
               (prev, element) =>
@@ -384,7 +387,7 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
           "미니멀 끝판왕"
         ];
 
-        final List<String> descriptions = ["가지고 있는 옷이 매우 적은 편인 것 같아요!"];
+        final List<String> descriptions = ["가지고 있는 옷이\n매우 적은 편인 것 같아요!"];
         final List<String> addClothesDescriptions = [
           "옷을 더 등록하면 정확한 결과를 확인할 수 있어요",
           "아직 옷을 등록 중이시겠죠?\n더 등록하고 정확한 유형을 확인하세요",
@@ -403,12 +406,12 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
         ];
 
         final List<String> descriptions = [
-          "가지고 있는 ${getPostposition(minimumPrimaryCategory.key.name)} 매우 적으신 편인 것 같아요!"
+          "가지고 있는 ${getPostposition(minimumPrimaryCategory.key.name)}\n매우 적으신 편인 것 같아요!"
         ];
 
         final List<String> addClothesDescriptions = [
-          "혹시 가지고 있는 ${getObjectMarker(minimumPrimaryCategory.key.name)} 덜 등록하신 건 아닐까요?👀",
-          "서둘러 ${getObjectMarker(minimumPrimaryCategory.key.name)} 더 등록해보세요🥲"
+          "혹시 가지고 있는 ${getObjectMarker(minimumPrimaryCategory.key.name)}\n덜 등록하신 건 아닐까요?👀",
+          "서둘러 ${getObjectMarker(minimumPrimaryCategory.key.name)}\n더 등록해보세요🥲"
         ];
 
         return DisplayMessage.of(titles, descriptions, addClothesDescriptions,
@@ -432,12 +435,12 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
         ];
 
         final List<String> descriptions = [
-          "${topColor.key.shortKoreanName} 옷을 엄청 많이 가지고 계시군요?"
+          "${topColor.key.shortKoreanName} 옷을 엄청\n많이 가지고 계시군요?"
         ];
 
         final List<String> addClothesDescriptions = [
-          "혹시 다른 색깔 옷은 더 없으신 건가요...?",
-          "분명 다른 색깔 옷을 덜 등록하신 걸 거예요!\n아닌가요...?🥲"
+          "혹시 다른 색깔 옷은\n더 없으신 건가요...?👀",
+          "분명 다른 색깔 옷을\n덜 등록하신 걸 거예요!🥲"
         ];
 
         return DisplayMessage.of(titles, descriptions, addClothesDescriptions,
@@ -451,12 +454,12 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
         final List<String> titles = ["흑백 사진관", "수묵담채화"];
 
         final List<String> descriptions = [
-          "모노톤을 좋아하시군요? 대부분 흰색, 검정색, 회색 옷이에요!"
+          "모노톤을 좋아하시군요?\n대부분 흰색, 검정색, 회색 옷이에요!"
         ];
 
         final List<String> addClothesDescriptions = [
-          "혹시 다른 색깔 옷은 더 없으신 건가요...?",
-          "컬러감 있는 옷 분명 더 있으실 거예요🥲"
+          "혹시 다른 색깔 옷은\n더 없으신 건가요...?👀",
+          "컬러감 있는 옷이\n분명 더 있으실 거예요🥲"
         ];
 
         return DisplayMessage.of(titles, descriptions, addClothesDescriptions,
@@ -467,12 +470,12 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
           getDarknessDistribution(widget.clothes).entries.reduce(
               (prev, element) => element.value > prev.value ? element : prev);
 
-      if (topDarknessDistribution.value >= widget.clothes.length * 7 / 10) {
+      if (topDarknessDistribution.value >= (widget.clothes.length * 7 / 10)) {
         if (topDarknessDistribution.key == "진한톤") {
           final List<String> darkToneTitles = ["다크나이트", "어두컴컴 애호가"];
 
           final List<String> darkToneDescriptions = [
-            "어두운 톤의 옷을 70% 이상 가지고 계시군요?"
+            "어두운 톤의 옷을 70% 이상\n가지고 계시군요?"
           ];
 
           final List<String> darkToneAddClothesDescriptions = [
@@ -490,12 +493,12 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
           final List<String> brightToneTitles = ["파스텔톤 마니아", "봄날의 햇살"];
 
           final List<String> brightToneDescriptions = [
-            "밝은 톤의 옷을 70% 이상 가지고 계시군요?"
+            "밝은 톤의 옷을 70% 이상\n가지고 계시군요?"
           ];
 
           final List<String> brightToneAddClothesDescriptions = [
-            "혹시 등록하지 못한 어두운 톤의 옷 없나요?👀",
-            "잊고 있었던 어두운 옷을 더 등록해 주세요!"
+            "혹시 등록하지 못한\n어두운 톤의 옷 없나요?👀",
+            "잊고 있었던 어두운 옷을\n더 등록해 주세요!"
           ];
           return DisplayMessage.of(
               brightToneTitles,
@@ -526,7 +529,7 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
         final List<String> minimalColorTitles = ["카멜레온", "보기 힘든 무지개"];
 
         final List<String> minimalColorDescriptions = [
-          "가지고 있는 옷 컬러가\n정말 다양하시군요!!"
+          "가지고 있는 옷 컬러가\n정말 다양하시군요!"
         ];
 
         final List<String> minimalColorAddClothesDescriptions = [
@@ -649,11 +652,12 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
           // Title Text
           Text(
             "옷장 분석 결과 당신은",
-            style: BodyTextStyles.Regular16,
+            style: BodyTextStyles.Medium14.copyWith(
+                color: SignatureColors.begie800),
             textAlign: TextAlign.center,
           ),
           // Display Message
-          SizedBox(height: 8),
+          SizedBox(height: 4),
 
           Text(
             message.title,
@@ -664,11 +668,12 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
 
           Text(
             message.description,
-            style: BodyTextStyles.Medium16,
+            style:
+                BodyTextStyles.Medium16.copyWith(color: SystemColors.gray800),
             textAlign: TextAlign.center,
           ),
 
-          SizedBox(height: 24),
+          SizedBox(height: 32),
           Container(
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

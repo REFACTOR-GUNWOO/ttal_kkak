@@ -5,10 +5,10 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 enum ClosetAnalysisType {
-  clothingCountLow, // (우선순위 1) 옷 개수가 많음
-  primaryCategoryClothesCountLow, // (1-2) 상위 카테고리 옷 개수가 많음
-  secondCategoryClothesCountHigh,
-  secondCategoriesClothesCountHigh,
+  clothingCountLow, // (우선순위 1) 옷 개수가 적음
+  primaryCategoryClothesCountLow, // (1-2) 상위 카테고리 옷 개수가 적음
+  secondCategoryClothesCountHigh, // (1-3) 하위 카테고리 옷 개수가 많음
+  secondCategoriesClothesCountHigh, 
   colorDominant, // (우선순위 2) 특정 컬러가 많음
   monochromeDominant, // (2-2) 모노톤 컬러가 많음
   darkToneDominant,

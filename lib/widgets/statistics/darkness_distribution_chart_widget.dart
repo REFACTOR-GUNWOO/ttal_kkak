@@ -153,10 +153,8 @@ class DarknessDistributionChartWidget extends StatelessWidget {
                       showingTooltipIndicators: [0],
                       barRods: [
                         BarChartRodData(
-                          toY: (entry.value.toDouble() == 0
-                                  ? 0.1
-                                  : entry.value.toDouble()) *
-                              animationValue,
+                          fromY: -maxCount / 10,
+                          toY: entry.value.toDouble() * animationValue,
                           color: entry.key == '진한톤'
                               ? SignatureColors.begie800
                               : SignatureColors.begie300,

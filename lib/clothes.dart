@@ -2089,7 +2089,7 @@ final List<ColorContainer> colorContainers = [
   ),
   ColorContainer(
     [ClothesColor.white, ClothesColor.warmWhite, ClothesColor.coolWhite],
-    ClothesColor.white,
+    ClothesColor.warmWhite,
     ColorName.WHITE,
   ),
   ColorContainer(
