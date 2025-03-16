@@ -111,8 +111,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: ElevatedButton(
                     onPressed: () {
-                      LogService().log(LogType.click_button,
-                          "statistics_mission_complete_bottom_sheet", "confirm_button", {});
+                      LogService().log(
+                          LogType.click_button,
+                          "statistics_mission_complete_bottom_sheet",
+                          "confirm_button", {});
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
@@ -249,6 +251,14 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
       // }
       setState(() {
         message = _message;
+      });
+
+      LogService().log(LogType.view_screen, "statistics_main_page", null, {
+        "title": message.title,
+        "description": message.description,
+        "addClothesDescription": message.addClothesDescription,
+        "analysisType": message.analysisType.name,
+        "clothesCount": widget.clothes.length.toString(),
       });
     });
   }
@@ -596,6 +606,11 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
                     message.showAddClothesButton
                         ? GestureDetector(
                             onTap: () async {
+                              LogService().log(
+                                  LogType.click_button,
+                                  "statistics_main_page",
+                                  "clothing_register_button", {});
+
                               final res = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
