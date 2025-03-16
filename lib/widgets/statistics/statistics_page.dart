@@ -69,6 +69,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   void _showMissionCompletedBottomSheet() {
+    LogService().log(LogType.view_screen,
+        "statistics_mission_complete_bottom_sheet", null, {});
+
     showModalBottomSheet(
       context: context,
       barrierColor: SystemColors.gray700.withOpacity(0.5),
@@ -107,7 +110,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      LogService().log(LogType.click_button,
+                          "statistics_mission_complete_bottom_sheet", "confirm_button", {});
+                      Navigator.pop(context);
+                    },
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: SystemColors.black,
