@@ -41,6 +41,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
       bool isNowCompleted = _checkMissionCompleted();
       if (isNowCompleted && !wasMissionCompleted) {
         _showMissionCompletedBottomSheet();
+        await MissionRepository().updateMissionStatus(true);
       }
     });
   }
@@ -110,11 +111,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: ElevatedButton(
                     onPressed: () async {
-                      // 확인 버튼을 눌렀을 때만 미션 완료 상태 저장
-                      await MissionRepository().updateMissionStatus(true);
                       Navigator.pop(context);
-                      // 상태 업데이트를 위해 setState 호출
-                      setState(() {});
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
