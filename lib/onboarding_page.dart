@@ -96,7 +96,7 @@ class BottomSheetContent extends StatelessWidget {
               ),
               // Spacer(),
               SizedBox(
-                height: MediaQuery.of(context).padding.bottom,
+                height: MediaQuery.of(context).padding.bottom + 20,
               )
             ],
           ),
