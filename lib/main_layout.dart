@@ -75,7 +75,6 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
             child: Padding(
               padding: const EdgeInsets.only(left: 42, right: 30),
               child: SizedBox(
-                height: 82,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
