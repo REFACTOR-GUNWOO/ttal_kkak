@@ -61,7 +61,7 @@ class _MissionWidgetState extends State<MissionWidget> {
           SvgPicture.asset("assets/icons/statistics_mission.svg"),
           SizedBox(height: 10),
           Text(
-            "아래 조건들을 달성해야\n통계 페이지를 확인할 수 있어요",
+            "아래 미션들을 달성해야\n통계 페이지를 확인할 수 있어요",
             textAlign: TextAlign.center,
             style:
                 BodyTextStyles.Regular14.copyWith(color: SystemColors.gray900),
