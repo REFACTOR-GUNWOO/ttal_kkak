@@ -13,6 +13,16 @@ class BodyTextStyles {
       fontSize: 12,
       fontWeight: FontWeight.w500,
       height: 1.5);
+  static const TextStyle Medium14 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      height: 1.5);
+  static const TextStyle Medium16 = TextStyle(
+      fontFamily: 'Pretendard',
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      height: 1.5);
 
   static const TextStyle Regular14 = TextStyle(
       fontFamily: 'Pretendard',

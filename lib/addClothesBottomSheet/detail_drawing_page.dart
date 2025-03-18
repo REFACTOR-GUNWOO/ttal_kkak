@@ -25,10 +25,14 @@ class DetailDrawingPage extends StatefulWidget {
   @override
   _DetailDrawingPageState createState() => _DetailDrawingPageState();
   const DetailDrawingPage(
-      {super.key, required this.isUpdate, required this.updateProvider});
+      {super.key,
+      required this.isUpdate,
+      required this.updateProvider,
+      required this.onSave});
 
   final bool isUpdate;
   final ClothesUpdateProvider updateProvider;
+  final VoidCallback onSave;
 }
 
 class _DetailDrawingPageState extends State<DetailDrawingPage> {
@@ -331,7 +335,9 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                           "isUpdate": widget.isUpdate.toString(),
                         });
 
-                        Navigator.pop(context);
+                        Navigator.pop(
+                          context,
+                        );
                       },
                       child: Padding(
                           padding: EdgeInsets.all(10),
@@ -355,9 +361,7 @@ class _DetailDrawingPageState extends State<DetailDrawingPage> {
                       Provider.of<ReloadHomeProvider>(context, listen: false)
                           .triggerReload(),
                       showToast(widget.isUpdate ? "수정되었습니다" : "등록되었습니다"),
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => MainLayout()),
-                      )
+                      widget.onSave()
                     },
                     child: Text(
                       '저장',

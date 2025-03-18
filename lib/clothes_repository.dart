@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/detail_drawing_page.dart';
@@ -10,7 +11,7 @@ class ClothesRepository {
   static Database? _database;
 
   static const String _tableName = 'clothes';
-  static const String _dbName = 'clothes_test.db';
+  static const String _dbName = 'clothes_test${kDebugMode ? "debug" : ""}.db';
 
   Future<List<Clothes>> loadClothes() async {
     final res = await (await database).rawQuery("SELECT * FROM ${_tableName}");

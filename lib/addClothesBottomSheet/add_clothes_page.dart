@@ -24,22 +24,27 @@ import 'package:uuid/uuid.dart';
 
 class AddClothesPage extends StatelessWidget {
   final bool isUpdate;
-  const AddClothesPage({super.key, required this.isUpdate});
+  final VoidCallback onClose;
+  const AddClothesPage(
+      {super.key, required this.isUpdate, required this.onClose});
 
   @override
   Widget build(BuildContext context) {
     return StepContainer(
       isUpdate: isUpdate,
+      onClose: onClose,
     );
   }
 }
 
 class StepContainer extends StatefulWidget {
-  const StepContainer({super.key, required this.isUpdate});
+  const StepContainer(
+      {super.key, required this.isUpdate, required this.onClose});
 
   @override
   _StepContainerState createState() => _StepContainerState();
   final bool isUpdate;
+  final VoidCallback onClose;
 }
 
 class _StepContainerState extends State<StepContainer> {
@@ -95,6 +100,7 @@ class _StepContainerState extends State<StepContainer> {
         onNextStep: _nextStep,
         isUpdate: widget.isUpdate,
         updateProvider: provider,
+        onSave: widget.onClose,
       )
     ];
   }
@@ -147,6 +153,7 @@ class _StepContainerState extends State<StepContainer> {
     return Scaffold(
         backgroundColor: SignatureColors.begie200,
         bottomNavigationBar: BottomSheetAppBar(
+            onSave: widget.onClose,
             nextStepFun: _nextStep,
             previousStepFun: _previousStep,
             nextStep: _currentStep == steps.length - 1
@@ -175,10 +182,7 @@ class _StepContainerState extends State<StepContainer> {
                   title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Expanded(
-                          flex: 2,
-                          child: Container()
-                        ),
+                        Expanded(flex: 2, child: Container()),
                         Expanded(
                             flex: 2,
                             child: Text(
@@ -209,10 +213,7 @@ class _StepContainerState extends State<StepContainer> {
                                     "button_position": "top"
                                   });
 
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) => MainLayout()),
-                                  );
+                                  widget.onClose();
                                 },
                                 child: Text("닫기",
                                     style:

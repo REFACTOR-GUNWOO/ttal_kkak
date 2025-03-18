@@ -13,9 +13,11 @@ class BottomSheetBody6 extends StatefulWidget implements BottomSheetStep {
       {super.key,
       required this.onNextStep,
       required this.isUpdate,
-      required this.updateProvider});
+      required this.updateProvider,
+      required this.onSave});
   final bool isUpdate;
   final ClothesUpdateProvider updateProvider;
+  final VoidCallback onSave;
   @override
   bool Function() get canGoNext => () => true;
 
@@ -49,6 +51,7 @@ class DetailInfoCards extends State<BottomSheetBody6> {
                 builder: (context) => DetailDrawingPage(
                       isUpdate: widget.isUpdate,
                       updateProvider: widget.updateProvider,
+                      onSave: widget.onSave,
                     )),
           );
         },
