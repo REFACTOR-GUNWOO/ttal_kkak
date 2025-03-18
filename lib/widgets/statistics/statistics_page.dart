@@ -90,10 +90,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                SizedBox(height: 32),
                 Lottie.asset(
-                  'assets/lotties/onboarding_present.json',
-                  width: 240,
-                  height: 240,
+                  'assets/lotties/firecrackers.json',
+                  width: 126,
+                  height: 126,
                   fit: BoxFit.fill,
                 ),
                 SizedBox(height: 12),
@@ -647,7 +648,8 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             MainLayout(
-                                                              currentTabIndex:1,
+                                                              currentTabIndex:
+                                                                  1,
                                                             )));
                                           },
                                         )), // 이동할 페이지

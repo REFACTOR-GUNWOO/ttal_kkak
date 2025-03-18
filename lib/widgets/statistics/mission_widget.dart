@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ttal_kkak/addClothesBottomSheet/add_clothes_page.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
@@ -57,7 +58,8 @@ class _MissionWidgetState extends State<MissionWidget> {
       ),
       child: Column(
         children: [
-          SizedBox(height: 12),
+          SvgPicture.asset("assets/icons/statistics_mission.svg"),
+          SizedBox(height: 10),
           Text(
             "아래 조건들을 달성해야\n통계 페이지를 확인할 수 있어요",
             textAlign: TextAlign.center,
