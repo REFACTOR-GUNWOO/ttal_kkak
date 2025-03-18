@@ -31,14 +31,17 @@ class MissionCheckListWidget extends StatelessWidget {
             ),
           ),
           child: isCompleted
-              ? SvgPicture.asset("assets/icons/check_icon.svg")
+              ? SvgPicture.asset(
+                  fit: BoxFit.none,
+                  "assets/icons/check_icon.svg",
+                )
               : null,
         ),
         SizedBox(width: 12),
         Text(
           text,
           style: OneLineTextStyles.Medium14.copyWith(
-            color: isCompleted ? SystemColors.gray500 : SystemColors.black,
+            color: isCompleted ? SystemColors.gray700 : SystemColors.black,
             decoration: isCompleted ? TextDecoration.lineThrough : null,
           ),
         ),
