@@ -138,7 +138,7 @@ class _CategoryStatisticsContainerWidgetState
                       color: SystemColors.gray700), // 텍스트 스타일 설정
                 ),
 
-          SizedBox(height: 10),
+          SizedBox(height: 24),
 
           // 카테고리 통계 위젯
           widget.isMissionCompleted

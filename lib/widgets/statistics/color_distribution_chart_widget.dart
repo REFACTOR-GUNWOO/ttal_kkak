@@ -41,7 +41,7 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: 20),
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       decoration: BoxDecoration(
         color: SystemColors.white,
         borderRadius: BorderRadius.circular(16),
@@ -55,7 +55,7 @@ class _ColorDistributionWidgetState extends State<ColorDistributionWidget> {
                   color: widget.isMissionCompleted
                       ? SystemColors.black
                       : SystemColors.gray700)),
-          SizedBox(height: 20),
+          SizedBox(height: 24),
           widget.isMissionCompleted
               ? ColorDistributionChartWidget(
                   clothesData: widget.clothesData,
