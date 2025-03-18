@@ -17,6 +17,7 @@ class BottomSheetAppBar extends StatelessWidget {
   final BottomSheetStep? nextStep;
   final BottomSheetStep? previousStep;
   final BottomSheetStep currentStep;
+  final VoidCallback onSave;
   final int currentStepCount;
   final bool isUpdate;
   const BottomSheetAppBar({
@@ -28,6 +29,7 @@ class BottomSheetAppBar extends StatelessWidget {
     required this.isUpdate,
     required this.currentStep,
     required this.currentStepCount,
+    required this.onSave,
   });
 
   bool isInactiveStep(Clothes? clothes) {
@@ -117,10 +119,7 @@ class BottomSheetAppBar extends StatelessWidget {
                               "button_position": "bottom"
                             });
                             showToast(isUpdate ? "수정되었습니다" : "등록되었습니다");
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => MainLayout()),
-                            );
+                            onSave();
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,

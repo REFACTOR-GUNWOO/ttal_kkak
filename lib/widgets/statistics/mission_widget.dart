@@ -3,9 +3,11 @@ import 'package:ttal_kkak/addClothesBottomSheet/add_clothes_page.dart';
 import 'package:ttal_kkak/category.dart';
 import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/common/log_service.dart';
+import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
 import 'package:ttal_kkak/widgets/statistics/mission_check_list_widget.dart';
+import 'package:ttal_kkak/widgets/statistics/statistics_page.dart';
 
 class MissionWidget extends StatefulWidget {
   final List<Clothes> clothesData;
@@ -74,6 +76,13 @@ class _MissionWidgetState extends State<MissionWidget> {
                 MaterialPageRoute(
                     builder: (context) => AddClothesPage(
                           isUpdate: false,
+                          onClose: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      MainLayout(currentTabIndex: 1)),
+                            );
+                          },
                         )),
               );
               if (res == 'refresh') {

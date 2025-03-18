@@ -12,6 +12,9 @@ import 'package:ttal_kkak/tool_tip_with_tail.dart';
 import 'dart:ui'; // BackdropFilter를 사용하기 위한 라이브러리 추가
 
 class MainLayout extends StatefulWidget {
+  final int? currentTabIndex;
+  const MainLayout({super.key, this.currentTabIndex = 0});
+
   @override
   _MainLayoutState createState() => _MainLayoutState();
 }
@@ -19,6 +22,15 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
   int _selectedIndex = 0;
   PageController _pageController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.currentTabIndex ?? 0;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _pageController.jumpToPage(_selectedIndex);
+    });
+  }
 
   // 탭 정보 공통 리스트
   final List<Map<String, String>> _tabs = [
@@ -32,7 +44,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
       LogType.click_button,
       "main_layout",
       "tab_button",
-      {"tab_name": _tabs[index]["name"]??"unknown"},
+      {"tab_name": _tabs[index]["name"] ?? "unknown"},
     );
 
     setState(() {
@@ -98,8 +110,12 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                           currentIndex: _selectedIndex,
                           selectedItemColor: SystemColors.black,
                           unselectedItemColor: SystemColors.gray700,
-                          selectedLabelStyle: OneLineTextStyles.Medium10.copyWith(color: SystemColors.black),
-                          unselectedLabelStyle: OneLineTextStyles.Medium10.copyWith(color: SystemColors.gray700),
+                          selectedLabelStyle:
+                              OneLineTextStyles.Medium10.copyWith(
+                                  color: SystemColors.black),
+                          unselectedLabelStyle:
+                              OneLineTextStyles.Medium10.copyWith(
+                                  color: SystemColors.gray700),
                           onTap: _onItemTapped,
                         ),
                       ),
@@ -117,7 +133,15 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
 
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => AddClothesPage(isUpdate: false),
+                              builder: (context) => AddClothesPage(
+                                isUpdate: false,
+                                onClose: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => MainLayout()),
+                                  );
+                                },
+                              ),
                             ),
                           );
                         },
@@ -129,7 +153,8 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Center(
-                            child: SvgPicture.asset("assets/icons/add_clothes_icon.svg"),
+                            child: SvgPicture.asset(
+                                "assets/icons/add_clothes_icon.svg"),
                           ),
                         ),
                       ),

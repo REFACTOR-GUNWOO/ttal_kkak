@@ -8,6 +8,8 @@ import 'package:ttal_kkak/clothes.dart';
 import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/common_bottom_sheet.dart';
 import 'package:ttal_kkak/common/log_service.dart';
+import 'package:ttal_kkak/main_layout.dart';
+import 'package:ttal_kkak/models/display_message_dto.dart';
 import 'package:ttal_kkak/repositories/display_message_repository.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -51,7 +53,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
     }
 
     setState(() {
-      isMissionCompleted = isNowCompleted;
+      isMissionCompleted = isNowCompleted || wasMissionCompleted;
     });
   }
 
@@ -225,7 +227,8 @@ class StatisticsTitleWidget extends StatefulWidget {
 }
 
 class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
-  DisplayMessage message = DisplayMessage.unknown();
+  DisplayMessageDto message =
+      DisplayMessageDto.fromDisplayMessage(DisplayMessage.unknown());
 
   @override
   initState() {
@@ -250,7 +253,7 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
       //   });
       // }
       setState(() {
-        message = _message;
+        message = DisplayMessageDto.fromDisplayMessage(_message);
       });
 
       LogService().log(LogType.view_screen, "statistics_main_page", null, {
@@ -270,6 +273,10 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
       final secondCategoryCount = <SecondCategory, int>{};
       final representativeClothesColorCount = <ColorName, int>{};
 
+      for (var category in firstCategories) {
+        if (category.code == "dress") continue;
+        primaryCategoryCount[category] = 0;
+      }
       for (var cloth in widget.clothes) {
         // Count by category
         final FirstCategory category = firstCategories
@@ -297,11 +304,11 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
                   prev == null || element.value < prev.value ? element : prev);
 
       if (widget.clothes.length <= 15) {
-        final List<String> titles = [
-          "미니멀리스트",
-          "맨몸 패셔니스타",
-          "돌려입기 마스터",
-          "미니멀 끝판왕"
+        final List<MapEntry<String, String>> titles = [
+          MapEntry("미니멀리스트", "image_minimalist_4.svg"),
+          MapEntry("맨몸 패셔니스타", "image_minimalist_3.svg"),
+          MapEntry("돌려입기 마스터", "image_minimalist_1.svg"),
+          MapEntry("미니멀 끝판왕", "image_minimalist_2.svg"),
         ];
 
         final List<String> descriptions = ["가지고 있는 옷이\n매우 적은 편인 것 같아요!"];
@@ -311,15 +318,15 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
           "이렇게 옷이 적으실리 없어요!\n옷을 더 등록해 주세요🥲"
         ];
         return DisplayMessage.of(titles, descriptions, addClothesDescriptions,
-            ClosetAnalysisType.clothingCountLow);
+            null, ClosetAnalysisType.clothingCountLow);
       }
 
       if (minimumPrimaryCategory != null) {
-        final List<String> titles = [
-          "${minimumPrimaryCategory.key.name} 미니멀리스트",
-          "${minimumPrimaryCategory.key.name} 무소유",
-          "작고 귀여운 ${minimumPrimaryCategory.key.name}",
-          "${minimumPrimaryCategory.key.name} 자리 고비"
+        final List<MapEntry<String, String?>> titles = [
+          MapEntry("${minimumPrimaryCategory.key.name} 미니멀리스트", null),
+          MapEntry("${minimumPrimaryCategory.key.name} 무소유", null),
+          MapEntry("작고 귀여운 ${minimumPrimaryCategory.key.name}", null),
+          MapEntry("${minimumPrimaryCategory.key.name} 자리 고비", null)
         ];
 
         final List<String> descriptions = [
@@ -331,7 +338,11 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
           "서둘러 ${getObjectMarker(minimumPrimaryCategory.key.name)}\n더 등록해보세요🥲"
         ];
 
-        return DisplayMessage.of(titles, descriptions, addClothesDescriptions,
+        return DisplayMessage.of(
+            titles,
+            descriptions,
+            addClothesDescriptions,
+            "image_minimalist_${minimumPrimaryCategory.key.code}.svg",
             ClosetAnalysisType.primaryCategoryClothesCountLow);
       }
 
@@ -343,12 +354,9 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
 
       if (topColor != null &&
           topColor.value >= widget.clothes.length * 4 / 10) {
-        final List<String> titles = [
-          "${topColor.key.englishName} 러버",
-          "${topColor.key.englishName} 중독자",
-          "${topColor.key.englishName} 매니아",
-          "${topColor.key.englishName} 사랑꾼",
-          "${topColor.key.englishName} 수집가"
+        final List<MapEntry<String, String?>> titles = [
+          MapEntry("${topColor.key.englishName} 러버", null),
+          MapEntry("${topColor.key.englishName} 사랑꾼", null),
         ];
 
         final List<String> descriptions = [
@@ -360,7 +368,11 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
           "분명 다른 색깔 옷을\n덜 등록하신 걸 거예요!🥲"
         ];
 
-        return DisplayMessage.of(titles, descriptions, addClothesDescriptions,
+        return DisplayMessage.of(
+            titles,
+            descriptions,
+            addClothesDescriptions,
+            "image_color_${topColor.key.name.toLowerCase()}.svg",
             ClosetAnalysisType.colorDominant);
       }
 
@@ -368,7 +380,10 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
               (representativeClothesColorCount[ColorName.WHITE] ?? 0) +
               (representativeClothesColorCount[ColorName.GRAY] ?? 0)) >=
           widget.clothes.length * 5 / 10) {
-        final List<String> titles = ["흑백 사진관", "수묵담채화"];
+        final List<MapEntry<String, String>> titles = [
+          MapEntry("흑백 사진관", "image_흑백사진관.svg"),
+          MapEntry("수묵담채화", "image_수묵담채화.svg")
+        ];
 
         final List<String> descriptions = [
           "모노톤을 좋아하시군요?\n대부분 흰색, 검정색, 회색 옷이에요!"
@@ -380,7 +395,7 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
         ];
 
         return DisplayMessage.of(titles, descriptions, addClothesDescriptions,
-            ClosetAnalysisType.monochromeDominant);
+            null, ClosetAnalysisType.monochromeDominant);
       }
 
       final MapEntry<String, int> topDarknessDistribution =
@@ -389,7 +404,10 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
 
       if (topDarknessDistribution.value >= (widget.clothes.length * 7 / 10)) {
         if (topDarknessDistribution.key == "진한톤") {
-          final List<String> darkToneTitles = ["다크나이트", "어두컴컴 애호가"];
+          final List<MapEntry<String, String>> darkToneTitles = [
+            MapEntry("다크나이트", "image_darknight.svg"),
+            MapEntry("어두컴컴애호가", "image_어두컴컴애호가.svg"),
+          ];
 
           final List<String> darkToneDescriptions = [
             "어두운 톤의 옷을 70% 이상\n가지고 계시군요?"
@@ -404,10 +422,14 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
               darkToneTitles,
               darkToneDescriptions,
               darkToneAddClothesDescriptions,
+              null,
               ClosetAnalysisType.darkToneDominant);
         }
         if (topDarknessDistribution.key == "밝은톤") {
-          final List<String> brightToneTitles = ["파스텔톤 마니아", "봄날의 햇살"];
+          final List<MapEntry<String, String>> brightToneTitles = [
+            MapEntry("파스텔톤 마니아", "image_파스텔톤매니아.svg"),
+            MapEntry("봄날의 햇살", "image_sunshine.svg"),
+          ];
 
           final List<String> brightToneDescriptions = [
             "밝은 톤의 옷을 70% 이상\n가지고 계시군요?"
@@ -421,13 +443,15 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
               brightToneTitles,
               brightToneDescriptions,
               brightToneAddClothesDescriptions,
+              null,
               ClosetAnalysisType.lightToneDominant);
         }
       }
 
       if (representativeClothesColorCount.entries.length <= 3) {
-        final List<String> minimalColorTitles = ["컬러 미니멀리스트", "단색주의자"];
-
+        final List<MapEntry<String, String>> minimalColorTitles = [
+          MapEntry("컬러 미니멀리스트", "image_컬러미니멀리스트.svg")
+        ];
         final List<String> minimalColorDescriptions = ["가지고 있는 컬러가 많이 적으시네요!"];
 
         final List<String> minimalColorAddClothesDescriptions = [
@@ -439,11 +463,15 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
             minimalColorTitles,
             minimalColorDescriptions,
             minimalColorAddClothesDescriptions,
+            null,
             ClosetAnalysisType.colorLimited);
       }
 
       if (representativeClothesColorCount.entries.length >= 7) {
-        final List<String> minimalColorTitles = ["카멜레온", "보기 힘든 무지개"];
+        final List<MapEntry<String, String>> minimalColorTitles = [
+          MapEntry("카멜레온", "image_chameleon.svg"),
+          MapEntry("보기 힘든 무지개", "image_rainbow.svg"),
+        ];
 
         final List<String> minimalColorDescriptions = [
           "가지고 있는 옷 컬러가\n정말 다양하시군요!"
@@ -457,6 +485,7 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
             minimalColorTitles,
             minimalColorDescriptions,
             minimalColorAddClothesDescriptions,
+            null,
             ClosetAnalysisType.colorDominant);
       }
 
@@ -475,10 +504,8 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
 
       if (topSecondCategoryCount >= 2) {
         if (topSecondCategories.length == 1) {
-          final List<String> categoryCollectorTitles = [
-            "${topSecondCategories.first.key.name} 만수르",
-            "${topSecondCategories.first.key.name} 콜렉터",
-            "${topSecondCategories.first.key.name} 수집가"
+          final List<MapEntry<String, String?>> categoryCollectorTitles = [
+            MapEntry("${topSecondCategories.first.key.name} 수집가", null),
           ];
 
           final List<String> categoryCollectorDescriptions = [
@@ -493,6 +520,7 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
               categoryCollectorTitles,
               categoryCollectorDescriptions,
               categoryCollectorAddClothesDescriptions,
+              "image_collector.svg",
               ClosetAnalysisType.secondCategoryClothesCountHigh);
         }
 
@@ -502,10 +530,8 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
               return e.key.name;
             },
           ).join(",");
-          final List<String> categoryCollectorTitles = [
-            "${topSecnodCategoryText} 만수르",
-            "${topSecnodCategoryText} 콜렉터",
-            "${topSecnodCategoryText} 수집가"
+          final List<MapEntry<String, String?>> categoryCollectorTitles = [
+            MapEntry("${topSecnodCategoryText} 수집가", null),
           ];
 
           final List<String> categoryCollectorDescriptions = [
@@ -521,6 +547,7 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
               categoryCollectorTitles,
               categoryCollectorDescriptions,
               categoryCollectorAddClothesDescriptions,
+              "image_수집가.svg",
               ClosetAnalysisType.secondCategoriesClothesCountHigh);
         }
       }
@@ -528,7 +555,9 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
       print("error : ${e.toString()}");
     }
 
-    final List<String> unknownStyleTitles = ["아직 스타일을 알 수 없어요"];
+    final List<MapEntry<String, String?>> unknownStyleTitles = [
+      MapEntry("아직 스타일을 알 수 없어요", "image_default.svg")
+    ];
 
     final List<String> unknownStyleDescriptions = ["우리에겐 아직 미스터리한 당신"];
 
@@ -537,8 +566,12 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
       "옷을 더 등록해서 정확한\n분석 결과를 받아보세요💪🏻"
     ];
 
-    return DisplayMessage.of(unknownStyleTitles, unknownStyleDescriptions,
-        unknownStyleAddClothesDescriptions, ClosetAnalysisType.unknownStyle);
+    return DisplayMessage.of(
+        unknownStyleTitles,
+        unknownStyleDescriptions,
+        unknownStyleAddClothesDescriptions,
+        null,
+        ClosetAnalysisType.unknownStyle);
   }
 
   @override
@@ -552,15 +585,7 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
             children: [
               // Bear Icon
               Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: SystemColors.white,
-                ),
-                child: Icon(
-                  Icons.pets, // Placeholder for bear icon
-                  size: 24,
-                ),
+                child: SvgPicture.asset(message.iconUrl),
               ),
               // Placeholder Image (X shape)
             ],
@@ -616,6 +641,15 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
                                 MaterialPageRoute(
                                     builder: (context) => AddClothesPage(
                                           isUpdate: false,
+                                          onClose: () {
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            MainLayout(
+                                                              currentTabIndex:1,
+                                                            )));
+                                          },
                                         )), // 이동할 페이지
                               );
                               print("res: $res");

@@ -8,6 +8,7 @@ import 'package:ttal_kkak/clothes_repository.dart';
 import 'package:ttal_kkak/common/common_bottom_sheet.dart';
 import 'package:ttal_kkak/common/log_service.dart';
 import 'package:ttal_kkak/common/show_toast.dart';
+import 'package:ttal_kkak/main_layout.dart';
 import 'package:ttal_kkak/provider/clothes_update_provider.dart';
 import 'package:ttal_kkak/styles/colors_styles.dart';
 import 'package:ttal_kkak/styles/text_styles.dart';
@@ -44,7 +45,15 @@ class UpdateBottomSheet extends StatelessWidget {
 
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (context) => AddClothesPage(isUpdate: true)),
+                      builder: (context) => AddClothesPage(
+                            isUpdate: true,
+                            onClose: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => MainLayout()),
+                              );
+                            },
+                          )),
                 );
               },
             ),

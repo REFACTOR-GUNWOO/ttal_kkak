@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
@@ -8,7 +9,7 @@ enum ClosetAnalysisType {
   clothingCountLow, // (우선순위 1) 옷 개수가 적음
   primaryCategoryClothesCountLow, // (1-2) 상위 카테고리 옷 개수가 적음
   secondCategoryClothesCountHigh, // (1-3) 하위 카테고리 옷 개수가 많음
-  secondCategoriesClothesCountHigh, 
+  secondCategoriesClothesCountHigh,
   colorDominant, // (우선순위 2) 특정 컬러가 많음
   monochromeDominant, // (2-2) 모노톤 컬러가 많음
   darkToneDominant,
@@ -24,8 +25,9 @@ class DisplayMessage {
   final String title;
   final String description;
   final bool showAddClothesButton;
-  final String addClothesDescription;
+  final List<String> addClothesDescriptions;
   final DateTime createdAt;
+  final String iconUrl;
   final ClosetAnalysisType analysisType;
 
   DisplayMessage({
@@ -34,61 +36,32 @@ class DisplayMessage {
     required this.description,
     this.showAddClothesButton = true,
     required this.analysisType,
-    required this.addClothesDescription,
+    required this.addClothesDescriptions,
+    required this.iconUrl,
     DateTime? createdAt,
   }) : this.createdAt = createdAt ?? DateTime.now();
 
-  static DisplayMessage unknown() {
-    final List<String> unknownStyleTitles = ["아직 스타일을 알 수 없어요"];
-
-    final List<String> unknownStyleDescriptions = ["우리에겐 아직 미스터리한 당신"];
-
-    final List<String> unknownStyleAddClothesDescriptions = [
-      "옷을 조금만 더 등록해\n저희에게 힌트를 주세요🥲",
-      "옷을 더 등록해서 정확한\n분석 결과를 받아보세요💪🏻"
-    ];
-
-    return DisplayMessage.of(unknownStyleTitles, unknownStyleDescriptions,
-        unknownStyleAddClothesDescriptions, ClosetAnalysisType.unknownStyle);
-  }
-
-  static DisplayMessage of(
-    List<String> titles,
-    List<String> descriptions,
-    List<String> addClothesDescriptions,
-    ClosetAnalysisType analysisType,
-  ) {
-    return DisplayMessage(
-      title: titles[Random().nextInt(titles.length)],
-      description: descriptions[Random().nextInt(descriptions.length)],
-      showAddClothesButton: true,
-      addClothesDescription: addClothesDescriptions[
-          Random().nextInt(addClothesDescriptions.length)],
-      analysisType: analysisType,
-    );
-  }
-
-  // DisplayMessage를 Map으로 변환 (DB 저장용)
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'description': description,
       'showAddClothesButton': showAddClothesButton ? 1 : 0,
-      'addClothesDescription': addClothesDescription,
+      'addClothesDescriptions': jsonEncode(addClothesDescriptions),
       'analysisType': analysisType.name,
+      'iconUrl': iconUrl,
       'createdAt': createdAt.toIso8601String(),
     };
   }
 
-  // Map에서 DisplayMessage 객체 생성 (DB 조회 결과 변환용)
   factory DisplayMessage.fromMap(Map<String, dynamic> map) {
     return DisplayMessage(
       id: map['id'],
       title: map['title'],
+      iconUrl: map['iconUrl'],
       description: map['description'],
       showAddClothesButton: map['showAddClothesButton'] == 1,
-      addClothesDescription: map['addClothesDescription'],
+      addClothesDescriptions: List<String>.from(jsonDecode(map['addClothesDescriptions'] ?? '[]')),
       createdAt: DateTime.parse(map['createdAt']),
       analysisType: ClosetAnalysisType.values.firstWhere(
         (type) => type.name == map['analysisType'],
@@ -97,25 +70,44 @@ class DisplayMessage {
     );
   }
 
-  // 객체 복제 및 속성 업데이트
-  DisplayMessage copyWith({
-    int? id,
-    String? title,
-    String? description,
-    bool? showAddClothesButton,
-    String? addClothesDescription,
-    DateTime? createdAt,
-    ClosetAnalysisType? analysisType,
-  }) {
+  static DisplayMessage unknown() {
+    final List<MapEntry<String, String>> unknownStyleTitles = [
+      MapEntry("아직 스타일을 알 수 없어요", "image_default.svg")
+    ];
+
+    final List<String> unknownStyleDescriptions = ["우리에겐 아직 미스터리한 당신"];
+
+    final List<String> unknownStyleAddClothesDescriptions = [
+      "옷을 조금만 더 등록해\n저희에게 힌트를 주세요🥲",
+      "옷을 더 등록해서 정확한\n분석 결과를 받아보세요💪🏻"
+    ];
+
+    return DisplayMessage.of(
+        unknownStyleTitles,
+        unknownStyleDescriptions,
+        unknownStyleAddClothesDescriptions,
+        null,
+        ClosetAnalysisType.unknownStyle);
+  }
+
+  static DisplayMessage of(
+    List<MapEntry<String, String?>> titleAndImageMaps,
+    List<String> descriptions,
+    List<String> addClothesDescriptions,
+    String? defaultUrl,
+    ClosetAnalysisType analysisType,
+  ) {
+    final titleAndImageMap =
+        titleAndImageMaps[Random().nextInt(titleAndImageMaps.length)];
+
     return DisplayMessage(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      showAddClothesButton: showAddClothesButton ?? this.showAddClothesButton,
-      addClothesDescription:
-          addClothesDescription ?? this.addClothesDescription,
-      createdAt: createdAt ?? this.createdAt,
-      analysisType: analysisType ?? this.analysisType,
+      title: titleAndImageMap.key,
+      iconUrl:
+          "assets/icons/statisticsTitle/${titleAndImageMap.value ?? defaultUrl}",
+      description: descriptions[Random().nextInt(descriptions.length)],
+      showAddClothesButton: true,
+      addClothesDescriptions: addClothesDescriptions,
+      analysisType: analysisType,
     );
   }
 }
@@ -140,7 +132,7 @@ class DisplayMessageRepository {
   }
 
   String getDbName() {
-    return 'display_messages_${kDebugMode ? "dev" : "live"}';
+    return 'display_messages_v2_${kDebugMode ? "dev" : "live"}';
   }
 
   // 데이터베이스 초기화
@@ -148,7 +140,7 @@ class DisplayMessageRepository {
     String path = join(await getDatabasesPath(), getDbName() + ".db");
     return await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: _createDb,
     );
   }
@@ -160,8 +152,9 @@ class DisplayMessageRepository {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
         description TEXT NOT NULL,
+        iconUrl TEXT NOT NULL,
         showAddClothesButton INTEGER NOT NULL,
-        addClothesDescription TEXT NOT NULL,
+        addClothesDescriptions TEXT NOT NULL,
         analysisType TEXT NOT NULL,
         createdAt TEXT NOT NULL
       )

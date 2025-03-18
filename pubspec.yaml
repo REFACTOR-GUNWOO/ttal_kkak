@@ -82,6 +82,7 @@ flutter:
   assets:
     - assets/
     - assets/icons/
+    - assets/icons/statisticsTitle/
     - assets/images/
     - assets/images/clothes/categoryImage/
     - assets/images/clothes/bg/
