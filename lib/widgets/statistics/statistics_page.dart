@@ -121,6 +121,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 20),
                       elevation: 0,
                       backgroundColor: SystemColors.black,
                       minimumSize: Size(double.infinity, 48),
