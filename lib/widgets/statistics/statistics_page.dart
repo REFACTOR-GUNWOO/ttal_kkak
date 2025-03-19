@@ -45,6 +45,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
     setState(() {
       clothesData = loadedClothes.where((element) => !element.isDraft).toList();
     });
+    _showMissionCompletedBottomSheet();
 
     bool isNowCompleted = _checkMissionCompleted();
     if (isNowCompleted && !wasMissionCompleted) {
@@ -77,67 +78,63 @@ class _StatisticsPageState extends State<StatisticsPage> {
     showModalBottomSheet(
       context: context,
       barrierColor: SystemColors.gray700.withOpacity(0.5),
+      isDismissible: true,
       isScrollControlled: true,
-      isDismissible: false,
-      enableDrag: false,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async => false,
-          child: CommonBottomSheet(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 32),
-                Lottie.asset(
-                  'assets/lotties/firecrackers.json',
-                  width: 126,
-                  height: 126,
-                  fit: BoxFit.fill,
-                ),
-                SizedBox(height: 12),
-                Text(
-                  "축하해요!\n이제 통계를 확인할 수 있어요",
-                  style: BodyTextStyles.Bold24,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: MissionCheckListWidget(clothesData: clothesData!),
-                ),
-                SizedBox(height: 32),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      LogService().log(
-                          LogType.click_button,
-                          "statistics_mission_complete_bottom_sheet",
-                          "confirm_button", {});
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      elevation: 0,
-                      backgroundColor: SystemColors.black,
-                      minimumSize: Size(double.infinity, 48),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      "확인",
-                      style: OneLineTextStyles.SemiBold16.copyWith(
-                          color: SystemColors.white),
+        return CommonBottomSheet(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 32),
+              Lottie.asset(
+                'assets/lotties/firecrackers.json',
+                width: 126,
+                height: 126,
+                fit: BoxFit.fill,
+              ),
+              SizedBox(height: 12),
+              Text(
+                "축하해요!\n이제 통계를 확인할 수 있어요",
+                style: BodyTextStyles.Bold24,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: MissionCheckListWidget(clothesData: clothesData!),
+              ),
+              SizedBox(height: 32),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton(
+                  onPressed: () {
+                    LogService().log(
+                        LogType.click_button,
+                        "statistics_mission_complete_bottom_sheet",
+                        "confirm_button", {});
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    elevation: 0,
+                    backgroundColor: SystemColors.black,
+                    minimumSize: Size(double.infinity, 48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
+                  child: Text(
+                    "확인",
+                    style: OneLineTextStyles.SemiBold16.copyWith(
+                        color: SystemColors.white),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
