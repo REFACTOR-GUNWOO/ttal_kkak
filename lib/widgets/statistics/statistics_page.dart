@@ -45,7 +45,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
     setState(() {
       clothesData = loadedClothes.where((element) => !element.isDraft).toList();
     });
-    _showMissionCompletedBottomSheet();
 
     bool isNowCompleted = _checkMissionCompleted();
     if (isNowCompleted && !wasMissionCompleted) {

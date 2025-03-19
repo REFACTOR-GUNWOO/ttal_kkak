@@ -281,11 +281,11 @@ enum ClothesColor {
   gray800(Color(0xFF4D4C4C), 'Gray 800', 800),
 
   // 빨강 계열
-  red50(Color(0xFFE8C9C9), 'Red 50', 50),
-  red100(Color(0xFFDBA5A5), 'Red 100', 100),
-  red500(Color(0xFFB37171), 'Red 500', 500),
-  red600(Color(0xFF8C3737), 'Red 600', 600),
-  red800(Color(0xFF6B1E1E), 'Red 800', 800),
+  red50(Color(0xFFEAD4D4), 'Red 50', 50),
+  red100(Color(0xFFDE9494), 'Red 100', 100),
+  red500(Color(0xFFC46060), 'Red 500', 500),
+  red600(Color(0xFFA84A4A), 'Red 600', 600),
+  red800(Color(0xFF8A3A3A), 'Red 800', 800),
 
   // 주황 계열
   orange50(Color(0xFFEDD6CA), 'Orange 50', 50),
