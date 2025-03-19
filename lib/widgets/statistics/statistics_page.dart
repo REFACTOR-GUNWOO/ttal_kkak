@@ -379,7 +379,7 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
               (representativeClothesColorCount[ColorName.GRAY] ?? 0)) >=
           widget.clothes.length * 5 / 10) {
         final List<MapEntry<String, String>> titles = [
-          MapEntry("흑백 사진관", "image_흑백사진관.svg"),
+          MapEntry("흑백 사진사", "image_흑백사진관.svg"),
           MapEntry("수묵담채화", "image_수묵담채화.svg")
         ];
 
