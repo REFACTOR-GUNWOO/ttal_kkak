@@ -362,8 +362,8 @@ class _StatisticsTitleWidgetState extends State<StatisticsTitleWidget> {
         ];
 
         final List<String> addClothesDescriptions = [
-          "혹시 다른 색깔 옷은\n더 없으신 건가요...?👀",
-          "분명 다른 색깔 옷을\n덜 등록하신 걸 거예요!🥲"
+          "좋아하는 색상의 옷을\n더 등록해보세요!",
+          "다른 색상의 옷도 등록해볼까요?"
         ];
 
         return DisplayMessage.of(
